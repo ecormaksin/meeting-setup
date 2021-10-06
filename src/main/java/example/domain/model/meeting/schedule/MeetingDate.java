@@ -1,0 +1,29 @@
+package example.domain.model.meeting.schedule;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * ミーティング開催日
+ */
+public class MeetingDate {
+
+    LocalDate value;
+
+    public MeetingDate(LocalDate value) {
+        this.value = value;
+    }
+
+    @Deprecated(since = "MyBatis")
+    public MeetingDate() {
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
+
+    public String shortFormat() {
+        return value.format(DateTimeFormatter.ofPattern("MM/dd(E)"));
+    }
+}
