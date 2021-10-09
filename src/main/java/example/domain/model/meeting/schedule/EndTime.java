@@ -5,20 +5,14 @@ import java.time.LocalTime;
 /**
  * 終了時刻
  */
-public class EndTime {
-
-    LocalTime value;
+public class EndTime extends AbstractTime {
 
     public EndTime(LocalTime value) {
-        this.value = value;
+        super(value);
     }
 
     @Deprecated(since = "MyBatis")
     public EndTime() {
-    }
-
-    @Override
-    public String toString() {
-        return value.toString();
+        super();
     }
 }

@@ -7,6 +7,7 @@ public class Meeting {
     MeetingNumber ミーティング番号;
     String 件名;
     String メモ;
+    ProposedSchedules 候補日程;
 
     public String number() {
         return ミーティング番号.toString();
@@ -17,9 +18,10 @@ public class Meeting {
         // @formatter:off
         return "Meeting{" +
                 "ミーティング番号=" + ミーティング番号 +
-                ", 件名='" + 件名 + "'" +
-                ", メモ='" + メモ + "'" +
-                "}";
+                ", 件名='" + 件名 + '\'' +
+                ", メモ='" + メモ + '\'' +
+                ", 候補日程='" + 候補日程 + '\'' +
+                '}';
         // @formatter:on
     }
 }

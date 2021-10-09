@@ -23,7 +23,7 @@ public class MeetingDate {
         return value.toString();
     }
 
-    public String shortFormat() {
+    public String formattedString() {
         return value.format(DateTimeFormatter.ofPattern("MM/dd(E)"));
     }
 }
