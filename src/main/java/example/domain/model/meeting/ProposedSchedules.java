@@ -1,5 +1,6 @@
 package example.domain.model.meeting;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -18,6 +19,10 @@ public class ProposedSchedules {
 
     public static ProposedSchedules of(Set<ProposedSchedule> set) {
         return new ProposedSchedules(set);
+    }
+
+    public Iterator<ProposedSchedule> list() {
+        return set.iterator();
     }
 
     @Override

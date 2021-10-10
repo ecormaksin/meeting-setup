@@ -7,231 +7,477 @@
 <body>
 
 <nav class="menu">
-
-    <details open>
-        <summary class="package">
-            <a href="#example.domain.model.meeting">ミーティング</a>
-        </summary>
-        <div>
-
-
+    
+        <details open>
+            <summary class="package">
+                <a href="#example.domain.model.meeting">ミーティング</a>
+            </summary>
+            <div>
+                
+        
+        
+            <a href="#example.domain.model.meeting.AttendanceReplies">AttendanceReplies</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.AttendanceReply">出欠回答</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.AttendanceReplyNumber">出欠回答番号</a><br>
+        
+    
+        
+        
             <a href="#example.domain.model.meeting.Meeting">ミーティング</a><br>
-
-
+        
+    
+        
+        
             <a href="#example.domain.model.meeting.MeetingNumber">ミーティング番号</a><br>
-
-
-            <a href="#example.domain.model.meeting.ProposedSchedule">候補日</a><br>
-
-
-            <a href="#example.domain.model.meeting.ProposedScheduleNumber">候補日番号</a><br>
-
-
-            <a href="#example.domain.model.meeting.ProposedSchedules">候補日のセット</a><br>
-
-
-            <details open>
-                <summary class="package">
-                    <a href="#example.domain.model.meeting.schedule">候補日程</a>
-                </summary>
-                <div>
-
-
-                    <a href="#example.domain.model.meeting.schedule.AbstractTime">　抽象的な時刻</a><br>
-
-
-                    <a href="#example.domain.model.meeting.schedule.EndTime">終了時刻</a><br>
-
-
-                    <a href="#example.domain.model.meeting.schedule.MeetingDate">ミーティング開催日</a><br>
-
-
-                    <a href="#example.domain.model.meeting.schedule.Schedule">スケジュール</a><br>
-
-
-                    <a href="#example.domain.model.meeting.schedule.StartTime">開始時刻</a><br>
-
-
-                </div>
-            </details>
-
-
-        </div>
-    </details>
-
-
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.ProposedSchedule">候補日程</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.ProposedScheduleNumber">候補日程番号</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.ProposedSchedules">候補日程のセット</a><br>
+        
+    
+        <details open>
+            <summary class="package">
+                <a href="#example.domain.model.meeting.schedule">候補日程</a>
+            </summary>
+            <div>
+                
+        
+        
+            <a href="#example.domain.model.meeting.schedule.AbstractTime">　抽象的な時刻</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.schedule.EndTime">終了時刻</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.schedule.MeetingDate">ミーティング開催日</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.schedule.Schedule">スケジュール</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.schedule.StartTime">開始時刻</a><br>
+        
+    
+            </div>
+        </details>
+        
+    
+        <details open>
+            <summary class="package">
+                <a href="#example.domain.model.meeting.reply">回答</a>
+            </summary>
+            <div>
+                
+        
+        
+            <a href="#example.domain.model.meeting.reply.RepliesToProposedSchedules">複数の候補日程への回答</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.reply.Reply">回答</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.reply.ReplyCategory">回答種別</a><br>
+        
+    
+        
+        
+            <a href="#example.domain.model.meeting.reply.ReplyToProposedSchedule">候補日程への回答</a><br>
+        
+    
+            </div>
+        </details>
+        
+    
+            </div>
+        </details>
+        
+    
 </nav>
 
 <main>
     <h1>ドメイン概要</h1>
 
-
-    <section class="package">
+    
+        <section class="package">
         <h2><a name="example">サンプルアプリケーション</a></h2>
         <small class="fully-qualified-name">example</small>
 
+        
+            
+        
 
-        <section>
-            <table>
-                <thead>
-                <tr>
-                    <th>名前</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><span>▶︎ </span>
-                        <a href="#example.domain">ミーティング セットアップ モデル</a>
-                    </td>
-                </tr>
-            </table>
-        </section>
-
+        
+            <section>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>名前</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><span>▶︎ </span>
+                            <a href="#example.domain">ミーティング セットアップ モデル</a>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        
     </section>
-
-    <section class="package">
+    
+        <section class="package">
         <h2><a name="example.domain">ミーティング セットアップ モデル</a></h2>
         <small class="fully-qualified-name">example.domain</small>
 
+        
+            
+        
 
-        <section>
-            <table>
-                <thead>
-                <tr>
-                    <th>名前</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><span>▶︎ </span>
-                        <a href="#example.domain.model">model</a>
-                    </td>
-                </tr>
-            </table>
-        </section>
-
+        
+            <section>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>名前</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><span>▶︎ </span>
+                            <a href="#example.domain.model">model</a>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        
     </section>
-
-    <section class="package">
+    
+        <section class="package">
         <h2><a name="example.domain.model">model</a></h2>
         <small class="fully-qualified-name">example.domain.model</small>
 
+        
+            
+        
 
-        <section>
-            <table>
-                <thead>
-                <tr>
-                    <th>名前</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><span>▶︎ </span>
-                        <a href="#example.domain.model.meeting">ミーティング</a>
-                    </td>
-                </tr>
-            </table>
-        </section>
-
+        
+            <section>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>名前</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><span>▶︎ </span>
+                            <a href="#example.domain.model.meeting">ミーティング</a>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        
     </section>
-
-    <section class="package">
+    
+        <section class="package">
         <h2><a name="example.domain.model.meeting">ミーティング</a></h2>
         <small class="fully-qualified-name">example.domain.model.meeting</small>
 
+        
+            
+        
 
-        <section>
-            <table>
-                <thead>
-                <tr>
-                    <th>名前</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.Meeting">ミーティング</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.MeetingNumber">ミーティング番号</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.ProposedSchedule">候補日</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.ProposedScheduleNumber">候補日番号</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.ProposedSchedules">候補日のセット</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span>▶︎ </span>
-                        <a href="#example.domain.model.meeting.schedule">候補日程</a>
-                    </td>
-                </tr>
-            </table>
-        </section>
-
+        
+            <section>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>名前</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.AttendanceReplies">AttendanceReplies</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.AttendanceReply">出欠回答</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.AttendanceReplyNumber">出欠回答番号</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.Meeting">ミーティング</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.MeetingNumber">ミーティング番号</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.ProposedSchedule">候補日程</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.ProposedScheduleNumber">候補日程番号</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.ProposedSchedules">候補日程のセット</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>▶︎ </span>
+                            <a href="#example.domain.model.meeting.schedule">候補日程</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span>▶︎ </span>
+                            <a href="#example.domain.model.meeting.reply">回答</a>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        
     </section>
+    
+        <section class="package">
+        <h2><a name="example.domain.model.meeting.reply">回答</a></h2>
+        <small class="fully-qualified-name">example.domain.model.meeting.reply</small>
 
-    <section class="package">
+        
+            
+        
+
+        
+            <section>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>名前</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.reply.RepliesToProposedSchedules">複数の候補日程への回答</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.reply.Reply">回答</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.reply.ReplyCategory">回答種別</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.reply.ReplyToProposedSchedule">候補日程への回答</a>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        
+    </section>
+    
+        <section class="package">
         <h2><a name="example.domain.model.meeting.schedule">候補日程</a></h2>
         <small class="fully-qualified-name">example.domain.model.meeting.schedule</small>
 
+        
+            
+        
 
-        <section>
-            <table>
-                <thead>
-                <tr>
-                    <th>名前</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.schedule.AbstractTime">　抽象的な時刻</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.schedule.EndTime">終了時刻</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.schedule.MeetingDate">ミーティング開催日</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.schedule.Schedule">スケジュール</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#example.domain.model.meeting.schedule.StartTime">開始時刻</a>
-                    </td>
-                </tr>
-            </table>
-        </section>
-
+        
+            <section>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>名前</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.schedule.AbstractTime">　抽象的な時刻</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.schedule.EndTime">終了時刻</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.schedule.MeetingDate">ミーティング開催日</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.schedule.Schedule">スケジュール</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#example.domain.model.meeting.schedule.StartTime">開始時刻</a>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        
     </section>
+    
 
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.AttendanceReplies">AttendanceReplies</a></h2>
+        <div class="fully-qualified-name">example.domain.model.meeting.AttendanceReplies</div>
 
-    <section class="type">
+        
+            
+        
+
+        
+
+        
+        <table>
+            <thead>
+            <tr>
+                <th width="20%">メソッド</th>
+                <th>引数</th>
+                <th>戻り値型</th>
+                <th>説明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="method-name">+ list</td>
+                <td>
+                    
+                </td>
+                <td>
+                    <a href="#java.util.Iterator">Iterator</a>
+                </td>
+                <td class="markdown"></td>
+            </tr>
+        </table>
+        
+        
+        <table>
+            <thead>
+            <tr>
+                <th width="20%">staticメソッド</th>
+                <th>引数</th>
+                <th>戻り値型</th>
+                <th>説明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="method-name">+ of</td>
+                <td>
+                    <a class="method-argument-item" href="#java.util.List">List</a>
+                </td>
+                <td>
+                    <a href="#example.domain.model.meeting.AttendanceReplies">AttendanceReplies</a>
+                </td>
+                <td class="markdown"></td>
+            </tr>
+        </table>
+        
+    </section>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.AttendanceReply">出欠回答</a></h2>
+        <div class="fully-qualified-name">example.domain.model.meeting.AttendanceReply</div>
+
+        
+            
+        
+
+        
+
+        
+        
+        
+        
+        
+        
+    </section>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.AttendanceReplyNumber">出欠回答番号</a></h2>
+        <div class="fully-qualified-name">example.domain.model.meeting.AttendanceReplyNumber</div>
+
+        
+            
+        
+
+        
+
+        
+        
+        
+        
+        
+        
+    </section>
+    
+        <section class="type">
         <h2><a name="example.domain.model.meeting.Meeting">ミーティング</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.Meeting</div>
 
+        
+            
+        
 
+        
+
+        
         <table>
             <thead>
             <tr>
@@ -245,7 +491,7 @@
             <tr>
                 <td class="method-name">+ number</td>
                 <td>
-
+                    
                 </td>
                 <td>
                     <a href="#java.lang.String">String</a>
@@ -253,36 +499,100 @@
                 <td class="markdown"></td>
             </tr>
         </table>
-
-
+        
+        
+        
+        
     </section>
-
-    <section class="type">
+    
+        <section class="type">
         <h2><a name="example.domain.model.meeting.MeetingNumber">ミーティング番号</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.MeetingNumber</div>
 
+        
+            
+        
 
+        
+
+        
+        
+        
+        
+        
+        
     </section>
-
-    <section class="type">
-        <h2><a name="example.domain.model.meeting.ProposedSchedule">候補日</a></h2>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.ProposedSchedule">候補日程</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.ProposedSchedule</div>
 
+        
+            
+        
 
+        
+
+        
+        
+        
+        
+        
+        
     </section>
-
-    <section class="type">
-        <h2><a name="example.domain.model.meeting.ProposedScheduleNumber">候補日番号</a></h2>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.ProposedScheduleNumber">候補日程番号</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.ProposedScheduleNumber</div>
 
+        
+            
+        
 
+        
+
+        
+        
+        
+        
+        
+        
     </section>
-
-    <section class="type">
-        <h2><a name="example.domain.model.meeting.ProposedSchedules">候補日のセット</a></h2>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.ProposedSchedules">候補日程のセット</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.ProposedSchedules</div>
 
+        
+            
+        
 
+        
+
+        
+        <table>
+            <thead>
+            <tr>
+                <th width="20%">メソッド</th>
+                <th>引数</th>
+                <th>戻り値型</th>
+                <th>説明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="method-name">+ list</td>
+                <td>
+                    
+                </td>
+                <td>
+                    <a href="#java.util.Iterator">Iterator</a>
+                </td>
+                <td class="markdown"></td>
+            </tr>
+        </table>
+        
+        
         <table>
             <thead>
             <tr>
@@ -299,19 +609,164 @@
                     <a class="method-argument-item" href="#java.util.Set">Set</a>
                 </td>
                 <td>
-                    <a href="#example.domain.model.meeting.ProposedSchedules">候補日のセット</a>
+                    <a href="#example.domain.model.meeting.ProposedSchedules">候補日程のセット</a>
                 </td>
                 <td class="markdown"></td>
             </tr>
         </table>
-
+        
     </section>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.reply.RepliesToProposedSchedules">複数の候補日程への回答</a></h2>
+        <div class="fully-qualified-name">example.domain.model.meeting.reply.RepliesToProposedSchedules</div>
 
-    <section class="type">
+        
+            
+        
+
+        
+
+        
+        <table>
+            <thead>
+            <tr>
+                <th width="20%">メソッド</th>
+                <th>引数</th>
+                <th>戻り値型</th>
+                <th>説明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="method-name">+ list</td>
+                <td>
+                    
+                </td>
+                <td>
+                    <a href="#java.util.Iterator">Iterator</a>
+                </td>
+                <td class="markdown"></td>
+            </tr>
+        </table>
+        
+        
+        <table>
+            <thead>
+            <tr>
+                <th width="20%">staticメソッド</th>
+                <th>引数</th>
+                <th>戻り値型</th>
+                <th>説明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="method-name">+ of</td>
+                <td>
+                    <a class="method-argument-item" href="#java.util.Set">Set</a>
+                </td>
+                <td>
+                    <a href="#example.domain.model.meeting.reply.RepliesToProposedSchedules">複数の候補日程への回答</a>
+                </td>
+                <td class="markdown"></td>
+            </tr>
+        </table>
+        
+    </section>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.reply.Reply">回答</a></h2>
+        <div class="fully-qualified-name">example.domain.model.meeting.reply.Reply</div>
+
+        
+            
+        
+
+        
+
+        
+        
+        
+        
+        
+        
+    </section>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.reply.ReplyCategory">回答種別</a></h2>
+        <div class="fully-qualified-name">example.domain.model.meeting.reply.ReplyCategory</div>
+
+        
+            
+        
+
+        <section>
+            <h3>列挙値</h3>
+            <ul>
+                <li>マル</li>
+                <li>サンカク</li>
+                <li>バツ</li>
+            </ul>
+        </section>
+
+        
+        <table>
+            <thead>
+            <tr>
+                <th width="20%">メソッド</th>
+                <th>引数</th>
+                <th>戻り値型</th>
+                <th>説明</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="method-name">+ 記号</td>
+                <td>
+                    
+                </td>
+                <td>
+                    <a href="#java.lang.String">String</a>
+                </td>
+                <td class="markdown"></td>
+            </tr>
+        </table>
+        
+        
+        
+        
+    </section>
+    
+        <section class="type">
+        <h2><a name="example.domain.model.meeting.reply.ReplyToProposedSchedule">候補日程への回答</a></h2>
+        <div class="fully-qualified-name">example.domain.model.meeting.reply.ReplyToProposedSchedule</div>
+
+        
+            
+        
+
+        
+
+        
+        
+        
+        
+        
+        
+    </section>
+    
+        <section class="type">
         <h2><a name="example.domain.model.meeting.schedule.AbstractTime">　抽象的な時刻</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.schedule.AbstractTime</div>
 
+        
+            
+        
 
+        
+
+        
         <table>
             <thead>
             <tr>
@@ -325,7 +780,7 @@
             <tr>
                 <td class="method-name">+ formattedString</td>
                 <td>
-
+                    
                 </td>
                 <td>
                     <a href="#java.lang.String">String</a>
@@ -333,22 +788,41 @@
                 <td class="markdown"></td>
             </tr>
         </table>
-
-
+        
+        
+        
+        
     </section>
-
-    <section class="type">
+    
+        <section class="type">
         <h2><a name="example.domain.model.meeting.schedule.EndTime">終了時刻</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.schedule.EndTime</div>
 
+        
+            
+        
 
+        
+
+        
+        
+        
+        
+        
+        
     </section>
-
-    <section class="type">
+    
+        <section class="type">
         <h2><a name="example.domain.model.meeting.schedule.MeetingDate">ミーティング開催日</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.schedule.MeetingDate</div>
 
+        
+            
+        
 
+        
+
+        
         <table>
             <thead>
             <tr>
@@ -362,7 +836,7 @@
             <tr>
                 <td class="method-name">+ formattedString</td>
                 <td>
-
+                    
                 </td>
                 <td>
                     <a href="#java.lang.String">String</a>
@@ -370,30 +844,52 @@
                 <td class="markdown"></td>
             </tr>
         </table>
-
-
+        
+        
+        
+        
     </section>
-
-    <section class="type">
+    
+        <section class="type">
         <h2><a name="example.domain.model.meeting.schedule.Schedule">スケジュール</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.schedule.Schedule</div>
 
+        
+            
+        
 
+        
+
+        
+        
+        
+        
+        
+        
     </section>
-
-    <section class="type">
+    
+        <section class="type">
         <h2><a name="example.domain.model.meeting.schedule.StartTime">開始時刻</a></h2>
         <div class="fully-qualified-name">example.domain.model.meeting.schedule.StartTime</div>
 
+        
+            
+        
 
+        
+
+        
+        
+        
+        
+        
+        
     </section>
-
+    
 </main>
 
 <script>
 Array.from(document.getElementsByClassName("markdown")).forEach(x => x.innerHTML = marked(x.innerHTML))
-
-
 
 </script>
 </body>

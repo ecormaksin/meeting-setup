@@ -5,16 +5,16 @@ package example.domain.model.meeting.reply;
  */
 public class Reply {
     String 名前;
-    String コメント;
     RepliesToProposedSchedules 候補日程別回答;
+    String コメント;
 
     @Override
     public String toString() {
         // @formatter:off
         return "Reply{" +
                 "名前='" + 名前 + '\'' +
-                ", コメント='" + コメント + '\'' +
                 ", 候補日程別回答=" + 候補日程別回答 +
+                ", コメント='" + コメント + '\'' +
                 '}';
         // @formatter:on
     }
