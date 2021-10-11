@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * 候補日程のセット
+ * 候補日程セット
  */
 public class ProposedSchedules {
     Set<ProposedSchedule> set;

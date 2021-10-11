@@ -1,16 +1,16 @@
-package example.domain.model.meeting.reply;
+package example.domain.model.meeting.attendance;
 
 /**
  * 回答種別
  */
-public enum ReplyCategory {
+public enum AttendanceCategory {
     マル("○"),
     サンカク("△"),
     バツ("×");
 
     String 記号;
 
-    ReplyCategory(String 記号) {
+    AttendanceCategory(String 記号) {
         this.記号 = 記号;
     }
 

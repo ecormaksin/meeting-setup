@@ -1,3 +1,3 @@
-# example.domain.model.meeting.reply <-> example.domain.model.meeting
-- example.domain.model.meeting.AttendanceReply -> example.domain.model.meeting.reply.Reply
-- example.domain.model.meeting.reply.ReplyToProposedSchedule -> example.domain.model.meeting.ProposedScheduleNumber
+# example.domain.model.meeting.attendance <-> example.domain.model.meeting
+- example.domain.model.meeting.AttendanceReply -> example.domain.model.meeting.attendance.Attendance
+- example.domain.model.meeting.attendance.Attendance -> example.domain.model.meeting.schedule.ScheduleNumber
