@@ -8,14 +8,14 @@ import example.domain.model.meeting.schedule.Schedule;
  */
 public class ProposedSchedule {
     Schedule 日程;
-    Attendances 出欠;
+    Attendances 出欠セット;
 
     @Override
     public String toString() {
         // @formatter:off
         return "ProposedSchedule{" +
                 "日程=" + 日程 +
-                ", 出欠=" + 出欠 +
+                ", 出欠=" + 出欠セット +
                 '}';
         // @formatter:on
     }

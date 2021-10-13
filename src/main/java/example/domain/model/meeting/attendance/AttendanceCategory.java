@@ -1,7 +1,7 @@
 package example.domain.model.meeting.attendance;
 
 /**
- * 回答種別
+ * 出欠種別
  */
 public enum AttendanceCategory {
     マル("○"),

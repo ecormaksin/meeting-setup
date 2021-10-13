@@ -17,7 +17,7 @@ public class Meeting {
     public String toString() {
         // @formatter:off
         return "Meeting{" +
-                "ミーティング番号='" + ミーティング番号 + '\'' +
+                "ミーティング番号=" + ミーティング番号 +
                 ", 件名='" + 件名 + '\'' +
                 ", メモ='" + メモ + '\'' +
                 ", 候補日程セット=" + 候補日程セット +
