@@ -1,18 +1,18 @@
-package example.domain.model.meeting.schedule;
+package example.domain.model.participant;
 
 /**
- * 日程番号
+ * 参加者番号
  */
-public class ScheduleNumber {
+public class ParticipantNumber {
 
     String value;
 
-    public ScheduleNumber(String value) {
+    public ParticipantNumber(String value) {
         this.value = value;
     }
 
     @Deprecated(since = "MyBatis")
-    public ScheduleNumber() {
+    public ParticipantNumber() {
     }
 
     @Override

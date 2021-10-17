@@ -10,9 +10,9 @@
 <title>区分使用図</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-65 955,-65 955,4 -4,4"/>
 <text text-anchor="middle" x="475.5" y="-7.8" font-family="Times,serif" font-size="14.00">区分使用図</text>
-<!-- example.domain.model.meeting.attendance.AttendanceCategory -->
+<!-- AttendanceCategory -->
 <g id="node1" class="node">
-<title>example.domain.model.meeting.attendance.AttendanceCategory</title>
+<title>example.domain.model.attendance.AttendanceCategory</title>
 <polygon fill="lemonchiffon" stroke="black" points="951,-61 792,-61 788,-57 788,-23 947,-23 951,-27 951,-61"/>
 <polyline fill="none" stroke="black" points="947,-57 788,-57 "/>
 <polyline fill="none" stroke="black" points="947,-57 947,-23 "/>
@@ -27,16 +27,16 @@
 <text text-anchor="middle" x="50" y="-45.8" font-family="Times,serif" font-size="14.00">ミーティング</text>
 <text text-anchor="middle" x="50" y="-30.8" font-family="Times,serif" font-size="14.00">Meeting</text>
 </g>
-<!-- example.domain.model.meeting.ProposedSchedules -->
+<!-- example.domain.model.meeting.ProposedScheduleSet -->
 <g id="node4" class="node">
-<title>example.domain.model.meeting.ProposedSchedules</title>
+<title>example.domain.model.meeting.ProposedScheduleSet</title>
 <polygon fill="white" stroke="black" points="292,-61 136,-61 136,-23 292,-23 292,-61"/>
 <text text-anchor="middle" x="214" y="-45.8" font-family="Times,serif" font-size="14.00">候補日程セット</text>
 <text text-anchor="middle" x="214" y="-30.8" font-family="Times,serif" font-size="14.00">ProposedSchedules</text>
 </g>
-<!-- example.domain.model.meeting.Meeting&#45;&gt;example.domain.model.meeting.ProposedSchedules -->
+<!-- example.domain.model.meeting.Meeting&#45;&gt;example.domain.model.meeting.ProposedScheduleSet -->
 <g id="edge2" class="edge">
-<title>example.domain.model.meeting.Meeting&#45;&gt;example.domain.model.meeting.ProposedSchedules</title>
+<title>example.domain.model.meeting.Meeting&#45;&gt;example.domain.model.meeting.ProposedScheduleSet</title>
 <path fill="none" stroke="black" d="M100.04,-42C108.14,-42 116.75,-42 125.46,-42"/>
 <polygon fill="black" stroke="black" points="125.7,-45.5 135.7,-42 125.7,-38.5 125.7,-45.5"/>
 </g>
@@ -47,41 +47,41 @@
 <text text-anchor="middle" x="402.5" y="-45.8" font-family="Times,serif" font-size="14.00">候補日程</text>
 <text text-anchor="middle" x="402.5" y="-30.8" font-family="Times,serif" font-size="14.00">ProposedSchedule</text>
 </g>
-<!-- example.domain.model.meeting.attendance.Attendances -->
+<!-- Attendances -->
 <g id="node6" class="node">
-<title>example.domain.model.meeting.attendance.Attendances</title>
+<title>example.domain.model.attendance.AttendanceSet</title>
 <polygon fill="white" stroke="black" points="618,-61 513,-61 513,-23 618,-23 618,-61"/>
 <text text-anchor="middle" x="565.5" y="-45.8" font-family="Times,serif" font-size="14.00">出欠セット</text>
 <text text-anchor="middle" x="565.5" y="-30.8" font-family="Times,serif" font-size="14.00">Attendances</text>
 </g>
-<!-- example.domain.model.meeting.ProposedSchedule&#45;&gt;example.domain.model.meeting.attendance.Attendances -->
+<!-- example.domain.model.meeting.ProposedSchedule&#45;&gt;Attendances -->
 <g id="edge1" class="edge">
-<title>example.domain.model.meeting.ProposedSchedule&#45;&gt;example.domain.model.meeting.attendance.Attendances</title>
+<title>example.domain.model.meeting.ProposedSchedule&#45;&gt;example.domain.model.attendance.AttendanceSet</title>
 <path fill="none" stroke="black" d="M477.4,-42C485.77,-42 494.24,-42 502.43,-42"/>
 <polygon fill="black" stroke="black" points="502.64,-45.5 512.64,-42 502.64,-38.5 502.64,-45.5"/>
 </g>
-<!-- example.domain.model.meeting.ProposedSchedules&#45;&gt;example.domain.model.meeting.ProposedSchedule -->
+<!-- example.domain.model.meeting.ProposedScheduleSet&#45;&gt;example.domain.model.meeting.ProposedSchedule -->
 <g id="edge3" class="edge">
 <title>example.domain.model.meeting.ProposedSchedules&#45;&gt;example.domain.model.meeting.ProposedSchedule</title>
 <path fill="none" stroke="black" d="M292.2,-42C300.61,-42 309.2,-42 317.68,-42"/>
 <polygon fill="black" stroke="black" points="317.95,-45.5 327.95,-42 317.95,-38.5 317.95,-45.5"/>
 </g>
-<!-- example.domain.model.meeting.attendance.Attendance -->
+<!-- Attendance -->
 <g id="node5" class="node">
-<title>example.domain.model.meeting.attendance.Attendance</title>
+<title>example.domain.model.attendance.Attendance</title>
 <polygon fill="white" stroke="black" points="752,-61 654,-61 654,-23 752,-23 752,-61"/>
 <text text-anchor="middle" x="703" y="-45.8" font-family="Times,serif" font-size="14.00">出欠</text>
 <text text-anchor="middle" x="703" y="-30.8" font-family="Times,serif" font-size="14.00">Attendance</text>
 </g>
-<!-- example.domain.model.meeting.attendance.Attendance&#45;&gt;example.domain.model.meeting.attendance.AttendanceCategory -->
+<!-- Attendance&#45;&gt;AttendanceCategory -->
 <g id="edge5" class="edge">
-<title>example.domain.model.meeting.attendance.Attendance&#45;&gt;example.domain.model.meeting.attendance.AttendanceCategory</title>
+<title>example.domain.model.meeting.attendance.Attendance&#45;&gt;example.domain.model.attendance.AttendanceCategory</title>
 <path fill="none" stroke="black" d="M752.02,-42C760.22,-42 768.97,-42 777.86,-42"/>
 <polygon fill="black" stroke="black" points="777.92,-45.5 787.92,-42 777.92,-38.5 777.92,-45.5"/>
 </g>
-<!-- example.domain.model.meeting.attendance.Attendances&#45;&gt;example.domain.model.meeting.attendance.Attendance -->
+<!-- Attendances&#45;&gt;Attendance -->
 <g id="edge4" class="edge">
-<title>example.domain.model.meeting.attendance.Attendances&#45;&gt;example.domain.model.meeting.attendance.Attendance</title>
+<title>example.domain.model.meeting.attendance.Attendances&#45;&gt;example.domain.model.attendance.Attendance</title>
 <path fill="none" stroke="black" d="M618.11,-42C626.41,-42 635.05,-42 643.49,-42"/>
 <polygon fill="black" stroke="black" points="643.65,-45.5 653.65,-42 643.65,-38.5 643.65,-45.5"/>
 </g>

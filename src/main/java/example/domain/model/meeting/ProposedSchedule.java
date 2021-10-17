@@ -1,14 +1,14 @@
 package example.domain.model.meeting;
 
-import example.domain.model.meeting.attendance.Attendances;
-import example.domain.model.meeting.schedule.Schedule;
+import example.domain.model.attendance.AttendanceSet;
+import example.domain.model.schedule.Schedule;
 
 /**
  * 候補日程
  */
 public class ProposedSchedule {
     Schedule 日程;
-    Attendances 出欠セット;
+    AttendanceSet 出欠セット;
 
     @Override
     public String toString() {

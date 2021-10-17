@@ -1,20 +1,20 @@
-package example.domain.model.meeting.schedule;
+package example.domain.model.schedule;
 
 import java.time.LocalTime;
 
 /**
- * 開始時刻
+ * 終了時刻
  */
-public class StartTime {
+public class EndTime {
 
     LocalTime value;
 
-    public StartTime(LocalTime value) {
+    public EndTime(LocalTime value) {
         this.value = value;
     }
 
     @Deprecated(since = "MyBatis")
-    public StartTime() {
+    public EndTime() {
     }
 
     @Override

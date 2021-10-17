@@ -1,4 +1,4 @@
-package example.domain.model.meeting.participant;
+package example.domain.model.participant;
 
 /**
  * 参加者

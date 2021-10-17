@@ -1,4 +1,4 @@
-package example.domain.model.meeting.schedule;
+package example.domain.model.schedule;
 
 /**
  * スケジュール

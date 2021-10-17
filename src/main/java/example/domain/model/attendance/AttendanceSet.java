@@ -1,4 +1,4 @@
-package example.domain.model.meeting.attendance;
+package example.domain.model.attendance;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -6,19 +6,19 @@ import java.util.Set;
 /**
  * 出欠セット
  */
-public class Attendances {
+public class AttendanceSet {
     Set<Attendance> set;
 
-    Attendances(Set<Attendance> set) {
+    AttendanceSet(Set<Attendance> set) {
         this.set = set;
     }
 
     @Deprecated(since = "MyBatis")
-    public Attendances() {
+    public AttendanceSet() {
     }
 
-    public static Attendances of(Set<Attendance> source) {
-        return new Attendances(source);
+    public static AttendanceSet of(Set<Attendance> source) {
+        return new AttendanceSet(source);
     }
 
     public Iterator<Attendance> list() {
@@ -28,7 +28,7 @@ public class Attendances {
     @Override
     public String toString() {
         // @formatter:off
-        return "Attendances{" +
+        return "AttendanceSet{" +
                 "set=" + set +
                 '}';
         // @formatter:on

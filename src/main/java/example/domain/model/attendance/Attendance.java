@@ -1,6 +1,6 @@
-package example.domain.model.meeting.attendance;
+package example.domain.model.attendance;
 
-import example.domain.model.meeting.participant.ParticipantNumber;
+import example.domain.model.participant.ParticipantNumber;
 
 /**
  * 出欠
