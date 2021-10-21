@@ -6,19 +6,19 @@ import java.util.List;
 /**
  * スケジュールリスト
  */
-public class ScheduleList {
+public class Schedules {
     List<Schedule> list;
 
-    ScheduleList(List<Schedule> list) {
+    Schedules(List<Schedule> list) {
         this.list = list;
     }
 
     @Deprecated(since = "MyBatis")
-    public ScheduleList() {
+    public Schedules() {
     }
 
-    public static ScheduleList of(List<Schedule> source) {
-        return new ScheduleList(source);
+    public static Schedules of(List<Schedule> source) {
+        return new Schedules(source);
     }
 
     public Iterator<Schedule> list() {
@@ -28,7 +28,7 @@ public class ScheduleList {
     @Override
     public String toString() {
         // @formatter:off
-        return "ScheduleList{" +
+        return "Schedules{" +
                 "list=" + list +
                 '}';
         // @formatter:on

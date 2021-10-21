@@ -1,6 +1,6 @@
 package example.domain.model.meeting;
 
-import example.domain.model.attendance.AttendanceSet;
+import example.domain.model.attendance.Attendances;
 import example.domain.model.schedule.Schedule;
 
 /**
@@ -8,7 +8,7 @@ import example.domain.model.schedule.Schedule;
  */
 public class ProposedSchedule {
     Schedule 日程;
-    AttendanceSet 出欠セット;
+    Attendances 出欠セット;
 
     @Override
     public String toString() {

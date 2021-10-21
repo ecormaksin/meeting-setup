@@ -1,6 +1,6 @@
 package example.domain.model.meeting;
 
-import example.domain.model.participant.ParticipantSet;
+import example.domain.model.participant.Participants;
 
 /**
  * ミーティング
@@ -9,8 +9,8 @@ public class Meeting {
     MeetingNumber ミーティング番号;
     String 件名;
     String メモ;
-    ProposedScheduleSet 候補日程セット;
-    ParticipantSet 参加者セット;
+    ProposedSchedules 候補日程セット;
+    Participants 参加者セット;
 
     public String number() {
         return ミーティング番号.toString();

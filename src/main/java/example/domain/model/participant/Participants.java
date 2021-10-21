@@ -6,19 +6,19 @@ import java.util.Set;
 /**
  * 参加者セット
  */
-public class ParticipantSet {
+public class Participants {
     Set<Participant> set;
 
-    ParticipantSet(Set<Participant> set) {
+    Participants(Set<Participant> set) {
         this.set = set;
     }
 
     @Deprecated(since = "MyBatis")
-    public ParticipantSet() {
+    public Participants() {
     }
 
-    public static ParticipantSet of(Set<Participant> source) {
-        return new ParticipantSet(source);
+    public static Participants of(Set<Participant> source) {
+        return new Participants(source);
     }
 
     public Iterator<Participant> list() {
@@ -28,7 +28,7 @@ public class ParticipantSet {
     @Override
     public String toString() {
         // @formatter:off
-        return "ParticipantSet{" +
+        return "Participants{" +
                 "set=" + set +
                 '}';
         // @formatter:on

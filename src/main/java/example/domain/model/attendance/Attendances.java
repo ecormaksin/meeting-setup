@@ -6,19 +6,19 @@ import java.util.Set;
 /**
  * 出欠セット
  */
-public class AttendanceSet {
+public class Attendances {
     Set<Attendance> set;
 
-    AttendanceSet(Set<Attendance> set) {
+    Attendances(Set<Attendance> set) {
         this.set = set;
     }
 
     @Deprecated(since = "MyBatis")
-    public AttendanceSet() {
+    public Attendances() {
     }
 
-    public static AttendanceSet of(Set<Attendance> source) {
-        return new AttendanceSet(source);
+    public static Attendances of(Set<Attendance> source) {
+        return new Attendances(source);
     }
 
     public Iterator<Attendance> list() {
@@ -28,7 +28,7 @@ public class AttendanceSet {
     @Override
     public String toString() {
         // @formatter:off
-        return "AttendanceSet{" +
+        return "Attendances{" +
                 "set=" + set +
                 '}';
         // @formatter:on

@@ -1,7 +1,7 @@
 package example.domain.model.meeting;
 
 import example.domain.model.schedule.Schedule;
-import example.domain.model.schedule.ScheduleList;
+import example.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -19,16 +19,16 @@ public class MeetingToCreate {
 
     @NotNull
     @Valid
-    ScheduleList スケジュールリスト;
+    Schedules スケジュールリスト;
 
-    public MeetingToCreate(String 件名, String メモ, ScheduleList スケジュールリスト) {
+    public MeetingToCreate(String 件名, String メモ, Schedules スケジュールリスト) {
         this.件名 = 件名;
         this.メモ = メモ;
         this.スケジュールリスト = スケジュールリスト;
     }
 
     public static MeetingToCreate blank() {
-        return new MeetingToCreate("", "", ScheduleList.of(new ArrayList<Schedule>()));
+        return new MeetingToCreate("", "", Schedules.of(new ArrayList<Schedule>()));
     }
 
     public String 件名() {
@@ -39,7 +39,7 @@ public class MeetingToCreate {
         return メモ;
     }
 
-    public ScheduleList スケジュールリスト() {
+    public Schedules スケジュールリスト() {
         return スケジュールリスト;
     }
 }

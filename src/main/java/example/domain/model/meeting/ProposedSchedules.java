@@ -6,19 +6,19 @@ import java.util.Set;
 /**
  * 候補日程セット
  */
-public class ProposedScheduleSet {
+public class ProposedSchedules {
     Set<ProposedSchedule> set;
 
-    ProposedScheduleSet(Set<ProposedSchedule> set) {
+    ProposedSchedules(Set<ProposedSchedule> set) {
         this.set = set;
     }
 
     @Deprecated(since = "MyBatis")
-    public ProposedScheduleSet() {
+    public ProposedSchedules() {
     }
 
-    public static ProposedScheduleSet of(Set<ProposedSchedule> source) {
-        return new ProposedScheduleSet(source);
+    public static ProposedSchedules of(Set<ProposedSchedule> source) {
+        return new ProposedSchedules(source);
     }
 
     public Iterator<ProposedSchedule> list() {
@@ -28,7 +28,7 @@ public class ProposedScheduleSet {
     @Override
     public String toString() {
         // @formatter:off
-        return "ProposedScheduleSet{" +
+        return "ProposedSchedules{" +
                 "set=" + set +
                 '}';
         // @formatter:on
