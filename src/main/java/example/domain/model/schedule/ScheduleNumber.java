@@ -1,7 +1,7 @@
 package example.domain.model.schedule;
 
 /**
- * 日程番号
+ * スケジュール番号
  */
 public class ScheduleNumber {
 

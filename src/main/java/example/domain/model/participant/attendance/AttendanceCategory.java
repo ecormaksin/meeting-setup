@@ -1,4 +1,4 @@
-package example.domain.model.attendance;
+package example.domain.model.participant.attendance;
 
 /**
  * 出欠種別

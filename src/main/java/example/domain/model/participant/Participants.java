@@ -1,35 +1,35 @@
 package example.domain.model.participant;
 
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 /**
- * 参加者セット
+ * 参加者リスト
  */
 public class Participants {
-    Set<Participant> set;
+    List<Participant> list;
 
-    Participants(Set<Participant> set) {
-        this.set = set;
+    Participants(List<Participant> list) {
+        this.list = list;
     }
 
     @Deprecated(since = "MyBatis")
     public Participants() {
     }
 
-    public static Participants of(Set<Participant> source) {
+    public static Participants of(List<Participant> source) {
         return new Participants(source);
     }
 
     public Iterator<Participant> list() {
-        return set.iterator();
+        return list.iterator();
     }
 
     @Override
     public String toString() {
         // @formatter:off
         return "Participants{" +
-                "set=" + set +
+                "list=" + list +
                 '}';
         // @formatter:on
     }

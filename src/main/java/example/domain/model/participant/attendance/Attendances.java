@@ -1,35 +1,35 @@
-package example.domain.model.attendance;
+package example.domain.model.participant.attendance;
 
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 /**
- * 出欠セット
+ * 出欠リスト
  */
 public class Attendances {
-    Set<Attendance> set;
+    List<Attendance> list;
 
-    Attendances(Set<Attendance> set) {
-        this.set = set;
+    Attendances(List<Attendance> list) {
+        this.list = list;
     }
 
     @Deprecated(since = "MyBatis")
     public Attendances() {
     }
 
-    public static Attendances of(Set<Attendance> source) {
+    public static Attendances of(List<Attendance> source) {
         return new Attendances(source);
     }
 
     public Iterator<Attendance> list() {
-        return set.iterator();
+        return list.iterator();
     }
 
     @Override
     public String toString() {
         // @formatter:off
         return "Attendances{" +
-                "set=" + set +
+                "list=" + list +
                 '}';
         // @formatter:on
     }

@@ -12,7 +12,7 @@
 <text text-anchor="middle" x="222.5" y="-7.8" font-family="Times,serif" font-size="14.00">集中ビジネスルールツリー図</text>
 <!-- Attendance -->
 <g id="node1" class="node">
-<title>example.domain.model.attendance.Attendance</title>
+<title>example.domain.model.participant.attendance.Attendance</title>
 <polygon fill="lemonchiffon" stroke="black" points="98,-117 0,-117 0,-79 98,-79 98,-117"/>
 <text text-anchor="middle" x="49" y="-101.8" font-family="Times,serif" font-size="14.00">出欠</text>
 <text text-anchor="middle" x="49" y="-86.8" font-family="Times,serif" font-size="14.00">Attendance</text>
