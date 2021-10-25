@@ -6,23 +6,23 @@ import example.domain.model.schedule.ScheduleNumber;
  * 出欠
  */
 public class Attendance {
-    ScheduleNumber スケジュール番号;
-    AttendanceCategory 出欠種別;
+    ScheduleNumber scheduleNumber;
+    AttendanceCategory attendanceCategory;
 
     public String ScheduleNumber() {
-        return スケジュール番号.toString();
+        return scheduleNumber.toString();
     }
 
     public String attendanceCategorySymbol() {
-        return 出欠種別.記号();
+        return attendanceCategory.symbol();
     }
 
     @Override
     public String toString() {
         // @formatter:off
         return "Attendance{" +
-                "スケジュール番号=" + スケジュール番号 +
-                ", 出欠種別=" + 出欠種別 +
+                "scheduleNumber=" + scheduleNumber +
+                ", attendanceCategory=" + attendanceCategory +
                 '}';
         // @formatter:on
     }

@@ -1,22 +1,25 @@
 package example.domain.model.schedule;
 
 /**
- * スケジュール番号
+ * 候補日程番号
  */
 public class ScheduleNumber {
+    int value;
 
-    String value;
-
-    public ScheduleNumber(String value) {
+    public ScheduleNumber(int value) {
         this.value = value;
     }
 
-    @Deprecated(since = "MyBatis")
-    public ScheduleNumber() {
+    public int value() {
+        return value;
     }
 
     @Override
     public String toString() {
-        return value;
+        return String.valueOf(value);
+    }
+
+    @Deprecated
+    ScheduleNumber() {
     }
 }

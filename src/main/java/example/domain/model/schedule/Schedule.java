@@ -1,22 +1,22 @@
 package example.domain.model.schedule;
 
 /**
- * スケジュール
+ * 候補日程
  */
 public class Schedule {
-    ScheduleNumber スケジュール番号;
-    MeetingDate 開催日;
-    StartTime 開始時刻;
-    EndTime 終了時刻;
+    ScheduleNumber scheduleNumber;
+    MeetingDate meetingDate;
+    StartTime startTime;
+    EndTime endTime;
 
     @Override
     public String toString() {
         // @formatter:off
         return "Schedule{" +
-                "スケジュール番号=" + スケジュール番号 +
-                ", 開催日=" + 開催日 +
-                ", 開始時刻=" + 開始時刻 +
-                ", 終了時刻=" + 終了時刻 +
+                "scheduleNumber=" + scheduleNumber +
+                ", meetingDate=" + meetingDate +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 '}';
         // @formatter:on
     }

@@ -1,7 +1,12 @@
 package example.application.service.meeting;
 
-import example.domain.model.meeting.MeetingNumber;
+import example.domain.model.meeting.MeetingId;
+import example.domain.model.meeting.MeetingSetupRequest;
 
+/**
+ * ミーティング リポジトリ
+ */
 public interface MeetingRepository {
-    MeetingNumber 新規作成準備();
+
+    MeetingId setup(MeetingSetupRequest meetingSetupRequest);
 }

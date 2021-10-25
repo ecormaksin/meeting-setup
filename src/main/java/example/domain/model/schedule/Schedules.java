@@ -4,17 +4,17 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * スケジュールリスト
+ * 候補日程リスト
  */
 public class Schedules {
     List<Schedule> list;
 
-    Schedules(List<Schedule> list) {
+    public Schedules(List<Schedule> list) {
         this.list = list;
     }
 
-    @Deprecated(since = "MyBatis")
-    public Schedules() {
+    @Deprecated
+    Schedules() {
     }
 
     public static Schedules of(List<Schedule> source) {

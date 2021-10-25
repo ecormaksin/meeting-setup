@@ -1,4 +1,4 @@
 /**
- * 業務
+ * 業務活動のまとまり
  */
 package example.application.activity;

@@ -1,18 +1,22 @@
 package example.domain.model.participant;
 
 /**
- * 参加者番号
+ * 参加者ID
  */
-public class ParticipantNumber {
+public class ParticipantId {
 
     String value;
 
-    public ParticipantNumber(String value) {
+    public ParticipantId(String value) {
         this.value = value;
     }
 
-    @Deprecated(since = "MyBatis")
-    public ParticipantNumber() {
+    public String value() {
+        return value;
+    }
+
+    @Deprecated
+    public ParticipantId() {
     }
 
     @Override

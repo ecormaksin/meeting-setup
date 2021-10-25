@@ -6,31 +6,31 @@ import example.domain.model.participant.attendance.Attendances;
  * 参加者
  */
 public class Participant {
-    ParticipantNumber 参加者番号;
-    String 名前;
-    Attendances 出欠;
-    String コメント;
+    ParticipantId participantId;
+    ParticipantName participantName;
+    Attendances attendances;
+    AttendanceComment attendanceComment;
 
     public String number() {
-        return 参加者番号.toString();
+        return participantId.value();
     }
 
     public String name() {
-        return 名前;
+        return participantName.value();
     }
 
-    public String comment() {
-        return コメント;
+    public String attendanceComment() {
+        return attendanceComment.value();
     }
 
     @Override
     public String toString() {
         // @formatter:off
         return "Participant{" +
-                "参加者番号=" + 参加者番号 +
-                ", 名前='" + 名前 + '\'' +
-                ", 出欠=" + 出欠 +
-                ", コメント='" + コメント + '\'' +
+                "participantId=" + participantId +
+                ", participantName=" + participantName +
+                ", attendances=" + attendances +
+                ", attendanceComment=" + attendanceComment +
                 '}';
         // @formatter:on
     }

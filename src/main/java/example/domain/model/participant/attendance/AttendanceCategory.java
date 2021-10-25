@@ -14,7 +14,7 @@ public enum AttendanceCategory {
         this.記号 = 記号;
     }
 
-    public String 記号() {
+    public String symbol() {
         return 記号;
     }
 }

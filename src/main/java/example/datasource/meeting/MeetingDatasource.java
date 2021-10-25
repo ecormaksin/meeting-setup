@@ -1,18 +1,19 @@
 package example.datasource.meeting;
 
 import example.application.service.meeting.MeetingRepository;
-import example.domain.model.meeting.MeetingNumber;
+import example.domain.model.meeting.MeetingId;
+import example.domain.model.meeting.MeetingSetupRequest;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
     @Override
-    public MeetingNumber 新規作成準備() {
-        UUID uuid = UUID.randomUUID();
-        String uuidStr = uuid.toString();
-        return new MeetingNumber(uuidStr.replace("-", ""));
+    @Transactional(rollbackFor = Exception.class)
+    public MeetingId setup(MeetingSetupRequest meetingSetupRequest) {
+        MeetingId meetingId = MeetingId.newId();
+        return meetingId;
     }
 }
