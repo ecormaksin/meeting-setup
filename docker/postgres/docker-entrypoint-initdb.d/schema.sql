@@ -1,0 +1,72 @@
+-- スキーマとオブジェクトをリセット
+DROP SCHEMA IF EXISTS ミーティング CASCADE;
+CREATE SCHEMA ミーティング;
+
+DROP SCHEMA IF EXISTS 候補日程 CASCADE;
+CREATE SCHEMA 候補日程;
+
+DROP SCHEMA IF EXISTS 参加者 CASCADE;
+CREATE SCHEMA 参加者;
+
+-- ミーティング スキーマ
+CREATE TABLE ミーティング.ミーティング
+(
+  ミーティングID CHAR(32) PRIMARY KEY,
+  件名 VARCHAR(40) NOT NULL,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ミーティング.ミーティングメモ
+(
+  ミーティングID CHAR(32) PRIMARY KEY REFERENCES ミーティング.ミーティング,
+  メモ TEXT NOT NULL,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 候補日程 スキーマ
+CREATE TABLE 候補日程.候補日程
+(
+  候補日程番号 INTEGER PRIMARY KEY,
+  ミーティングID CHAR(32) NOT NULL REFERENCES ミーティング.ミーティング,
+  候補日程 TSRANGE NOT NULL,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (ミーティングID,候補日程)
+);
+
+-- 参加者 スキーマ
+CREATE TABLE 参加者.参加者
+(
+  参加者ID CHAR(32) PRIMARY KEY,
+  ミーティングID CHAR(32) NOT NULL REFERENCES ミーティング.ミーティング,
+  参加者名 VARCHAR(40) NOT NULL,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (ミーティングID, 参加者名)
+);
+
+CREATE TABLE 参加者.出欠回答種別
+(
+  出欠回答種別番号 INTEGER PRIMARY KEY,
+  出欠回答種別 VARCHAR(2) NOT NULL,
+  UNIQUE (出欠回答種別)
+);
+
+INSERT INTO 参加者.出欠回答種別 (出欠回答種別番号, 出欠回答種別) VALUES (1, '○');
+INSERT INTO 参加者.出欠回答種別 (出欠回答種別番号, 出欠回答種別) VALUES (2, '△');
+INSERT INTO 参加者.出欠回答種別 (出欠回答種別番号, 出欠回答種別) VALUES (3, '×');
+
+CREATE TABLE 参加者.出欠
+(
+  出欠番号 INTEGER PRIMARY KEY,
+  参加者ID CHAR(32) NOT NULL REFERENCES 参加者.参加者,
+  候補日程番号 INTEGER NOT NULL REFERENCES 候補日程.候補日程,
+  出欠回答種別番号 INTEGER NOT NULL REFERENCES 参加者.出欠回答種別,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (参加者ID, 候補日程番号)
+);
+
+CREATE TABLE 参加者.参加者コメント
+(
+  参加者ID CHAR(32) PRIMARY KEY REFERENCES 参加者.参加者,
+  出欠コメント VARCHAR(255) NOT NULL,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
