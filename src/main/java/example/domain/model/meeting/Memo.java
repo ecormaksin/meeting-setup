@@ -1,6 +1,7 @@
 package example.domain.model.meeting;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 /**
  * メモ
@@ -19,6 +20,10 @@ public class Memo {
     @Override
     public String toString() {
         return value;
+    }
+
+    public boolean isNotBlank() {
+        return Objects.nonNull(value) && !value.isBlank();
     }
 
     @Deprecated

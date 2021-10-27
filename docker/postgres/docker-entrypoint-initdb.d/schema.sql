@@ -24,6 +24,8 @@ CREATE TABLE ミーティング.ミーティングメモ
 );
 
 -- 候補日程 スキーマ
+CREATE SEQUENCE 候補日程.候補日程番号;
+
 CREATE TABLE 候補日程.候補日程
 (
   候補日程番号 INTEGER PRIMARY KEY,
@@ -53,6 +55,8 @@ CREATE TABLE 参加者.出欠回答種別
 INSERT INTO 参加者.出欠回答種別 (出欠回答種別番号, 出欠回答種別) VALUES (1, '○');
 INSERT INTO 参加者.出欠回答種別 (出欠回答種別番号, 出欠回答種別) VALUES (2, '△');
 INSERT INTO 参加者.出欠回答種別 (出欠回答種別番号, 出欠回答種別) VALUES (3, '×');
+
+CREATE SEQUENCE 参加者.出欠番号;
 
 CREATE TABLE 参加者.出欠
 (

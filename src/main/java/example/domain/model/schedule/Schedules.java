@@ -1,5 +1,6 @@
 package example.domain.model.schedule;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class Schedules {
         return new Schedules(source);
     }
 
-    public Iterator<Schedule> list() {
-        return list.iterator();
+    public List<Schedule> asList() {
+        return Collections.unmodifiableList(list);
     }
 
     @Override

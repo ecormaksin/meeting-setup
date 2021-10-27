@@ -31,12 +31,12 @@ public class MeetingSetupRequest {
     MeetingSetupRequest() {
     }
 
-    public String subject() {
-        return subject.value();
+    public Subject subject() {
+        return subject;
     }
 
-    public String memo() {
-        return memo.value();
+    public Memo memo() {
+        return memo;
     }
 
     public Schedules schedules() {

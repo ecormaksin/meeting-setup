@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="example.datasource.meeting.MeetingMapper">
+    <insert id="insertMeeting">
+        INSERT INTO ミーティング.ミーティング(ミーティングID, 件名)
+        VALUES (#{meetingId.value}, #{subject.value})
+    </insert>
+
+    <insert id="insertMeetingMemo">
+        INSERT INTO ミーティング.ミーティングメモ(ミーティングID, メモ)
+        VALUES (#{meetingId.value}, #{memo.value})
+    </insert>
+</mapper>
