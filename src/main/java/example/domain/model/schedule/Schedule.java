@@ -9,6 +9,18 @@ public class Schedule {
     StartTime startTime;
     EndTime endTime;
 
+    public MeetingDate meetingDate() {
+        return this.meetingDate;
+    }
+
+    public StartTime startTime() {
+        return this.startTime;
+    }
+
+    public EndTime endTime() {
+        return this.endTime;
+    }
+
     @Override
     public String toString() {
         // @formatter:off

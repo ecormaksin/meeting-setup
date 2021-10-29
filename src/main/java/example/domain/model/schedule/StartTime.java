@@ -13,6 +13,10 @@ public class StartTime {
         this.value = value;
     }
 
+    public LocalTime value() {
+        return this.value;
+    }
+
     @Deprecated(since = "MyBatis")
     public StartTime() {
     }

@@ -14,6 +14,10 @@ public class MeetingDate {
         this.value = value;
     }
 
+    public LocalDate value() {
+        return this.value;
+    }
+
     @Deprecated(since = "MyBatis")
     public MeetingDate() {
     }
