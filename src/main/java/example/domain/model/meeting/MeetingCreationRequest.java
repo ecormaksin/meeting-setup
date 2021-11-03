@@ -23,9 +23,6 @@ public class MeetingCreationRequest {
     @Valid
     Schedules schedules;
 
-    @Valid
-    List<Schedule> scheduleList;
-
     public MeetingCreationRequest(@Valid Subject subject, @Valid Memo memo, @Valid Schedules schedules) {
         this.subject = subject;
         this.memo = memo;
@@ -48,15 +45,9 @@ public class MeetingCreationRequest {
         return schedules;
     }
 
-    public List<Schedule> scheduleList() {
-        return scheduleList;
-    }
-
     public static MeetingCreationRequest empty() {
         MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest();
-        meetingCreationRequest.subject = new Subject("hogehoge");
         meetingCreationRequest.schedules = Schedules.initialEmptyList();
-        meetingCreationRequest.scheduleList = Schedules.initialEmptyList().asList();
         return meetingCreationRequest;
     }
 }

@@ -29,15 +29,56 @@
         <mark><span th:errors="*{memo.value}"></span></mark>
       </p>
 
-      <label>候補日程</label>
-
-      <div id="schedules">
-        <div th:each="schedule,scheduleStat: *{scheduleList}">
-          <input type="date" th:field="*{scheduleList[__${scheduleStat.index}__].meetingDate.value}">
-        </div>
+      <div class="meeting-schedules-title-section">
+        <label class="meeting-schedules-title-label">候補日程</label>
+        <button type="submit" name="addSchedule"
+                class="small-button">追加</button>
       </div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>開催日</th>
+            <th>開始時刻</th>
+            <th></th>
+            <th>終了時刻</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
+            <td th:text="${scheduleStat.count}">1</td>
+            <td>
+              <input type="date" th:field="*{schedules.list[__${scheduleStat.index}__].meetingDate.value}">
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].meetingDate.value')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].meetingDate.value}"></span></mark>
+              </p>
+            </td>
+            <td>
+              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].startTime.value}">
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].startTime.value')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].startTime.value}"></span></mark>
+              </p>
+            </td>
+            <td>～</td>
+            <td>
+              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].endTime.value}">
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].endTime.value')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].endTime.value}"></span></mark>
+              </p>
+            </td>
+            <td>
+              <button th:if="${scheduleStat.index > 0}"
+                      type="submit" name="deleteSchedule"
+                      class="small-button">削除</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      <button>作成</button>
+      <div>
+        <button>作成</button>
+      </div>
     </form>
   </article>
 

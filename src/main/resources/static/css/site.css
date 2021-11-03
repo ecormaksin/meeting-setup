@@ -43,8 +43,17 @@ table tr td:nth-child(2) {
     text-align: var(--justify-normal);
 }
 
+/* プレースホルダがChromeのみ小さくなることへの対応 */
 textarea {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif , 'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ',Meiryo,'ＭＳ Ｐゴシック';
+}
+
+th, td {
+    vertical-align: middle;
+}
+
+th *, td * {
+    margin-bottom: 0rem;
 }
 
 .meeting-subject {
@@ -54,4 +63,19 @@ textarea {
 .meeting-memo {
     width: 40ch;
     height: 15ex;
+}
+
+.meeting-schedules-title-section {
+}
+
+.meeting-schedules-title-section *{
+    display: inline-block;
+}
+
+.meeting-schedules-title-label {
+    padding-right: 1rem;
+}
+
+.small-button {
+    padding: 4px;
 }
