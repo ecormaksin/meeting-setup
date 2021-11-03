@@ -3,15 +3,15 @@ package example.datasource.meeting;
 import example.application.service.meeting.MeetingRepository;
 import example.datasource.schedule.ScheduleMapper;
 import example.domain.model.meeting.MeetingId;
-import example.domain.model.meeting.MeetingSetupRequest;
+import example.domain.model.meeting.MeetingCreationRequest;
 import example.domain.model.meeting.Memo;
+import example.domain.model.meeting.Subject;
 import example.domain.model.schedule.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
@@ -25,21 +25,26 @@ public class MeetingDatasource implements MeetingRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public MeetingId setup(MeetingSetupRequest meetingSetupRequest) {
+    public MeetingId create(MeetingCreationRequest meetingCreationRequest) {
         MeetingId meetingId = MeetingId.newId();
 
-        meetingMapper.insertMeeting(
-                meetingId,
-                meetingSetupRequest.subject());
+        insertMeeting(meetingId, meetingCreationRequest.subject());
+        insertMeetingMemo(meetingId, meetingCreationRequest.memo());
+        insertSchedules(meetingId, meetingCreationRequest.schedules());
 
-        Memo memo = meetingSetupRequest.memo();
-        if (memo.isNotBlank()) {
-            meetingMapper.insertMeetingMemo(
-                    meetingId,
-                    meetingSetupRequest.memo());
-        }
+        return meetingId;
+    }
 
-        Schedules schedules = meetingSetupRequest.schedules();
+    private void insertMeeting(MeetingId meetingId, Subject subject) {
+        meetingMapper.insertMeeting(meetingId, subject);
+    }
+
+    private void insertMeetingMemo(MeetingId meetingId, Memo memo) {
+        if (memo.isBlank()) return;
+        meetingMapper.insertMeetingMemo(meetingId, memo);
+    }
+
+    private void insertSchedules(MeetingId meetingId, Schedules schedules) {
         List<Schedule> scheduleList = schedules.asList();
         scheduleList.stream().forEach(schedule -> {
             int scheduleNumber = scheduleMapper.newScheduleNumber();
@@ -53,7 +58,5 @@ public class MeetingDatasource implements MeetingRepository {
                     LocalDateTime.of(meetingDate.value(), endTime.value())
             );
         });
-
-        return meetingId;
     }
 }

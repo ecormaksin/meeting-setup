@@ -1,11 +1,11 @@
 package example.application.service.meeting;
 
 import example.domain.model.meeting.MeetingId;
-import example.domain.model.meeting.MeetingSetupRequest;
+import example.domain.model.meeting.MeetingCreationRequest;
 import org.springframework.stereotype.Service;
 
 /**
- * ミーティングサービス
+ * ミーティングの記録
  */
 @Service
 public class MeetingRecordService {
@@ -15,7 +15,7 @@ public class MeetingRecordService {
         this.meetingRepository = meetingRepository;
     }
 
-    public MeetingId setup(MeetingSetupRequest meetingSetupRequest) {
-        return meetingRepository.setup(meetingSetupRequest);
+    public MeetingId create(MeetingCreationRequest meetingCreationRequest) {
+        return meetingRepository.create(meetingCreationRequest);
     }
 }

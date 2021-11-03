@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<head>
+  <th:block th:replace="_parts/head :: meta"/>
+  <title>ミーティングの作成</title>
+  <th:block th:replace="_parts/head :: css"/>
+</head>
+<body>
+
+<main>
+  <article>
+    <h3>ミーティングの作成</h3>
+    <form method="post" action="#"
+          th:object="${meetingCreationRequest}" th:action="@{/meeting/create}">
+
+      <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
+        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+      </ul>
+
+      <label>件名</label>
+      <input type="text" th:field="*{subject.value}" placeholder="○○様カンファレンス など" class="meeting-subject">
+      <p th:if="${#fields.hasErrors('subject.value')}">
+        <mark><span th:errors="*{subject.value}"></span></mark>
+      </p>
+
+      <label>メモ（任意）</label>
+      <textarea th:field="*{memo.value}" placeholder="リハビリ実施計画書について など" class="meeting-memo"></textarea>
+      <p th:if="${#fields.hasErrors('memo.value')}">
+        <mark><span th:errors="*{memo.value}"></span></mark>
+      </p>
+
+      <label>候補日程</label>
+
+      <div id="schedules">
+        <div th:each="schedule,scheduleStat: *{scheduleList}">
+          <input type="date" th:field="*{scheduleList[__${scheduleStat.index}__].meetingDate.value}">
+        </div>
+      </div>
+
+      <button>作成</button>
+    </form>
+  </article>
+
+</main>
+<footer th:replace="_parts/footer :: default"></footer>
+</body>
+</html>

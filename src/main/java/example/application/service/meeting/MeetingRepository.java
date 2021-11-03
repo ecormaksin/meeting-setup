@@ -1,12 +1,12 @@
 package example.application.service.meeting;
 
 import example.domain.model.meeting.MeetingId;
-import example.domain.model.meeting.MeetingSetupRequest;
+import example.domain.model.meeting.MeetingCreationRequest;
 
 /**
  * ミーティング リポジトリ
  */
 public interface MeetingRepository {
 
-    MeetingId setup(MeetingSetupRequest meetingSetupRequest);
+    MeetingId create(MeetingCreationRequest meetingCreationRequest);
 }

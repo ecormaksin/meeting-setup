@@ -22,6 +22,10 @@ public class Memo {
         return value;
     }
 
+    public boolean isBlank() {
+        return Objects.isNull(value) || value.isBlank();
+    }
+
     public boolean isNotBlank() {
         return Objects.nonNull(value) && !value.isBlank();
     }
