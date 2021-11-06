@@ -5,8 +5,7 @@ import java.util.Objects;
 /**
  * 候補日程
  */
-@ScheduleElementsNotNull
-@StartTimeLessThanEndTime
+@ScheduleValid
 public class Schedule {
     ScheduleNumber scheduleNumber;
     MeetingDate meetingDate;
