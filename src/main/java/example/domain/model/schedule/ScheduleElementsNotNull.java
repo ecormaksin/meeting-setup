@@ -19,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = {ScheduleElementsNotNullValidator.class})
 public @interface ScheduleElementsNotNull {
 
-    String message() default "候補日程は開催日・開始時刻・終了時刻をすべて入力してください。";
+    String message() default "開催日・開始時刻・終了時刻をすべて入力してください。";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 

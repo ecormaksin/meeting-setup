@@ -6,20 +6,12 @@ import java.util.Objects;
  * 候補日程
  */
 @ScheduleElementsNotNull
+@StartTimeLessThanEndTime
 public class Schedule {
     ScheduleNumber scheduleNumber;
     MeetingDate meetingDate;
     StartTime startTime;
     EndTime endTime;
-
-    @Deprecated
-    public Schedule() {}
-
-    public Schedule(MeetingDate meetingDate, StartTime startTime, EndTime endTime) {
-        this.meetingDate = meetingDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
 
     public MeetingDate meetingDate() {
         return this.meetingDate;
@@ -51,6 +43,12 @@ public class Schedule {
 
     private boolean isEndTimeNull() {
         return Objects.isNull(endTime) || endTime.isNull();
+    }
+
+    public boolean isStartTimeLessThanEndTime() {
+        if (isStartTimeNull()) return false;
+        if (isEndTimeNull()) return false;
+        return startTime.value.compareTo(endTime.value) < 0;
     }
 
     @Override

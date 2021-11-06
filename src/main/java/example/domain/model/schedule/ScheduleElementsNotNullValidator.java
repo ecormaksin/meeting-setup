@@ -4,10 +4,12 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Objects;
 
-public class ScheduleElementsNotNullValidator implements ConstraintValidator<ScheduleElementsNotNull, Schedule> {
+public class ScheduleElementsNotNullValidator
+        implements ConstraintValidator<ScheduleElementsNotNull, Schedule> {
 
     private String message;
 
+    @Override
     public void initialize(ScheduleElementsNotNull constraintAnnotation) {
         this.message = constraintAnnotation.message();
     }
