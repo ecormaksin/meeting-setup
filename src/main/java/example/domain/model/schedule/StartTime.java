@@ -1,12 +1,16 @@
 package example.domain.model.schedule;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  * 開始時刻
  */
 public class StartTime {
 
+    @DateTimeFormat(pattern = "HH:mm")
     LocalTime value;
 
     public StartTime(LocalTime value) {
@@ -17,7 +21,11 @@ public class StartTime {
         return this.value;
     }
 
-    @Deprecated(since = "MyBatis")
+    public boolean isNull() {
+        return Objects.isNull(value);
+    }
+
+    @Deprecated
     public StartTime() {
     }
 

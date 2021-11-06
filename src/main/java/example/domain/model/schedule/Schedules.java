@@ -1,8 +1,8 @@
 package example.domain.model.schedule;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -11,7 +11,7 @@ import java.util.List;
 public class Schedules {
     private static final int INITIAL_EMPTY_SCHEDULES_SIZE = 3;
 
-    List<Schedule> list;
+    List<@Valid Schedule> list;
 
     public Schedules(List<Schedule> list) {
         this.list = list;
@@ -34,7 +34,19 @@ public class Schedules {
     }
 
     public List<Schedule> asList() {
-        return list;
+        return Collections.unmodifiableList(list);
+    }
+
+    public Schedules addNew() {
+        List<Schedule> newList = new ArrayList<>(list);
+        newList.add(new Schedule());
+        return of(newList);
+    }
+
+    public Schedules remove(int index) {
+        List<Schedule> newList = new ArrayList<>(list);
+        newList.remove(index);
+        return of(newList);
     }
 
     @Override

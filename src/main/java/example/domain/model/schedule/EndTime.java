@@ -1,12 +1,16 @@
 package example.domain.model.schedule;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  * 終了時刻
  */
 public class EndTime {
 
+    @DateTimeFormat(pattern = "HH:mm")
     LocalTime value;
 
     public EndTime(LocalTime value) {
@@ -17,7 +21,11 @@ public class EndTime {
         return this.value;
     }
 
-    @Deprecated(since = "MyBatis")
+    public boolean isNull() {
+        return Objects.isNull(value);
+    }
+
+    @Deprecated
     public EndTime() {
     }
 

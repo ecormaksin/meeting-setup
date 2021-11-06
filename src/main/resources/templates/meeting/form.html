@@ -38,6 +38,7 @@
         <thead>
           <tr>
             <th></th>
+            <th></th>
             <th>開催日</th>
             <th>開始時刻</th>
             <th></th>
@@ -48,6 +49,11 @@
         <tbody>
           <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
             <td th:text="${scheduleStat.count}">1</td>
+            <td>
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__]')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__]}"></span></mark>
+              </p>
+            </td>
             <td>
               <input type="date" th:field="*{schedules.list[__${scheduleStat.index}__].meetingDate.value}">
               <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].meetingDate.value')}">
@@ -69,7 +75,8 @@
             </td>
             <td>
               <button th:if="${scheduleStat.index > 0}"
-                      type="submit" name="deleteSchedule"
+                      type="submit" name="removeSchedule"
+                      th:value="${scheduleStat.index}"
                       class="small-button">削除</button>
             </td>
           </tr>

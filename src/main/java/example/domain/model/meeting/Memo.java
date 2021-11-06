@@ -1,6 +1,5 @@
 package example.domain.model.meeting;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 /**
@@ -24,10 +23,6 @@ public class Memo {
 
     public boolean isBlank() {
         return Objects.isNull(value) || value.isBlank();
-    }
-
-    public boolean isNotBlank() {
-        return Objects.nonNull(value) && !value.isBlank();
     }
 
     @Deprecated

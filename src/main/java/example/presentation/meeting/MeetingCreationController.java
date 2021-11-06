@@ -2,17 +2,15 @@ package example.presentation.meeting;
 
 import example.application.senario.MeetingCreationScenario;
 import example.domain.model.meeting.MeetingCreationRequest;
-import example.domain.model.schedule.Schedule;
-import example.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("meeting/create")
@@ -31,9 +29,30 @@ public class MeetingCreationController {
 
     @PostMapping(params={"addSchedule"})
     String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest, BindingResult bindingResult) {
-        Schedules schedules = meetingCreationRequest.schedules();
-        List<Schedule> scheduleList = schedules.asList();
-        scheduleList.add(new Schedule());
+        meetingCreationRequest.addEmptySchedule();
         return "meeting/form";
+    }
+
+    @PostMapping(params={"removeSchedule"})
+    String removeSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest, BindingResult bindingResult, HttpServletRequest req) {
+        final Integer index = Integer.valueOf(req.getParameter("removeSchedule"));
+        meetingCreationRequest.removeSchedule(index.intValue());
+        return "meeting/form";
+    }
+
+    @PostMapping
+    String create(@Validated @ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest, BindingResult bindingResult, RedirectAttributes attributes) {
+        if (bindingResult.hasErrors()) return "meeting/form";
+
+        return "redirect:/meeting/create/completed";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setAllowedFields(
+                "subject.value",
+                "memo.value",
+                "schedules.list[*"
+        );
     }
 }
