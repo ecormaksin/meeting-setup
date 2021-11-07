@@ -19,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @StartTimeLessThanEndTime
 public @interface ScheduleConstructValid {
 
-    String message() default "候補日程を正しく入力してください。";
+    String message() default "";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 

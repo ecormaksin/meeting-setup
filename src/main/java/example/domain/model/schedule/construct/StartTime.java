@@ -30,6 +30,20 @@ public class StartTime {
     }
 
     @Override
+    public boolean equals(Object anObject) {
+        if (Objects.isNull(anObject)) return false;
+        if (!(anObject instanceof StartTime other)) return false;
+        if (this.isNull()) return false;
+        if (other.isNull()) return false;
+        return this.value.equals(other.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
+
+    @Override
     public String toString() {
         return value.format(TimeFormatter.ofPattern());
     }

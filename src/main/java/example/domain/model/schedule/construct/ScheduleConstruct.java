@@ -5,6 +5,7 @@ import java.util.Objects;
 /**
  * 候補日程の構成要素
  */
+@ScheduleConstructValid
 public class ScheduleConstruct {
 
     MeetingDate meetingDate;
@@ -58,14 +59,27 @@ public class ScheduleConstruct {
         if (Objects.isNull(anObject)) return false;
         if (!(anObject instanceof ScheduleConstruct other)) return false;
         if (!other.isValid()) return false;
-        if (!meetingDate.value.equals(other.meetingDate.value)) return false;
-        if (!startTime.value.equals(other.startTime.value)) return false;
-        if (!endTime.value.equals(other.endTime.value)) return false;
+        if (!meetingDate.equals(other.meetingDate)) return false;
+        if (!startTime.equals(other.startTime)) return false;
+        if (!endTime.equals(other.endTime)) return false;
         return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(meetingDate, startTime, endTime);
+        return Objects.hash(Objects.hashCode(meetingDate.hashCode()),
+                Objects.hashCode(startTime.value),
+                Objects.hashCode(endTime.value));
+    }
+
+    @Override
+    public String toString() {
+        // @formatter:off
+        return "ScheduleConstruct{" +
+                "meetingDate=" + meetingDate +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
+        // @formatter:on
     }
 }

@@ -1,15 +1,14 @@
 package example.domain.model.schedule;
 
+import example.domain.model.schedule.construct.ScheduleConstruct;
+
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 候補日程リスト
  */
-@SchedulesHasAtLeastOne
+@SchedulesValid
 public class Schedules {
     private static final int INITIAL_EMPTY_SCHEDULES_SIZE = 3;
 
@@ -52,12 +51,37 @@ public class Schedules {
     }
 
     public boolean hasValidSchedule() {
+        if (isEmpty()) {
+            return false;
+        }
+        return list.stream().anyMatch(Schedule::isConstructNotNull);
+    }
 
-        if (Objects.isNull(list)) return false;
-        if (list.isEmpty()) return false;
+    public boolean isNotDuplicated() {
+        if (!hasValidSchedule()) {
+            return true;
+        }
 
-        return list.stream()
-                .anyMatch(schedule -> schedule.isConstructNotNull());
+        Set<ScheduleConstruct> scheduleConstructSet = new HashSet<>();
+        boolean isNotDuplicated = true;
+        for (Schedule schedule : list) {
+            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
+            if (!scheduleConstruct.isValid()) {
+                continue;
+            }
+            if (!scheduleConstructSet.add(scheduleConstruct)) {
+                isNotDuplicated = false;
+                break;
+            }
+        }
+
+        return isNotDuplicated;
+    }
+
+    private boolean isEmpty() {
+        if (Objects.isNull(list)) return true;
+        if (list.isEmpty()) return true;
+        return false;
     }
 
     @Override

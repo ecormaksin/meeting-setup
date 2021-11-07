@@ -1,7 +1,6 @@
 package example.domain.model.schedule;
 
 import example.domain.model.schedule.construct.ScheduleConstruct;
-import example.domain.model.schedule.construct.ScheduleConstructValid;
 
 import javax.validation.Valid;
 
@@ -12,7 +11,6 @@ public class Schedule {
     ScheduleNumber scheduleNumber;
 
     @Valid
-    @ScheduleConstructValid
     ScheduleConstruct scheduleConstruct;
 
     public ScheduleConstruct scheduleConstruct() {
