@@ -1,4 +1,4 @@
-package example.domain.model.schedule;
+package example.domain.model.schedule.construct;
 
 import org.springframework.format.annotation.DateTimeFormat;
 

@@ -50,27 +50,27 @@
           <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
             <td th:text="${scheduleStat.count}">1</td>
             <td>
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__]')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__]}"></span></mark>
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct}"></span></mark>
               </p>
             </td>
             <td>
-              <input type="date" th:field="*{schedules.list[__${scheduleStat.index}__].meetingDate.value}">
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].meetingDate.value')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].meetingDate.value}"></span></mark>
+              <input type="date" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value}">
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value}"></span></mark>
               </p>
             </td>
             <td>
-              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].startTime.value}">
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].startTime.value')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].startTime.value}"></span></mark>
+              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value}">
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value}"></span></mark>
               </p>
             </td>
             <td>～</td>
             <td>
-              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].endTime.value}">
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].endTime.value')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].endTime.value}"></span></mark>
+              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value}">
+              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value')}">
+                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value}"></span></mark>
               </p>
             </td>
             <td>

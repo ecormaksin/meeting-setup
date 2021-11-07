@@ -1,10 +1,6 @@
 package example.datasource.schedule;
 
 import example.domain.model.meeting.MeetingId;
-import example.domain.model.meeting.Memo;
-import example.domain.model.meeting.Subject;
-import example.domain.model.schedule.EndTime;
-import example.domain.model.schedule.StartTime;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

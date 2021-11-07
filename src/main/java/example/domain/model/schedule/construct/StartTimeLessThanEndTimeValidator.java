@@ -1,10 +1,10 @@
-package example.domain.model.schedule;
+package example.domain.model.schedule.construct;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class StartTimeLessThanEndTimeValidator
-        implements ConstraintValidator<StartTimeLessThanEndTime, Schedule> {
+        implements ConstraintValidator<StartTimeLessThanEndTime, ScheduleConstruct> {
 
     private String message;
 
@@ -14,10 +14,10 @@ public class StartTimeLessThanEndTimeValidator
     }
 
     @Override
-    public boolean isValid(Schedule value, ConstraintValidatorContext context) {
+    public boolean isValid(ScheduleConstruct value, ConstraintValidatorContext context) {
 
-        if (value.areAllElementsNull()) return true;
-        if (!value.areAllElementsNotNull()) return true; // 別のバリデーションでエラーになるので、ここではスルーする
+        if (value.isNull()) return true;
+        if (!value.isNotNull()) return true; // 別のバリデーションでエラーになるので、ここではスルーする
         if (value.isStartTimeLessThanEndTime()) return true;
 
         context.disableDefaultConstraintViolation();

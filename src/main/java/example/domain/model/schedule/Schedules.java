@@ -57,7 +57,7 @@ public class Schedules {
         if (list.isEmpty()) return false;
 
         return list.stream()
-                .anyMatch(schedule -> schedule.areAllElementsNotNull());
+                .anyMatch(schedule -> schedule.isConstructNotNull());
     }
 
     @Override

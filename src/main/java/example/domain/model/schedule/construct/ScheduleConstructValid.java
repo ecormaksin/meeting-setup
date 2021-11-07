@@ -1,6 +1,4 @@
-package example.domain.model.schedule;
-
-import example.domain.model.schedule.ScheduleElementsNotNull.List;
+package example.domain.model.schedule.construct;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,14 +10,16 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+@Documented
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Repeatable(List.class)
-@Documented
-@Constraint(validatedBy = {ScheduleElementsNotNullValidator.class})
-public @interface ScheduleElementsNotNull {
+@Repeatable(ScheduleConstructValid.List.class)
+@Constraint(validatedBy = {})
+@ScheduleConstructNotNull
+@StartTimeLessThanEndTime
+public @interface ScheduleConstructValid {
 
-    String message() default "{example.domain.model.schedule.ScheduleElementsNotNull.message}";
+    String message() default "候補日程を正しく入力してください。";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 
@@ -27,6 +27,6 @@ public @interface ScheduleElementsNotNull {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        ScheduleElementsNotNull[] value();
+        ScheduleConstructValid[] value();
     }
 }

@@ -1,4 +1,6 @@
-package example.domain.model.schedule;
+package example.domain.model.schedule.construct;
+
+import example.domain.model.schedule.construct.ScheduleConstructNotNull.List;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,12 +14,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Repeatable(StartTimeLessThanEndTime.List.class)
+@Repeatable(List.class)
 @Documented
-@Constraint(validatedBy = { StartTimeLessThanEndTimeValidator.class })
-public @interface StartTimeLessThanEndTime {
+@Constraint(validatedBy = {ScheduleConstructNotNullValidator.class})
+public @interface ScheduleConstructNotNull {
 
-    String message() default "{example.domain.model.schedule.StartTimeLessThanEndTime.message}";
+    String message() default "{example.domain.model.schedule.construct.ScheduleConstructNotNull.message}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 
@@ -25,6 +27,6 @@ public @interface StartTimeLessThanEndTime {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        StartTimeLessThanEndTime[] value();
+        ScheduleConstructNotNull[] value();
     }
 }

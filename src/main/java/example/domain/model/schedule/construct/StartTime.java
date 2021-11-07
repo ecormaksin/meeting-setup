@@ -1,4 +1,4 @@
-package example.domain.model.schedule;
+package example.domain.model.schedule.construct;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -6,14 +6,14 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 /**
- * 終了時刻
+ * 開始時刻
  */
-public class EndTime {
+public class StartTime {
 
     @DateTimeFormat(pattern = "HH:mm")
     LocalTime value;
 
-    public EndTime(LocalTime value) {
+    public StartTime(LocalTime value) {
         this.value = value;
     }
 
@@ -26,7 +26,7 @@ public class EndTime {
     }
 
     @Deprecated
-    public EndTime() {
+    public StartTime() {
     }
 
     @Override
