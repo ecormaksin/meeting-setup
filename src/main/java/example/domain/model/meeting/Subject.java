@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
  * 件名
  */
 public class Subject {
-    @NotBlank(message = "件名を入力してください。")
+    @NotBlank(message = "{example.domain.model.meeting.Subject.NotBlank.message}")
     String value;
 
     public Subject(String value) {

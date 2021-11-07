@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = { StartTimeLessThanEndTimeValidator.class })
 public @interface StartTimeLessThanEndTime {
 
-    String message() default "開始時刻 ＜ 終了時刻となるように入力してください。";
+    String message() default "{example.domain.model.schedule.StartTimeLessThanEndTime.message}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 
