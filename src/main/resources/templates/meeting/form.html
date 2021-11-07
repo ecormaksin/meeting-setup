@@ -82,6 +82,11 @@
           </tr>
         </tbody>
       </table>
+      <div>
+        <p th:if="${#fields.hasErrors('schedules')}">
+          <mark><span th:errors="*{schedules}"></span></mark>
+        </p>
+      </div>
 
       <div>
         <button>作成</button>

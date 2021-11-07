@@ -17,7 +17,7 @@ public class StartTimeLessThanEndTimeValidator
     public boolean isValid(Schedule value, ConstraintValidatorContext context) {
 
         if (value.areAllElementsNull()) return true;
-        if (!value.areAllElementsNotNull()) return true;
+        if (!value.areAllElementsNotNull()) return true; // 別のバリデーションでエラーになるので、ここではスルーする
         if (value.isStartTimeLessThanEndTime()) return true;
 
         context.disableDefaultConstraintViolation();

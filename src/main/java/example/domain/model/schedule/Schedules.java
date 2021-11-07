@@ -4,10 +4,12 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 候補日程リスト
  */
+@SchedulesHasAtLeastOne
 public class Schedules {
     private static final int INITIAL_EMPTY_SCHEDULES_SIZE = 3;
 
@@ -47,6 +49,15 @@ public class Schedules {
         List<Schedule> newList = new ArrayList<>(list);
         newList.remove(index);
         return of(newList);
+    }
+
+    public boolean hasValidSchedule() {
+
+        if (Objects.isNull(list)) return false;
+        if (list.isEmpty()) return false;
+
+        return list.stream()
+                .anyMatch(schedule -> schedule.areAllElementsNotNull());
     }
 
     @Override
