@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class StartTime {
 
-    @DateTimeFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = TimeFormatter.PATTERN)
     LocalTime value;
 
     public StartTime(LocalTime value) {

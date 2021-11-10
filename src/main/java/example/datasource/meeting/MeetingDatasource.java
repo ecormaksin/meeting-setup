@@ -8,14 +8,9 @@ import example.domain.model.meeting.Memo;
 import example.domain.model.meeting.Subject;
 import example.domain.model.schedule.Schedule;
 import example.domain.model.schedule.Schedules;
-import example.domain.model.schedule.construct.EndTime;
-import example.domain.model.schedule.construct.MeetingDate;
-import example.domain.model.schedule.construct.ScheduleConstruct;
-import example.domain.model.schedule.construct.StartTime;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -52,16 +47,16 @@ public class MeetingDatasource implements MeetingRepository {
     private void insertSchedules(MeetingId meetingId, Schedules schedules) {
         List<Schedule> scheduleList = schedules.asList();
         scheduleList.stream().forEach(schedule -> {
+            if (!schedule.isValid()) {
+                return;
+            }
+
             int scheduleNumber = scheduleMapper.newScheduleNumber();
-            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
-            MeetingDate meetingDate = scheduleConstruct.meetingDate();
-            StartTime startTime = scheduleConstruct.startTime();
-            EndTime endTime = scheduleConstruct.endTime();
             scheduleMapper.insertSchedule(
                     scheduleNumber,
                     meetingId,
-                    LocalDateTime.of(meetingDate.value(), startTime.value()),
-                    LocalDateTime.of(meetingDate.value(), endTime.value())
+                    schedule.startDateTime(),
+                    schedule.endDateTime()
             );
         });
     }

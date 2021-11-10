@@ -30,9 +30,10 @@ CREATE TABLE 候補日程.候補日程
 (
   候補日程番号 INTEGER PRIMARY KEY,
   ミーティングID CHAR(32) NOT NULL REFERENCES ミーティング.ミーティング,
-  候補日程 TSRANGE NOT NULL,
+  開始日時 TIMESTAMP NOT NULL,
+  終了日時 TIMESTAMP NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (ミーティングID,候補日程)
+  UNIQUE (ミーティングID, 開始日時, 終了日時)
 );
 
 -- 参加者 スキーマ

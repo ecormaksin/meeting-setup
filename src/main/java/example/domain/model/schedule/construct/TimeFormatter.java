@@ -4,7 +4,9 @@ import java.time.format.DateTimeFormatter;
 
 public class TimeFormatter {
 
+    public static final String PATTERN = "HH:mm";
+
     public static DateTimeFormatter ofPattern() {
-        return DateTimeFormatter.ofPattern("HH:mm");
+        return DateTimeFormatter.ofPattern(PATTERN);
     }
 }

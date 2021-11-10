@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<head>
+  <th:block th:replace="_parts/head :: meta"/>
+  <title>ミーティングの作成 完了</title>
+  <th:block th:replace="_parts/head :: css"/>
+</head>
+<body>
+
+<main>
+  <article>
+    <p>ミーティングの作成が完了しました。</p>
+    <p>参加者には次のURLを連絡してください。: </p>
+    <p th:text="${attendanceReplyLocation}"></p>
+  </article>
+</main>
+<footer th:replace="_parts/footer :: default"></footer>
+</body>
+</html>

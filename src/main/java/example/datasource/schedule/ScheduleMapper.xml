@@ -8,7 +8,7 @@
     </select>
 
     <insert id="insertSchedule">
-        INSERT INTO 候補日程.候補日程(候補日程番号, ミーティングID, 候補日程)
-        VALUES (#{scheduleNumber}, #{meetingId.value}, [#{startDateTime}, #{endDateTime}])
+        INSERT INTO 候補日程.候補日程(候補日程番号, ミーティングID, 開始日時, 終了日時)
+        VALUES (#{scheduleNumber}, #{meetingId.value}, #{startDateTime}, #{endDateTime})
     </insert>
 </mapper>
