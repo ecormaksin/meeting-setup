@@ -11,9 +11,27 @@
   <article>
     <p>ミーティングの作成が完了しました。</p>
     <p>参加者には次のURLを連絡してください。: </p>
-    <p th:text="${attendanceReplyLocation}"></p>
+    <div class="attendance-reply-location-parent">
+      <input type="text" id="url" class="attendance-reply-location" th:readonly="readonly" th:value="${attendanceReplyLocation}">
+      <button id="copyUrlButton" class="small-button attendance-reply-location-copy-button">URLをコピーする</button>
+    </div>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
+<script>
+$(function() {
+  function copyUrl() {
+    var url = $('#url').val();
+    var dummyTextBox = $("<input type='text'>");
+    dummyTextBox.val(url);
+    $('body').append(dummyTextBox);
+    dummyTextBox.select();
+    document.execCommand('copy');
+    dummyTextBox.remove();
+  }
+
+  $('#copyUrlButton').on('click', copyUrl);
+});
+</script>
 </body>
 </html>

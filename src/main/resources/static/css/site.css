@@ -56,6 +56,10 @@ th *, td * {
     margin-bottom: 0rem;
 }
 
+.small-button {
+    padding: 4px;
+}
+
 .meeting-subject {
     width: 40ch;
 }
@@ -76,6 +80,17 @@ th *, td * {
     padding-right: 1rem;
 }
 
-.small-button {
-    padding: 4px;
+.attendance-reply-location-parent {
+    display: flex;
+}
+
+.attendance-reply-location {
+    border: thin solid black;
+    width: 256ch !important;
+    margin-bottom: 0rem;
+}
+
+.attendance-reply-location-copy-button {
+    word-break: keep-all;
+    margin-left: 1rem;
 }
