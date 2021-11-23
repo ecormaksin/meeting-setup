@@ -6,6 +6,7 @@ import example.domain.model.meeting.MeetingCreationRequest;
 import example.domain.model.meeting.MeetingId;
 import example.domain.model.meeting.Memo;
 import example.domain.model.meeting.Subject;
+import example.domain.model.meeting.organizer.OrganizerTerminal;
 import example.domain.model.schedule.Schedule;
 import example.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,7 @@ public class MeetingDatasource implements MeetingRepository {
         insertMeeting(meetingId, meetingCreationRequest.subject());
         insertMeetingMemo(meetingId, meetingCreationRequest.memo());
         insertSchedules(meetingId, meetingCreationRequest.schedules());
+        insertOrganizerTerminal(meetingId, meetingCreationRequest.organizerTerminal());
 
         return meetingId;
     }
@@ -59,5 +61,13 @@ public class MeetingDatasource implements MeetingRepository {
                     schedule.endDateTime()
             );
         });
+    }
+
+    private void insertOrganizerTerminal(MeetingId meetingId, OrganizerTerminal organizerTerminal) {
+        meetingMapper.insertOrganizerTerminal(meetingId,
+                organizerTerminal.ipAddress(),
+                organizerTerminal.osFamily(),
+                organizerTerminal.userAgentFamily()
+        );
     }
 }

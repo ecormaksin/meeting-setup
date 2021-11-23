@@ -90,7 +90,12 @@ th *, td * {
     margin-bottom: 0rem;
 }
 
-.attendance-reply-location-copy-button {
+.meeting-url-copy-button {
     word-break: keep-all;
     margin-left: 1rem;
+    width: 60ch;
+}
+
+.meeting-url-copy-button-copied {
+    background-color: green;
 }

@@ -13,13 +13,15 @@
     <p>参加者には次のURLを連絡してください。: </p>
     <div class="attendance-reply-location-parent">
       <input type="text" id="url" class="attendance-reply-location" th:readonly="readonly" th:value="${attendanceReplyLocation}">
-      <button id="copyUrlButton" class="small-button attendance-reply-location-copy-button">URLをコピーする</button>
+      <button id="copyUrlButton" class="small-button meeting-url-copy-button">URLをコピーする</button>
     </div>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 <script>
 $(function() {
+  var copyButtonObj = $('#copyUrlButton');
+
   function copyUrl() {
     var url = $('#url').val();
     var dummyTextBox = $("<input type='text'>");
@@ -28,9 +30,18 @@ $(function() {
     dummyTextBox.select();
     document.execCommand('copy');
     dummyTextBox.remove();
+
+    copyButtonObj.text('コピー完了');
+    copyButtonObj.addClass('meeting-url-copy-button-copied');
+    setTimeout(removeCopiedStyle, 5000);
   }
 
-  $('#copyUrlButton').on('click', copyUrl);
+  function removeCopiedStyle() {
+    copyButtonObj.text('URLをコピーする');
+    copyButtonObj.removeClass('meeting-url-copy-button-copied');
+  }
+
+  copyButtonObj.on('click', copyUrl);
 });
 </script>
 </body>

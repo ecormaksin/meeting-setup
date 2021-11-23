@@ -12,4 +12,9 @@
         INSERT INTO ミーティング.ミーティングメモ(ミーティングID, メモ)
         VALUES (#{meetingId.value}, #{memo.value})
     </insert>
+
+    <insert id="insertOrganizerTerminal">
+        INSERT INTO ミーティング.主催者端末(ミーティングID, IPアドレス, OSファミリー, ユーザーエージェントファミリー)
+        VALUES (#{meetingId.value}, #{ipAddress.value}, #{osFamily.value}, #{userAgentFamily.value})
+    </insert>
 </mapper>

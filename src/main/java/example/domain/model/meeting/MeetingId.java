@@ -1,14 +1,13 @@
 package example.domain.model.meeting;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.util.UUID;
 
 /**
  * ミーティングID
  */
 public class MeetingId {
-    @NotBlank(message = "ミーティングIDを設定してください。")
+    @NotBlank(message = "{example.domain.model.meeting.MeetingId.NotBlank.message}")
     String value;
 
     public static MeetingId newId() {

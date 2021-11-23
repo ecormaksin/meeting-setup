@@ -1,5 +1,6 @@
 package example.domain.model.meeting;
 
+import example.domain.model.meeting.organizer.OrganizerTerminal;
 import example.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
@@ -18,10 +19,17 @@ public class MeetingCreationRequest {
     @Valid
     Schedules schedules;
 
-    public MeetingCreationRequest(@Valid Subject subject, @Valid Memo memo, @Valid Schedules schedules) {
+    @Valid
+    OrganizerTerminal organizerTerminal;
+
+    public MeetingCreationRequest(@Valid Subject subject,
+                                  @Valid Memo memo,
+                                  @Valid Schedules schedules,
+                                  @Valid OrganizerTerminal organizerTerminal) {
         this.subject = subject;
         this.memo = memo;
         this.schedules = schedules;
+        this.organizerTerminal = organizerTerminal;
     }
 
     @Deprecated
@@ -40,6 +48,10 @@ public class MeetingCreationRequest {
         return schedules;
     }
 
+    public OrganizerTerminal organizerTerminal() {
+        return organizerTerminal;
+    }
+
     public void addEmptySchedule() {
         schedules = schedules.addNew();
     }
@@ -48,9 +60,10 @@ public class MeetingCreationRequest {
         schedules = schedules.remove(index);
     }
 
-    public static MeetingCreationRequest empty() {
+    public static MeetingCreationRequest empty(@Valid OrganizerTerminal organizerTerminal) {
         MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest();
         meetingCreationRequest.schedules = Schedules.initialEmptyList();
+        meetingCreationRequest.organizerTerminal = organizerTerminal;
         return meetingCreationRequest;
     }
 }

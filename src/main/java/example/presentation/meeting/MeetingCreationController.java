@@ -3,6 +3,8 @@ package example.presentation.meeting;
 import example.application.senario.MeetingCreationScenario;
 import example.domain.model.meeting.MeetingCreationRequest;
 import example.domain.model.meeting.MeetingId;
+import example.domain.model.meeting.organizer.OrganizerTerminal;
+import example.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,24 +22,32 @@ import java.net.URI;
 public class MeetingCreationController {
     MeetingCreationScenario coordinator;
 
-    public MeetingCreationController(MeetingCreationScenario coordinator) {
+    ClientInfoGetter clientInfoGetter;
+
+    public MeetingCreationController(MeetingCreationScenario coordinator,
+                                     ClientInfoGetter clientInfoGetter) {
         this.coordinator = coordinator;
+        this.clientInfoGetter = clientInfoGetter;
     }
 
     @GetMapping
-    String init(Model model) {
-        model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty());
+    String init(Model model, HttpServletRequest req) {
+        OrganizerTerminal organizerTerminal = clientInfoGetter.organizerTerminal(req);
+        model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty(organizerTerminal));
         return "meeting/form";
     }
 
     @PostMapping(params={"addSchedule"})
-    String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest, BindingResult bindingResult) {
+    String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
+                       BindingResult bindingResult) {
         meetingCreationRequest.addEmptySchedule();
         return "meeting/form";
     }
 
     @PostMapping(params={"removeSchedule"})
-    String removeSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest, BindingResult bindingResult, HttpServletRequest req) {
+    String removeSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
+                          BindingResult bindingResult,
+                          HttpServletRequest req) {
         final Integer index = Integer.valueOf(req.getParameter("removeSchedule"));
         meetingCreationRequest.removeSchedule(index.intValue());
         return "meeting/form";
@@ -59,7 +69,7 @@ public class MeetingCreationController {
 
     @GetMapping("completed")
     String completed(@ModelAttribute("meetingId") String meetingId, Model model, UriComponentsBuilder builder) {
-        URI attendanceReplyLocation = builder.path("/meeting/" + meetingId + "/attendance/reply").build().toUri();
+        URI attendanceReplyLocation = builder.path("/meeting/" + meetingId).build().toUri();
         model.addAttribute("attendanceReplyLocation", attendanceReplyLocation.toString());
         return "meeting/completed";
     }
@@ -69,7 +79,10 @@ public class MeetingCreationController {
         binder.setAllowedFields(
                 "subject.value",
                 "memo.value",
-                "schedules.list[*"
+                "schedules.list[*",
+                "organizerTerminal.ipAddress.value",
+                "organizerTerminal.osFamily.value",
+                "organizerTerminal.userAgentFamily.value"
         );
     }
 }

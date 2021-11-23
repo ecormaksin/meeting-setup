@@ -3,6 +3,9 @@ package example.datasource.meeting;
 import example.domain.model.meeting.MeetingId;
 import example.domain.model.meeting.Memo;
 import example.domain.model.meeting.Subject;
+import example.domain.model.meeting.organizer.IpAddress;
+import example.domain.model.meeting.organizer.OSFamily;
+import example.domain.model.meeting.organizer.UserAgentFamily;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,9 +14,18 @@ public interface MeetingMapper {
 
     void insertMeeting(
             @Param("meetingId") MeetingId meetingId,
-            @Param("subject") Subject subject);
+            @Param("subject") Subject subject
+    );
 
     void insertMeetingMemo(
             @Param("meetingId") MeetingId meetingId,
-            @Param("memo") Memo memo);
+            @Param("memo") Memo memo
+    );
+
+    void insertOrganizerTerminal(
+            @Param("meetingId") MeetingId meetingId,
+            @Param("ipAddress") IpAddress ipAddress,
+            @Param("osFamily") OSFamily osFamily,
+            @Param("userAgentFamily") UserAgentFamily userAgentFamily
+    );
 }
