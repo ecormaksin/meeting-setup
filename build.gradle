@@ -6,7 +6,7 @@ plugins {
     id 'idea'
 }
 
-group = 'org.example'
+group = 'org.meeting'
 version = '0.0.1-SNAPSHOT'
 description 'ミーティング調整サービスの試作'
 sourceCompatibility = '17'

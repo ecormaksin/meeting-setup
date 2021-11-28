@@ -1,4 +1,0 @@
-/**
- * ユーザーインタフェース
- */
-package example.presentation;
