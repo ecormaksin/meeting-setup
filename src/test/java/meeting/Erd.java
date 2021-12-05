@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.sql.DataSource;
 
 @SpringBootTest
-public class EntityRelationshipDiagram {
+public class Erd {
 
     @Test
     void run(@Autowired DataSource dataSource) {

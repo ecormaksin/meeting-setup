@@ -11,11 +11,11 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface MeetingMapper {
-
-
     void insertMeeting(MeetingId meetingId, Subject subject);
     void insertMeetingMemo(MeetingId meetingId, Memo memo);
     void insertOrganizerTerminal(MeetingId meetingId, IpAddress ipAddress, OSFamily osFamily, UserAgentFamily userAgentFamily);
 
+    Subject selectSubject(MeetingId meetingId);
+    Memo selectMemo(MeetingId meetingId);
     OrganizerTerminal selectOrganizerTerminal(MeetingId meetingId);
 }

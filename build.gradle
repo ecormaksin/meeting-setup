@@ -22,6 +22,7 @@ dependencies {
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
     implementation 'com.github.ua-parser:uap-java:1.5.2'
 
+    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -30,6 +31,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:deprecation'
 }
 
 // Mybatisのmapper.xmlのスキャン対象
@@ -56,3 +61,10 @@ task documentWithErd(type: Test, dependsOn: document) {
 }
 
 [document, documentWithErd]*.group('jig')
+
+// スキーマ ファイルをテスト リソースへコピーするタスク
+task copySchemaFileToTestResource(type: Copy) {
+    from 'docker/postgres/docker-entrypoint-initdb.d/schema.sql'
+    into 'src/test/resources'
+}
+processTestResources.dependsOn(copySchemaFileToTestResource)

@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### customised ###
+src/test/resources/schema.sql

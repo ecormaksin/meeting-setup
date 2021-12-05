@@ -3,9 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meeting.infrastructure.datasource.meeting.MeetingMapper">
-    <select id="newMeetingId" resultType="meeting.domain.model.meeting.MeetingId">
-        SELECT REPLACE(CAST(GEN_RANDOM_UUID() AS VARCHAR), '-', '');
-    </select>
 
     <insert id="insertMeeting">
         INSERT INTO ミーティング.ミーティング(ミーティングID, 件名)
@@ -22,14 +19,23 @@
         VALUES (#{meetingId.value}, #{ipAddress.value}, #{osFamily.value}, #{userAgentFamily.value})
     </insert>
 
-    <resultMap id="meeting" type="meeting.domain.model.meeting.Meeting">
-        <association property="schedules.list"
-                     column="meetingId.value"
-                     select="meeting.infrastructure.datasource.schedule.ScheduleMapper.selectByMeetingId" />
-        <association property="organizerTerminal"
-                     column="meetingId.value"
-                     select="meeting.infrastructure.datasource.meeting.MeetingMapper.selectOrganizerTerminal"/>
-    </resultMap>
+    <select id="selectSubject" resultType="meeting.domain.model.meeting.Subject">
+        SELECT
+            件名 as "value"
+        FROM
+            ミーティング.ミーティング
+        WHERE
+        ミーティングID = #{meetingId.value}
+    </select>
+
+    <select id="selectMemo" resultType="meeting.domain.model.meeting.Memo">
+        SELECT
+            メモ as "value"
+        FROM
+            ミーティング.ミーティングメモ
+        WHERE
+            ミーティングID = #{meetingId.value}
+    </select>
 
     <select id="selectOrganizerTerminal" resultType="meeting.domain.model.meeting.organizer.OrganizerTerminal">
         SELECT
@@ -39,7 +45,7 @@
         FROM
             ミーティング.主催者端末
         WHERE
-            ミーティングID = #{value}
+            ミーティングID = #{meetingId.value}
     </select>
 
 </mapper>

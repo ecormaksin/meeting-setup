@@ -6,7 +6,9 @@ import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.domain.model.schedule.construct.StartTime;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * 候補日程
@@ -20,6 +22,20 @@ public class Schedule {
     public Schedule(ScheduleNumber scheduleNumber, ScheduleConstruct scheduleConstruct) {
         this.scheduleNumber = scheduleNumber;
         this.scheduleConstruct = scheduleConstruct;
+    }
+
+    public static Schedule of (int primitiveScheduleNumber,
+                               LocalDate noWrappedMeetingDate,
+                               LocalTime noWrappedStartTime,
+                               LocalTime noWrappedEndTime) {
+        return new Schedule(
+                new ScheduleNumber(primitiveScheduleNumber),
+                ScheduleConstruct.of(noWrappedMeetingDate, noWrappedStartTime, noWrappedEndTime)
+        );
+    }
+
+    public static Schedule empty() {
+        return new Schedule();
     }
 
     @Deprecated

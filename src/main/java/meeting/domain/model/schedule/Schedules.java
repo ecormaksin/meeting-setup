@@ -29,7 +29,7 @@ public class Schedules {
     public static Schedules initialEmptyList() {
         List<Schedule> list = new ArrayList<>();
         for (int i = 0; i < INITIAL_EMPTY_SCHEDULES_SIZE; i++) {
-            list.add(new Schedule());
+            list.add(Schedule.empty());
         }
         return new Schedules(list);
     }
@@ -40,7 +40,7 @@ public class Schedules {
 
     public Schedules addNew() {
         List<Schedule> newList = new ArrayList<>(list);
-        newList.add(new Schedule());
+        newList.add(Schedule.empty());
         return of(newList);
     }
 

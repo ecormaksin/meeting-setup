@@ -1,5 +1,7 @@
 package meeting.domain.model.schedule.construct;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -16,6 +18,16 @@ public class ScheduleConstruct {
         this.meetingDate = meetingDate;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public static ScheduleConstruct of(LocalDate noWrappedMeetingDate,
+                                       LocalTime noWrappedStartTime,
+                                       LocalTime noWrappedEndTime) {
+        return new ScheduleConstruct(
+                new MeetingDate(noWrappedMeetingDate),
+                new StartTime(noWrappedStartTime),
+                new EndTime(noWrappedEndTime)
+        );
     }
 
     @Deprecated

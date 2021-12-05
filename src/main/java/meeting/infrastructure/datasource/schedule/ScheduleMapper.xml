@@ -21,6 +21,6 @@
         FROM
             候補日程.候補日程
         WHERE
-            ミーティングid = #{value}
+            ミーティングid = #{meetingId.value}
     </select>
 </mapper>
