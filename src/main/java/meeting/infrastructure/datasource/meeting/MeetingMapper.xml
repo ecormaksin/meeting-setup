@@ -19,6 +19,25 @@
         VALUES (#{meetingId.value}, #{ipAddress.value}, #{osFamily.value}, #{userAgentFamily.value})
     </insert>
 
+    <resultMap id="meeting" type="meeting.domain.model.meeting.MeetingTest">
+
+    </resultMap>
+
+    <select id="findBy" resultMap="meeting">
+        SELECT
+            ミーティング.ミーティングID as "meetingId.value",
+            ミーティング.件名 as "subject.value",
+            ミーティングメモ.メモ as "memo.value"
+        FROM
+            ミーティング.ミーティング AS ミーティング
+            LEFT OUTER JOIN
+            ミーティング.ミーティングメモ AS ミーティングメモ
+                ON
+                    ミーティング.ミーティングID = ミーティングメモ.ミーティングID
+        WHERE
+            ミーティング.ミーティングID = #{meetingId.value}
+    </select>
+
     <select id="selectSubject" resultType="meeting.domain.model.meeting.Subject">
         SELECT
             件名 as "value"

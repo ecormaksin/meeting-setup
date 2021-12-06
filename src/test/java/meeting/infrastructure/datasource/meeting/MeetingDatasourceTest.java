@@ -1,10 +1,7 @@
 package meeting.infrastructure.datasource.meeting;
 
 import meeting.MeetingDBTest;
-import meeting.domain.model.meeting.MeetingCreationRequest;
-import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.Memo;
-import meeting.domain.model.meeting.Subject;
+import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
@@ -18,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @MeetingDBTest
@@ -73,8 +71,15 @@ class MeetingDatasourceTest {
 //                        .param("organizerTerminal.userAgentFamily.value", "Chrome")
 //                )
 //                .andDo(print()).andReturn();
-        MeetingId meetingId = meetingDatasource.create(meetingCreationRequest);
+        MeetingId createdMeetingId = meetingDatasource.create(meetingCreationRequest);
 
-        assertNotNull(meetingId);
+        assertNotNull(createdMeetingId);
+
+        MeetingTest meetingTest = meetingDatasource.findBy(createdMeetingId);
+        assertNotNull(meetingTest);
+
+        MeetingId foundMeetingId = meetingTest.meetingId();
+        assertNotNull(foundMeetingId);
+        assertEquals(foundMeetingId.value(), createdMeetingId.value());
     }
 }

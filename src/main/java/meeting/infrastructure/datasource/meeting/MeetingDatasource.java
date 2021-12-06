@@ -1,11 +1,11 @@
 package meeting.infrastructure.datasource.meeting;
 
 import meeting.application.service.meeting.MeetingRepository;
-import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
+import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +69,8 @@ public class MeetingDatasource implements MeetingRepository {
     }
 
     @Override
-    public Meeting findBy(MeetingId meetingId) {
-        return null;
+    public MeetingTest findBy(MeetingId meetingId) {
+        return meetingMapper.findBy(meetingId).orElseThrow(() ->
+                new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId)));
     }
 }
