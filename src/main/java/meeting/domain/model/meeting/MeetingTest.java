@@ -1,5 +1,7 @@
 package meeting.domain.model.meeting;
 
+import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+
 import javax.validation.Valid;
 
 /**
@@ -15,12 +17,17 @@ public class MeetingTest {
     @Valid
     Memo memo;
 
+    @Valid
+    OrganizerTerminal organizerTerminal;
+
     public MeetingTest(@Valid MeetingId meetingId,
                        @Valid Subject subject,
-                       @Valid Memo memo) {
+                       @Valid Memo memo,
+                       @Valid OrganizerTerminal organizerTerminal) {
         this.meetingId = meetingId;
         this.subject = subject;
         this.memo = memo;
+        this.organizerTerminal = organizerTerminal;
     }
 
     @Deprecated
@@ -37,5 +44,9 @@ public class MeetingTest {
 
     public Memo memo() {
         return memo;
+    }
+
+    public OrganizerTerminal organizerTerminal() {
+        return organizerTerminal;
     }
 }

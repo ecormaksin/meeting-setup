@@ -3,6 +3,7 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.MeetingDBTest;
 import meeting.domain.model.meeting.MeetingId;
 import meeting.domain.model.meeting.MeetingTest;
+import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -54,5 +55,11 @@ class MeetingDatasourceTest {
         assertNotNull(foundMeetingId);
         assertEquals(createdMeetingId.value(), foundMeetingId.value());
         assertEquals("件名テスト", meetingTest.subject().value());
+        assertEquals("メモテスト", meetingTest.memo().value());
+
+        OrganizerTerminal organizerTerminal = meetingTest.organizerTerminal();
+        assertEquals("127.0.0.1", organizerTerminal.ipAddress().value());
+        assertEquals("Windows", organizerTerminal.osFamily().value());
+        assertEquals("Chrome", organizerTerminal.userAgentFamily().value());
     }
 }

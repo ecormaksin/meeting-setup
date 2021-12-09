@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
@@ -70,7 +71,27 @@ public class MeetingDatasource implements MeetingRepository {
 
     @Override
     public MeetingTest findBy(MeetingId meetingId) {
-        return meetingMapper.findBy(meetingId).orElseThrow(() ->
-                new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value())));
+        boolean meetingNotFound = false;
+
+        Optional<Subject> optSubject = meetingMapper.selectSubject(meetingId);
+        if (!optSubject.isPresent()) {
+            meetingNotFound = true;
+        }
+
+        Optional<Memo> optMemo = meetingMapper.selectMemo(meetingId);
+
+        Optional<OrganizerTerminal> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingId);
+        if (!optOrganizerTerminal.isPresent()) {
+            meetingNotFound = true;
+        }
+
+        if (meetingNotFound) {
+            throw new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value()));
+        }
+
+        return new MeetingTest(meetingId,
+                optSubject.get(),
+                optMemo.orElse(null),
+                optOrganizerTerminal.get());
     }
 }

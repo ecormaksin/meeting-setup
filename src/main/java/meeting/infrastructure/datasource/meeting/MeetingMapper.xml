@@ -20,6 +20,9 @@
     </insert>
 
     <resultMap id="meeting" type="meeting.domain.model.meeting.MeetingTest">
+        <association property="organizerTerminal"
+                    column="meetingId.value"
+                    select="meeting.infrastructure.datasource.meeting.MeetingMapper.selectOrganizerTerminal" />
     </resultMap>
 
     <select id="findBy" resultMap="meeting">
@@ -63,7 +66,7 @@
         FROM
             ミーティング.主催者端末
         WHERE
-            ミーティングID = #{value}
+            ミーティングID = #{meetingId.value}
     </select>
 
 </mapper>

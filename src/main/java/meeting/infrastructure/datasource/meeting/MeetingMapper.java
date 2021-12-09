@@ -21,7 +21,7 @@ public interface MeetingMapper {
 
     Optional<MeetingTest> findBy(@Param("meetingId") MeetingId meetingId);
 
-    Subject selectSubject(MeetingId meetingId);
-    Memo selectMemo(MeetingId meetingId);
-    OrganizerTerminal selectOrganizerTerminal(MeetingId meetingId);
+    Optional<Subject> selectSubject(@Param("meetingId") MeetingId meetingId);
+    Optional<Memo> selectMemo(@Param("meetingId") MeetingId meetingId);
+    Optional<OrganizerTerminal> selectOrganizerTerminal(@Param("meetingId") MeetingId meetingId);
 }
