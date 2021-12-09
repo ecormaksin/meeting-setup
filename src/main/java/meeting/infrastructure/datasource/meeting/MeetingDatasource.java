@@ -71,6 +71,6 @@ public class MeetingDatasource implements MeetingRepository {
     @Override
     public MeetingTest findBy(MeetingId meetingId) {
         return meetingMapper.findBy(meetingId).orElseThrow(() ->
-                new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId)));
+                new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value())));
     }
 }
