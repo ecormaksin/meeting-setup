@@ -3,10 +3,12 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.MeetingDBTest;
 import meeting.domain.model.meeting.MeetingId;
 import meeting.domain.model.meeting.MeetingTest;
+import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @MeetingDBTest
@@ -65,6 +66,20 @@ class MeetingDatasourceTest {
         return params;
     }
 
+    private MultiValueMap<String, String> reverseOrderedSchedulesParam() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
+        params.add("schedules.list[0].scheduleConstruct.meetingDate.value", "2021-12-07");
+        params.add("schedules.list[0].scheduleConstruct.startTime.value", "14:00");
+        params.add("schedules.list[0].scheduleConstruct.endTime.value", "15:00");
+
+        params.add("schedules.list[1].scheduleConstruct.meetingDate.value", "2021-12-06");
+        params.add("schedules.list[1].scheduleConstruct.startTime.value", "10:00");
+        params.add("schedules.list[1].scheduleConstruct.endTime.value", "11:00");
+
+        return params;
+    }
+
     private MultiValueMap<String, String> organizerTerminalParam() {
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("organizerTerminal.ipAddress.value", "127.0.0.1");
@@ -73,24 +88,22 @@ class MeetingDatasourceTest {
         return param;
     }
 
-    private MeetingId getCreatedMeetingId(MvcResult result) {
+    private MeetingId createdMeetingId(MvcResult result) {
         FlashMap flashMap = result.getFlashMap();
         String meetingIdValue = (String) flashMap.get("meetingId");
         return new MeetingId(meetingIdValue);
     }
 
     private MeetingTest findMeeting(MvcResult result) {
-        MeetingId meetingId = getCreatedMeetingId(result);
+        MeetingId meetingId = createdMeetingId(result);
         return meetingDatasource.findBy(meetingId);
     }
 
     @Nested
     @MeetingDBTest
     @AutoConfigureMockMvc
+    @DisplayName("メモと昇順の候補日程リストを持つ標準的なミーティングの場合")
     class MeetingWithMemoAndOrderedSchedules {
-
-        @Autowired
-        MeetingDatasource meetingDatasource;
 
         @Autowired
         MockMvc mockMvc;
@@ -164,6 +177,88 @@ class MeetingDatasourceTest {
             Schedule schedule = scheduleList().get(1);
             assertNotNull(schedule);
             assertNotNull(schedule.scheduleNumber());
+            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
+            assertEquals(LocalDate.of(2021, 12, 7), scheduleConstruct.meetingDate().value());
+            assertEquals(LocalTime.of(14, 0),scheduleConstruct.startTime().value() );
+            assertEquals(LocalTime.of(15, 0),scheduleConstruct.endTime().value() );
+        }
+
+        private OrganizerTerminal organizerTerminal() {
+            return meeting.organizerTerminal();
+        }
+
+        @Test
+        void 主催者端末がNULLではない() throws Exception {
+            assertNotNull(organizerTerminal());
+        }
+
+        @Test
+        void 作成時のIPアドレスと同じ() throws Exception {
+            OrganizerTerminal organizerTerminal = organizerTerminal();
+            assertEquals("127.0.0.1", organizerTerminal.ipAddress().value());
+        }
+
+        @Test
+        void 作成時のOSファミリーと同じ() throws Exception {
+            OrganizerTerminal organizerTerminal = organizerTerminal();
+            assertEquals("Windows", organizerTerminal.osFamily().value());
+        }
+
+        @Test
+        void 作成時のブラウザと同じ() throws Exception {
+            OrganizerTerminal organizerTerminal = organizerTerminal();
+            assertEquals("Chrome", organizerTerminal.userAgentFamily().value());
+        }
+    }
+
+    @Nested
+    @MeetingDBTest
+    @AutoConfigureMockMvc
+    @DisplayName("メモがなく降順の候補日程リストを持つミーティングの場合")
+    class MeetingWithoutMemoAndReverseOrderedSchedules {
+
+        @Autowired
+        MockMvc mockMvc;
+
+        MeetingTest meeting;
+
+        @BeforeEach
+        void setup()  throws Exception  {
+            meeting = MeetingDatasourceTest.this.findMeeting(performPostRequest());
+        }
+
+        private MvcResult performPostRequest() throws Exception {
+            return mockMvc.perform(
+                            MeetingDatasourceTest.this.postMeetingCreation()
+                                    .params(MeetingDatasourceTest.this.subjectParam())
+                                    .params(MeetingDatasourceTest.this.reverseOrderedSchedulesParam())
+                                    .params(MeetingDatasourceTest.this.organizerTerminalParam())
+                    )
+                    .andReturn();
+        }
+
+        @Test
+        void メモがNULLである() throws Exception {
+            assertNull(meeting.memo());
+        }
+
+        List<Schedule> scheduleList() {
+            Schedules schedules = meeting.schedules();
+            return schedules.asList();
+        }
+
+        @Test
+        void 作成時の候補日程1件目を取得できる() throws Exception {
+            Schedule schedule = scheduleList().get(0);
+            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
+            assertEquals(LocalDate.of(2021, 12, 6), scheduleConstruct.meetingDate().value());
+            assertEquals(LocalTime.of(10, 0),scheduleConstruct.startTime().value() );
+            assertEquals(LocalTime.of(11, 0),scheduleConstruct.endTime().value() );
+        }
+
+        @Test
+        void 作成時の候補日程2件目を取得できる() throws Exception {
+            Schedule schedule = scheduleList().get(1);
             ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
             assertEquals(LocalDate.of(2021, 12, 7), scheduleConstruct.meetingDate().value());
             assertEquals(LocalTime.of(14, 0),scheduleConstruct.startTime().value() );

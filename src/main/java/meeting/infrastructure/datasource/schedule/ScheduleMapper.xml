@@ -22,5 +22,8 @@
             候補日程.候補日程
         WHERE
             ミーティングid = #{meetingId.value}
+        ORDER BY
+            開始日時 ASC,
+            終了日時 ASC
     </select>
 </mapper>
