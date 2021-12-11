@@ -85,6 +85,11 @@ public class MeetingDatasource implements MeetingRepository {
             meetingNotFound = true;
         }
 
+        List<Schedule> scheduleList = scheduleMapper.selectByMeetingId(meetingId);
+        if (scheduleList.isEmpty()) {
+            meetingNotFound = true;
+        }
+
         if (meetingNotFound) {
             throw new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value()));
         }
@@ -92,6 +97,7 @@ public class MeetingDatasource implements MeetingRepository {
         return new MeetingTest(meetingId,
                 optSubject.get(),
                 optMemo.orElse(null),
+                new Schedules(scheduleList),
                 optOrganizerTerminal.get());
     }
 }

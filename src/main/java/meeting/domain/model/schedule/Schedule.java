@@ -41,6 +41,10 @@ public class Schedule {
     @Deprecated
     Schedule() {}
 
+    public ScheduleNumber scheduleNumber() {
+        return scheduleNumber;
+    }
+
     public ScheduleConstruct scheduleConstruct() {
         return scheduleConstruct;
     }
