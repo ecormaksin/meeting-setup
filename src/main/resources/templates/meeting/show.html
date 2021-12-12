@@ -9,6 +9,15 @@
 
 <main>
   <article>
+    <table>
+      <thead>
+        <tr>
+          <th>日程</th>
+          <th th:each="attendanceCategory : ${T(meeting.domain.model.participant.attendance.AttendanceCategory).values()}"
+            th:value="${attendanceCategory}" th:text="${attendanceCategory.symbol()}"></th>
+        </tr>
+      </thead>
+    </table>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>

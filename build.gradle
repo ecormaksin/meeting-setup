@@ -11,6 +11,12 @@ version = '0.0.1-SNAPSHOT'
 description 'ミーティング調整サービスの試作'
 sourceCompatibility = '17'
 
+sourceSets {
+    main {
+        resources.srcDirs = ["src/main/java", "src/main/resources"]
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -21,6 +27,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
     implementation 'com.github.ua-parser:uap-java:1.5.2'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
@@ -33,34 +41,20 @@ test {
     useJUnitPlatform()
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-Xlint:deprecation'
-}
-
-// Mybatisのmapper.xmlのスキャン対象
-sourceSets {
-    main {
-        resources.srcDirs = ["src/main/java", "src/main/resources"]
-    }
+jig {
+    linkPrefix = "https://github.com/ecormaksin/meeting-setup/tree/main/src/main/java"
 }
 
 [compileJava, processResources]*.shouldRunAfter(clean)
-
-// JIG ドキュメントの生成タスク
-
 jigReports.dependsOn(clean, classes)
 
-task document(type: Copy, dependsOn: jigReports) {
-    from 'build/jig'
-    into 'src/main/resources/static/document/jig'
+bootRun {
+    sourceResources sourceSets.main
 }
 
-task documentWithErd(type: Test, dependsOn: document) {
-    useJUnitPlatform()
-    include '**/EntityRelationshipDiagram**'
-}
-
-[document, documentWithErd]*.group('jig')
+//tasks.withType(JavaCompile) {
+//    options.compilerArgs << '-Xlint:deprecation'
+//}
 
 // スキーマ ファイルをテスト リソースへコピーするタスク
 task copySchemaFileToTestResource(type: Copy) {
