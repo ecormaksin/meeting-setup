@@ -4,22 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meeting.infrastructure.datasource.schedule.ScheduleMapper">
     <select id="newScheduleNumber" resultType="int">
-        SELECT NEXTVAL('候補日程.候補日程番号')
+        SELECT NEXTVAL('日程候補.日程候補番号')
     </select>
 
     <insert id="insertSchedule">
-        INSERT INTO 候補日程.候補日程(候補日程番号, ミーティングID, 開始日時, 終了日時)
+        INSERT INTO 日程候補.日程候補(日程候補番号, ミーティングID, 開始日時, 終了日時)
         VALUES (#{scheduleNumber}, #{meetingId.value}, #{startDateTime}, #{endDateTime})
     </insert>
 
     <select id="selectByMeetingId" resultType="meeting.domain.model.schedule.Schedule">
         SELECT
-            候補日程番号 as "scheduleNumber.value",
-            TO_CHAR(開始日時, 'YYYY-MM-DD') AS "scheduleConstruct.meetingDate.value",
-            TO_CHAR(開始日時, 'HH24:MI:SS') AS "scheduleConstruct.startTime.value",
-            TO_CHAR(終了日時, 'HH24:MI:SS') AS "scheduleConstruct.endTime.value"
+            日程候補番号 as "scheduleNumber.value",
+            CAST(開始日時 AS DATE) AS "scheduleConstruct.meetingDate.value",
+            CAST(開始日時 AS TIME) AS "scheduleConstruct.startTime.value",
+            CAST(終了日時 AS TIME) AS "scheduleConstruct.endTime.value"
         FROM
-            候補日程.候補日程
+            日程候補.日程候補
         WHERE
             ミーティングid = #{meetingId.value}
         ORDER BY

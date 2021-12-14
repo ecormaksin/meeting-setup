@@ -1,7 +1,7 @@
 package meeting.domain.model.schedule;
 
 /**
- * 候補日程番号
+ * 日程候補番号
  */
 public class ScheduleNumber {
     int value;

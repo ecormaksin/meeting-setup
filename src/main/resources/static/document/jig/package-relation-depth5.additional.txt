@@ -1,3 +1,0 @@
-# meeting.domain.model.meeting.attendance <-> meeting.domain.model.meeting
-- meeting.domain.model.meeting.AttendanceReply -> Attendance
-- Attendance -> ScheduleNumber

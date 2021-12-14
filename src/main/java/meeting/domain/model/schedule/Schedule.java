@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * 候補日程
+ * 日程候補
  */
 public class Schedule {
     ScheduleNumber scheduleNumber;

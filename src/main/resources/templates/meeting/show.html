@@ -9,15 +9,23 @@
 
 <main>
   <article>
-    <table>
-      <thead>
+    <h1>ミーティングの詳細</h1>
+    <form method="post" th:object="${meeting}" th:action="@{/attendance}">
+      <label>件名</label>
+      <p th:text="${meeting.subject()}" />
+      <label>ミーティングの補足説明</label>
+      <p th:text="${meeting.memo()}" />
+      <label>日程候補</label>
+      <table>
+        <thead>
         <tr>
           <th>日程</th>
           <th th:each="attendanceCategory : ${T(meeting.domain.model.participant.attendance.AttendanceCategory).values()}"
-            th:value="${attendanceCategory}" th:text="${attendanceCategory.symbol()}"></th>
+              th:value="${attendanceCategory}" th:text="${attendanceCategory.symbol()}"></th>
         </tr>
-      </thead>
-    </table>
+        </thead>
+      </table>
+    </form>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>

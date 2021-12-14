@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 /**
- * 候補日程の構成要素
+ * 日程候補の構成要素
  */
 @ScheduleConstructValid
 public class ScheduleConstruct {

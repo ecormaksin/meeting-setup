@@ -6,7 +6,7 @@ import javax.validation.Valid;
 import java.util.*;
 
 /**
- * 候補日程リスト
+ * 日程候補リスト
  */
 @SchedulesValid
 public class Schedules {

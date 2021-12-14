@@ -1,8 +1,8 @@
 package meeting.infrastructure.datasource.meeting;
 
 import meeting.MeetingDBTest;
+import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.MeetingTest;
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
@@ -94,21 +94,21 @@ class MeetingDatasourceTest {
         return new MeetingId(meetingIdValue);
     }
 
-    private MeetingTest findMeeting(MvcResult result) {
+    private Meeting findMeeting(MvcResult result) {
         MeetingId meetingId = createdMeetingId(result);
-        return meetingDatasource.findBy(meetingId);
+        return meetingDatasource.meetingOf(meetingId);
     }
 
     @Nested
     @MeetingDBTest
     @AutoConfigureMockMvc
-    @DisplayName("メモと昇順の候補日程リストを持つ標準的なミーティングの場合")
+    @DisplayName("メモと昇順の日程候補リストを持つ標準的なミーティングの場合")
     class MeetingWithMemoAndOrderedSchedules {
 
         @Autowired
         MockMvc mockMvc;
 
-        MeetingTest meeting;
+        Meeting meeting;
 
         @BeforeEach
         void setup()  throws Exception  {
@@ -142,7 +142,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void 候補日程リストがNULLではない() throws Exception {
+        void 日程候補リストがNULLではない() throws Exception {
             assertNotNull(meeting.schedules());
         }
 
@@ -152,17 +152,17 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void 候補日程リストのデータがNULLではない() throws Exception {
+        void 日程候補リストのデータがNULLではない() throws Exception {
             assertNotNull(scheduleList());
         }
 
         @Test
-        void 候補日程リストの件数が作成時と同じ() throws Exception {
+        void 日程候補リストの件数が作成時と同じ() throws Exception {
             assertEquals(2, scheduleList().size());
         }
 
         @Test
-        void 作成時の候補日程1件目を取得できる() throws Exception {
+        void 作成時の日程候補1件目を取得できる() throws Exception {
             Schedule schedule = scheduleList().get(0);
             assertNotNull(schedule);
             assertNotNull(schedule.scheduleNumber());
@@ -173,7 +173,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void 作成時の候補日程2件目を取得できる() throws Exception {
+        void 作成時の日程候補2件目を取得できる() throws Exception {
             Schedule schedule = scheduleList().get(1);
             assertNotNull(schedule);
             assertNotNull(schedule.scheduleNumber());
@@ -214,13 +214,13 @@ class MeetingDatasourceTest {
     @Nested
     @MeetingDBTest
     @AutoConfigureMockMvc
-    @DisplayName("メモがなく降順の候補日程リストを持つミーティングの場合")
+    @DisplayName("メモがなく降順の日程候補リストを持つミーティングの場合")
     class MeetingWithoutMemoAndReverseOrderedSchedules {
 
         @Autowired
         MockMvc mockMvc;
 
-        MeetingTest meeting;
+        Meeting meeting;
 
         @BeforeEach
         void setup()  throws Exception  {
@@ -248,7 +248,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void 作成時の候補日程1件目を取得できる() throws Exception {
+        void 作成時の日程候補1件目を取得できる() throws Exception {
             Schedule schedule = scheduleList().get(0);
             ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
             assertEquals(LocalDate.of(2021, 12, 6), scheduleConstruct.meetingDate().value());
@@ -257,7 +257,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void 作成時の候補日程2件目を取得できる() throws Exception {
+        void 作成時の日程候補2件目を取得できる() throws Exception {
             Schedule schedule = scheduleList().get(1);
             ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
             assertEquals(LocalDate.of(2021, 12, 7), scheduleConstruct.meetingDate().value());

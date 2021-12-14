@@ -1,4 +1,4 @@
 /**
- * 候補日程
+ * 日程候補
  */
 package meeting.domain.model.schedule;

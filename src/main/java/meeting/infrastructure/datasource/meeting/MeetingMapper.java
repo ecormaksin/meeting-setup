@@ -1,7 +1,6 @@
 package meeting.infrastructure.datasource.meeting;
 
 import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.MeetingTest;
 import meeting.domain.model.meeting.Memo;
 import meeting.domain.model.meeting.Subject;
 import meeting.domain.model.meeting.organizer.IpAddress;
@@ -18,8 +17,6 @@ public interface MeetingMapper {
     void insertMeeting(MeetingId meetingId, Subject subject);
     void insertMeetingMemo(MeetingId meetingId, Memo memo);
     void insertOrganizerTerminal(MeetingId meetingId, IpAddress ipAddress, OSFamily osFamily, UserAgentFamily userAgentFamily);
-
-    Optional<MeetingTest> findBy(@Param("meetingId") MeetingId meetingId);
 
     Optional<Subject> selectSubject(@Param("meetingId") MeetingId meetingId);
     Optional<Memo> selectMemo(@Param("meetingId") MeetingId meetingId);

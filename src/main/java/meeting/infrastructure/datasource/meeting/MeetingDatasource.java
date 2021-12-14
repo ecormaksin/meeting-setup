@@ -72,7 +72,7 @@ public class MeetingDatasource implements MeetingRepository {
     }
 
     @Override
-    public MeetingTest findBy(MeetingId meetingId) {
+    public Meeting meetingOf(MeetingId meetingId) {
         boolean meetingNotFound = false;
 
         Optional<Subject> optSubject = meetingMapper.selectSubject(meetingId);
@@ -96,10 +96,11 @@ public class MeetingDatasource implements MeetingRepository {
             throw new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value()));
         }
 
-        return new MeetingTest(meetingId,
+        return new Meeting(meetingId,
                 optSubject.get(),
                 optMemo.orElse(null),
                 new Schedules(scheduleList),
+                null,
                 optOrganizerTerminal.get());
     }
 }

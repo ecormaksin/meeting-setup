@@ -1,8 +1,8 @@
 package meeting.application.service.meeting;
 
+import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.MeetingTest;
 
 /**
  * ミーティング リポジトリ
@@ -10,5 +10,5 @@ import meeting.domain.model.meeting.MeetingTest;
 public interface MeetingRepository {
     MeetingId create(MeetingCreationRequest meetingCreationRequest);
 
-    MeetingTest findBy(MeetingId meetingId);
+    Meeting meetingOf(MeetingId meetingId);
 }
