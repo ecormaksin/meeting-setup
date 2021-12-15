@@ -57,6 +57,10 @@ public class Schedule {
         return scheduleConstruct.isNotNull();
     }
 
+    public String show() {
+        return meetingDate().formatForView() + " " + startTime().toString() + "～" + endTime().toString();
+    }
+
     public MeetingDate meetingDate() {
         return scheduleConstruct.meetingDate();
     }

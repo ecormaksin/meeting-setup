@@ -99,3 +99,7 @@ th *, td * {
 .meeting-url-copy-button-copied {
     background-color: green;
 }
+
+.meeting-show-detail {
+    margin-bottom: 5rem;
+}
