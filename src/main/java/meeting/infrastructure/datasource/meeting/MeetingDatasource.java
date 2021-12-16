@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -41,7 +40,6 @@ public class MeetingDatasource implements MeetingRepository {
     }
 
     private void insertMeetingMemo(MeetingId meetingId, Memo memo) {
-        if (Objects.isNull(memo)) return;
         if (memo.isBlank()) return;
         meetingMapper.insertMeetingMemo(meetingId, memo);
     }

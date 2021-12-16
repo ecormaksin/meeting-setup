@@ -52,6 +52,12 @@ class MeetingDatasourceTest {
         return param;
     }
 
+    private MultiValueMap<String, String> memoWithoutValueParam() {
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("memo.value", "");
+        return param;
+    }
+
     private MultiValueMap<String, String> orderedSchedulesParam() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
@@ -231,6 +237,7 @@ class MeetingDatasourceTest {
             return mockMvc.perform(
                             MeetingDatasourceTest.this.postMeetingCreation()
                                     .params(MeetingDatasourceTest.this.subjectParam())
+                                    .params(MeetingDatasourceTest.this.memoWithoutValueParam())
                                     .params(MeetingDatasourceTest.this.reverseOrderedSchedulesParam())
                                     .params(MeetingDatasourceTest.this.organizerTerminalParam())
                     )
