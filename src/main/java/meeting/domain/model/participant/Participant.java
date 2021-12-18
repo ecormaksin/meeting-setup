@@ -11,6 +11,23 @@ public class Participant {
     Attendances attendances;
     AttendanceComment attendanceComment;
 
+    public Participant(ParticipantId participantId,
+                       ParticipantName participantName,
+                       Attendances attendances,
+                       AttendanceComment attendanceComment) {
+        this.participantId = participantId;
+        this.participantName = participantName;
+        this.attendances = attendances;
+        this.attendanceComment = attendanceComment;
+    }
+
+    @Deprecated
+    public Participant() {}
+
+    public Attendances attendances() {
+        return attendances;
+    }
+
     @Override
     public String toString() {
         // @formatter:off

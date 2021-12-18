@@ -24,7 +24,7 @@ public class Schedule {
         this.scheduleConstruct = scheduleConstruct;
     }
 
-    public static Schedule of (int primitiveScheduleNumber,
+    public static Schedule of(int primitiveScheduleNumber,
                                LocalDate noWrappedMeetingDate,
                                LocalTime noWrappedStartTime,
                                LocalTime noWrappedEndTime) {
@@ -55,10 +55,6 @@ public class Schedule {
 
     public boolean isConstructNotNull() {
         return scheduleConstruct.isNotNull();
-    }
-
-    public String show() {
-        return meetingDate().formatForView() + " " + startTime().toString() + "～" + endTime().toString();
     }
 
     public MeetingDate meetingDate() {

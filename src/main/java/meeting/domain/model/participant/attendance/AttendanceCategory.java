@@ -8,19 +8,30 @@ public enum AttendanceCategory {
     サンカク("△", "attendance-category-sankaku"),
     バツ("×", "attendance-category-shikaku");
 
-    String 記号;
-    String 表示スタイル;
+    String symbol;
+    String displayStyle;
 
-    AttendanceCategory(String 記号, String 表示スタイル) {
-        this.記号 = 記号;
-        this.表示スタイル = 表示スタイル;
+    public static AttendanceCategory of(String symbol) {
+        for (AttendanceCategory attendanceCategory : AttendanceCategory.values()) {
+            if (attendanceCategory.symbol().equals(symbol)) {
+                return attendanceCategory;
+            }
+        }
+        throw new IllegalArgumentException(
+                String.format("指定された記号に該当する出欠種別はありません。記号を確認してください。（%s）", symbol)
+        );
+    }
+
+    AttendanceCategory(String symbol, String displayStyle) {
+        this.symbol = symbol;
+        this.displayStyle = displayStyle;
     }
 
     public String symbol() {
-        return 記号;
+        return symbol;
     }
 
     public String displayStyle() {
-        return 表示スタイル;
+        return displayStyle;
     }
 }

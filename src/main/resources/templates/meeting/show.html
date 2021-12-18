@@ -28,10 +28,10 @@
         <tbody>
           <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
             <td th:text="${scheduleStat.count}">1</td>
-            <td th:text="${schedule.show()}">
+            <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
             </td>
             <td th:each="attendanceCategory : ${T(meeting.domain.model.participant.attendance.AttendanceCategory).values()}"
-                th:value="${attendanceCategory}" th:text="${attendanceCategory.symbol()}">
+                th:value="${attendanceCategory}" th:text="${meeting.showTotalNumOfParticipantsOf(schedule.scheduleNumber(), attendanceCategory)}">
             </td>
           </tr>
         </tbody>

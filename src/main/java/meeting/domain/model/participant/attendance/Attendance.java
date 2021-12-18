@@ -9,6 +9,18 @@ public class Attendance {
     ScheduleNumber scheduleNumber;
     AttendanceCategory attendanceCategory;
 
+    public static Attendance of(int primitiveScheduleNumber,
+                                String symbol) {
+        return new Attendance(new ScheduleNumber(primitiveScheduleNumber),
+                                AttendanceCategory.of(symbol));
+    }
+
+    public Attendance(ScheduleNumber scheduleNumber,
+                       AttendanceCategory attendanceCategory) {
+        this.scheduleNumber = scheduleNumber;
+        this.attendanceCategory = attendanceCategory;
+    }
+
     @Override
     public String toString() {
         // @formatter:off

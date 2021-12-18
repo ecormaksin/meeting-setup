@@ -43,8 +43,7 @@ public class StartTime {
         return Objects.hashCode(value);
     }
 
-    @Override
-    public String toString() {
+    public String show() {
         return value.format(TimeFormatter.ofPattern());
     }
 }

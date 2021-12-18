@@ -49,7 +49,7 @@ public class MeetingDate {
         return value.toString();
     }
 
-    public String formatForView() {
+    public String show() {
         return value.format(DateTimeFormatter.ofPattern("MM/dd(E)"));
     }
 }
