@@ -71,15 +71,21 @@ public class Meeting {
         return organizerTerminal;
     }
 
-    public String showTotalNumOfParticipantsOf(ScheduleNumber scheduleNumber, AttendanceCategory attendanceCategory) {
-//        List<Schedule> scheduleList =
+    public int totalParticipantNumberOf(ScheduleNumber scheduleNumber, AttendanceCategory attendanceCategory) {
+        int totalParticipantNumber = 0;
         List<Participant> participantList = participants.asList();
         for (Participant participant : participantList) {
             for (Attendance attendance : participant.attendances().asList()) {
-
+                if (!attendance.scheduleNumber().equals(scheduleNumber)) {
+                    continue;
+                }
+                if (attendance.attendanceCategory() != attendanceCategory) {
+                    continue;
+                }
+                totalParticipantNumber++;
             }
         }
 
-        return "hogehoge";
+        return totalParticipantNumber;
     }
 }

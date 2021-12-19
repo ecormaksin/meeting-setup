@@ -21,6 +21,14 @@ public class Attendance {
         this.attendanceCategory = attendanceCategory;
     }
 
+    public ScheduleNumber scheduleNumber() {
+        return scheduleNumber;
+    }
+
+    public AttendanceCategory attendanceCategory() {
+        return attendanceCategory;
+    }
+
     @Override
     public String toString() {
         // @formatter:off
