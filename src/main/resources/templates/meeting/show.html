@@ -31,7 +31,7 @@
             <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
             </td>
             <td th:each="attendanceCategory : ${T(meeting.domain.model.participant.attendance.AttendanceCategory).values()}"
-                th:value="${attendanceCategory}" th:text="${meeting.totalParticipantNumberOf(schedule.scheduleNumber(), attendanceCategory)}">
+                th:value="${attendanceCategory}" th:text="${meeting.totalNumberOfParticipantAt(schedule.scheduleNumber(), attendanceCategory).show()}">
             </td>
           </tr>
         </tbody>

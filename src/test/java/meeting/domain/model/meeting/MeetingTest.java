@@ -90,13 +90,13 @@ public class MeetingTest {
 
         ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
         assertEquals(numberOfParticipantMaru,
-                meeting.totalParticipantNumberOf(scheduleNumber, AttendanceCategory.マル),
+                meeting.totalNumberOfParticipantAt(scheduleNumber, AttendanceCategory.マル).value(),
                 String.format("◯と回答した人数は%d", numberOfParticipantMaru));
         assertEquals(numberOfParticipantSankaku,
-                meeting.totalParticipantNumberOf(scheduleNumber, AttendanceCategory.サンカク),
+                meeting.totalNumberOfParticipantAt(scheduleNumber, AttendanceCategory.サンカク).value(),
                 String.format("△と回答した人数は%d", numberOfParticipantSankaku));
         assertEquals(numberOfParticipantsBatsu,
-                meeting.totalParticipantNumberOf(scheduleNumber, AttendanceCategory.バツ),
+                meeting.totalNumberOfParticipantAt(scheduleNumber, AttendanceCategory.バツ).value(),
                 String.format("×と回答した人数は%d", numberOfParticipantsBatsu));
     }
 

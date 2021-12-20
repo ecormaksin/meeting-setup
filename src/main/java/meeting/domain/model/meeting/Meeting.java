@@ -3,6 +3,7 @@ package meeting.domain.model.meeting;
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.participant.Participant;
 import meeting.domain.model.participant.Participants;
+import meeting.domain.model.participant.TotalNumberOfParticipant;
 import meeting.domain.model.participant.attendance.Attendance;
 import meeting.domain.model.participant.attendance.AttendanceCategory;
 import meeting.domain.model.schedule.ScheduleNumber;
@@ -71,8 +72,8 @@ public class Meeting {
         return organizerTerminal;
     }
 
-    public int totalParticipantNumberOf(ScheduleNumber scheduleNumber, AttendanceCategory attendanceCategory) {
-        int totalParticipantNumber = 0;
+    public TotalNumberOfParticipant totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, AttendanceCategory attendanceCategory) {
+        int number = 0;
         List<Participant> participantList = participants.asList();
         for (Participant participant : participantList) {
             for (Attendance attendance : participant.attendances().asList()) {
@@ -82,10 +83,10 @@ public class Meeting {
                 if (attendance.attendanceCategory() != attendanceCategory) {
                     continue;
                 }
-                totalParticipantNumber++;
+                number++;
             }
         }
 
-        return totalParticipantNumber;
+        return new TotalNumberOfParticipant(number);
     }
 }
