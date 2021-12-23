@@ -1,21 +1,21 @@
-package meeting.domain.model.participant;
+package meeting.domain.model.attendance;
 
 import java.util.UUID;
 
 /**
- * 参加者ID
+ * 出欠ID
  */
-public class ParticipantId {
+public class AttendanceId {
 
     String value;
 
-    public static ParticipantId newId() {
+    public static AttendanceId newId() {
         UUID uuid = UUID.randomUUID();
         String uuidStr = uuid.toString();
-        return new ParticipantId(uuidStr.replace("-", ""));
+        return new AttendanceId(uuidStr.replace("-", ""));
     }
 
-    public ParticipantId(String value) {
+    public AttendanceId(String value) {
         this.value = value;
     }
 
@@ -24,7 +24,7 @@ public class ParticipantId {
     }
 
     @Deprecated
-    public ParticipantId() {
+    public AttendanceId() {
     }
 
     @Override

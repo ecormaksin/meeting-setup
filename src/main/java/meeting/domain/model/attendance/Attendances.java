@@ -1,4 +1,4 @@
-package meeting.domain.model.participant.attendance;
+package meeting.domain.model.attendance;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ public class Attendances {
     }
 
     @Deprecated
-    Attendances() {
+    public Attendances() {
     }
 
     public static Attendances of(List<Attendance> source) {

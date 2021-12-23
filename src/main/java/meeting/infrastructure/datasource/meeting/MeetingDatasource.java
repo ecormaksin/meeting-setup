@@ -3,7 +3,7 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.application.service.meeting.MeetingRepository;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
-import meeting.domain.model.participant.Participants;
+import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
@@ -100,7 +100,7 @@ public class MeetingDatasource implements MeetingRepository {
                 optSubject.get(),
                 optMemo.orElse(null),
                 new Schedules(scheduleList),
-                Participants.of(new ArrayList<>()),
+                Attendances.of(new ArrayList<>()),
                 optOrganizerTerminal.get());
     }
 }

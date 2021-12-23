@@ -1,4 +1,4 @@
-package meeting.domain.model.participant;
+package meeting.domain.model.attendance;
 
 /**
  * 参加者の合計人数

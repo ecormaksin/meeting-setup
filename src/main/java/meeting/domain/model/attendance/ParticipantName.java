@@ -1,12 +1,12 @@
-package meeting.domain.model.participant;
+package meeting.domain.model.attendance;
 
 /**
- * 出欠コメント
+ * 参加者名
  */
-public class AttendanceComment {
+public class ParticipantName {
     String value;
 
-    public AttendanceComment(String value) {
+    public ParticipantName(String value) {
         this.value = value;
     }
 
@@ -20,6 +20,6 @@ public class AttendanceComment {
     }
 
     @Deprecated
-    AttendanceComment() {
+    ParticipantName() {
     }
 }

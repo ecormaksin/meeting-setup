@@ -1,10 +1,10 @@
 package meeting.domain.model.meeting;
 
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
-import meeting.domain.model.participant.*;
-import meeting.domain.model.participant.attendance.Attendance;
-import meeting.domain.model.participant.attendance.AttendanceCategory;
-import meeting.domain.model.participant.attendance.Attendances;
+import meeting.domain.model.attendance.*;
+import meeting.domain.model.attendance.convenience.Convenience;
+import meeting.domain.model.attendance.convenience.ConvenienceCategory;
+import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
@@ -57,7 +57,7 @@ public class MeetingTest {
             "26, '×', '×', '△', 0, 1, 2",
             "27, '×', '×', '×', 0, 0, 3",
     })
-    void 指定した日程候補の出欠種別ごとの人数を取得できる(int patternNumber,
+    void 指定した日程候補の都合種別ごとの人数を取得できる(int patternNumber,
                     String participant1Attendance,
                     String participant2Attendance,
                     String participant3Attendance,
@@ -72,7 +72,7 @@ public class MeetingTest {
                         LocalTime.of(11, 0))
         );
 
-        Participants participants = createParticipants(patternNumber,
+        Attendances attendances = createParticipants(patternNumber,
                                         Arrays.asList(participant1Attendance,
                                                         participant2Attendance,
                                                         participant3Attendance));
@@ -85,44 +85,44 @@ public class MeetingTest {
                 new Subject("件名テスト"),
                 new Memo("メモテスト"),
                 Schedules.of(scheduleList),
-                participants,
+                attendances,
                 organizerTerminal);
 
         ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
         assertEquals(numberOfParticipantMaru,
-                meeting.totalNumberOfParticipantAt(scheduleNumber, AttendanceCategory.マル).value(),
+                meeting.totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル).value(),
                 String.format("◯と回答した人数は%d", numberOfParticipantMaru));
         assertEquals(numberOfParticipantSankaku,
-                meeting.totalNumberOfParticipantAt(scheduleNumber, AttendanceCategory.サンカク).value(),
+                meeting.totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.サンカク).value(),
                 String.format("△と回答した人数は%d", numberOfParticipantSankaku));
         assertEquals(numberOfParticipantsBatsu,
-                meeting.totalNumberOfParticipantAt(scheduleNumber, AttendanceCategory.バツ).value(),
+                meeting.totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.バツ).value(),
                 String.format("×と回答した人数は%d", numberOfParticipantsBatsu));
     }
 
-    private Participants createParticipants(int primitiveScheduleNumber, List<String> attendanceTextList) {
+    private Attendances createParticipants(int primitiveScheduleNumber, List<String> attendanceTextList) {
 
-        List<Participant> participantList = new ArrayList<>();
+        List<Attendance> attendanceList = new ArrayList<>();
 
         for (int i = 0; i < attendanceTextList.size(); i++) {
             String attendanceText = attendanceTextList.get(i);
 
-            List<Attendance> attendanceList = Arrays.asList(
-                    Attendance.of(primitiveScheduleNumber, attendanceText)
+            List<Convenience> convenienceList = Arrays.asList(
+                    Convenience.of(primitiveScheduleNumber, attendanceText)
             );
-            Attendances attendances = Attendances.of(attendanceList);
+            Conveniences conveniences = Conveniences.of(convenienceList);
 
             String participantNameText = "参加者テスト" + (i + 1);
-            Participant participant = new Participant(
-                    ParticipantId.newId(),
+            Attendance attendance = new Attendance(
+                    AttendanceId.newId(),
                     new ParticipantName(participantNameText),
-                    attendances,
+                    conveniences,
                     new AttendanceComment(participantNameText + "_出欠コメント")
             );
 
-            participantList.add(participant);
+            attendanceList.add(attendance);
         }
 
-        return Participants.of(participantList);
+        return Attendances.of(attendanceList);
     }
 }

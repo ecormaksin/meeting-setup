@@ -1,11 +1,11 @@
 package meeting.domain.model.meeting;
 
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
-import meeting.domain.model.participant.Participant;
-import meeting.domain.model.participant.Participants;
-import meeting.domain.model.participant.TotalNumberOfParticipant;
-import meeting.domain.model.participant.attendance.Attendance;
-import meeting.domain.model.participant.attendance.AttendanceCategory;
+import meeting.domain.model.attendance.Attendance;
+import meeting.domain.model.attendance.Attendances;
+import meeting.domain.model.attendance.TotalNumberOfParticipant;
+import meeting.domain.model.attendance.convenience.Convenience;
+import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
@@ -29,7 +29,7 @@ public class Meeting {
     Schedules schedules;
 
     @Valid
-    Participants participants;
+    Attendances attendances;
 
     @Valid
     OrganizerTerminal organizerTerminal;
@@ -38,13 +38,13 @@ public class Meeting {
                    @Valid Subject subject,
                    @Valid Memo memo,
                    @Valid Schedules schedules,
-                   @Valid Participants participants,
+                   @Valid Attendances attendances,
                    @Valid OrganizerTerminal organizerTerminal) {
         this.meetingId = meetingId;
         this.subject = subject;
         this.memo = memo;
         this.schedules = schedules;
-        this.participants = participants;
+        this.attendances = attendances;
         this.organizerTerminal = organizerTerminal;
     }
 
@@ -72,15 +72,15 @@ public class Meeting {
         return organizerTerminal;
     }
 
-    public TotalNumberOfParticipant totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, AttendanceCategory attendanceCategory) {
+    public TotalNumberOfParticipant totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
         int number = 0;
-        List<Participant> participantList = participants.asList();
-        for (Participant participant : participantList) {
-            for (Attendance attendance : participant.attendances().asList()) {
-                if (!attendance.scheduleNumber().equals(scheduleNumber)) {
+        List<Attendance> attendanceList = attendances.asList();
+        for (Attendance attendance : attendanceList) {
+            for (Convenience convenience : attendance.attendances().asList()) {
+                if (!convenience.scheduleNumber().equals(scheduleNumber)) {
                     continue;
                 }
-                if (attendance.attendanceCategory() != attendanceCategory) {
+                if (convenience.attendanceCategory() != convenienceCategory) {
                     continue;
                 }
                 number++;
