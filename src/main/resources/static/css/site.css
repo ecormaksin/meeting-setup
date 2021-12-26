@@ -103,3 +103,12 @@ th *, td * {
 .meeting-show-detail {
     margin-bottom: 5rem;
 }
+
+.participant-name {
+    width: 40ch;
+}
+
+.attendance-comment {
+    width: 40ch;
+    height: 15ex;
+}

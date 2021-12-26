@@ -1,5 +1,7 @@
 package meeting.domain.model.attendance.convenience;
 
+import meeting.domain.model.schedule.ScheduleNumber;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
 public class Conveniences {
     List<Convenience> list;
 
-    Conveniences(List<Convenience> list) {
+    public Conveniences(List<Convenience> list) {
         this.list = list;
     }
 
@@ -23,6 +25,15 @@ public class Conveniences {
 
     public List<Convenience> asList() {
         return Collections.unmodifiableList(list);
+    }
+
+    public Convenience of(ScheduleNumber scheduleNumber) {
+        for (Convenience convenience : list) {
+            if (scheduleNumber.equals(convenience.scheduleNumber())) {
+                return convenience;
+            }
+        }
+        throw new IllegalArgumentException("該当する日程候補が見つかりません。");
     }
 
     @Override

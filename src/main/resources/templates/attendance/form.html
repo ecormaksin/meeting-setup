@@ -11,90 +11,49 @@
   <article>
     <h1>出欠の入力</h1>
     <form method="post" action="#"
-          th:action="@{/attendance/input}">
+          th:object="${attendanceInputRequest}" th:action="@{/meeting/__${meetingId}__/attendance/input}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <label>名前</label>
-      <input type="text" th:field="*{subject.value}" placeholder="○○様カンファレンス など" class="meeting-subject">
-      <p th:if="${#fields.hasErrors('subject.value')}">
-        <mark><span th:errors="*{subject.value}"></span></mark>
+      <label>参加者名</label>
+      <input type="text" th:field="*{participantName.value}" class="participant-name">
+      <p th:if="${#fields.hasErrors('participantName.value')}">
+        <mark><span th:errors="*{participantName.value}"></span></mark>
       </p>
 
-      <label>メモ（任意）</label>
-      <textarea th:field="*{memo.value}" placeholder="リハビリ実施計画書について など" class="meeting-memo"></textarea>
-      <p th:if="${#fields.hasErrors('memo.value')}">
-        <mark><span th:errors="*{memo.value}"></span></mark>
-      </p>
-
-      <div class="meeting-schedules-title-section">
-        <label class="meeting-schedules-title-label">日程候補</label>
-        <button type="submit" name="addSchedule"
-                class="small-button">追加</button>
-      </div>
+      <label>日程候補</label>
       <table>
         <thead>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>開催日</th>
-            <th>開始時刻</th>
-            <th></th>
-            <th>終了時刻</th>
-            <th></th>
-          </tr>
+        <tr>
+          <th></th>
+          <th>日程</th>
+          <th>都合</th>
+        </tr>
         </thead>
         <tbody>
-          <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
-            <td th:text="${scheduleStat.count}">1</td>
-            <td>
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct}"></span></mark>
-              </p>
-            </td>
-            <td>
-              <input type="date" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value}">
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value}"></span></mark>
-              </p>
-            </td>
-            <td>
-              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value}">
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value}"></span></mark>
-              </p>
-            </td>
-            <td>～</td>
-            <td>
-              <input type="time" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value}">
-              <p th:if="${#fields.hasErrors('schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value')}">
-                <mark><span th:errors="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value}"></span></mark>
-              </p>
-            </td>
-            <td>
-              <button th:if="${scheduleStat.index > 0}"
-                      type="submit" name="removeSchedule"
-                      th:value="${scheduleStat.index}"
-                      class="small-button">削除</button>
-            </td>
-          </tr>
+        <tr th:each="schedule,scheduleStat: ${schedules.asList()}">
+          <td th:text="${scheduleStat.count}">1</td>
+          <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
+          </td>
+          <td>
+            <th:block th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}">
+              <input type="radio" th:field="${attendanceInputRequest.conveniences.of(schedule.scheduleNumber())}"
+                     th:value="${convenienceCategory.symbol()}"
+                     th:text="${convenienceCategory.symbol()}" />
+            </th:block>
+          </td>
+        </tr>
         </tbody>
       </table>
-      <div>
-        <p th:if="${#fields.hasErrors('schedules')}">
-          <mark><span th:errors="*{schedules}"></span></mark>
-        </p>
-      </div>
 
-      <input type="hidden" th:field="*{organizerTerminal.ipAddress.value}">
-      <input type="hidden" th:field="*{organizerTerminal.osFamily.value}">
-      <input type="hidden" th:field="*{organizerTerminal.userAgentFamily.value}">
+      <label>コメント</label>
+      <textarea th:field="*{attendanceComment.value}" class="attendance-comment"></textarea>
+      <p th:if="${#fields.hasErrors('attendanceComment.value')}">
+        <mark><span th:errors="*{attendanceComment.value}"></span></mark>
+      </p>
 
-      <div>
-        <button>作成</button>
-      </div>
     </form>
   </article>
 

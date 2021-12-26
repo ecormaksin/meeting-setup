@@ -17,7 +17,6 @@ public class MeetingCreationScenario {
     }
 
     public MeetingId create(MeetingCreationRequest meetingCreationRequest) {
-        MeetingId meetingId = meetingRecordService.create(meetingCreationRequest);
-        return meetingId;
+        return meetingRecordService.create(meetingCreationRequest);
     }
 }

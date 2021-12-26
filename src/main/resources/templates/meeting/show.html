@@ -10,19 +10,18 @@
 <main>
   <article>
     <h1>ミーティングの詳細</h1>
-    <form method="post" th:object="${meeting}" th:action="@{/convenience}">
-      <input type="hidden" name="meeting" th:value="${meeting.meetingId()}" />
+    <form method="get" th:object="${meeting}" th:action="@{/meeting/__${meetingId}__/attendance/input}">
       <label>件名</label>
       <p class="meeting-show-detail" th:text="${meeting.subject()}" />
       <label>ミーティングの補足説明</label>
       <p class="meeting-show-detail" th:text="${meeting.memo()}" />
       <label>日程候補</label>
-      <table>
+      <table class="meeting-show-detail" >
         <thead>
           <tr>
             <th></th>
             <th>日程</th>
-            <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.AttendanceCategory).values()}"
+            <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
                 th:value="${convenienceCategory}" th:text="${convenienceCategory.symbol()}"></th>
           </tr>
         </thead>
@@ -31,12 +30,16 @@
             <td th:text="${scheduleStat.count}">1</td>
             <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
             </td>
-            <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.AttendanceCategory).values()}"
+            <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
                 th:value="${convenienceCategory}" th:text="${meeting.totalNumberOfParticipantAt(schedule.scheduleNumber(), convenienceCategory).show()}">
             </td>
           </tr>
         </tbody>
       </table>
+
+      <div>
+        <button>出欠を入力する</button>
+      </div>
     </form>
   </article>
 </main>

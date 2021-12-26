@@ -60,7 +60,7 @@ public class MeetingCreationRequest {
         schedules = schedules.remove(index);
     }
 
-    public static MeetingCreationRequest empty(@Valid OrganizerTerminal organizerTerminal) {
+    public static MeetingCreationRequest empty(OrganizerTerminal organizerTerminal) {
         MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest();
         meetingCreationRequest.schedules = Schedules.initialEmptyList();
         meetingCreationRequest.organizerTerminal = organizerTerminal;

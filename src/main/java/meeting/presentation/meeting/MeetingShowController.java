@@ -26,6 +26,7 @@ public class MeetingShowController {
     String show(Model model, @PathVariable("meetingId") MeetingId meetingId) {
         Meeting meeting = coordinator.meetingOf(meetingId);
         model.addAttribute("meeting", meeting);
+        model.addAttribute("meetingId", meeting.meetingId().value());
         return "meeting/show";
     }
 }

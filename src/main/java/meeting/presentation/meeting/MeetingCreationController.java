@@ -23,13 +23,13 @@ import java.net.URI;
 @Controller
 @RequestMapping("meeting/create")
 public class MeetingCreationController {
-    MeetingCreationScenario coordinator;
+    MeetingCreationScenario meetingCreationScenario;
 
     ClientInfoGetter clientInfoGetter;
 
-    public MeetingCreationController(MeetingCreationScenario coordinator,
+    public MeetingCreationController(MeetingCreationScenario meetingCreationScenario,
                                      ClientInfoGetter clientInfoGetter) {
-        this.coordinator = coordinator;
+        this.meetingCreationScenario = meetingCreationScenario;
         this.clientInfoGetter = clientInfoGetter;
     }
 
@@ -62,7 +62,7 @@ public class MeetingCreationController {
                   UriComponentsBuilder builder) {
         if (bindingResult.hasErrors()) return "meeting/form";
 
-        MeetingId meetingId = coordinator.create(meetingCreationRequest);
+        MeetingId meetingId = meetingCreationScenario.create(meetingCreationRequest);
 
         attributes.addFlashAttribute("meetingId", meetingId.value());
 
