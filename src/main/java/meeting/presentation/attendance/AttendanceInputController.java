@@ -41,7 +41,7 @@ public class AttendanceInputController {
         binder.setAllowedFields(
                 "participantName.value",
                 "attendanceComment.value",
-                "conveniences.*"
+                "conveniences.list[*"
         );
     }
 }

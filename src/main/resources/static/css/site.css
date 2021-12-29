@@ -112,3 +112,34 @@ th *, td * {
     width: 40ch;
     height: 15ex;
 }
+
+.convenience-radio {
+    display: inline-block;
+    font-size: 2em;
+}
+
+.convenience-radio input[type=radio] {
+    display: none;
+}
+
+.convenience-radio input[type=radio] + label {
+    color: lightgray;
+    display: table-cell;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    cursor: pointer;
+    background: #f4f4f4;
+    border-radius: 99em;
+    border: 1px solid #ccc;
+    font: bold;
+}
+
+.convenience-radio input[type=radio]:checked + label,
+.convenience-radio input[type=radio]:hover + label {
+    color: white;
+    border: 1px solid #7a7a7a;
+    background-color: #7cc93a;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 1px 1px rgba(255, 255, 255, 0.3) inset, 0 -1px 0 rgba(0, 0, 0, 0.4) inset;
+    font-weight: bold;
+}
