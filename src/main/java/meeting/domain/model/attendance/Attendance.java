@@ -24,8 +24,20 @@ public class Attendance {
     @Deprecated
     public Attendance() {}
 
-    public Conveniences attendances() {
+    public AttendanceId attendanceId() {
+        return attendanceId;
+    }
+
+    public ParticipantName participantName() {
+        return participantName;
+    }
+
+    public Conveniences conveniences() {
         return conveniences;
+    }
+
+    public AttendanceComment attendanceComment() {
+        return attendanceComment;
     }
 
     @Override

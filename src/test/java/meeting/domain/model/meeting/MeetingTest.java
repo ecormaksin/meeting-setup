@@ -22,9 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MeetingTest {
 
     @ParameterizedTest(name = "ケース番号 兼 日程候補番号: {0}, " +
-            "参加者1の出欠: ''{1}'', " +
-            "参加者2の出欠: ''{2}'', " +
-            "参加者3の出欠: ''{3}'', " +
+            "参加者1の都合: ''{1}'', " +
+            "参加者2の都合: ''{2}'', " +
+            "参加者3の都合: ''{3}'', " +
             "◯の数の期待値: {4}, " +
             "△の数の期待値: {5}, " +
             "×の数の期待値: {6}")
@@ -72,7 +72,7 @@ public class MeetingTest {
                         LocalTime.of(11, 0))
         );
 
-        Attendances attendances = createParticipants(patternNumber,
+        Attendances attendances = createAttendances(patternNumber,
                                         Arrays.asList(participant1Attendance,
                                                         participant2Attendance,
                                                         participant3Attendance));
@@ -100,7 +100,7 @@ public class MeetingTest {
                 String.format("×と回答した人数は%d", numberOfParticipantsBatsu));
     }
 
-    private Attendances createParticipants(int primitiveScheduleNumber, List<String> attendanceTextList) {
+    private Attendances createAttendances(int primitiveScheduleNumber, List<String> attendanceTextList) {
 
         List<Attendance> attendanceList = new ArrayList<>();
 

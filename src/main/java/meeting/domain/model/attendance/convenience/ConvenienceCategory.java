@@ -4,12 +4,11 @@ package meeting.domain.model.attendance.convenience;
  * 都合種別
  */
 public enum ConvenienceCategory {
-    マル("○", "convenience-category-maru"),
-    サンカク("△", "convenience-category-sankaku"),
-    バツ("×", "convenience-category-shikaku");
+    マル("○"),
+    サンカク("△"),
+    バツ("×");
 
     String symbol;
-    String displayStyle;
 
     public static ConvenienceCategory of(String symbol) {
         for (ConvenienceCategory convenienceCategory : ConvenienceCategory.values()) {
@@ -22,16 +21,11 @@ public enum ConvenienceCategory {
         );
     }
 
-    ConvenienceCategory(String symbol, String displayStyle) {
+    ConvenienceCategory(String symbol) {
         this.symbol = symbol;
-        this.displayStyle = displayStyle;
     }
 
     public String symbol() {
         return symbol;
-    }
-
-    public String displayStyle() {
-        return displayStyle;
     }
 }

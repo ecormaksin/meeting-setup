@@ -1,5 +1,6 @@
 package meeting.domain.model.attendance;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -30,5 +31,18 @@ public class AttendanceId {
     @Override
     public String toString() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object anObject) {
+        if (Objects.isNull(anObject)) return false;
+        if (!(anObject instanceof AttendanceId other)) return false;
+        if (Objects.isNull(other.value)) return false;
+        return other.value.equals(value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 }

@@ -1,16 +1,17 @@
 package meeting.infrastructure.datasource.meeting;
 
 import meeting.application.service.meeting.MeetingRepository;
+import meeting.domain.model.attendance.Attendance;
+import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.OrganizerTerminal;
-import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
+import meeting.infrastructure.datasource.attendance.AttendanceMapper;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +19,12 @@ import java.util.Optional;
 public class MeetingDatasource implements MeetingRepository {
     MeetingMapper meetingMapper;
     ScheduleMapper scheduleMapper;
+    AttendanceMapper attendanceMapper;
 
-    public MeetingDatasource(MeetingMapper meetingMapper, ScheduleMapper scheduleMapper) {
+    public MeetingDatasource(MeetingMapper meetingMapper, ScheduleMapper scheduleMapper, AttendanceMapper attendanceMapper) {
         this.meetingMapper = meetingMapper;
         this.scheduleMapper = scheduleMapper;
+        this.attendanceMapper = attendanceMapper;
     }
 
     @Override
@@ -96,11 +99,13 @@ public class MeetingDatasource implements MeetingRepository {
             throw new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value()));
         }
 
+        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingId(meetingId);
+
         return new Meeting(meetingId,
                 optSubject.get(),
                 optMemo.orElse(null),
                 new Schedules(scheduleList),
-                Attendances.of(new ArrayList<>()),
+                Attendances.of(attendanceList),
                 optOrganizerTerminal.get());
     }
 }

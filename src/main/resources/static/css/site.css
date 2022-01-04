@@ -60,47 +60,47 @@ th *, td * {
     padding: 4px;
 }
 
-.meeting-subject {
+.meeting__subject {
     width: 40ch;
 }
 
-.meeting-memo {
+.meeting__memo {
     width: 40ch;
     height: 15ex;
 }
 
-.meeting-schedules-title-section {
+.meeting__schedules-title-section {
 }
 
-.meeting-schedules-title-section *{
+.meeting__schedules-title-section *{
     display: inline-block;
 }
 
-.meeting-schedules-title-label {
+.meeting__schedules-title-label {
     padding-right: 1rem;
 }
 
-.attendance-reply-location-parent {
+.meeting-show__location-parent {
     display: flex;
 }
 
-.attendance-reply-location {
+.meeting-show__location {
     border: thin solid black;
     width: 256ch !important;
     margin-bottom: 0rem;
 }
 
-.meeting-url-copy-button {
+.url-copy-button {
     word-break: keep-all;
     margin-left: 1rem;
     width: 60ch;
 }
 
-.meeting-url-copy-button-copied {
+.url-copy-button-copied {
     background-color: green;
 }
 
-.meeting-show-detail {
+.meeting-show__detail {
     margin-bottom: 5rem;
 }
 
@@ -142,4 +142,14 @@ th *, td * {
     background-color: #7cc93a;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 1px 1px rgba(255, 255, 255, 0.3) inset, 0 -1px 0 rgba(0, 0, 0, 0.4) inset;
     font-weight: bold;
+}
+
+.attendance-edit__location-parent {
+    display: flex;
+}
+
+.attendance-edit__location {
+    border: thin solid black;
+    width: 256ch !important;
+    margin-bottom: 0rem;
 }

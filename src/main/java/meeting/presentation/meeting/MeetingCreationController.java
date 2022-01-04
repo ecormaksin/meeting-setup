@@ -66,14 +66,14 @@ public class MeetingCreationController {
 
         attributes.addFlashAttribute("meetingId", meetingId.value());
 
-        URI redirectLocation = builder.path("/meeting/create/completed").build().toUri();
-        return "redirect:" + redirectLocation.toString();
+        URI uri = builder.path("/meeting/create/completed").build().toUri();
+        return "redirect:" + uri.toString();
     }
 
     @GetMapping("completed")
     String completed(@ModelAttribute("meetingId") String meetingId, Model model, UriComponentsBuilder builder) {
-        URI attendanceReplyLocation = builder.path("/meeting/" + meetingId).build().toUri();
-        model.addAttribute("attendanceReplyLocation", attendanceReplyLocation.toString());
+        URI uri = builder.path(String.format("/meeting/%s", meetingId)).build().toUri();
+        model.addAttribute("meetingShowLocation", uri.toString());
         return "meeting/completed";
     }
 

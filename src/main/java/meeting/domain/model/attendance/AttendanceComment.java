@@ -1,5 +1,7 @@
 package meeting.domain.model.attendance;
 
+import java.util.Objects;
+
 /**
  * 出欠コメント
  */
@@ -17,6 +19,10 @@ public class AttendanceComment {
     @Override
     public String toString() {
         return value;
+    }
+
+    public boolean isBlank() {
+        return Objects.isNull(value) || value.isBlank();
     }
 
     @Deprecated

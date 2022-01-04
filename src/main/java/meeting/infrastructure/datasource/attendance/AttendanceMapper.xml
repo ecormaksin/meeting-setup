@@ -3,4 +3,58 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meeting.infrastructure.datasource.attendance.AttendanceMapper">
+
+    <insert id="insertAttendance">
+        INSERT INTO 出欠.出欠(出欠ID, ミーティングID, 参加者名)
+        VALUES (#{attendanceId.value}, #{meetingId.value}, #{participantName.value})
+    </insert>
+
+    <insert id="insertAttendanceComment">
+        INSERT INTO 出欠.出欠コメント(出欠ID, 出欠コメント)
+        VALUES (#{attendanceId.value}, #{attendanceComment.value})
+    </insert>
+
+
+    <select id="newConvenienceNumber" resultType="int">
+        SELECT NEXTVAL('出欠.都合番号')
+    </select>
+
+    <insert id="insertConvenience">
+        INSERT INTO 出欠.都合(都合番号, 出欠ID, 日程候補番号, 都合種別)
+        VALUES (#{convenienceNumber}, #{attendanceId.value}, #{scheduleNumber.value}, #{convenienceCategory})
+    </insert>
+
+    <resultMap id="attendance" type="meeting.domain.model.attendance.Attendance">
+        <collection property="conveniences.list"
+            column="attendanceId.value"
+            ofType="meeting.domain.model.attendance.convenience.Convenience"
+            select="meeting.infrastructure.datasource.attendance.AttendanceMapper.selectConveniencesByAttendanceId">
+        </collection>
+    </resultMap>
+
+    <select id="selectAttendancesByMeetingId" resultMap="attendance">
+        SELECT
+            出欠.出欠ID AS "attendanceId.value",
+            出欠.参加者名 AS "participantName.value",
+            出欠コメント.出欠コメント AS "attendanceComment.value"
+        FROM
+            出欠.出欠 AS 出欠
+            LEFT OUTER JOIN 出欠.出欠コメント AS 出欠コメント
+                ON
+                出欠コメント.出欠ID = 出欠.出欠ID
+        WHERE
+            出欠.ミーティングID = #{meetingId.value}
+        ORDER BY
+            出欠.参加者名 ASC
+    </select>
+
+    <select id="selectConveniencesByAttendanceId" resultType="meeting.domain.model.attendance.convenience.Convenience">
+        SELECT
+            日程候補番号 AS "scheduleNumber.value",
+            都合種別 AS "convenienceCategory"
+        FROM
+            出欠.都合
+        WHERE
+            出欠ID = #{value}
+    </select>
 </mapper>

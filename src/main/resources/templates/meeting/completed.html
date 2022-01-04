@@ -11,16 +11,16 @@
   <article>
     <p>ミーティングの作成が完了しました。</p>
     <p>参加者には次のURLを連絡してください。: </p>
-    <div class="convenience-reply-location-parent">
-      <input type="text" id="url" class="convenience-reply-location" th:readonly="readonly" th:value="${attendanceReplyLocation}">
-      <button id="copyUrlButton" class="small-button meeting-url-copy-button">URLをコピーする</button>
+    <div class="meeting-show__location-parent">
+      <input type="text" id="url" class="meeting-show__location" th:readonly="readonly" th:value="${meetingShowLocation}">
+      <button id="copyUrlButton" class="small-button url-copy-button">URLをコピーする</button>
     </div>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 <script>
 $(function() {
-  var copyButtonObj = $('#copyUrlButton');
+  var copyUrlButtonObj = $('#copyUrlButton');
 
   function copyUrl() {
     var url = $('#url').val();
@@ -31,17 +31,17 @@ $(function() {
     document.execCommand('copy');
     dummyTextBox.remove();
 
-    copyButtonObj.text('コピー完了');
-    copyButtonObj.addClass('meeting-url-copy-button-copied');
+    copyUrlButtonObj.text('コピー完了');
+    copyUrlButtonObj.addClass('url-copy-button-copied');
     setTimeout(removeCopiedStyle, 5000);
   }
 
   function removeCopiedStyle() {
-    copyButtonObj.text('URLをコピーする');
-    copyButtonObj.removeClass('meeting-url-copy-button-copied');
+    copyUrlButtonObj.text('URLをコピーする');
+    copyUrlButtonObj.removeClass('url-copy-button-copied');
   }
 
-  copyButtonObj.on('click', copyUrl);
+  copyUrlButtonObj.on('click', copyUrl);
 });
 </script>
 </body>

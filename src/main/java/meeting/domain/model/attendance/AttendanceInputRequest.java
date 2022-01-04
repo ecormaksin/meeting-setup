@@ -24,12 +24,16 @@ public class AttendanceInputRequest {
     @Valid
     AttendanceComment attendanceComment;
 
+    Schedules schedules;
+
     public AttendanceInputRequest(@Valid ParticipantName participantName,
                                   @Valid Conveniences conveniences,
-                                  @Valid AttendanceComment attendanceComment) {
+                                  @Valid AttendanceComment attendanceComment,
+                                  Schedules schedules) {
         this.participantName = participantName;
         this.conveniences = conveniences;
         this.attendanceComment = attendanceComment;
+        this.schedules = schedules;
     }
 
     @Deprecated
@@ -47,6 +51,10 @@ public class AttendanceInputRequest {
         return attendanceComment;
     }
 
+    public Schedules schedules() {
+        return schedules;
+    }
+
     public static AttendanceInputRequest empty(Schedules schedules) {
 
         List<Convenience> convenienceList = new ArrayList<>();
@@ -58,6 +66,7 @@ public class AttendanceInputRequest {
 
         AttendanceInputRequest attendanceInputRequest = new AttendanceInputRequest();
         attendanceInputRequest.conveniences = new Conveniences(convenienceList);
+        attendanceInputRequest.schedules = schedules;
         return attendanceInputRequest;
     }
 }

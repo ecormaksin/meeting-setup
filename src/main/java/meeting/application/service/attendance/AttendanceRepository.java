@@ -2,10 +2,11 @@ package meeting.application.service.attendance;
 
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
+import meeting.domain.model.meeting.MeetingId;
 
 /**
  * 出欠 リポジトリ
  */
 public interface AttendanceRepository {
-    AttendanceId input(AttendanceInputRequest attendanceInputRequest);
+    AttendanceId input(MeetingId meetingId, AttendanceInputRequest attendanceInputRequest);
 }

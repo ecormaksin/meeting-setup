@@ -22,8 +22,8 @@ public class AttendanceInputScenario {
         this.scheduleQueryService = scheduleQueryService;
     }
 
-    public AttendanceId input(AttendanceInputRequest attendanceInputRequest) {
-        return attendanceRecordService.input(attendanceInputRequest);
+    public AttendanceId input(MeetingId meetingId, AttendanceInputRequest attendanceInputRequest) {
+        return attendanceRecordService.input(meetingId, attendanceInputRequest);
     }
 
     public Schedules schedules(MeetingId meetingId) {

@@ -1,16 +1,20 @@
 package meeting.presentation.attendance;
 
 import meeting.application.senario.AttendanceInputScenario;
+import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
 import meeting.domain.model.meeting.MeetingId;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 /**
  * 出欠入力画面
@@ -29,19 +33,43 @@ public class AttendanceInputController {
         Schedules schedules = attendanceInputScenario.schedules(meetingId);
         AttendanceInputRequest attendanceInputRequest = AttendanceInputRequest.empty(schedules);
 
-        model.addAttribute("meetingId", meetingId);
         model.addAttribute("attendanceInputRequest", attendanceInputRequest);
-        model.addAttribute("schedules", schedules);
 
         return "attendance/form";
+    }
+
+    @PostMapping
+    String input(@PathVariable("meetingId") MeetingId meetingId,
+                 @Validated @ModelAttribute("attendanceInputRequest") AttendanceInputRequest attendanceInputRequest,
+                 BindingResult bindingResult, RedirectAttributes attributes,
+                 UriComponentsBuilder builder) {
+        if (bindingResult.hasErrors()) return "attendance/form";
+
+        AttendanceId attendanceId = attendanceInputScenario.input(meetingId, attendanceInputRequest);
+
+        attributes.addFlashAttribute("meetingId", meetingId.value());
+        attributes.addFlashAttribute("attendanceId", attendanceId.value());
+
+        URI uri = builder.path(String.format("meeting/%s/attendance/input/completed", meetingId.value())).build().toUri();
+        return "redirect:" + uri.toString();
+    }
+
+    @GetMapping("completed")
+    String completed(@ModelAttribute("meetingId") String meetingId,
+                     @ModelAttribute("attendanceId") String attendanceId,
+                     Model model, UriComponentsBuilder builder) {
+        URI uri = builder.path(String.format("/meeting/%s/attendance/%s", meetingId, attendanceId)).build().toUri();
+        model.addAttribute("attendanceEditLocation", uri.toString());
+        return "attendance/completed";
     }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
                 "participantName.value",
+                "conveniences.list[*",
                 "attendanceComment.value",
-                "conveniences.list[*"
+                "schedules.list[*"
         );
     }
 }

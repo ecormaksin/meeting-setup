@@ -2,6 +2,7 @@ package meeting.application.service.attendance;
 
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
+import meeting.domain.model.meeting.MeetingId;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,7 +16,7 @@ public class AttendanceRecordService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public AttendanceId input(AttendanceInputRequest attendanceInputRequest) {
-        return attendanceRepository.input(attendanceInputRequest);
+    public AttendanceId input(MeetingId meetingId, AttendanceInputRequest attendanceInputRequest) {
+        return attendanceRepository.input(meetingId, attendanceInputRequest);
     }
 }

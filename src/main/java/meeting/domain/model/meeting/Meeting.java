@@ -1,11 +1,12 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.attendance.Attendance;
+import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.attendance.TotalNumberOfParticipant;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
+import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
@@ -68,6 +69,10 @@ public class Meeting {
         return schedules;
     }
 
+    public Attendances attendances() {
+        return attendances;
+    }
+
     public OrganizerTerminal organizerTerminal() {
         return organizerTerminal;
     }
@@ -76,11 +81,11 @@ public class Meeting {
         int number = 0;
         List<Attendance> attendanceList = attendances.asList();
         for (Attendance attendance : attendanceList) {
-            for (Convenience convenience : attendance.attendances().asList()) {
+            for (Convenience convenience : attendance.conveniences().asList()) {
                 if (!convenience.scheduleNumber().equals(scheduleNumber)) {
                     continue;
                 }
-                if (convenience.attendanceCategory() != convenienceCategory) {
+                if (convenience.convenienceCategory() != convenienceCategory) {
                     continue;
                 }
                 number++;
@@ -88,5 +93,21 @@ public class Meeting {
         }
 
         return new TotalNumberOfParticipant(number);
+    }
+
+    public ConvenienceCategory convenienceCategoryOf(AttendanceId attendanceId, ScheduleNumber scheduleNumber) {
+
+        for (Attendance attendance : attendances.asList()) {
+            if (!attendance.attendanceId().equals(attendanceId)) {
+                continue;
+            }
+            for (Convenience convenience : attendance.conveniences().asList()) {
+                if (!convenience.scheduleNumber().equals(scheduleNumber)) {
+                    continue;
+                }
+                return convenience.convenienceCategory();
+            }
+        }
+        throw new IllegalArgumentException("該当する出欠の都合が見つかりませんでした。");
     }
 }

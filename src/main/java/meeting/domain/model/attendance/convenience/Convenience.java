@@ -21,11 +21,14 @@ public class Convenience {
         this.convenienceCategory = convenienceCategory;
     }
 
+    @Deprecated
+    Convenience() {}
+
     public ScheduleNumber scheduleNumber() {
         return scheduleNumber;
     }
 
-    public ConvenienceCategory attendanceCategory() {
+    public ConvenienceCategory convenienceCategory() {
         return convenienceCategory;
     }
 
