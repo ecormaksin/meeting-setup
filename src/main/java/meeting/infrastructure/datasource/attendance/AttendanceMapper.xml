@@ -25,6 +25,9 @@
     </insert>
 
     <resultMap id="attendance" type="meeting.domain.model.attendance.Attendance">
+        <id property="attendanceId.value" column="attendanceId.value" />
+        <result property="participantName.value" column="participantName.value" />
+        <result property="attendanceComment.value" column="attendanceComment.value" />
         <collection property="conveniences.list"
             column="attendanceId.value"
             ofType="meeting.domain.model.attendance.convenience.Convenience"
