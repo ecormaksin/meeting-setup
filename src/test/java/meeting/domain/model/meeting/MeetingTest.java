@@ -1,6 +1,6 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
@@ -76,7 +76,7 @@ public class MeetingTest {
                                         Arrays.asList(participant1Attendance,
                                                         participant2Attendance,
                                                         participant3Attendance));
-        OrganizerTerminal organizerTerminal = OrganizerTerminal.of(
+        ClientBrowser clientBrowser = ClientBrowser.of(
                 "127.0.0.1",
                 "Windows",
                 "Chrome");
@@ -86,7 +86,7 @@ public class MeetingTest {
                 new Memo("メモテスト"),
                 Schedules.of(scheduleList),
                 attendances,
-                organizerTerminal);
+                clientBrowser);
 
         ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
         assertEquals(numberOfParticipantMaru,

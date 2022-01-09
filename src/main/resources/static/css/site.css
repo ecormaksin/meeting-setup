@@ -70,14 +70,24 @@ th *, td * {
 }
 
 .meeting__schedules-title-section {
-}
-
-.meeting__schedules-title-section *{
-    display: inline-block;
+    display: flex;
+    align-items: center;
 }
 
 .meeting__schedules-title-label {
     padding-right: 1rem;
+}
+
+.meeting__schedules-error * {
+    margin-bottom: 0rem;
+    text-align: left;
+    margin-top: 0;
+}
+
+.meeting-show__h1-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .meeting-show__location-parent {

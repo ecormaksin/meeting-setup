@@ -4,7 +4,7 @@ import meeting.application.service.meeting.MeetingRepository;
 import meeting.domain.model.attendance.Attendance;
 import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.meeting.*;
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
 import meeting.infrastructure.datasource.attendance.AttendanceMapper;
@@ -66,11 +66,11 @@ public class MeetingDatasource implements MeetingRepository {
         });
     }
 
-    private void insertOrganizerTerminal(MeetingId meetingId, OrganizerTerminal organizerTerminal) {
+    private void insertOrganizerTerminal(MeetingId meetingId, ClientBrowser clientBrowser) {
         meetingMapper.insertOrganizerTerminal(meetingId,
-                organizerTerminal.ipAddress(),
-                organizerTerminal.osFamily(),
-                organizerTerminal.userAgentFamily()
+                clientBrowser.ipAddress(),
+                clientBrowser.osFamily(),
+                clientBrowser.userAgentFamily()
         );
     }
 
@@ -85,7 +85,7 @@ public class MeetingDatasource implements MeetingRepository {
 
         Optional<Memo> optMemo = meetingMapper.selectMemo(meetingId);
 
-        Optional<OrganizerTerminal> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingId);
+        Optional<ClientBrowser> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingId);
         if (!optOrganizerTerminal.isPresent()) {
             meetingNotFound = true;
         }

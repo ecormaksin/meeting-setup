@@ -88,9 +88,7 @@ public class ScheduleConstruct {
 
     @Override
     public int hashCode() {
-        return Objects.hash(Objects.hashCode(meetingDate.hashCode()),
-                Objects.hashCode(startTime.value),
-                Objects.hashCode(endTime.value));
+        return Objects.hash(meetingDate, startTime, endTime);
     }
 
     @Override

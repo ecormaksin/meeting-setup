@@ -5,7 +5,7 @@ import meeting.domain.model.meeting.Memo;
 import meeting.domain.model.meeting.Subject;
 import meeting.domain.model.meeting.organizer.IpAddress;
 import meeting.domain.model.meeting.organizer.OSFamily;
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.meeting.organizer.UserAgentFamily;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,5 +20,5 @@ public interface MeetingMapper {
 
     Optional<Subject> selectSubject(@Param("meetingId") MeetingId meetingId);
     Optional<Memo> selectMemo(@Param("meetingId") MeetingId meetingId);
-    Optional<OrganizerTerminal> selectOrganizerTerminal(@Param("meetingId") MeetingId meetingId);
+    Optional<ClientBrowser> selectOrganizerTerminal(@Param("meetingId") MeetingId meetingId);
 }

@@ -1,8 +1,8 @@
 package meeting.presentation;
 
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.meeting.organizer.IpAddress;
 import meeting.domain.model.meeting.organizer.OSFamily;
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
 import meeting.domain.model.meeting.organizer.UserAgentFamily;
 import org.springframework.stereotype.Component;
 import ua_parser.Client;
@@ -20,7 +20,7 @@ public class ClientInfoGetter {
         this.parser = parser;
     }
 
-    public OrganizerTerminal organizerTerminal(HttpServletRequest req) {
+    public ClientBrowser clientBrowser(HttpServletRequest req) {
 
         IpAddress ipAddress = new IpAddress(clientIPAddress(req));
 
@@ -29,7 +29,7 @@ public class ClientInfoGetter {
         OSFamily osFamily = new OSFamily(client.os.family);
         UserAgentFamily userAgentFamily = new UserAgentFamily(client.userAgent.family);
 
-        return new OrganizerTerminal(ipAddress, osFamily, userAgentFamily);
+        return new ClientBrowser(ipAddress, osFamily, userAgentFamily);
     }
 
     private String clientIPAddress(HttpServletRequest req) {

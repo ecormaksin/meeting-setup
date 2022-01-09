@@ -3,7 +3,7 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.MeetingDBTest;
 import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
@@ -189,7 +189,7 @@ class MeetingDatasourceTest {
             assertEquals(LocalTime.of(15, 0),scheduleConstruct.endTime().value() );
         }
 
-        private OrganizerTerminal organizerTerminal() {
+        private ClientBrowser organizerTerminal() {
             return meeting.organizerTerminal();
         }
 
@@ -200,20 +200,20 @@ class MeetingDatasourceTest {
 
         @Test
         void 作成時のIPアドレスと同じ() throws Exception {
-            OrganizerTerminal organizerTerminal = organizerTerminal();
-            assertEquals("127.0.0.1", organizerTerminal.ipAddress().value());
+            ClientBrowser clientBrowser = organizerTerminal();
+            assertEquals("127.0.0.1", clientBrowser.ipAddress().value());
         }
 
         @Test
         void 作成時のOSファミリーと同じ() throws Exception {
-            OrganizerTerminal organizerTerminal = organizerTerminal();
-            assertEquals("Windows", organizerTerminal.osFamily().value());
+            ClientBrowser clientBrowser = organizerTerminal();
+            assertEquals("Windows", clientBrowser.osFamily().value());
         }
 
         @Test
         void 作成時のブラウザと同じ() throws Exception {
-            OrganizerTerminal organizerTerminal = organizerTerminal();
-            assertEquals("Chrome", organizerTerminal.userAgentFamily().value());
+            ClientBrowser clientBrowser = organizerTerminal();
+            assertEquals("Chrome", clientBrowser.userAgentFamily().value());
         }
     }
 

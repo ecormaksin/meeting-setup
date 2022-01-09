@@ -37,7 +37,7 @@
             ミーティングID = #{meetingId.value}
     </select>
 
-    <select id="selectOrganizerTerminal" resultType="meeting.domain.model.meeting.organizer.OrganizerTerminal">
+    <select id="selectOrganizerTerminal" resultType="meeting.domain.model.meeting.organizer.ClientBrowser">
         SELECT
             IPアドレス as "ipAddress.value",
             OSファミリー as "osFamily.value",

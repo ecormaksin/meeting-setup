@@ -3,7 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,16 +35,16 @@ public class MeetingCreationController {
 
     @GetMapping
     String init(Model model, HttpServletRequest req) {
-        OrganizerTerminal organizerTerminal = clientInfoGetter.organizerTerminal(req);
-        model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty(organizerTerminal));
-        return "meeting/form";
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(req);
+        model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty(clientBrowser));
+        return "meeting/create";
     }
 
     @PostMapping(params={"addSchedule"})
     String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
                        BindingResult bindingResult) {
         meetingCreationRequest.addEmptySchedule();
-        return "meeting/form";
+        return "meeting/create";
     }
 
     @PostMapping(params={"removeSchedule"})
@@ -53,14 +53,14 @@ public class MeetingCreationController {
                           HttpServletRequest req) {
         final Integer index = Integer.valueOf(req.getParameter("removeSchedule"));
         meetingCreationRequest.removeSchedule(index.intValue());
-        return "meeting/form";
+        return "meeting/create";
     }
 
     @PostMapping
     String create(@Validated @ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
                   BindingResult bindingResult, RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
-        if (bindingResult.hasErrors()) return "meeting/form";
+        if (bindingResult.hasErrors()) return "meeting/create";
 
         MeetingId meetingId = meetingCreationScenario.create(meetingCreationRequest);
 

@@ -9,7 +9,12 @@
 
 <main>
   <article>
-    <h1>ミーティングの詳細</h1>
+    <div class="meeting-show__h1-section">
+      <h1>ミーティングの詳細</h1>
+      <div th:if="${isEditable}">
+        <a th:href="@{/meeting/__${meetingId}__/edit}">ミーティングの編集</a>
+      </div>
+    </div>
     <form method="get" th:object="${meeting}" th:action="@{/meeting/__${meetingId}__/attendance/input}">
       <label>件名</label>
       <p class="meeting-show__detail" th:text="${meeting.subject()}" />

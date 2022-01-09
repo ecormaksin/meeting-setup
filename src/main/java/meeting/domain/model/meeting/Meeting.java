@@ -6,7 +6,7 @@ import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.attendance.TotalNumberOfParticipant;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
@@ -33,20 +33,20 @@ public class Meeting {
     Attendances attendances;
 
     @Valid
-    OrganizerTerminal organizerTerminal;
+    ClientBrowser organizerTerminal;
 
     public Meeting(@Valid MeetingId meetingId,
                    @Valid Subject subject,
                    @Valid Memo memo,
                    @Valid Schedules schedules,
                    @Valid Attendances attendances,
-                   @Valid OrganizerTerminal organizerTerminal) {
+                   @Valid ClientBrowser clientBrowser) {
         this.meetingId = meetingId;
         this.subject = subject;
         this.memo = memo;
         this.schedules = schedules;
         this.attendances = attendances;
-        this.organizerTerminal = organizerTerminal;
+        this.organizerTerminal = clientBrowser;
     }
 
     @Deprecated
@@ -73,7 +73,7 @@ public class Meeting {
         return attendances;
     }
 
-    public OrganizerTerminal organizerTerminal() {
+    public ClientBrowser organizerTerminal() {
         return organizerTerminal;
     }
 
@@ -109,5 +109,12 @@ public class Meeting {
             }
         }
         throw new IllegalArgumentException("該当する出欠の都合が見つかりませんでした。");
+    }
+
+    public MeetingEditability editability(ClientBrowser clientBrowser) {
+        if (clientBrowser.equals(organizerTerminal)) {
+            return MeetingEditability.編集可;
+        }
+        return MeetingEditability.編集不可;
     }
 }

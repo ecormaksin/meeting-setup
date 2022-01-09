@@ -1,9 +1,10 @@
 package meeting.domain.model.meeting.organizer;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 /**
- * 主催者端末のIPアドレス
+ * IPアドレス
  */
 public class IpAddress {
     @NotBlank(message = "{meeting.domain.model.meeting.organizer.IpAddress.NotBlank.message}")
@@ -24,5 +25,18 @@ public class IpAddress {
 
     @Deprecated
     IpAddress() {
+    }
+
+    @Override
+    public boolean equals(Object anObject) {
+        if (Objects.isNull(anObject)) return false;
+        if (!(anObject instanceof IpAddress other)) return false;
+        if (Objects.isNull(other.value)) return false;
+        return other.value.equals(value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 }

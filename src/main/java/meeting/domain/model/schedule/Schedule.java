@@ -9,10 +9,12 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  * 日程候補
  */
+@ScheduleIsFutureWhenToAdd
 public class Schedule {
     ScheduleNumber scheduleNumber;
 
@@ -55,6 +57,12 @@ public class Schedule {
 
     public boolean isConstructNotNull() {
         return scheduleConstruct.isNotNull();
+    }
+
+    public boolean isFutureWhenToAdd() {
+        if (!isValid()) return true;
+        if (Objects.nonNull(scheduleNumber)) return true;
+        return startDateTime().isAfter(LocalDateTime.now()) ;
     }
 
     public MeetingDate meetingDate() {

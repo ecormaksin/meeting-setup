@@ -1,6 +1,6 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.meeting.organizer.OrganizerTerminal;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
@@ -20,16 +20,16 @@ public class MeetingCreationRequest {
     Schedules schedules;
 
     @Valid
-    OrganizerTerminal organizerTerminal;
+    ClientBrowser organizerTerminal;
 
     public MeetingCreationRequest(@Valid Subject subject,
                                   @Valid Memo memo,
                                   @Valid Schedules schedules,
-                                  @Valid OrganizerTerminal organizerTerminal) {
+                                  @Valid ClientBrowser clientBrowser) {
         this.subject = subject;
         this.memo = memo;
         this.schedules = schedules;
-        this.organizerTerminal = organizerTerminal;
+        this.organizerTerminal = clientBrowser;
     }
 
     @Deprecated
@@ -48,7 +48,7 @@ public class MeetingCreationRequest {
         return schedules;
     }
 
-    public OrganizerTerminal organizerTerminal() {
+    public ClientBrowser organizerTerminal() {
         return organizerTerminal;
     }
 
@@ -60,10 +60,10 @@ public class MeetingCreationRequest {
         schedules = schedules.remove(index);
     }
 
-    public static MeetingCreationRequest empty(OrganizerTerminal organizerTerminal) {
+    public static MeetingCreationRequest empty(ClientBrowser clientBrowser) {
         MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest();
         meetingCreationRequest.schedules = Schedules.initialEmptyList();
-        meetingCreationRequest.organizerTerminal = organizerTerminal;
+        meetingCreationRequest.organizerTerminal = clientBrowser;
         return meetingCreationRequest;
     }
 }

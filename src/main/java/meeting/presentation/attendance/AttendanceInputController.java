@@ -35,7 +35,7 @@ public class AttendanceInputController {
 
         model.addAttribute("attendanceInputRequest", attendanceInputRequest);
 
-        return "attendance/form";
+        return "attendance/input";
     }
 
     @PostMapping
@@ -43,7 +43,7 @@ public class AttendanceInputController {
                  @Validated @ModelAttribute("attendanceInputRequest") AttendanceInputRequest attendanceInputRequest,
                  BindingResult bindingResult, RedirectAttributes attributes,
                  UriComponentsBuilder builder) {
-        if (bindingResult.hasErrors()) return "attendance/form";
+        if (bindingResult.hasErrors()) return "attendance/input";
 
         AttendanceId attendanceId = attendanceInputScenario.input(meetingId, attendanceInputRequest);
 
