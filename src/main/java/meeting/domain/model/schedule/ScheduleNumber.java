@@ -16,6 +16,10 @@ public class ScheduleNumber {
         return value;
     }
 
+    public boolean isNotPublished() {
+        return value <= 0;
+    }
+
     @Override
     public String toString() {
         return String.valueOf(value);

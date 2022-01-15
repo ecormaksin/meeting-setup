@@ -39,7 +39,7 @@
         SELECT
             出欠.出欠ID AS "attendanceId.value",
             出欠.参加者名 AS "participantName.value",
-            出欠コメント.出欠コメント AS "attendanceComment.value"
+            COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
         FROM
             出欠.出欠 AS 出欠
             LEFT OUTER JOIN 出欠.出欠コメント AS 出欠コメント
@@ -60,4 +60,33 @@
         WHERE
             出欠ID = #{value}
     </select>
+
+    <delete id="deleteAttendanceCommentsByMeetingId">
+        DELETE FROM 出欠.出欠コメント
+        WHERE 出欠ID IN (
+            SELECT
+                出欠ID
+            FROM
+                出欠.出欠
+            WHERE
+                ミーティングID = #{meetingId.value}
+        )
+    </delete>
+
+    <delete id="deleteConveniencesByMeetingId">
+        DELETE FROM 出欠.都合
+        WHERE 出欠ID IN (
+            SELECT
+                出欠ID
+            FROM
+                出欠.出欠
+            WHERE
+                ミーティングID = #{meetingId.value}
+        )
+    </delete>
+
+    <delete id="deleteAttendancesByMeetingId">
+        DELETE FROM 出欠.出欠
+        WHERE ミーティングID = #{meetingId.value}
+    </delete>
 </mapper>

@@ -12,7 +12,12 @@ import java.util.List;
 public interface ScheduleMapper {
 
     int newScheduleNumber();
-    void insertSchedule(int scheduleNumber, MeetingId meetingId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    void insertSchedule(@Param("scheduleNumber") int scheduleNumber,
+                        @Param("meetingId") MeetingId meetingId,
+                        @Param("startDateTime") LocalDateTime startDateTime,
+                        @Param("endDateTime") LocalDateTime endDateTime);
 
-    List<Schedule> selectByMeetingId(@Param("meetingId") MeetingId meetingId);
+    List<Schedule> selectSchedulesByMeetingId(@Param("meetingId") MeetingId meetingId);
+
+    void deleteSchedulesByMeetingId(@Param("meetingId") MeetingId meetingId);
 }

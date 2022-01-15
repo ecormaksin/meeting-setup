@@ -61,8 +61,12 @@ public class Schedule {
 
     public boolean isFutureWhenToAdd() {
         if (!isValid()) return true;
-        if (Objects.nonNull(scheduleNumber)) return true;
+        if (!isNewScheduleNumberNeeded()) return true;
         return startDateTime().isAfter(LocalDateTime.now()) ;
+    }
+
+    public boolean isNewScheduleNumberNeeded() {
+        return Objects.isNull(scheduleNumber) || scheduleNumber.isNotPublished();
     }
 
     public MeetingDate meetingDate() {

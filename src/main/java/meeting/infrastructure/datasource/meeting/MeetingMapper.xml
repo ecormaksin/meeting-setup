@@ -25,7 +25,7 @@
         FROM
             ミーティング.ミーティング
         WHERE
-        ミーティングID = #{meetingId.value}
+            ミーティングID = #{meetingId.value}
     </select>
 
     <select id="selectMemo" resultType="meeting.domain.model.meeting.Memo">
@@ -47,5 +47,20 @@
         WHERE
             ミーティングID = #{meetingId.value}
     </select>
+
+    <delete id="deleteOrganizerTerminal">
+        DELETE FROM ミーティング.主催者端末
+        WHERE ミーティングID = #{meetingId.value}
+    </delete>
+
+    <delete id="deleteMeetingMemo">
+        DELETE FROM ミーティング.ミーティングメモ
+        WHERE ミーティングID = #{meetingId.value}
+    </delete>
+
+    <delete id="deleteMeeting">
+        DELETE FROM ミーティング.ミーティング
+        WHERE ミーティングID = #{meetingId.value}
+    </delete>
 
 </mapper>

@@ -14,11 +14,18 @@ import java.util.Optional;
 
 @Mapper
 public interface MeetingMapper {
-    void insertMeeting(MeetingId meetingId, Subject subject);
-    void insertMeetingMemo(MeetingId meetingId, Memo memo);
-    void insertOrganizerTerminal(MeetingId meetingId, IpAddress ipAddress, OSFamily osFamily, UserAgentFamily userAgentFamily);
+    void insertMeeting(@Param("meetingId") MeetingId meetingId, @Param("subject") Subject subject);
+    void insertMeetingMemo(@Param("meetingId") MeetingId meetingId, @Param("memo") Memo memo);
+    void insertOrganizerTerminal(@Param("meetingId") MeetingId meetingId,
+                                 @Param("ipAddress") IpAddress ipAddress,
+                                 @Param("osFamily") OSFamily osFamily,
+                                 @Param("userAgentFamily") UserAgentFamily userAgentFamily);
 
     Optional<Subject> selectSubject(@Param("meetingId") MeetingId meetingId);
     Optional<Memo> selectMemo(@Param("meetingId") MeetingId meetingId);
     Optional<ClientBrowser> selectOrganizerTerminal(@Param("meetingId") MeetingId meetingId);
+
+    void deleteOrganizerTerminal(@Param("meetingId") MeetingId meetingId);
+    void deleteMeetingMemo(@Param("meetingId") MeetingId meetingId);
+    void deleteMeeting(@Param("meetingId") MeetingId meetingId);
 }

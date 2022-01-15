@@ -15,16 +15,23 @@ import java.util.List;
 
 @Mapper
 public interface AttendanceMapper {
-    void insertAttendance(MeetingId meetingId, AttendanceId attendanceId, ParticipantName participantName);
+    void insertAttendance(@Param("meetingId") MeetingId meetingId,
+                          @Param("attendanceId") AttendanceId attendanceId,
+                          @Param("participantName") ParticipantName participantName);
 
     int newConvenienceNumber();
-    void insertConvenience(int convenienceNumber,
-                           AttendanceId attendanceId,
-                           ScheduleNumber scheduleNumber,
-                           ConvenienceCategory convenienceCategory);
+    void insertConvenience(@Param("convenienceNumber") int convenienceNumber,
+                           @Param("attendanceId") AttendanceId attendanceId,
+                           @Param("scheduleNumber") ScheduleNumber scheduleNumber,
+                           @Param("convenienceCategory") ConvenienceCategory convenienceCategory);
 
-    void insertAttendanceComment(AttendanceId attendanceId, AttendanceComment attendanceComment);
+    void insertAttendanceComment(@Param("attendanceId") AttendanceId attendanceId,
+                                 @Param("attendanceComment") AttendanceComment attendanceComment);
 
     List<Attendance> selectAttendancesByMeetingId(@Param("meetingId") MeetingId meetingId);
     List<Convenience> selectConveniencesByAttendanceId(@Param("attendanceId") AttendanceId attendanceId);
+
+    void deleteAttendanceCommentsByMeetingId(@Param("meetingId") MeetingId meetingId);
+    void deleteConveniencesByMeetingId(@Param("meetingId") MeetingId meetingId);
+    void deleteAttendancesByMeetingId(@Param("meetingId") MeetingId meetingId);
 }

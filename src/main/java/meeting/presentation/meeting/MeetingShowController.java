@@ -38,7 +38,7 @@ public class MeetingShowController {
         boolean isEditable = (meeting.editability(clientBrowser) == MeetingEditability.編集可);
 
         model.addAttribute("meeting", meeting);
-        model.addAttribute("meetingId", meeting.meetingId().value());
+        model.addAttribute("meetingId", meetingId.value());
         model.addAttribute("isEditable", isEditable);
 
         return "meeting/show";

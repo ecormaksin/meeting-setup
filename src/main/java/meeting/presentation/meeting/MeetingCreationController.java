@@ -34,24 +34,22 @@ public class MeetingCreationController {
     }
 
     @GetMapping
-    String init(Model model, HttpServletRequest req) {
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(req);
+    String init(Model model, HttpServletRequest request) {
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
         model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty(clientBrowser));
         return "meeting/create";
     }
 
     @PostMapping(params={"addSchedule"})
-    String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
-                       BindingResult bindingResult) {
+    String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest) {
         meetingCreationRequest.addEmptySchedule();
         return "meeting/create";
     }
 
     @PostMapping(params={"removeSchedule"})
     String removeSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
-                          BindingResult bindingResult,
-                          HttpServletRequest req) {
-        final Integer index = Integer.valueOf(req.getParameter("removeSchedule"));
+                          HttpServletRequest request) {
+        final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
         meetingCreationRequest.removeSchedule(index.intValue());
         return "meeting/create";
     }

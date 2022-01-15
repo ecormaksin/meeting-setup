@@ -2,18 +2,22 @@ package meeting.infrastructure.datasource.meeting;
 
 import meeting.application.service.meeting.MeetingRepository;
 import meeting.domain.model.attendance.Attendance;
+import meeting.domain.model.attendance.AttendanceComment;
+import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.Attendances;
+import meeting.domain.model.attendance.convenience.Convenience;
+import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedule;
+import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.infrastructure.datasource.attendance.AttendanceMapper;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
@@ -49,21 +53,27 @@ public class MeetingDatasource implements MeetingRepository {
         meetingMapper.insertMeetingMemo(meetingId, memo);
     }
 
-    private void insertSchedules(MeetingId meetingId, Schedules schedules) {
+    private Set<ScheduleNumber> insertSchedules(MeetingId meetingId, Schedules schedules) {
+        Set<ScheduleNumber> scheduleNumbers = new HashSet<>();
         List<Schedule> scheduleList = schedules.asList();
         scheduleList.stream().forEach(schedule -> {
             if (!schedule.isValid()) {
                 return;
             }
 
-            int scheduleNumber = scheduleMapper.newScheduleNumber();
+            int scheduleNumber = schedule.isNewScheduleNumberNeeded() ?
+                    scheduleMapper.newScheduleNumber()
+                    : schedule.scheduleNumber().value();
             scheduleMapper.insertSchedule(
                     scheduleNumber,
                     meetingId,
                     schedule.startDateTime(),
                     schedule.endDateTime()
             );
+            scheduleNumbers.add(new ScheduleNumber(scheduleNumber));
         });
+
+        return scheduleNumbers;
     }
 
     private void insertOrganizerTerminal(MeetingId meetingId, ClientBrowser clientBrowser) {
@@ -90,7 +100,7 @@ public class MeetingDatasource implements MeetingRepository {
             meetingNotFound = true;
         }
 
-        List<Schedule> scheduleList = scheduleMapper.selectByMeetingId(meetingId);
+        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingId(meetingId);
         if (scheduleList.isEmpty()) {
             meetingNotFound = true;
         }
@@ -107,5 +117,60 @@ public class MeetingDatasource implements MeetingRepository {
                 new Schedules(scheduleList),
                 Attendances.of(attendanceList),
                 optOrganizerTerminal.get());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
+        MeetingId meetingId = meetingEditRequest.meetingId();
+
+        // 既存のレコードを削除
+        attendanceMapper.deleteAttendanceCommentsByMeetingId(meetingId);
+        attendanceMapper.deleteConveniencesByMeetingId(meetingId);
+        attendanceMapper.deleteAttendancesByMeetingId(meetingId);
+
+        scheduleMapper.deleteSchedulesByMeetingId(meetingId);
+
+        meetingMapper.deleteOrganizerTerminal(meetingId);
+        meetingMapper.deleteMeetingMemo(meetingId);
+        meetingMapper.deleteMeeting(meetingId);
+
+        // 再追加
+        insertMeeting(meetingId, meetingEditRequest.subject());
+        insertMeetingMemo(meetingId, meetingEditRequest.memo());
+        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingId, meetingEditRequest.schedules());
+        insertOrganizerTerminal(meetingId, meetingEditRequest.organizerTerminal());
+        insertAttendances(meetingId, meeting.attendances(), scheduleNumbers);
+    }
+
+    private void insertAttendances(MeetingId meetingId, Attendances attendances, Set<ScheduleNumber> scheduleNumbers) {
+
+        for (Attendance attendance : attendances.asList()) {
+            AttendanceId attendanceId = attendance.attendanceId();
+            attendanceMapper.insertAttendance(meetingId, attendanceId, attendance.participantName());
+            insertConveniences(attendanceId, attendance.conveniences(), scheduleNumbers);
+
+            AttendanceComment attendanceComment = attendance.attendanceComment();
+            if (attendanceComment.isBlank()) continue;
+            attendanceMapper.insertAttendanceComment(attendanceId, attendanceComment);
+        }
+    }
+
+    private void insertConveniences(AttendanceId attendanceId, Conveniences conveniences, Set<ScheduleNumber> scheduleNumbers) {
+
+        for (Convenience convenience : conveniences.asList()) {
+            if (isScheduleDeleted(scheduleNumbers, convenience.scheduleNumber())) {
+                continue;
+            }
+            int convenienceNumber = attendanceMapper.newConvenienceNumber();
+            attendanceMapper.insertConvenience(convenienceNumber,
+                    attendanceId,
+                    convenience.scheduleNumber(),
+                    convenience.convenienceCategory());
+        }
+    }
+
+    private boolean isScheduleDeleted(Set<ScheduleNumber> scheduleNumbers, ScheduleNumber scheduleNumber) {
+        return !scheduleNumbers.contains(scheduleNumber);
     }
 }

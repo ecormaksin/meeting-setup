@@ -108,7 +108,7 @@ public class Meeting {
                 return convenience.convenienceCategory();
             }
         }
-        throw new IllegalArgumentException("該当する出欠の都合が見つかりませんでした。");
+        return ConvenienceCategory.未回答;
     }
 
     public MeetingEditability editability(ClientBrowser clientBrowser) {
