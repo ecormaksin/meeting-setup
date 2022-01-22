@@ -12,10 +12,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {ScheduleConstructNotNullValidator.class})
-public @interface ScheduleConstructNotNull {
+@Constraint(validatedBy = {ScheduleConstructAllInputValidator.class})
+public @interface ScheduleConstructAllInput {
 
-    String message() default "{meeting.domain.model.schedule.construct.ScheduleConstructNotNull.message}";
+    String message() default "{meeting.domain.model.schedule.construct.ScheduleConstructAllInput.message}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }

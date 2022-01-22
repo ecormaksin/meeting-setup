@@ -22,7 +22,11 @@ public class MeetingDate {
         return this.value;
     }
 
-    public boolean isNull() {
+    public static MeetingDate empty() {
+        return new MeetingDate(null);
+    }
+
+    public boolean isEmpty() {
         return Objects.isNull(value);
     }
 
@@ -34,8 +38,8 @@ public class MeetingDate {
     public boolean equals(Object anObject) {
         if (Objects.isNull(anObject)) return false;
         if (!(anObject instanceof MeetingDate other)) return false;
-        if (this.isNull()) return false;
-        if (other.isNull()) return false;
+        if (this.isEmpty()) return false;
+        if (other.isEmpty()) return false;
         return this.value.equals(other.value);
     }
 

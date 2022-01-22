@@ -1,9 +1,6 @@
 package meeting.domain.model.schedule;
 
-import meeting.domain.model.schedule.construct.EndTime;
-import meeting.domain.model.schedule.construct.MeetingDate;
-import meeting.domain.model.schedule.construct.ScheduleConstruct;
-import meeting.domain.model.schedule.construct.StartTime;
+import meeting.domain.model.schedule.construct.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -37,7 +34,7 @@ public class Schedule {
     }
 
     public static Schedule empty() {
-        return new Schedule();
+        return new Schedule(ScheduleNumber.empty(), ScheduleConstruct.empty());
     }
 
     @Deprecated
@@ -51,22 +48,20 @@ public class Schedule {
         return scheduleConstruct;
     }
 
-    public boolean isValid() {
-        return scheduleConstruct.isValid();
+    public ScheduleValidity validity() {
+        if (scheduleConstruct.validity() == ScheduleConstructValidity.妥当_すべて未入力) return ScheduleValidity.妥当_未入力;
+        if (scheduleConstruct.validity() == ScheduleConstructValidity.不当_一部未入力あり) return ScheduleValidity.不当_構成要素の問題;
+        if (scheduleConstruct.validity() == ScheduleConstructValidity.不当_時刻の前後関係が不正) return ScheduleValidity.不当_構成要素の問題;
+
+        if (scheduleNumberIssuedStatus() == ScheduleNumberIssuedStatus.発番済) return ScheduleValidity.妥当;
+
+        if (startDateTime().isBefore(LocalDateTime.now())) return ScheduleValidity.不当_追加時に過去;
+        return ScheduleValidity.妥当;
     }
 
-    public boolean isConstructNotNull() {
-        return scheduleConstruct.isNotNull();
-    }
-
-    public boolean isFutureWhenToAdd() {
-        if (!isValid()) return true;
-        if (!isNewScheduleNumberNeeded()) return true;
-        return startDateTime().isAfter(LocalDateTime.now()) ;
-    }
-
-    public boolean isNewScheduleNumberNeeded() {
-        return Objects.isNull(scheduleNumber) || scheduleNumber.isNotPublished();
+    public ScheduleNumberIssuedStatus scheduleNumberIssuedStatus() {
+        if (Objects.isNull(scheduleNumber)) return ScheduleNumberIssuedStatus.未発番;
+        return scheduleNumber.issuedStatus();
     }
 
     public MeetingDate meetingDate() {

@@ -26,7 +26,7 @@
           <tr>
             <th></th>
             <th>日程</th>
-            <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
+            <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).valuesExcludeUnreplied()}"
                 th:text="${convenienceCategory.symbol()}"></th>
             <th th:each="attendance, attendanceStat: *{attendances.asList()}"
                 th:text="${attendance.participantName.value()}"></th>
@@ -37,7 +37,7 @@
             <td th:text="${scheduleStat.count}">1</td>
             <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
             </td>
-            <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
+            <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).valuesExcludeUnreplied()}"
                 th:text="${meeting.totalNumberOfParticipantAt(schedule.scheduleNumber(), convenienceCategory).show()}">
             </td>
             <td th:each="attendance, attendanceStat: *{attendances.asList()}"

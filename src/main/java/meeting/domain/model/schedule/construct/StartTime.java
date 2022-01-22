@@ -21,7 +21,11 @@ public class StartTime {
         return this.value;
     }
 
-    public boolean isNull() {
+    public static StartTime empty() {
+        return new StartTime(null);
+    }
+
+    public boolean isEmpty() {
         return Objects.isNull(value);
     }
 
@@ -33,8 +37,8 @@ public class StartTime {
     public boolean equals(Object anObject) {
         if (Objects.isNull(anObject)) return false;
         if (!(anObject instanceof StartTime other)) return false;
-        if (this.isNull()) return false;
-        if (other.isNull()) return false;
+        if (this.isEmpty()) return false;
+        if (other.isEmpty()) return false;
         return this.value.equals(other.value);
     }
 

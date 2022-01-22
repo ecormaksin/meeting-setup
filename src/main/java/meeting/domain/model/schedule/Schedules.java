@@ -1,6 +1,7 @@
 package meeting.domain.model.schedule;
 
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
+import meeting.domain.model.schedule.construct.ScheduleConstructValidity;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -50,32 +51,33 @@ public class Schedules {
         return of(newList);
     }
 
-    public boolean hasValidSchedule() {
-        if (isEmpty()) {
-            return false;
-        }
-        return list.stream().anyMatch(Schedule::isConstructNotNull);
+    public SchedulesValidity validity() {
+        if (isEmpty()) return SchedulesValidity.不当_日程候補なし;
+        if (areDuplicated()) return SchedulesValidity.不当_日程重複;
+        if (hasValidSchedule()) return SchedulesValidity.妥当;
+        return SchedulesValidity.不当_日程に不備あり;
     }
 
-    public boolean isNotDuplicated() {
-        if (!hasValidSchedule()) {
-            return true;
-        }
+    private boolean hasValidSchedule() {
+        return list.stream().anyMatch(s -> {return s.validity() == ScheduleValidity.妥当;});
+    }
+
+    private boolean areDuplicated() {
+        boolean areDuplicated = false;
 
         Set<ScheduleConstruct> scheduleConstructSet = new HashSet<>();
-        boolean isNotDuplicated = true;
         for (Schedule schedule : list) {
             ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
-            if (!scheduleConstruct.isValid()) {
+            if (scheduleConstruct.validity() != ScheduleConstructValidity.妥当_すべて入力済) {
                 continue;
             }
             if (!scheduleConstructSet.add(scheduleConstruct)) {
-                isNotDuplicated = false;
+                areDuplicated = true;
                 break;
             }
         }
 
-        return isNotDuplicated;
+        return areDuplicated;
     }
 
     private boolean isEmpty() {

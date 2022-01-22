@@ -21,7 +21,11 @@ public class EndTime {
         return this.value;
     }
 
-    public boolean isNull() {
+    public static EndTime empty() {
+        return new EndTime(null);
+    }
+
+    public boolean isEmpty() {
         return Objects.isNull(value);
     }
 
@@ -33,8 +37,8 @@ public class EndTime {
     public boolean equals(Object anObject) {
         if (Objects.isNull(anObject)) return false;
         if (!(anObject instanceof EndTime other)) return false;
-        if (this.isNull()) return false;
-        if (other.isNull()) return false;
+        if (this.isEmpty()) return false;
+        if (other.isEmpty()) return false;
         return this.value.equals(other.value);
     }
 

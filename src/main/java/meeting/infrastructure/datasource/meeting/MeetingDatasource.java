@@ -1,23 +1,21 @@
 package meeting.infrastructure.datasource.meeting;
 
 import meeting.application.service.meeting.MeetingRepository;
-import meeting.domain.model.attendance.Attendance;
-import meeting.domain.model.attendance.AttendanceComment;
-import meeting.domain.model.attendance.AttendanceId;
-import meeting.domain.model.attendance.Attendances;
+import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
-import meeting.domain.model.schedule.Schedule;
-import meeting.domain.model.schedule.ScheduleNumber;
-import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.*;
 import meeting.infrastructure.datasource.attendance.AttendanceMapper;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
@@ -49,7 +47,7 @@ public class MeetingDatasource implements MeetingRepository {
     }
 
     private void insertMeetingMemo(MeetingId meetingId, Memo memo) {
-        if (memo.isBlank()) return;
+        if (memo.inputStatus() == MemoInputStatus.なし) return;
         meetingMapper.insertMeetingMemo(meetingId, memo);
     }
 
@@ -57,13 +55,14 @@ public class MeetingDatasource implements MeetingRepository {
         Set<ScheduleNumber> scheduleNumbers = new HashSet<>();
         List<Schedule> scheduleList = schedules.asList();
         scheduleList.stream().forEach(schedule -> {
-            if (!schedule.isValid()) {
+            if (schedule.validity() != ScheduleValidity.妥当) {
                 return;
             }
 
-            int scheduleNumber = schedule.isNewScheduleNumberNeeded() ?
+            int scheduleNumber = schedule.scheduleNumberIssuedStatus() == ScheduleNumberIssuedStatus.未発番 ?
                     scheduleMapper.newScheduleNumber()
-                    : schedule.scheduleNumber().value();
+                    :
+                    schedule.scheduleNumber().value();
             scheduleMapper.insertSchedule(
                     scheduleNumber,
                     meetingId,
@@ -151,7 +150,7 @@ public class MeetingDatasource implements MeetingRepository {
             insertConveniences(attendanceId, attendance.conveniences(), scheduleNumbers);
 
             AttendanceComment attendanceComment = attendance.attendanceComment();
-            if (attendanceComment.isBlank()) continue;
+            if (attendanceComment.inputStatus() == AttendanceCommentInputStatus.なし) continue;
             attendanceMapper.insertAttendanceComment(attendanceId, attendanceComment);
         }
     }

@@ -21,8 +21,10 @@ public class AttendanceComment {
         return value;
     }
 
-    public boolean isBlank() {
-        return Objects.isNull(value) || value.isBlank();
+    public AttendanceCommentInputStatus inputStatus() {
+        if (Objects.isNull(value)) return AttendanceCommentInputStatus.なし;
+        if (value.isBlank()) return AttendanceCommentInputStatus.なし;
+        return AttendanceCommentInputStatus.あり;
     }
 
     @Deprecated

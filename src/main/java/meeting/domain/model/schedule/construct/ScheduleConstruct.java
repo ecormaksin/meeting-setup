@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 /**
- * 日程候補の構成要素
+ * 日程の構成要素
  */
 @ScheduleConstructValid
 public class ScheduleConstruct {
@@ -18,6 +18,10 @@ public class ScheduleConstruct {
         this.meetingDate = meetingDate;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public static ScheduleConstruct empty() {
+        return new ScheduleConstruct(MeetingDate.empty(), StartTime.empty(), EndTime.empty());
     }
 
     public static ScheduleConstruct of(LocalDate noWrappedMeetingDate,
@@ -45,44 +49,44 @@ public class ScheduleConstruct {
         return this.endTime;
     }
 
-    public boolean isValid() {
-        return isNotNull() && isStartTimeLessThanEndTime();
+    public ScheduleConstructValidity validity() {
+        if (areAllEmpty()) return ScheduleConstructValidity.妥当_すべて未入力;
+        if (areAnyEmpty()) return ScheduleConstructValidity.不当_一部未入力あり;
+        if (isTimeRelationInvalid()) return ScheduleConstructValidity.不当_時刻の前後関係が不正;
+        return ScheduleConstructValidity.妥当_すべて入力済;
     }
 
-    public boolean isNull() {
-        return isMeetingDateNull() && isStartTimeNull() && isEndTimeNull();
+    private boolean areAllEmpty() {
+        if (!meetingDate.isEmpty()) return false;
+        if (!startTime.isEmpty()) return false;
+        if (!endTime.isEmpty()) return false;
+        return true;
     }
 
-    public boolean isNotNull() {
-        return !isMeetingDateNull() && !isStartTimeNull() && !isEndTimeNull();
+    private boolean areAnyEmpty() {
+        if (meetingDate.isEmpty()) return true;
+        if (startTime.isEmpty()) return true;
+        if (endTime.isEmpty()) return true;
+        return false;
     }
 
-    private boolean isMeetingDateNull() {
-        return Objects.isNull(meetingDate) || meetingDate.isNull();
-    }
-
-    private boolean isStartTimeNull() {
-        return Objects.isNull(startTime) || startTime.isNull();
-    }
-
-    private boolean isEndTimeNull() {
-        return Objects.isNull(endTime) || endTime.isNull();
-    }
-
-    public boolean isStartTimeLessThanEndTime() {
-        if (isStartTimeNull()) return false;
-        if (isEndTimeNull()) return false;
-        return startTime.value.compareTo(endTime.value) < 0;
+    private boolean isTimeRelationInvalid() {
+        return startTime.value.compareTo(endTime.value) >= 0;
     }
 
     @Override
     public boolean equals(Object anObject) {
         if (Objects.isNull(anObject)) return false;
         if (!(anObject instanceof ScheduleConstruct other)) return false;
-        if (!other.isValid()) return false;
-        if (!meetingDate.equals(other.meetingDate)) return false;
-        if (!startTime.equals(other.startTime)) return false;
-        if (!endTime.equals(other.endTime)) return false;
+        if (!meetingDate.isEmpty()
+                && !other.meetingDate.isEmpty()
+                && !meetingDate.equals(other.meetingDate)) return false;
+        if (!startTime.isEmpty()
+                && !other.startTime.isEmpty()
+                && !startTime.equals(other.startTime)) return false;
+        if (!endTime.isEmpty()
+                && !other.endTime.isEmpty()
+                && !endTime.equals(other.endTime)) return false;
         return true;
     }
 

@@ -16,8 +16,13 @@ public class ScheduleNumber {
         return value;
     }
 
-    public boolean isNotPublished() {
-        return value <= 0;
+    public static ScheduleNumber empty() {
+        return new ScheduleNumber(0);
+    }
+
+    public ScheduleNumberIssuedStatus issuedStatus() {
+        if (value <= 0) return ScheduleNumberIssuedStatus.未発番;
+        return ScheduleNumberIssuedStatus.発番済;
     }
 
     @Override

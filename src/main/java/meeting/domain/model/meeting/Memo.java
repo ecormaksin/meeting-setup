@@ -21,8 +21,10 @@ public class Memo {
         return value;
     }
 
-    public boolean isBlank() {
-        return Objects.isNull(value) || value.isBlank();
+    public MemoInputStatus inputStatus() {
+        if (Objects.isNull(value)) return MemoInputStatus.なし;
+        if (value.isBlank()) return MemoInputStatus.なし;
+        return MemoInputStatus.あり;
     }
 
     @Deprecated

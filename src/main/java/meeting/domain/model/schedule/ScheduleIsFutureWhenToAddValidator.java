@@ -16,6 +16,11 @@ public class ScheduleIsFutureWhenToAddValidator implements ConstraintValidator<S
     @Override
     public boolean isValid(Schedule value, ConstraintValidatorContext context) {
         if (Objects.isNull(value)) return true;
-        return value.isFutureWhenToAdd();
+        if (value.validity() != ScheduleValidity.不当_追加時に過去) return true;
+
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(message)
+                .addConstraintViolation();
+        return false;
     }
 }

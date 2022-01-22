@@ -1,10 +1,7 @@
 package meeting.infrastructure.datasource.attendance;
 
 import meeting.application.service.attendance.AttendanceRepository;
-import meeting.domain.model.attendance.AttendanceComment;
-import meeting.domain.model.attendance.AttendanceId;
-import meeting.domain.model.attendance.AttendanceInputRequest;
-import meeting.domain.model.attendance.ParticipantName;
+import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.MeetingId;
@@ -49,7 +46,7 @@ public class AttendanceDatasource implements AttendanceRepository {
     }
 
     private void insertAttendanceComment(AttendanceId attendanceId, AttendanceComment attendanceComment) {
-        if (attendanceComment.isBlank()) return;
+        if (attendanceComment.inputStatus() == AttendanceCommentInputStatus.なし) return;
         attendanceMapper.insertAttendanceComment(attendanceId, attendanceComment);
     }
 }

@@ -17,16 +17,12 @@ public class SchedulesNotDuplicatedValidator
     @Override
     public boolean isValid(Schedules value, ConstraintValidatorContext context) {
 
-        if (isNotDuplicated(value)) return true;
+        if (Objects.isNull(value)) return true;
+        if (value.validity() != SchedulesValidity.不当_日程重複) return true;
 
         context.disableDefaultConstraintViolation();
         context.buildConstraintViolationWithTemplate(message)
                 .addConstraintViolation();
         return false;
-    }
-
-    private boolean isNotDuplicated(Schedules value) {
-        if (Objects.isNull(value)) return false;
-        return value.isNotDuplicated();
     }
 }
