@@ -10,7 +10,7 @@ public enum ConvenienceCategory {
     マル("○"),
     サンカク("△"),
     バツ("×"),
-    未回答("");
+    未回答("未回答");
 
     String symbol;
 
