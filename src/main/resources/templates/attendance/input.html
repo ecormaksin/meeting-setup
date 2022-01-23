@@ -17,47 +17,11 @@
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <label>参加者名</label>
-      <input type="text" th:field="*{participantName.value}" class="participant-name">
-      <p th:if="${#fields.hasErrors('participantName.value')}">
-        <mark><span th:errors="*{participantName.value}"></span></mark>
-      </p>
+      <div th:replace="_parts/attendance_input :: participantName_part (participantName=*{participantName})"></div>
 
-      <label>日程候補</label>
-      <table>
-        <thead>
-        <tr>
-          <th></th>
-          <th>日程</th>
-          <th>都合</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
-          <td th:text="${scheduleStat.count}">1</td>
-          <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
-          </td>
-          <td>
-            <input type="hidden" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value}">
-            <input type="hidden" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value}">
-            <input type="hidden" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value}">
-            <input type="hidden" th:field="*{conveniences.list[__${scheduleStat.index}__].scheduleNumber.value}">
-            <div class="convenience-radio" th:each="convenienceCategory,convenienceCategoryStat : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).valuesExcludeUnreplied()}">
-              <input type="radio" th:field="*{conveniences.list[__${scheduleStat.index}__].convenienceCategory}"
-                      th:value="${convenienceCategory}">
-              <label th:for="${#ids.prev('conveniences.list__${scheduleStat.index}__.convenienceCategory')}"
-                    th:text="${convenienceCategory.symbol()}"></label>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div th:replace="_parts/attendance_input :: conveniences_part (schedules=*{schedules}, conveniences=*{conveniences})"></div>
 
-      <label>コメント</label>
-      <textarea th:field="*{attendanceComment.value}" class="attendance-comment"></textarea>
-      <p th:if="${#fields.hasErrors('attendanceComment.value')}">
-        <mark><span th:errors="*{attendanceComment.value}"></span></mark>
-      </p>
+      <div th:replace="_parts/attendance_input :: comment_part (attendanceComment=*{attendanceComment})"></div>
 
       <div>
         <button>入力</button>
