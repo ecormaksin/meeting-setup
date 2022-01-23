@@ -58,7 +58,7 @@ public class AttendanceInputController {
     String completed(@ModelAttribute("meetingId") String meetingId,
                      @ModelAttribute("attendanceId") String attendanceId,
                      Model model, UriComponentsBuilder builder) {
-        URI uri = builder.path(String.format("/meeting/%s/attendance/%s", meetingId, attendanceId)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingId, attendanceId)).build().toUri();
         model.addAttribute("attendanceEditLocation", uri.toString());
         return "attendance/completed";
     }
