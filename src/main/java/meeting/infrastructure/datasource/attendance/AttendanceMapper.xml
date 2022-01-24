@@ -89,4 +89,20 @@
         DELETE FROM 出欠.出欠
         WHERE ミーティングID = #{meetingId.value}
     </delete>
+
+    <delete id="deleteAttendanceComment">
+        DELETE FROM 出欠.出欠コメント
+        WHERE 出欠ID = #{attendanceId.value}
+    </delete>
+
+    <delete id="deleteConveniences">
+        DELETE FROM 出欠.都合
+        WHERE 出欠ID = #{attendanceId.value}
+    </delete>
+
+    <delete id="deleteAttendance">
+        DELETE FROM 出欠.出欠
+        WHERE 出欠ID = #{attendanceId.value}
+    </delete>
+
 </mapper>

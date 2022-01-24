@@ -49,4 +49,18 @@ public class AttendanceDatasource implements AttendanceRepository {
         if (attendanceComment.inputStatus() == AttendanceCommentInputStatus.なし) return;
         attendanceMapper.insertAttendanceComment(attendanceId, attendanceComment);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(MeetingId meetingId, AttendanceEditRequest attendanceEditRequest) {
+        AttendanceId attendanceId = attendanceEditRequest.attendanceId();
+
+        attendanceMapper.deleteAttendanceComment(attendanceId);
+        attendanceMapper.deleteConveniences(attendanceId);
+        attendanceMapper.deleteAttendance(attendanceId);
+
+        insertAttendance(meetingId, attendanceId, attendanceEditRequest.participantName());
+        insertConveniences(attendanceId, attendanceEditRequest.conveniences());
+        insertAttendanceComment(attendanceId, attendanceEditRequest.attendanceComment());
+    }
 }

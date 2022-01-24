@@ -34,4 +34,8 @@ public interface AttendanceMapper {
     void deleteAttendanceCommentsByMeetingId(@Param("meetingId") MeetingId meetingId);
     void deleteConveniencesByMeetingId(@Param("meetingId") MeetingId meetingId);
     void deleteAttendancesByMeetingId(@Param("meetingId") MeetingId meetingId);
+
+    void deleteAttendanceComment(@Param("attendanceId") AttendanceId attendanceId);
+    void deleteConveniences(@Param("attendanceId") AttendanceId attendanceId);
+    void deleteAttendance(@Param("attendanceId") AttendanceId attendanceId);
 }
