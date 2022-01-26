@@ -1,5 +1,6 @@
 package meeting.application.service.attendance;
 
+import meeting.domain.model.attendance.AttendanceEditRequest;
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
 import meeting.domain.model.meeting.MeetingId;
@@ -18,5 +19,9 @@ public class AttendanceRecordService {
 
     public AttendanceId input(MeetingId meetingId, AttendanceInputRequest attendanceInputRequest) {
         return attendanceRepository.input(meetingId, attendanceInputRequest);
+    }
+
+    public void edit(MeetingId meetingId, AttendanceEditRequest attendanceEditRequest) {
+        attendanceRepository.edit(meetingId, attendanceEditRequest);
     }
 }
