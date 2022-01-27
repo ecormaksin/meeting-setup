@@ -28,6 +28,7 @@ public interface AttendanceMapper {
     void insertAttendanceComment(@Param("attendanceId") AttendanceId attendanceId,
                                  @Param("attendanceComment") AttendanceComment attendanceComment);
 
+    Attendance selectAttendance(@Param("attendanceId") AttendanceId attendanceId);
     List<Attendance> selectAttendancesByMeetingId(@Param("meetingId") MeetingId meetingId);
     List<Convenience> selectConveniencesByAttendanceId(@Param("attendanceId") AttendanceId attendanceId);
 

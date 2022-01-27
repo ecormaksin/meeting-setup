@@ -30,6 +30,11 @@ public class AttendanceDatasource implements AttendanceRepository {
         return attendanceId;
     }
 
+    @Override
+    public Attendance attendanceOf(AttendanceId attendanceId) {
+        return attendanceMapper.selectAttendance(attendanceId);
+    }
+
     private void insertAttendance(MeetingId meetingId, AttendanceId attendanceId, ParticipantName participantName) {
         attendanceMapper.insertAttendance(meetingId, attendanceId, participantName);
     }

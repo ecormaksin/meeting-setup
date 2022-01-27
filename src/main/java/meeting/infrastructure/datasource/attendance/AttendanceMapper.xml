@@ -35,6 +35,20 @@
         </collection>
     </resultMap>
 
+    <select id="selectAttendance" resultMap="attendance">
+        SELECT
+            出欠.出欠ID AS "attendanceId.value",
+            出欠.参加者名 AS "participantName.value",
+            COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
+        FROM
+            出欠.出欠 AS 出欠
+            LEFT OUTER JOIN 出欠.出欠コメント AS 出欠コメント
+                ON
+                出欠コメント.出欠ID = 出欠.出欠ID
+        WHERE
+            出欠.出欠ID = #{attendanceId.value}
+    </select>
+
     <select id="selectAttendancesByMeetingId" resultMap="attendance">
         SELECT
             出欠.出欠ID AS "attendanceId.value",
