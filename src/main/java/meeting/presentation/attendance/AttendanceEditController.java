@@ -1,6 +1,7 @@
 package meeting.presentation.attendance;
 
 import meeting.application.senario.AttendanceEditScenario;
+import meeting.domain.model.attendance.Attendance;
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceEditRequest;
 import meeting.domain.model.meeting.MeetingId;
@@ -33,9 +34,18 @@ public class AttendanceEditController {
                 @PathVariable("meetingId") MeetingId meetingId,
                 @PathVariable("attendanceId") AttendanceId attendanceId) {
         Schedules schedules = attendanceEditScenario.schedules(meetingId);
-        AttendanceEditRequest attendanceEditRequest = null;
+        Attendance attendance = attendanceEditScenario.attendanceOf(attendanceId);
+        AttendanceEditRequest attendanceEditRequest = new AttendanceEditRequest(
+                attendanceId,
+                attendance.participantName(),
+                attendance.conveniences(),
+                attendance.attendanceComment(),
+                schedules
+        );
 
         model.addAttribute("attendanceEditRequest", attendanceEditRequest);
+        model.addAttribute("meetingId", meetingId.value());
+        model.addAttribute("attendanceId", attendanceId.value());
 
         return "attendance/edit";
     }
@@ -53,7 +63,11 @@ public class AttendanceEditController {
         attributes.addFlashAttribute("meetingId", meetingId.value());
         attributes.addFlashAttribute("attendanceId", attendanceId.value());
 
-        URI uri = builder.path(String.format("meeting/%s/attendance/edit/completed", meetingId.value())).build().toUri();
+        URI uri = builder.path(
+                        String.format("meeting/%s/attendance/%s/edit/completed",
+                                meetingId.value(),
+                                attendanceId.value()
+                    )).build().toUri();
         return "redirect:" + uri.toString();
     }
 
