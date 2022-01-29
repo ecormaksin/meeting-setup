@@ -2,11 +2,14 @@ package meeting.domain.model.attendance.convenience;
 
 import meeting.domain.model.schedule.ScheduleNumber;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 都合
  */
 public class Convenience {
     ScheduleNumber scheduleNumber;
+
     ConvenienceCategory convenienceCategory;
 
     public static Convenience of(int primitiveScheduleNumber,

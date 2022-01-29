@@ -6,6 +6,7 @@
   <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
+<header th:replace="_parts/navigation :: home_only"></header>
 
 <main>
   <article>
@@ -17,13 +18,7 @@
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <div th:replace="_parts/meeting_input :: subject_part (subject=*{subject})"></div>
-
-      <div th:replace="_parts/meeting_input :: memo_part (memo=*{memo})"></div>
-
-      <div th:replace="_parts/meeting_input :: schedules_part (schedules=*{schedules})"></div>
-
-      <div th:replace="_parts/meeting_input :: organizerTerminal_part (organizerTerminal=*{organizerTerminal})"></div>
+      <div th:replace="_parts/meeting :: form (subject=*{subject}, memo=*{memo}, schedules=*{schedules}, organizerTerminal=*{organizerTerminal})"></div>
 
       <div>
         <button>作成</button>

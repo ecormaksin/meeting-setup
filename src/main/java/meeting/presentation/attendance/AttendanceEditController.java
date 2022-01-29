@@ -1,9 +1,10 @@
 package meeting.presentation.attendance;
 
 import meeting.application.senario.AttendanceEditScenario;
-import meeting.domain.model.attendance.Attendance;
-import meeting.domain.model.attendance.AttendanceId;
-import meeting.domain.model.attendance.AttendanceEditRequest;
+import meeting.domain.model.attendance.*;
+import meeting.domain.model.attendance.convenience.Convenience;
+import meeting.domain.model.attendance.convenience.ConvenienceCategory;
+import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.MeetingId;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Objects;
+
+import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.あり;
 
 /**
  * 出欠編集画面
@@ -33,6 +38,7 @@ public class AttendanceEditController {
     String init(Model model,
                 @PathVariable("meetingId") MeetingId meetingId,
                 @PathVariable("attendanceId") AttendanceId attendanceId) {
+
         Schedules schedules = attendanceEditScenario.schedules(meetingId);
         Attendance attendance = attendanceEditScenario.attendanceOf(attendanceId);
         AttendanceEditRequest attendanceEditRequest = new AttendanceEditRequest(
@@ -44,8 +50,6 @@ public class AttendanceEditController {
         );
 
         model.addAttribute("attendanceEditRequest", attendanceEditRequest);
-        model.addAttribute("meetingId", meetingId.value());
-        model.addAttribute("attendanceId", attendanceId.value());
 
         return "attendance/edit";
     }
@@ -56,7 +60,20 @@ public class AttendanceEditController {
                  @Validated @ModelAttribute("attendanceEditRequest") AttendanceEditRequest attendanceEditRequest,
                  BindingResult bindingResult, RedirectAttributes attributes,
                  UriComponentsBuilder builder) {
+
         if (bindingResult.hasErrors()) return "attendance/edit";
+
+        if (checkIfNotInputConvenience(bindingResult, attendanceEditRequest.conveniences())) return "attendance/edit";
+
+        ParticipantNameDuplicationStatus participantNameDuplicationStatus =
+                attendanceEditScenario.participantNameDuplicationStatus(
+                        meetingId,
+                        attendanceId,
+                        attendanceEditRequest.participantName());
+        if (participantNameDuplicationStatus == あり) {
+            bindingResult.rejectValue("participantName.value", "error.code.participantName.duplicated");
+            return "attendance/edit";
+        }
 
         attendanceEditScenario.edit(meetingId, attendanceEditRequest);
 
@@ -71,12 +88,36 @@ public class AttendanceEditController {
         return "redirect:" + uri.toString();
     }
 
+    private boolean checkIfNotInputConvenience(BindingResult bindingResult, Conveniences conveniences) {
+
+        boolean existNotInputConvenience = false;
+
+        List<Convenience> convenienceList = conveniences.asList();
+        for (int i = 0; i < convenienceList.size(); i++) {
+            Convenience convenience = convenienceList.get(i);
+            ConvenienceCategory convenienceCategory = convenience.convenienceCategory();
+            if (Objects.nonNull(convenienceCategory) && convenienceCategory != ConvenienceCategory.未回答) {
+                continue;
+            }
+            existNotInputConvenience = true;
+            bindingResult.rejectValue("conveniences.list[" + i + "].convenienceCategory",
+                    "error.code.convenience.notInput");
+        }
+
+        return existNotInputConvenience;
+    }
+
     @GetMapping("completed")
     String completed(@ModelAttribute("meetingId") String meetingId,
                      @ModelAttribute("attendanceId") String attendanceId,
                      Model model, UriComponentsBuilder builder) {
+
+        model.addAttribute("meetingId", meetingId);
+        model.addAttribute("attendanceLifeCycleStatus", AttendanceLifeCycleStatus.EDITION);
+
         URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingId, attendanceId)).build().toUri();
         model.addAttribute("attendanceEditLocation", uri.toString());
+
         return "attendance/completed";
     }
 

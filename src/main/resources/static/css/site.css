@@ -118,6 +118,10 @@ th *, td * {
     width: 40ch;
 }
 
+.participant-name__link {
+    color: white;
+}
+
 .attendance-comment {
     width: 40ch;
     height: 15ex;

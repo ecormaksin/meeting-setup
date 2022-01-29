@@ -15,6 +15,10 @@ import java.util.List;
 
 @Mapper
 public interface AttendanceMapper {
+    boolean participantNameDuplicated(@Param("meetingId") MeetingId meetingId,
+                                      @Param("attendanceId") AttendanceId attendanceId,
+                                      @Param("participantName") ParticipantName participantName);
+
     void insertAttendance(@Param("meetingId") MeetingId meetingId,
                           @Param("attendanceId") AttendanceId attendanceId,
                           @Param("participantName") ParticipantName participantName);

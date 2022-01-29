@@ -2,14 +2,20 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
 <head>
   <th:block th:replace="_parts/head :: meta"/>
-  <title>ミーティングの作成 完了</title>
+  <th:block th:if="${meetingLifeCycleStatus == T(meeting.domain.model.meeting.MeetingLifeCycleStatus).CREATION}">
+    <title>ミーティングの作成 完了</title>
+  </th:block>
+  <th:block th:if="${meetingLifeCycleStatus == T(meeting.domain.model.meeting.MeetingLifeCycleStatus).EDITION}">
+    <title>ミーティングの編集 完了</title>
+  </th:block>
   <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
+<header th:replace="_parts/navigation :: home_meeting-show (meetingId=${meetingId})"></header>
 
 <main>
   <article>
-    <p>ミーティングの作成が完了しました。</p>
+    <p>ミーティングの<span th:text="${meetingLifeCycleStatus.text()}"></span>が完了しました。</p>
     <p>参加者には次のURLを連絡してください。: </p>
     <div class="meeting-show__location-parent">
       <input type="text" id="url" class="meeting-show__location" th:readonly="readonly" th:value="${meetingShowLocation}">

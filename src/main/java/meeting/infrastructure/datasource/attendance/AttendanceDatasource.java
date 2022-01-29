@@ -10,12 +10,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.あり;
+import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.なし;
+
 @Repository
 public class AttendanceDatasource implements AttendanceRepository {
     AttendanceMapper attendanceMapper;
 
     public AttendanceDatasource (AttendanceMapper attendanceMapper) {
         this.attendanceMapper = attendanceMapper;
+    }
+
+    @Override
+    public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
+            MeetingId meetingId,
+            ParticipantName participantName) {
+
+        return participantNameDuplicationStatus(meetingId, null, participantName);
+    }
+
+    @Override
+    public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
+            MeetingId meetingId,
+            AttendanceId attendanceId,
+            ParticipantName participantName) {
+
+        boolean duplicated = attendanceMapper.participantNameDuplicated(meetingId, attendanceId, participantName);
+        if (duplicated) return あり;
+        return なし;
     }
 
     @Override

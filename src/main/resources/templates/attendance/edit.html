@@ -6,6 +6,7 @@
   <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
+<header th:replace="_parts/navigation :: meeting-show_only (meetingId=${meetingId})"></header>
 
 <main>
   <article>
@@ -17,11 +18,7 @@
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <div th:replace="_parts/attendance_input :: participantName_part (participantName=*{participantName})"></div>
-
-      <div th:replace="_parts/attendance_input :: conveniences_part (schedules=*{schedules}, conveniences=*{conveniences})"></div>
-
-      <div th:replace="_parts/attendance_input :: comment_part (attendanceComment=*{attendanceComment})"></div>
+      <div th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></div>
 
       <div>
         <button>編集</button>

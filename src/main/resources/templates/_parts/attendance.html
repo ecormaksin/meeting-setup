@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="participantName_part (participantName)">
+    <div th:fragment="form (participantName, schedules, conveniences, attendanceComment)">
         <label>参加者名</label>
         <input type="text" th:field="*{participantName.value}" class="participant-name">
         <p th:if="${#fields.hasErrors('participantName.value')}">
             <mark><span th:errors="*{participantName.value}"></span></mark>
         </p>
-    </div>
 
-    <div th:fragment="conveniences_part (schedules, conveniences)">
         <label>日程候補</label>
         <table>
             <thead>
@@ -35,19 +33,19 @@
                         <label th:for="${#ids.prev('conveniences.list__${scheduleStat.index}__.convenienceCategory')}"
                                th:text="${convenienceCategory.symbol()}"></label>
                     </div>
+                    <p th:if="${#fields.hasErrors('conveniences.list[__${scheduleStat.index}__].convenienceCategory')}">
+                        <mark><span th:errors="*{conveniences.list[__${scheduleStat.index}__].convenienceCategory}"></span></mark>
+                    </p>
                 </td>
             </tr>
             </tbody>
         </table>
-    </div>
 
-    <div th:fragment="comment_part (attendanceComment)">
         <label>コメント</label>
         <textarea th:field="*{attendanceComment.value}" class="attendance-comment"></textarea>
         <p th:if="${#fields.hasErrors('attendanceComment.value')}">
             <mark><span th:errors="*{attendanceComment.value}"></span></mark>
         </p>
     </div>
-
 </body>
 </html>

@@ -4,6 +4,7 @@ import meeting.application.senario.MeetingEditScenario;
 import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingEditRequest;
 import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingLifeCycleStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,7 @@ public class MeetingEditController {
 
     @GetMapping
     String init(Model model, @PathVariable("meetingId") MeetingId meetingId) {
+
         Meeting meeting = meetingEditScenario.meetingOf(meetingId);
 
         model.addAttribute("meetingEditRequest", new MeetingEditRequest(
@@ -39,7 +41,6 @@ public class MeetingEditController {
                 meeting.schedules(),
                 meeting.organizerTerminal()
         ));
-        model.addAttribute("meetingId", meetingId.value());
 
         return "meeting/edit";
     }
@@ -65,20 +66,28 @@ public class MeetingEditController {
                   @Validated @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
                   BindingResult bindingResult, RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
+
         if (bindingResult.hasErrors()) return "meeting/edit";
 
         meetingEditScenario.edit(meetingEditRequest);
 
         attributes.addFlashAttribute("meetingId", meetingId.value());
 
-        URI uri = builder.path(String.format("/meeting/%s/edit/completed", meetingId.value())).build().toUri();
+        URI uri = builder.path(
+                            String.format("/meeting/%s/edit/completed", meetingId.value())
+                        ).build().toUri();
         return "redirect:" + uri.toString();
     }
 
     @GetMapping("completed")
     String completed(@ModelAttribute("meetingId") String meetingId, Model model, UriComponentsBuilder builder) {
+
+        model.addAttribute("meetingId", meetingId);
+        model.addAttribute("meetingLifeCycleStatus", MeetingLifeCycleStatus.EDITION);
+
         URI uri = builder.path(String.format("/meeting/%s", meetingId)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
+
         return "meeting/completed";
     }
 

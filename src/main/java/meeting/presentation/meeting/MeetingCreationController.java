@@ -3,6 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingLifeCycleStatus;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
@@ -29,14 +30,17 @@ public class MeetingCreationController {
 
     public MeetingCreationController(MeetingCreationScenario meetingCreationScenario,
                                      ClientInfoGetter clientInfoGetter) {
+
         this.meetingCreationScenario = meetingCreationScenario;
         this.clientInfoGetter = clientInfoGetter;
     }
 
     @GetMapping
     String init(Model model, HttpServletRequest request) {
+
         ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
         model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty(clientBrowser));
+
         return "meeting/create";
     }
 
@@ -58,6 +62,7 @@ public class MeetingCreationController {
     String create(@Validated @ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
                   BindingResult bindingResult, RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
+
         if (bindingResult.hasErrors()) return "meeting/create";
 
         MeetingId meetingId = meetingCreationScenario.create(meetingCreationRequest);
@@ -70,8 +75,13 @@ public class MeetingCreationController {
 
     @GetMapping("completed")
     String completed(@ModelAttribute("meetingId") String meetingId, Model model, UriComponentsBuilder builder) {
+
+        model.addAttribute("meetingId", meetingId);
+        model.addAttribute("meetingLifeCycleStatus", MeetingLifeCycleStatus.CREATION);
+
         URI uri = builder.path(String.format("/meeting/%s", meetingId)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
+
         return "meeting/completed";
     }
 

@@ -3,6 +3,8 @@ package meeting.presentation.attendance;
 import meeting.application.senario.AttendanceInputScenario;
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
+import meeting.domain.model.attendance.AttendanceLifeCycleStatus;
+import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
 import meeting.domain.model.meeting.MeetingId;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+
+import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.あり;
 
 /**
  * 出欠入力画面
@@ -30,6 +34,7 @@ public class AttendanceInputController {
 
     @GetMapping
     String init(Model model, @PathVariable("meetingId") MeetingId meetingId) {
+
         Schedules schedules = attendanceInputScenario.schedules(meetingId);
         AttendanceInputRequest attendanceInputRequest = AttendanceInputRequest.empty(schedules);
 
@@ -43,7 +48,17 @@ public class AttendanceInputController {
                  @Validated @ModelAttribute("attendanceInputRequest") AttendanceInputRequest attendanceInputRequest,
                  BindingResult bindingResult, RedirectAttributes attributes,
                  UriComponentsBuilder builder) {
+
         if (bindingResult.hasErrors()) return "attendance/input";
+
+        ParticipantNameDuplicationStatus participantNameDuplicationStatus =
+                attendanceInputScenario.participantNameDuplicationStatus(
+                        meetingId,
+                        attendanceInputRequest.participantName());
+        if (participantNameDuplicationStatus == あり) {
+            bindingResult.rejectValue("participantName.value", "error.code.participantName.duplicated");
+            return "attendance/input";
+        }
 
         AttendanceId attendanceId = attendanceInputScenario.input(meetingId, attendanceInputRequest);
 
@@ -58,8 +73,13 @@ public class AttendanceInputController {
     String completed(@ModelAttribute("meetingId") String meetingId,
                      @ModelAttribute("attendanceId") String attendanceId,
                      Model model, UriComponentsBuilder builder) {
+
+        model.addAttribute("meetingId", meetingId);
+        model.addAttribute("attendanceLifeCycleStatus", AttendanceLifeCycleStatus.CREATION);
+
         URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingId, attendanceId)).build().toUri();
         model.addAttribute("attendanceEditLocation", uri.toString());
+
         return "attendance/completed";
     }
 

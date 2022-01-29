@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="home_only">
+        <nav>
+            <ul>
+                <li><a th:href="@{/}">ホーム</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <header th:fragment="meeting-show_only (meetingId)">
+        <nav>
+            <ul>
+                <li><a th:href="@{/meeting/__${meetingId}__}">ミーティングの詳細</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <header th:fragment="home_meeting-show (meetingId)">
+        <nav>
+            <ul>
+                <li><a th:href="@{/}">ホーム</a></li>
+                <li><a th:href="@{/meeting/__${meetingId}__}">ミーティングの詳細</a></li>
+            </ul>
+        </nav>
+    </header>
+
+</body>
+</html>

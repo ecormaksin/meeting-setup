@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="subject_part (subject)">
+    <div th:fragment="form (subject, memo, schedules, organizerTerminal)">
         <label>件名</label>
         <input type="text" th:field="*{subject.value}" placeholder="○○様カンファレンス など" class="meeting__subject">
         <p th:if="${#fields.hasErrors('subject.value')}">
             <mark><span th:errors="*{subject.value}"></span></mark>
         </p>
-    </div>
 
-    <div th:fragment="memo_part (memo)">
         <label>メモ（任意）</label>
         <textarea th:field="*{memo.value}" placeholder="リハビリ実施計画書について など" class="meeting__memo"></textarea>
         <p th:if="${#fields.hasErrors('memo.value')}">
             <mark><span th:errors="*{memo.value}"></span></mark>
         </p>
-    </div>
 
-    <div th:fragment="schedules_part (schedules)">
         <div class="meeting__schedules-title-section">
             <label class="meeting__schedules-title-label">日程候補</label>
             <button type="submit" name="addSchedule"
@@ -84,13 +80,10 @@
                 <mark><span th:errors="*{schedules}"></span></mark>
             </p>
         </div>
-    </div>
 
-    <div th:fragment="organizerTerminal_part (organizerTerminal)">
         <input type="hidden" th:field="*{organizerTerminal.ipAddress.value}">
         <input type="hidden" th:field="*{organizerTerminal.osFamily.value}">
         <input type="hidden" th:field="*{organizerTerminal.userAgentFamily.value}">
     </div>
-
 </body>
 </html>

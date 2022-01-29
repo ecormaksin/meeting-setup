@@ -4,6 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meeting.infrastructure.datasource.attendance.AttendanceMapper">
 
+    <select id="participantNameDuplicated" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 参加者名 FROM 出欠.出欠
+            WHERE
+                ミーティングID = #{meetingId.value}
+            <if test="attendanceId != null and attendanceId.value != null">
+                AND 出欠ID != #{attendanceId.value}
+            </if>
+            AND 参加者名 = #{participantName.value}
+        )
+    </select>
+
     <insert id="insertAttendance">
         INSERT INTO 出欠.出欠(出欠ID, ミーティングID, 参加者名)
         VALUES (#{attendanceId.value}, #{meetingId.value}, #{participantName.value})
@@ -67,12 +79,26 @@
 
     <select id="selectConveniencesByAttendanceId" resultType="meeting.domain.model.attendance.convenience.Convenience">
         SELECT
-            日程候補番号 AS "scheduleNumber.value",
-            都合種別 AS "convenienceCategory"
+            日程候補.日程候補番号 AS "scheduleNumber.value",
+            COALESCE(都合.都合種別, '未回答') AS "convenienceCategory"
         FROM
-            出欠.都合
+            日程候補.日程候補 AS 日程候補
+            LEFT OUTER JOIN 出欠.都合 AS 都合
+                ON
+                都合.日程候補番号 = 日程候補.日程候補番号
+                AND 都合.出欠ID = #{value}
         WHERE
-            出欠ID = #{value}
+            日程候補.ミーティングID IN (
+                SELECT
+                    ミーティングID
+                FROM
+                    出欠.出欠
+                WHERE
+                    出欠ID = #{value}
+            )
+        ORDER BY
+            日程候補.開始日時 ASC,
+            日程候補.終了日時 ASC
     </select>
 
     <delete id="deleteAttendanceCommentsByMeetingId">
