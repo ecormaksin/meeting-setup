@@ -20,13 +20,27 @@
 
       <div th:replace="_parts/meeting :: form (subject=*{subject}, memo=*{memo}, schedules=*{schedules}, organizerTerminal=*{organizerTerminal})"></div>
 
-      <div>
-        <button>編集</button>
+      <div class="meeting-edit__button-parent">
+        <div>
+          <button>編集</button>
+        </div>
+        <div>
+          <button type="button" class="delete-button">削除</button>
+        </div>
       </div>
     </form>
   </article>
 
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
+<script th:inline="javascript">
+$(function() {
+
+  $('.delete-button').on('click', function() {
+    var result = window.confirm('削除すると元に戻せません。実行してよろしいですか？');
+    alert([[__${meetingId}__]]);
+  });
+});
+</script>
 </body>
 </html>

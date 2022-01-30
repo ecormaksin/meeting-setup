@@ -60,6 +60,11 @@ th *, td * {
     padding: 4px;
 }
 
+.delete-button {
+    background-color: red;
+    border-color: red;
+}
+
 .meeting__subject {
     width: 40ch;
 }
@@ -98,6 +103,12 @@ th *, td * {
     border: thin solid black;
     width: 256ch !important;
     margin-bottom: 0rem;
+}
+
+.meeting-edit__button-parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .url-copy-button {

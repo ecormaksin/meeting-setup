@@ -29,7 +29,7 @@ public class Conveniences {
     public String toString() {
         // @formatter:off
         return "Conveniences{" +
-                "list=" + list +
+                    "list=" + list +
                 '}';
         // @formatter:on
     }
