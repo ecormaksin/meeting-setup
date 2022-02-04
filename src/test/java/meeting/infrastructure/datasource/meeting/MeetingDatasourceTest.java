@@ -6,7 +6,6 @@ import meeting.domain.model.meeting.MeetingId;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
-import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,8 +19,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.servlet.FlashMap;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +34,27 @@ class MeetingDatasourceTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    LocalDateTime currentDateTime = LocalDateTime.now();
+    LocalDateTime firstScheduleStart = LocalDateTime.of(
+            currentDateTime.getYear(),
+            currentDateTime.getMonth(),
+            currentDateTime.getDayOfMonth(),
+            10,
+            0
+            ).plusDays(1);
+    LocalDateTime firstScheduleEnd = firstScheduleStart.plusHours(1);
+    Schedule firstSchedule = Schedule.of(firstScheduleStart.toLocalDate(),
+            firstScheduleStart.toLocalTime(),
+            firstScheduleEnd.toLocalTime());
+
+    LocalDateTime secondScheduleStart = firstScheduleStart
+            .plusDays(1)
+            .plusHours(1);
+    LocalDateTime secondScheduleEnd = secondScheduleStart.plusHours(1);
+    Schedule secondSchedule = Schedule.of(secondScheduleStart.toLocalDate(),
+            secondScheduleStart.toLocalTime(),
+            secondScheduleEnd.toLocalTime());
 
     private MockHttpServletRequestBuilder postMeetingCreation() {
         return post("/meeting/create");
@@ -59,29 +79,24 @@ class MeetingDatasourceTest {
     }
 
     private MultiValueMap<String, String> orderedSchedulesParam() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-
-        params.add("schedules.list[0].scheduleConstruct.meetingDate.value", "2021-12-06");
-        params.add("schedules.list[0].scheduleConstruct.startTime.value", "10:00");
-        params.add("schedules.list[0].scheduleConstruct.endTime.value", "11:00");
-
-        params.add("schedules.list[1].scheduleConstruct.meetingDate.value", "2021-12-07");
-        params.add("schedules.list[1].scheduleConstruct.startTime.value", "14:00");
-        params.add("schedules.list[1].scheduleConstruct.endTime.value", "15:00");
-
-        return params;
+        List<Schedule> scheduleList = Arrays.asList(firstSchedule, secondSchedule);
+        return schedulesParam(scheduleList);
     }
 
     private MultiValueMap<String, String> reverseOrderedSchedulesParam() {
+        List<Schedule> scheduleList = Arrays.asList(secondSchedule, firstSchedule);
+        return schedulesParam(scheduleList);
+    }
+
+    private MultiValueMap<String, String> schedulesParam(List<Schedule> scheduleList) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
-        params.add("schedules.list[0].scheduleConstruct.meetingDate.value", "2021-12-07");
-        params.add("schedules.list[0].scheduleConstruct.startTime.value", "14:00");
-        params.add("schedules.list[0].scheduleConstruct.endTime.value", "15:00");
-
-        params.add("schedules.list[1].scheduleConstruct.meetingDate.value", "2021-12-06");
-        params.add("schedules.list[1].scheduleConstruct.startTime.value", "10:00");
-        params.add("schedules.list[1].scheduleConstruct.endTime.value", "11:00");
+        for (int i = 0; i < scheduleList.size(); i++) {
+            Schedule schedule = scheduleList.get(i);
+            params.add("schedules.list[" + i + "].scheduleConstruct.meetingDate.value", schedule.meetingDate().toString());
+            params.add("schedules.list[" + i + "].scheduleConstruct.startTime.value", schedule.startTime().toString());
+            params.add("schedules.list[" + i + "].scheduleConstruct.endTime.value", schedule.endTime().toString());
+        }
 
         return params;
     }
@@ -157,6 +172,14 @@ class MeetingDatasourceTest {
             return schedules.asList();
         }
 
+        Schedule firstSchedule() {
+            return scheduleList().get(0);
+        }
+
+        Schedule secondSchedule() {
+            return scheduleList().get(1);
+        }
+
         @Test
         void 日程候補リストのデータがNULLではない() throws Exception {
             assertNotNull(scheduleList());
@@ -169,24 +192,52 @@ class MeetingDatasourceTest {
 
         @Test
         void 作成時の日程候補1件目を取得できる() throws Exception {
-            Schedule schedule = scheduleList().get(0);
-            assertNotNull(schedule);
-            assertNotNull(schedule.scheduleNumber());
-            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
-            assertEquals(LocalDate.of(2021, 12, 6), scheduleConstruct.meetingDate().value());
-            assertEquals(LocalTime.of(10, 0),scheduleConstruct.startTime().value() );
-            assertEquals(LocalTime.of(11, 0),scheduleConstruct.endTime().value() );
+            assertNotNull(firstSchedule());
+        }
+
+        @Test
+        void 作成時の日程候補1件目に日程候補番号が発番されている() throws Exception {
+            assertTrue(firstSchedule().scheduleNumber().value() > 0);
+        }
+
+        @Test
+        void 日程候補1件目の開催日が作成時と同じ() throws Exception {
+            assertEquals(firstScheduleStart.toLocalDate(), firstSchedule().meetingDate().value());
+        }
+
+        @Test
+        void 日程候補1件目の開始時刻が作成時と同じ() throws Exception {
+            assertEquals(firstScheduleStart.toLocalTime(), firstSchedule().startTime().value() );
+        }
+
+        @Test
+        void 日程候補1件目の終了時刻が作成時と同じ() throws Exception {
+            assertEquals(firstScheduleEnd.toLocalTime(), firstSchedule().endTime().value() );
         }
 
         @Test
         void 作成時の日程候補2件目を取得できる() throws Exception {
-            Schedule schedule = scheduleList().get(1);
-            assertNotNull(schedule);
-            assertNotNull(schedule.scheduleNumber());
-            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
-            assertEquals(LocalDate.of(2021, 12, 7), scheduleConstruct.meetingDate().value());
-            assertEquals(LocalTime.of(14, 0),scheduleConstruct.startTime().value() );
-            assertEquals(LocalTime.of(15, 0),scheduleConstruct.endTime().value() );
+            assertNotNull(secondSchedule());
+        }
+
+        @Test
+        void 作成時の日程候補2件目に日程候補番号が発番されている() throws Exception {
+            assertTrue(secondSchedule().scheduleNumber().value() > 0);
+        }
+
+        @Test
+        void 日程候補2件目の開催日が作成時と同じ() throws Exception {
+            assertEquals(secondScheduleStart.toLocalDate(), secondSchedule().meetingDate().value());
+        }
+
+        @Test
+        void 日程候補2件目の開始時刻が作成時と同じ() throws Exception {
+            assertEquals(secondScheduleStart.toLocalTime(), secondSchedule().startTime().value() );
+        }
+
+        @Test
+        void 日程候補2件目の終了時刻が作成時と同じ() throws Exception {
+            assertEquals(secondScheduleEnd.toLocalTime(), secondSchedule().endTime().value() );
         }
 
         private ClientBrowser organizerTerminal() {
@@ -200,20 +251,17 @@ class MeetingDatasourceTest {
 
         @Test
         void 作成時のIPアドレスと同じ() throws Exception {
-            ClientBrowser clientBrowser = organizerTerminal();
-            assertEquals("127.0.0.1", clientBrowser.ipAddress().value());
+            assertEquals("127.0.0.1", organizerTerminal().ipAddress().value());
         }
 
         @Test
         void 作成時のOSファミリーと同じ() throws Exception {
-            ClientBrowser clientBrowser = organizerTerminal();
-            assertEquals("Windows", clientBrowser.osFamily().value());
+            assertEquals("Windows", organizerTerminal().osFamily().value());
         }
 
         @Test
         void 作成時のブラウザと同じ() throws Exception {
-            ClientBrowser clientBrowser = organizerTerminal();
-            assertEquals("Chrome", clientBrowser.userAgentFamily().value());
+            assertEquals("Chrome", organizerTerminal().userAgentFamily().value());
         }
     }
 
@@ -254,22 +302,42 @@ class MeetingDatasourceTest {
             return schedules.asList();
         }
 
-        @Test
-        void 作成時の日程候補1件目を取得できる() throws Exception {
-            Schedule schedule = scheduleList().get(0);
-            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
-            assertEquals(LocalDate.of(2021, 12, 6), scheduleConstruct.meetingDate().value());
-            assertEquals(LocalTime.of(10, 0),scheduleConstruct.startTime().value() );
-            assertEquals(LocalTime.of(11, 0),scheduleConstruct.endTime().value() );
+        Schedule firstSchedule() {
+            return scheduleList().get(0);
+        }
+
+        Schedule secondSchedule() {
+            return scheduleList().get(1);
         }
 
         @Test
-        void 作成時の日程候補2件目を取得できる() throws Exception {
-            Schedule schedule = scheduleList().get(1);
-            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
-            assertEquals(LocalDate.of(2021, 12, 7), scheduleConstruct.meetingDate().value());
-            assertEquals(LocalTime.of(14, 0),scheduleConstruct.startTime().value() );
-            assertEquals(LocalTime.of(15, 0),scheduleConstruct.endTime().value() );
+        void 作成時の日程候補2件目の開催日が1件目として取得できる() throws Exception {
+            assertEquals(firstScheduleStart.toLocalDate(), firstSchedule().meetingDate().value());
+        }
+
+        @Test
+        void 作成時の日程候補2件目の開始時刻が1件目として取得できる() throws Exception {
+            assertEquals(firstScheduleStart.toLocalTime(), firstSchedule().startTime().value());
+        }
+
+        @Test
+        void 作成時の日程候補2件目の終了時刻が1件目として取得できる() throws Exception {
+            assertEquals(firstScheduleEnd.toLocalTime(), firstSchedule().endTime().value());
+        }
+
+        @Test
+        void 作成時の日程候補1件目の開催日が2件目として取得できる() throws Exception {
+            assertEquals(secondScheduleStart.toLocalDate(), secondSchedule().meetingDate().value());
+        }
+
+        @Test
+        void 作成時の日程候補1件目の開始時刻が2件目として取得できる() throws Exception {
+            assertEquals(secondScheduleStart.toLocalTime(), secondSchedule().startTime().value());
+        }
+
+        @Test
+        void 作成時の日程候補1件目の終了時刻が2件目として取得できる() throws Exception {
+            assertEquals(secondScheduleEnd.toLocalTime(), secondSchedule().endTime().value());
         }
     }
 }
