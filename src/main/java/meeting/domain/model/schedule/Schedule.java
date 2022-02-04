@@ -23,6 +23,15 @@ public class Schedule {
         this.scheduleConstruct = scheduleConstruct;
     }
 
+    public static Schedule of(LocalDate noWrappedMeetingDate,
+                              LocalTime noWrappedStartTime,
+                              LocalTime noWrappedEndTime) {
+        return new Schedule(
+                ScheduleNumber.empty(),
+                ScheduleConstruct.of(noWrappedMeetingDate, noWrappedStartTime, noWrappedEndTime)
+        );
+    }
+
     public static Schedule of(int primitiveScheduleNumber,
                                LocalDate noWrappedMeetingDate,
                                LocalTime noWrappedStartTime,
