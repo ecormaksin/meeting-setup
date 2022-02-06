@@ -16,7 +16,7 @@ public class StartTimeLessThanEndTimeValidator
     @Override
     public boolean isValid(ScheduleConstruct value, ConstraintValidatorContext context) {
 
-        if (value.validity() !=  ScheduleConstructValidity.不当_時刻の前後関係が不正) return true;
+        if (value.validity() !=  ScheduleConstructValidity.不当_時刻の前後関係が不当) return true;
 
         context.disableDefaultConstraintViolation();
         context.buildConstraintViolationWithTemplate(message)

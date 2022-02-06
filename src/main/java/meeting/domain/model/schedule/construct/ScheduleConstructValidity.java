@@ -6,6 +6,6 @@ package meeting.domain.model.schedule.construct;
 public enum ScheduleConstructValidity {
     妥当_すべて未入力,
     不当_一部未入力あり,
-    不当_時刻の前後関係が不正,
+    不当_時刻の前後関係が不当,
     妥当_すべて入力済;
 }

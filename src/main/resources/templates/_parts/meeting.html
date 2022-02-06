@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="form (subject, memo, schedules, organizerTerminal)">
+    <th:block th:fragment="form (subject, memo, schedules, organizerTerminal)">
         <label>件名</label>
         <input type="text" th:field="*{subject.value}" placeholder="○○様カンファレンス など" class="meeting__subject">
         <p th:if="${#fields.hasErrors('subject.value')}">
@@ -16,13 +16,12 @@
 
         <div class="meeting__schedules-title-section">
             <label class="meeting__schedules-title-label">日程候補</label>
-            <button type="submit" name="addSchedule"
+            <button name="addSchedule"
                     class="small-button">追加</button>
         </div>
         <table>
             <thead>
             <tr>
-                <th></th>
                 <th></th>
                 <th>開催日</th>
                 <th>開始時刻</th>
@@ -57,7 +56,7 @@
                     </td>
                     <td>
                         <button th:if="${scheduleStat.index > 0}"
-                                type="submit" name="removeSchedule"
+                                name="removeSchedule"
                                 th:value="${scheduleStat.index}"
                                 class="small-button">削除</button>
                     </td>
@@ -84,6 +83,13 @@
         <input type="hidden" th:field="*{organizerTerminal.ipAddress.value}">
         <input type="hidden" th:field="*{organizerTerminal.osFamily.value}">
         <input type="hidden" th:field="*{organizerTerminal.userAgentFamily.value}">
-    </div>
+    </th:block>
+
+    <th:block th:fragment="show-location (meetingShowLocation)">
+        <div class="meeting-show__location-parent">
+            <input type="text" id="url" class="meeting-show__location" th:readonly="readonly" th:value="${meetingShowLocation}">
+            <button id="copyUrlButton" class="small-button url-copy-button">URLをコピーする</button>
+        </div>
+    </th:block>
 </body>
 </html>

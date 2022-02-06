@@ -12,4 +12,5 @@ public interface MeetingRepository {
     MeetingId create(MeetingCreationRequest meetingCreationRequest);
     Meeting meetingOf(MeetingId meetingId);
     void edit(Meeting meeting, MeetingEditRequest meetingEditRequest);
+    void delete(MeetingId meetingId);
 }

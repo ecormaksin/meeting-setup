@@ -42,6 +42,63 @@ public class MeetingDatasource implements MeetingRepository {
         return meetingId;
     }
 
+    @Override
+    public Meeting meetingOf(MeetingId meetingId) {
+        boolean meetingNotFound = false;
+
+        Optional<Subject> optSubject = meetingMapper.selectSubject(meetingId);
+        if (!optSubject.isPresent()) {
+            meetingNotFound = true;
+        }
+
+        Optional<Memo> optMemo = meetingMapper.selectMemo(meetingId);
+
+        Optional<ClientBrowser> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingId);
+        if (!optOrganizerTerminal.isPresent()) {
+            meetingNotFound = true;
+        }
+
+        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingId(meetingId);
+        if (scheduleList.isEmpty()) {
+            meetingNotFound = true;
+        }
+
+        if (meetingNotFound) {
+            throw new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value()));
+        }
+
+        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingId(meetingId);
+
+        return new Meeting(meetingId,
+                optSubject.get(),
+                optMemo.orElse(null),
+                new Schedules(scheduleList),
+                Attendances.of(attendanceList),
+                optOrganizerTerminal.get());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
+        MeetingId meetingId = meetingEditRequest.meetingId();
+
+        // 既存のレコードを削除
+        deleteMeetingWithWholeAggregate(meetingId);
+
+        // 再追加
+        insertMeeting(meetingId, meetingEditRequest.subject());
+        insertMeetingMemo(meetingId, meetingEditRequest.memo());
+        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingId, meetingEditRequest.schedules());
+        insertOrganizerTerminal(meetingId, meetingEditRequest.organizerTerminal());
+        insertAttendances(meetingId, meeting.attendances(), scheduleNumbers);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(MeetingId meetingId) {
+        deleteMeetingWithWholeAggregate(meetingId);
+    }
+
     private void insertMeeting(MeetingId meetingId, Subject subject) {
         meetingMapper.insertMeeting(meetingId, subject);
     }
@@ -83,47 +140,8 @@ public class MeetingDatasource implements MeetingRepository {
         );
     }
 
-    @Override
-    public Meeting meetingOf(MeetingId meetingId) {
-        boolean meetingNotFound = false;
+    private void deleteMeetingWithWholeAggregate(MeetingId meetingId) {
 
-        Optional<Subject> optSubject = meetingMapper.selectSubject(meetingId);
-        if (!optSubject.isPresent()) {
-            meetingNotFound = true;
-        }
-
-        Optional<Memo> optMemo = meetingMapper.selectMemo(meetingId);
-
-        Optional<ClientBrowser> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingId);
-        if (!optOrganizerTerminal.isPresent()) {
-            meetingNotFound = true;
-        }
-
-        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingId(meetingId);
-        if (scheduleList.isEmpty()) {
-            meetingNotFound = true;
-        }
-
-        if (meetingNotFound) {
-            throw new IllegalArgumentException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value()));
-        }
-
-        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingId(meetingId);
-
-        return new Meeting(meetingId,
-                optSubject.get(),
-                optMemo.orElse(null),
-                new Schedules(scheduleList),
-                Attendances.of(attendanceList),
-                optOrganizerTerminal.get());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
-        MeetingId meetingId = meetingEditRequest.meetingId();
-
-        // 既存のレコードを削除
         attendanceMapper.deleteAttendanceCommentsByMeetingId(meetingId);
         attendanceMapper.deleteConveniencesByMeetingId(meetingId);
         attendanceMapper.deleteAttendancesByMeetingId(meetingId);
@@ -133,13 +151,6 @@ public class MeetingDatasource implements MeetingRepository {
         meetingMapper.deleteOrganizerTerminal(meetingId);
         meetingMapper.deleteMeetingMemo(meetingId);
         meetingMapper.deleteMeeting(meetingId);
-
-        // 再追加
-        insertMeeting(meetingId, meetingEditRequest.subject());
-        insertMeetingMemo(meetingId, meetingEditRequest.memo());
-        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingId, meetingEditRequest.schedules());
-        insertOrganizerTerminal(meetingId, meetingEditRequest.organizerTerminal());
-        insertAttendances(meetingId, meeting.attendances(), scheduleNumbers);
     }
 
     private void insertAttendances(MeetingId meetingId, Attendances attendances, Set<ScheduleNumber> scheduleNumbers) {

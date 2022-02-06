@@ -113,7 +113,6 @@ public class AttendanceEditController {
                      Model model, UriComponentsBuilder builder) {
 
         model.addAttribute("meetingId", meetingId);
-        model.addAttribute("attendanceLifeCycleStatus", AttendanceLifeCycleStatus.EDITION);
 
         URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingId, attendanceId)).build().toUri();
         model.addAttribute("attendanceEditLocation", uri.toString());

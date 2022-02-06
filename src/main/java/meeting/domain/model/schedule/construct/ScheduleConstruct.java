@@ -52,7 +52,7 @@ public class ScheduleConstruct {
     public ScheduleConstructValidity validity() {
         if (areAllEmpty()) return ScheduleConstructValidity.妥当_すべて未入力;
         if (areAnyEmpty()) return ScheduleConstructValidity.不当_一部未入力あり;
-        if (isTimeRelationInvalid()) return ScheduleConstructValidity.不当_時刻の前後関係が不正;
+        if (isTimeRelationInvalid()) return ScheduleConstructValidity.不当_時刻の前後関係が不当;
         return ScheduleConstructValidity.妥当_すべて入力済;
     }
 

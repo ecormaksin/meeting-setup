@@ -24,4 +24,8 @@ public class MeetingRecordService {
     public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
         meetingRepository.edit(meeting, meetingEditRequest);
     }
+
+    public void delete(MeetingId meetingId) {
+        meetingRepository.delete(meetingId);
+    }
 }

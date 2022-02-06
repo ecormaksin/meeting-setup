@@ -2,9 +2,7 @@ package meeting.application.senario;
 
 import meeting.application.service.meeting.MeetingQueryService;
 import meeting.application.service.meeting.MeetingRecordService;
-import meeting.domain.model.meeting.Meeting;
-import meeting.domain.model.meeting.MeetingEditRequest;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.*;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,8 +23,7 @@ public class MeetingEditScenario {
         return meetingQueryService.meetingOf(meetingId);
     }
 
-    public void edit(MeetingEditRequest meetingEditRequest) {
-        Meeting meeting = meetingQueryService.meetingOf(meetingEditRequest.meetingId());
+    public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
         meetingRecordService.edit(meeting, meetingEditRequest);
     }
 }

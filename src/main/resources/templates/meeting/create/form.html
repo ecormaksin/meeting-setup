@@ -2,30 +2,29 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
 <head>
   <th:block th:replace="_parts/head :: meta"/>
-  <title>出欠の編集</title>
+  <title>ミーティングの作成</title>
   <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
-<header th:replace="_parts/navigation :: meeting-show_only (meetingId=${meetingId})"></header>
+<header th:replace="_parts/navigation :: home_only"></header>
 
 <main>
   <article>
-    <h1>出欠の編集</h1>
+    <h1>ミーティングの作成</h1>
     <form method="post" action="#"
-          th:object="${attendanceEditRequest}" th:action="@{/meeting/__${meetingId}__/attendance/__${attendanceId}__/edit}">
+          th:object="${meetingCreationRequest}" th:action="@{/meeting/create}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <div th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></div>
+      <th:block th:replace="_parts/meeting :: form (subject=*{subject}, memo=*{memo}, schedules=*{schedules}, organizerTerminal=*{organizerTerminal})"></th:block>
 
       <div>
-        <button>編集</button>
+        <button>作成</button>
       </div>
     </form>
   </article>
-
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 </body>

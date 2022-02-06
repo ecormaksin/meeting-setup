@@ -1,10 +1,9 @@
 package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingEditScenario;
-import meeting.domain.model.meeting.Meeting;
-import meeting.domain.model.meeting.MeetingEditRequest;
-import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.MeetingLifeCycleStatus;
+import meeting.domain.model.meeting.*;
+import meeting.domain.model.meeting.organizer.ClientBrowser;
+import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,31 +24,42 @@ import java.net.URI;
 public class MeetingEditController {
     MeetingEditScenario meetingEditScenario;
 
-    public MeetingEditController(MeetingEditScenario meetingEditScenario) {
+    ClientInfoGetter clientInfoGetter;
+
+    public MeetingEditController(MeetingEditScenario meetingEditScenario,
+                                 ClientInfoGetter clientInfoGetter) {
         this.meetingEditScenario = meetingEditScenario;
+        this.clientInfoGetter = clientInfoGetter;
     }
 
     @GetMapping
-    String init(Model model, @PathVariable("meetingId") MeetingId meetingId) {
+    String init(Model model,
+                @PathVariable("meetingId") MeetingId meetingId,
+                HttpServletRequest request) {
 
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
         Meeting meeting = meetingEditScenario.meetingOf(meetingId);
+
+        if (meeting.editability(clientBrowser) != MeetingEditability.編集可) {
+            throw new MeetingCannotEditException();
+        }
 
         model.addAttribute("meetingEditRequest", new MeetingEditRequest(
                 meetingId,
                 meeting.subject(),
                 meeting.memo(),
                 meeting.schedules(),
-                meeting.organizerTerminal()
+                clientBrowser
         ));
 
-        return "meeting/edit";
+        return "meeting/edit/form";
     }
 
     @PostMapping(params={"addSchedule"})
     String addSchedule(@PathVariable("meetingId") MeetingId meetingId,
                        @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest) {
         meetingEditRequest.addEmptySchedule();
-        return "meeting/edit";
+        return "meeting/edit/form";
     }
 
     @PostMapping(params={"removeSchedule"})
@@ -58,7 +68,7 @@ public class MeetingEditController {
                           HttpServletRequest request) {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
         meetingEditRequest.removeSchedule(index.intValue());
-        return "meeting/edit";
+        return "meeting/edit/form";
     }
 
     @PostMapping
@@ -67,9 +77,15 @@ public class MeetingEditController {
                   BindingResult bindingResult, RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
-        if (bindingResult.hasErrors()) return "meeting/edit";
+        Meeting meeting = meetingEditScenario.meetingOf(meetingId);
 
-        meetingEditScenario.edit(meetingEditRequest);
+        if (meeting.editability(meetingEditRequest.organizerTerminal()) != MeetingEditability.編集可) {
+            throw new MeetingCannotEditException();
+        }
+
+        if (bindingResult.hasErrors()) return "meeting/edit/form";
+
+        meetingEditScenario.edit(meeting, meetingEditRequest);
 
         attributes.addFlashAttribute("meetingId", meetingId.value());
 
@@ -80,15 +96,15 @@ public class MeetingEditController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingId") String meetingId, Model model, UriComponentsBuilder builder) {
+    String completed(@ModelAttribute("meetingId") String meetingId,
+                     Model model, UriComponentsBuilder builder) {
 
         model.addAttribute("meetingId", meetingId);
-        model.addAttribute("meetingLifeCycleStatus", MeetingLifeCycleStatus.EDITION);
 
         URI uri = builder.path(String.format("/meeting/%s", meetingId)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
-        return "meeting/completed";
+        return "meeting/edit/completed";
     }
 
     @InitBinder

@@ -3,7 +3,6 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.MeetingLifeCycleStatus;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
@@ -41,13 +40,13 @@ public class MeetingCreationController {
         ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
         model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty(clientBrowser));
 
-        return "meeting/create";
+        return "meeting/create/form";
     }
 
     @PostMapping(params={"addSchedule"})
     String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest) {
         meetingCreationRequest.addEmptySchedule();
-        return "meeting/create";
+        return "meeting/create/form";
     }
 
     @PostMapping(params={"removeSchedule"})
@@ -55,7 +54,7 @@ public class MeetingCreationController {
                           HttpServletRequest request) {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
         meetingCreationRequest.removeSchedule(index.intValue());
-        return "meeting/create";
+        return "meeting/create/form";
     }
 
     @PostMapping
@@ -63,7 +62,7 @@ public class MeetingCreationController {
                   BindingResult bindingResult, RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
-        if (bindingResult.hasErrors()) return "meeting/create";
+        if (bindingResult.hasErrors()) return "meeting/create/form";
 
         MeetingId meetingId = meetingCreationScenario.create(meetingCreationRequest);
 
@@ -77,12 +76,11 @@ public class MeetingCreationController {
     String completed(@ModelAttribute("meetingId") String meetingId, Model model, UriComponentsBuilder builder) {
 
         model.addAttribute("meetingId", meetingId);
-        model.addAttribute("meetingLifeCycleStatus", MeetingLifeCycleStatus.CREATION);
 
         URI uri = builder.path(String.format("/meeting/%s", meetingId)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
-        return "meeting/completed";
+        return "meeting/create/completed";
     }
 
     @InitBinder

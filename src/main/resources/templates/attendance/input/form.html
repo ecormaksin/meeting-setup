@@ -18,14 +18,13 @@
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <div th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></div>
+      <th:block th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></th:block>
 
       <div>
         <button>入力</button>
       </div>
     </form>
   </article>
-
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 </body>

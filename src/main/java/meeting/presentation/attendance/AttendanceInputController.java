@@ -3,7 +3,6 @@ package meeting.presentation.attendance;
 import meeting.application.senario.AttendanceInputScenario;
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
-import meeting.domain.model.attendance.AttendanceLifeCycleStatus;
 import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
 import meeting.domain.model.meeting.MeetingId;
 import meeting.domain.model.schedule.Schedules;
@@ -40,7 +39,7 @@ public class AttendanceInputController {
 
         model.addAttribute("attendanceInputRequest", attendanceInputRequest);
 
-        return "attendance/input";
+        return "attendance/input/form";
     }
 
     @PostMapping
@@ -49,7 +48,7 @@ public class AttendanceInputController {
                  BindingResult bindingResult, RedirectAttributes attributes,
                  UriComponentsBuilder builder) {
 
-        if (bindingResult.hasErrors()) return "attendance/input";
+        if (bindingResult.hasErrors()) return "attendance/input/form";
 
         ParticipantNameDuplicationStatus participantNameDuplicationStatus =
                 attendanceInputScenario.participantNameDuplicationStatus(
@@ -57,7 +56,7 @@ public class AttendanceInputController {
                         attendanceInputRequest.participantName());
         if (participantNameDuplicationStatus == あり) {
             bindingResult.rejectValue("participantName.value", "error.code.participantName.duplicated");
-            return "attendance/input";
+            return "attendance/input/form";
         }
 
         AttendanceId attendanceId = attendanceInputScenario.input(meetingId, attendanceInputRequest);
@@ -75,12 +74,11 @@ public class AttendanceInputController {
                      Model model, UriComponentsBuilder builder) {
 
         model.addAttribute("meetingId", meetingId);
-        model.addAttribute("attendanceLifeCycleStatus", AttendanceLifeCycleStatus.CREATION);
 
         URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingId, attendanceId)).build().toUri();
         model.addAttribute("attendanceEditLocation", uri.toString());
 
-        return "attendance/completed";
+        return "attendance/input/completed";
     }
 
     @InitBinder

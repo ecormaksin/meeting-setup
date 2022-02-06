@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<head>
+  <th:block th:replace="_parts/head :: meta"/>
+  <title>エラー</title>
+  <th:block th:replace="_parts/head :: css"/>
+</head>
+<body>
+<header th:replace="_parts/navigation :: home_only"></header>
+
+<main>
+  <article>
+    <h1>エラー</h1>
+    <p th:text="${message}"></p>
+  </article>
+</main>
+<footer th:replace="_parts/footer :: default"></footer>
+</body>
+</html>

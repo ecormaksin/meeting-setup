@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HTML script要素の部品</title>
+</head>
+<body>
+<script th:fragment="copy-url">
+$(function() {
+  var copyUrlButtonObj = $('#copyUrlButton');
+
+  function copyUrl() {
+    var url = $('#url').val();
+    var dummyTextBox = $("<input type='text'>");
+    dummyTextBox.val(url);
+    $('body').append(dummyTextBox);
+    dummyTextBox.select();
+    document.execCommand('copy');
+    dummyTextBox.remove();
+
+    copyUrlButtonObj.text('コピー完了');
+    copyUrlButtonObj.addClass('url-copy-button-copied');
+    setTimeout(removeCopiedStyle, 5000);
+  }
+
+  function removeCopiedStyle() {
+    copyUrlButtonObj.text('URLをコピーする');
+    copyUrlButtonObj.removeClass('url-copy-button-copied');
+  }
+
+  copyUrlButtonObj.on('click', copyUrl);
+});
+</script>
+</body>
+</html>

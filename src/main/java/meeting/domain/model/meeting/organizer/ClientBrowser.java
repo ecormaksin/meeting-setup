@@ -26,7 +26,7 @@ public class ClientBrowser {
         this.userAgentFamily = userAgentFamily;
     }
 
-    public static ClientBrowser of (@NotBlank String noWrappedIpAddress,
+    public static ClientBrowser of(@NotBlank String noWrappedIpAddress,
                                     @NotBlank String noWrappedOSFamily,
                                     @NotBlank String noWrappedUserAgentFamily) {
         return new ClientBrowser(

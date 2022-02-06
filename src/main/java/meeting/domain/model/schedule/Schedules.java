@@ -54,12 +54,24 @@ public class Schedules {
     public SchedulesValidity validity() {
         if (isEmpty()) return SchedulesValidity.不当_日程候補なし;
         if (areDuplicated()) return SchedulesValidity.不当_日程重複;
-        if (hasValidSchedule()) return SchedulesValidity.妥当;
+        if (containAllValidSchedule()) return SchedulesValidity.妥当;
         return SchedulesValidity.不当_日程に不備あり;
     }
 
-    private boolean hasValidSchedule() {
-        return list.stream().anyMatch(s -> {return s.validity() == ScheduleValidity.妥当;});
+    private boolean containAllValidSchedule() {
+        boolean anyValidInput = list.stream().anyMatch(s -> {
+            return s.validity() == ScheduleValidity.妥当;
+        });
+        if (!anyValidInput) return false;
+
+        boolean allValid = list.stream().allMatch(s -> {
+            if (s.validity() == ScheduleValidity.妥当) return true;
+            if (s.validity() == ScheduleValidity.妥当_未入力) return true;
+            return false;
+        });
+        if (!allValid) return false;
+
+        return true;
     }
 
     private boolean areDuplicated() {
@@ -83,7 +95,7 @@ public class Schedules {
     private boolean isEmpty() {
         if (Objects.isNull(list)) return true;
         if (list.isEmpty()) return true;
-        return false;
+        return list.stream().allMatch(s -> {return s.validity() == ScheduleValidity.妥当_未入力;});
     }
 
     @Override
