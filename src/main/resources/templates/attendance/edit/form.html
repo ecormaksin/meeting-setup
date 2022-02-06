@@ -20,8 +20,16 @@
 
       <th:block th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></th:block>
 
-      <div>
-        <button>編集</button>
+      <p>
+        削除すると元に戻せません。
+      </p>
+      <div class="attendance-edit__button-parent">
+        <div>
+          <button>編集</button>
+        </div>
+        <div>
+          <button name="delete" class="delete-button">削除</button>
+        </div>
       </div>
     </form>
   </article>

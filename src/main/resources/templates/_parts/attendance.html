@@ -42,7 +42,7 @@
         </table>
 
         <label>コメント</label>
-        <textarea th:field="*{attendanceComment.value}" class="attendance-comment"></textarea>
+        <textarea th:field="*{attendanceComment.value}" class="attendance-comment__textarea"></textarea>
         <p th:if="${#fields.hasErrors('attendanceComment.value')}">
             <mark><span th:errors="*{attendanceComment.value}"></span></mark>
         </p>

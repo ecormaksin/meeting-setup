@@ -137,9 +137,16 @@ th *, td * {
     color: white;
 }
 
-.attendance-comment {
+.attendance-comment__textarea {
     width: 40ch;
     height: 15ex;
+}
+
+.attendance-comment__table-cell {
+    width: 10ch;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    text-align: left;
 }
 
 .convenience-radio {
@@ -181,4 +188,10 @@ th *, td * {
     border: thin solid black;
     width: 256ch !important;
     margin-bottom: 0rem;
+}
+
+.attendance-edit__button-parent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

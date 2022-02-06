@@ -107,6 +107,25 @@ public class MeetingEditController {
         return "meeting/edit/completed";
     }
 
+    @PostMapping(params={"delete"})
+    String delete(@PathVariable("meetingId") MeetingId meetingId,
+                  @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
+                  UriComponentsBuilder builder) {
+
+        Meeting meeting = meetingEditScenario.meetingOf(meetingId);
+
+        if (meeting.editability(meetingEditRequest.organizerTerminal()) != MeetingEditability.編集可) {
+            throw new MeetingCannotDeleteException();
+        }
+
+        meetingEditScenario.delete(meetingId);
+
+        URI uri = builder.path(
+                String.format("/meeting/%s/delete/completed", meetingId.value())
+        ).build().toUri();
+        return "redirect:" + uri.toString();
+    }
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(

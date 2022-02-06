@@ -13,8 +13,7 @@
     <div class="meeting-show__h1-section">
       <h1>ミーティングの詳細</h1>
       <div th:if="${isEditable}">
-        <a th:href="@{/meeting/__${meetingId}__/edit}">編集</a>
-        <a th:href="@{/meeting/__${meetingId}__/delete}">削除</a>
+        <a th:href="@{/meeting/__${meetingId}__/edit}">ミーティングの編集・削除</a>
       </div>
     </div>
     <form method="get" th:object="${meeting}" th:action="@{/meeting/__${meetingId}__/attendance/input}">
@@ -56,6 +55,13 @@
             <td th:each="attendance, attendanceStat: *{attendances.asList()}"
                 th:text="${meeting.convenienceCategoryOf(attendance.attendanceId(), schedule.scheduleNumber()).symbol()}"></td>
           </tr>
+          <tr>
+            <td colspan="5"></td>
+            <!-- 参加者の出欠コメント -->
+            <td class="attendance-comment__table-cell"
+                th:each="attendance, attendanceStat: *{attendances.asList()}"
+                th:text="${attendance.attendanceComment().value()}"></td>
+          </tr>
         </tbody>
       </table>
 
@@ -63,7 +69,7 @@
         <button>出欠を入力する</button>
       </div>
       <p>
-        出欠を編集する場合は、参加者名をクリックしてください。
+        出欠を編集・削除する場合は、参加者名をクリックしてください。
       </p>
     </form>
   </article>

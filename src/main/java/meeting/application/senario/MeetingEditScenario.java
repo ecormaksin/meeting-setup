@@ -26,4 +26,8 @@ public class MeetingEditScenario {
     public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
         meetingRecordService.edit(meeting, meetingEditRequest);
     }
+
+    public void delete(MeetingId meetingId) {
+        meetingRecordService.delete(meetingId);
+    }
 }

@@ -20,24 +20,21 @@
 
       <th:block th:replace="_parts/meeting :: form (subject=*{subject}, memo=*{memo}, schedules=*{schedules}, organizerTerminal=*{organizerTerminal})"></th:block>
 
-      <div>
-        <button>編集</button>
+      <p>
+        削除すると元に戻せません。
+      </p>
+      <div class="meeting-edit__button-parent">
+        <div>
+          <button>編集</button>
+        </div>
+        <div>
+          <button name="delete" class="delete-button">削除</button>
+        </div>
       </div>
     </form>
   </article>
 
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
-<script th:inline="javascript">
-$(function() {
-
-  $('.delete-button').on('click', function() {
-    var result = window.confirm('削除すると元に戻せません。実行してよろしいですか？');
-    if (result) {
-      $('.hidden-delete-submit-button').click();
-    }
-  });
-});
-</script>
 </body>
 </html>

@@ -99,6 +99,18 @@ public class MeetingDatasource implements MeetingRepository {
         deleteMeetingWithWholeAggregate(meetingId);
     }
 
+    @Override
+    public OrganizerMeetingList organizerMeetingList(ClientBrowser organizerTerminal) {
+
+        List<OrganizerMeetingListItem> list = meetingMapper.organizerMeetingListItems(
+                organizerTerminal.ipAddress(),
+                organizerTerminal.osFamily(),
+                organizerTerminal.userAgentFamily()
+        );
+
+        return OrganizerMeetingList.of(list);
+    }
+
     private void insertMeeting(MeetingId meetingId, Subject subject) {
         meetingMapper.insertMeeting(meetingId, subject);
     }

@@ -57,6 +57,26 @@ public class AttendanceDatasource implements AttendanceRepository {
         return attendanceMapper.selectAttendance(attendanceId);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void edit(MeetingId meetingId, AttendanceEditRequest attendanceEditRequest) {
+        AttendanceId attendanceId = attendanceEditRequest.attendanceId();
+
+        // 既存のレコードを削除
+        deleteAttendanceWithWholeAggregate(attendanceId);
+
+        // 再追加
+        insertAttendance(meetingId, attendanceId, attendanceEditRequest.participantName());
+        insertConveniences(attendanceId, attendanceEditRequest.conveniences());
+        insertAttendanceComment(attendanceId, attendanceEditRequest.attendanceComment());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(AttendanceId attendanceId) {
+        deleteAttendanceWithWholeAggregate(attendanceId);
+    }
+
     private void insertAttendance(MeetingId meetingId, AttendanceId attendanceId, ParticipantName participantName) {
         attendanceMapper.insertAttendance(meetingId, attendanceId, participantName);
     }
@@ -77,17 +97,9 @@ public class AttendanceDatasource implements AttendanceRepository {
         attendanceMapper.insertAttendanceComment(attendanceId, attendanceComment);
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void edit(MeetingId meetingId, AttendanceEditRequest attendanceEditRequest) {
-        AttendanceId attendanceId = attendanceEditRequest.attendanceId();
-
+    private void deleteAttendanceWithWholeAggregate(AttendanceId attendanceId) {
         attendanceMapper.deleteAttendanceComment(attendanceId);
         attendanceMapper.deleteConveniences(attendanceId);
         attendanceMapper.deleteAttendance(attendanceId);
-
-        insertAttendance(meetingId, attendanceId, attendanceEditRequest.participantName());
-        insertConveniences(attendanceId, attendanceEditRequest.conveniences());
-        insertAttendanceComment(attendanceId, attendanceEditRequest.attendanceComment());
     }
 }

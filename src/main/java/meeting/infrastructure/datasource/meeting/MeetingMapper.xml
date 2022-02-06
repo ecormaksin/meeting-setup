@@ -63,4 +63,22 @@
         WHERE ミーティングID = #{meetingId.value}
     </delete>
 
+    <select id="organizerMeetingListItems" resultType="meeting.domain.model.meeting.OrganizerMeetingListItem">
+        SELECT
+            ミーティング.ミーティングID as "meetingId.value",
+            ミーティング.件名 as "subject.value"
+        FROM
+            ミーティング.ミーティング AS ミーティング
+            INNER JOIN
+                ミーティング.主催者端末 AS 主催者端末
+                    ON
+                    主催者端末.ミーティングID = ミーティング.ミーティングID
+        WHERE
+            主催者端末.IPアドレス = #{ipAddress.value}
+            AND 主催者端末.OSファミリー = #{osFamily.value}
+            AND 主催者端末.ユーザーエージェントファミリー = #{userAgentFamily.value}
+        ORDER BY
+            ミーティング.登録日時
+    </select>
+
 </mapper>

@@ -44,4 +44,8 @@ public class AttendanceEditScenario {
 
         return attendanceQueryService.participantNameDuplicationStatus(meetingId, attendanceId, participantName);
     }
+
+    public void delete(AttendanceId attendanceId) {
+        attendanceRecordService.delete(attendanceId);
+    }
 }

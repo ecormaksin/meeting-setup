@@ -51,7 +51,7 @@ public class AttendanceEditController {
 
         model.addAttribute("attendanceEditRequest", attendanceEditRequest);
 
-        return "attendance/edit";
+        return "attendance/edit/form";
     }
 
     @PostMapping
@@ -61,9 +61,9 @@ public class AttendanceEditController {
                  BindingResult bindingResult, RedirectAttributes attributes,
                  UriComponentsBuilder builder) {
 
-        if (bindingResult.hasErrors()) return "attendance/edit";
+        if (bindingResult.hasErrors()) return "attendance/edit/form";
 
-        if (checkIfNotInputConvenience(bindingResult, attendanceEditRequest.conveniences())) return "attendance/edit";
+        if (checkIfNotInputConvenience(bindingResult, attendanceEditRequest.conveniences())) return "attendance/edit/form";
 
         ParticipantNameDuplicationStatus participantNameDuplicationStatus =
                 attendanceEditScenario.participantNameDuplicationStatus(
@@ -72,7 +72,7 @@ public class AttendanceEditController {
                         attendanceEditRequest.participantName());
         if (participantNameDuplicationStatus == あり) {
             bindingResult.rejectValue("participantName.value", "error.code.participantName.duplicated");
-            return "attendance/edit";
+            return "attendance/edit/form";
         }
 
         attendanceEditScenario.edit(meetingId, attendanceEditRequest);
@@ -117,7 +117,22 @@ public class AttendanceEditController {
         URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingId, attendanceId)).build().toUri();
         model.addAttribute("attendanceEditLocation", uri.toString());
 
-        return "attendance/completed";
+        return "attendance/edit/completed";
+    }
+
+    @PostMapping(params={"delete"})
+    String delete(@PathVariable("meetingId") MeetingId meetingId,
+                  @PathVariable("attendanceId") AttendanceId attendanceId,
+                  UriComponentsBuilder builder) {
+
+        attendanceEditScenario.delete(attendanceId);
+
+        URI uri = builder.path(
+                String.format("meeting/%s/attendance/%s/delete/completed",
+                        meetingId.value(),
+                        attendanceId.value()
+                )).build().toUri();
+        return "redirect:" + uri.toString();
     }
 
     @InitBinder

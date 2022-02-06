@@ -18,4 +18,6 @@ public interface AttendanceRepository {
     Attendance attendanceOf(AttendanceId attendanceId);
 
     void edit(MeetingId meetingId, AttendanceEditRequest attendanceEditRequest);
+
+    void delete(AttendanceId attendanceId);
 }
