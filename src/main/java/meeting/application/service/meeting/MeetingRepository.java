@@ -2,6 +2,7 @@ package meeting.application.service.meeting;
 
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
+import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
 
 /**
  * ミーティング リポジトリ
@@ -16,4 +17,6 @@ public interface MeetingRepository {
     void delete(MeetingId meetingId);
 
     OrganizerMeetingList organizerMeetingList(ClientBrowser organizerTerminal);
+
+    OrganizerMeetingList search(ClientBrowser organizerTerminal, MeetingSearchCondition searchCondition);
 }

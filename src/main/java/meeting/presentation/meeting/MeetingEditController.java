@@ -71,11 +71,25 @@ public class MeetingEditController {
         return "meeting/edit/form";
     }
 
+    private void checkIfClientBrowserFalsified(HttpServletRequest request,
+                                               MeetingEditRequest meetingEditRequest) {
+
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
+
+        if (clientBrowser.equals(meetingEditRequest.organizerTerminal())) return;
+
+        throw new ClientBrowserFalsifiedException();
+    }
+
     @PostMapping
-    String edit(@PathVariable("meetingId") MeetingId meetingId,
-                  @Validated @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
-                  BindingResult bindingResult, RedirectAttributes attributes,
-                  UriComponentsBuilder builder) {
+    String edit(HttpServletRequest request,
+                    @PathVariable("meetingId") MeetingId meetingId,
+                    @Validated @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
+                    BindingResult bindingResult,
+                    RedirectAttributes attributes,
+                    UriComponentsBuilder builder) {
+
+        checkIfClientBrowserFalsified(request, meetingEditRequest);
 
         Meeting meeting = meetingEditScenario.meetingOf(meetingId);
 
@@ -101,16 +115,19 @@ public class MeetingEditController {
 
         model.addAttribute("meetingId", meetingId);
 
-        URI uri = builder.path(String.format("/meeting/%s", meetingId)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/show", meetingId)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
         return "meeting/edit/completed";
     }
 
     @PostMapping(params={"delete"})
-    String delete(@PathVariable("meetingId") MeetingId meetingId,
+    String delete(HttpServletRequest request,
+                  @PathVariable("meetingId") MeetingId meetingId,
                   @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
                   UriComponentsBuilder builder) {
+
+        checkIfClientBrowserFalsified(request, meetingEditRequest);
 
         Meeting meeting = meetingEditScenario.meetingOf(meetingId);
 

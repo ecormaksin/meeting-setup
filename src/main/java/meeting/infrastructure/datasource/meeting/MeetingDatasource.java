@@ -6,6 +6,7 @@ import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
+import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
 import meeting.domain.model.schedule.*;
 import meeting.infrastructure.datasource.attendance.AttendanceMapper;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
@@ -109,6 +110,11 @@ public class MeetingDatasource implements MeetingRepository {
         );
 
         return OrganizerMeetingList.of(list);
+    }
+
+    @Override
+    public OrganizerMeetingList search(ClientBrowser organizerTerminal, MeetingSearchCondition searchCondition) {
+        return null;
     }
 
     private void insertMeeting(MeetingId meetingId, Subject subject) {

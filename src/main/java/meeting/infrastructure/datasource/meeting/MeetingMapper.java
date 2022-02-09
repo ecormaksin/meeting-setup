@@ -8,6 +8,9 @@ import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.meeting.organizer.IpAddress;
 import meeting.domain.model.meeting.organizer.OSFamily;
 import meeting.domain.model.meeting.organizer.UserAgentFamily;
+import meeting.domain.model.meeting.search_condition.EndDate;
+import meeting.domain.model.meeting.search_condition.Keyword;
+import meeting.domain.model.meeting.search_condition.StartDate;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,4 +39,12 @@ public interface MeetingMapper {
             @Param("ipAddress") IpAddress ipAddress,
             @Param("osFamily") OSFamily osFamily,
             @Param("userAgentFamily") UserAgentFamily userAgentFamily);
+
+    List<OrganizerMeetingListItem> search(
+            @Param("ipAddress") IpAddress ipAddress,
+            @Param("osFamily") OSFamily osFamily,
+            @Param("userAgentFamily") UserAgentFamily userAgentFamily,
+            @Param("keyword") Keyword keyword,
+            @Param("startDate") StartDate startDate,
+            @Param("endDate") EndDate endDate);
 }

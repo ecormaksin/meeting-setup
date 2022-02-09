@@ -16,7 +16,7 @@
       <li>ミーティングの編集
         <ul>
           <th:block th:each="meetingListItem: ${organizerMeetingList.asList()}">
-          <li><a th:href="@{/meeting/__${meetingListItem.meetingId()}__}" th:text="${meetingListItem.subject().value()}"></a></li>
+          <li><a th:href="@{/meeting/__${meetingListItem.meetingId()}__/show}" th:text="${meetingListItem.subject().value()}"></a></li>
           </th:block>
         </ul>
       </li>

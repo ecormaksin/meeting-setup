@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * ミーティング表示画面
  */
 @Controller
-@RequestMapping("meeting")
+@RequestMapping("meeting/{meetingId}/show")
 public class MeetingShowController {
     MeetingShowScenario meetingShowScenario;
 
@@ -30,7 +30,7 @@ public class MeetingShowController {
         this.clientInfoGetter = clientInfoGetter;
     }
 
-    @GetMapping("{meetingId}")
+    @GetMapping
     String show(Model model, @PathVariable("meetingId") MeetingId meetingId, HttpServletRequest req) {
         ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(req);
         Meeting meeting = meetingShowScenario.meetingOf(meetingId);

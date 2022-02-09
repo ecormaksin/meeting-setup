@@ -58,9 +58,16 @@ public class MeetingCreationController {
     }
 
     @PostMapping
-    String create(@Validated @ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
-                  BindingResult bindingResult, RedirectAttributes attributes,
+    String create(HttpServletRequest request,
+                  @Validated @ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
+                  BindingResult bindingResult,
+                  RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
+
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
+        if (!clientBrowser.equals(meetingCreationRequest.organizerTerminal())) {
+            throw new ClientBrowserFalsifiedException();
+        }
 
         if (bindingResult.hasErrors()) return "meeting/create/form";
 
@@ -77,7 +84,7 @@ public class MeetingCreationController {
 
         model.addAttribute("meetingId", meetingId);
 
-        URI uri = builder.path(String.format("/meeting/%s", meetingId)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/show", meetingId)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
         return "meeting/create/completed";

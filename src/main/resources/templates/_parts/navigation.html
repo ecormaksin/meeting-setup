@@ -12,7 +12,7 @@
     <header th:fragment="meeting-show_only (meetingId)">
         <nav>
             <ul>
-                <li><a th:href="@{/meeting/__${meetingId}__}">ミーティングの詳細</a></li>
+                <li><a th:href="@{/meeting/__${meetingId}__/show}">ミーティングの詳細</a></li>
             </ul>
         </nav>
     </header>
@@ -21,7 +21,7 @@
         <nav>
             <ul>
                 <li><a th:href="@{/}">ホーム</a></li>
-                <li><a th:href="@{/meeting/__${meetingId}__}">ミーティングの詳細</a></li>
+                <li><a th:href="@{/meeting/__${meetingId}__/show}">ミーティングの詳細</a></li>
             </ul>
         </nav>
     </header>
