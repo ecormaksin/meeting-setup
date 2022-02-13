@@ -1,15 +1,18 @@
 package meeting.presentation.meeting;
 
-import meeting.application.senario.MeetingShowScenario;
-import meeting.domain.model.meeting.Meeting;
-import meeting.domain.model.meeting.MeetingEditability;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.application.senario.MeetingSearchScenario;
+import meeting.domain.model.meeting.MeetingSearchRequest;
+import meeting.domain.model.meeting.meeting_list.MeetingList;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,26 +23,62 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("meeting/search")
 public class MeetingSearchController {
-    MeetingShowScenario meetingShowScenario;
+    MeetingSearchScenario meetingSearchScenario;
 
     ClientInfoGetter clientInfoGetter;
 
-    public MeetingSearchController(MeetingShowScenario meetingShowScenario,
+    public MeetingSearchController(MeetingSearchScenario meetingSearchScenario,
                                    ClientInfoGetter clientInfoGetter) {
-        this.meetingShowScenario = meetingShowScenario;
+        this.meetingSearchScenario = meetingSearchScenario;
         this.clientInfoGetter = clientInfoGetter;
     }
 
-    @GetMapping("{meetingId}")
-    String show(Model model, @PathVariable("meetingId") MeetingId meetingId, HttpServletRequest req) {
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(req);
-        Meeting meeting = meetingShowScenario.meetingOf(meetingId);
+    @GetMapping
+    String init(Model model, HttpServletRequest request) {
 
-        boolean isEditable = (meeting.editability(clientBrowser) == MeetingEditability.編集可);
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
+        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.initial(clientBrowser);
+        MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
 
-        model.addAttribute("meeting", meeting);
-        model.addAttribute("isEditable", isEditable);
+        model.addAttribute("meetingSearchRequest", MeetingSearchRequest.initial(clientBrowser));
+        model.addAttribute("meetingList", meetingList);
 
-        return "meeting/show";
+        return "meeting/search";
+    }
+
+    @GetMapping(params = {"exec"})
+    String search(Model model,
+                  HttpServletRequest request,
+                  @Validated @ModelAttribute("meetingSearchRequest") MeetingSearchRequest meetingSearchRequest,
+                  BindingResult bindingResult) {
+
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
+        if (!clientBrowser.equals(meetingSearchRequest.organizerTerminal())) {
+            throw new ClientBrowserFalsifiedException();
+        }
+
+        model.addAttribute("meetingSearchRequest", meetingSearchRequest);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("meetingList", MeetingList.empty());
+            return "meeting/search";
+        }
+
+        MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
+        model.addAttribute("meetingList", meetingList);
+
+        return "meeting/search";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setAllowedFields(
+                "searchCondition.keyword.value",
+                "searchCondition.startDate.value",
+                "searchCondition.endDate.value",
+                "organizerTerminal.ipAddress.value",
+                "organizerTerminal.osFamily.value",
+                "organizerTerminal.userAgentFamily.value"
+        );
     }
 }

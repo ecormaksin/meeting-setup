@@ -5,6 +5,8 @@ import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.*;
+import meeting.domain.model.meeting.meeting_list.MeetingList;
+import meeting.domain.model.meeting.meeting_list.MeetingListItem;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
 import meeting.domain.model.schedule.*;
@@ -13,6 +15,8 @@ import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -101,20 +105,22 @@ public class MeetingDatasource implements MeetingRepository {
     }
 
     @Override
-    public OrganizerMeetingList organizerMeetingList(ClientBrowser organizerTerminal) {
+    public MeetingList search(MeetingSearchRequest meetingSearchRequest) {
+        ClientBrowser organizerTerminal = meetingSearchRequest.organizerTerminal();
+        MeetingSearchCondition searchCondition = meetingSearchRequest.searchCondition();
 
-        List<OrganizerMeetingListItem> list = meetingMapper.organizerMeetingListItems(
+        LocalDateTime startDateTime = LocalDateTime.of(searchCondition.startDate().value(), LocalTime.of(0,0,0));
+        LocalDateTime endDateTime = LocalDateTime.of(searchCondition.endDate().value(), LocalTime.of(23, 59, 59));
+
+        List<MeetingListItem> list = meetingMapper.search(
                 organizerTerminal.ipAddress(),
                 organizerTerminal.osFamily(),
-                organizerTerminal.userAgentFamily()
-        );
+                organizerTerminal.userAgentFamily(),
+                searchCondition.keyword(),
+                startDateTime,
+                endDateTime);
 
-        return OrganizerMeetingList.of(list);
-    }
-
-    @Override
-    public OrganizerMeetingList search(ClientBrowser organizerTerminal, MeetingSearchCondition searchCondition) {
-        return null;
+        return MeetingList.of(list);
     }
 
     private void insertMeeting(MeetingId meetingId, Subject subject) {

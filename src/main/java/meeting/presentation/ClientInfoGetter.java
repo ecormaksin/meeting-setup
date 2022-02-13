@@ -20,11 +20,11 @@ public class ClientInfoGetter {
         this.parser = parser;
     }
 
-    public ClientBrowser clientBrowser(HttpServletRequest req) {
+    public ClientBrowser clientBrowser(HttpServletRequest request) {
 
-        IpAddress ipAddress = new IpAddress(clientIPAddress(req));
+        IpAddress ipAddress = new IpAddress(clientIPAddress(request));
 
-        String userAgent = req.getHeader("user-agent");
+        String userAgent = request.getHeader("user-agent");
         Client client = parser.parse(userAgent);
         OSFamily osFamily = new OSFamily(client.os.family);
         UserAgentFamily userAgentFamily = new UserAgentFamily(client.userAgent.family);
@@ -32,10 +32,10 @@ public class ClientInfoGetter {
         return new ClientBrowser(ipAddress, osFamily, userAgentFamily);
     }
 
-    private String clientIPAddress(HttpServletRequest req) {
-        String header = req.getHeader("X-Forwarded-For");
+    private String clientIPAddress(HttpServletRequest request) {
+        String header = request.getHeader("X-Forwarded-For");
         if (Objects.isNull(header)) {
-            return req.getRemoteAddr();
+            return request.getRemoteAddr();
         }
         return header.split(" *, *")[0];
     }

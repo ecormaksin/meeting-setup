@@ -2,15 +2,17 @@ package meeting.domain.model.meeting.search_condition;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * 検索開始日
+ * 検索終了日
  */
 public class EndDate {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull(message = "{meeting.domain.model.meeting.search_condition.EndDate.NotNull.message}")
     LocalDate value;
 
     public EndDate(LocalDate value) {

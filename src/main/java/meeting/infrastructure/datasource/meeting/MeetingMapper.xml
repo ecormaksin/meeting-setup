@@ -63,7 +63,7 @@
         WHERE ミーティングID = #{meetingId.value}
     </delete>
 
-    <select id="organizerMeetingListItems" resultType="meeting.domain.model.meeting.OrganizerMeetingListItem">
+    <select id="organizerMeetingListItems" resultType="meeting.domain.model.meeting.meeting_list.MeetingListItem">
         SELECT
             ミーティング.ミーティングID as "meetingId.value",
             ミーティング.件名 as "subject.value"
@@ -81,4 +81,53 @@
             ミーティング.登録日時
     </select>
 
+    <select id="search" resultType="meeting.domain.model.meeting.meeting_list.MeetingListItem">
+        <if test="keyword != null and keyword.value != null">
+            <bind name="keywordCondition" value="'%' + keyword.value + '%'" />
+        </if>
+        SELECT
+            ミーティング.ミーティングID as "meetingId.value",
+            ミーティング.件名 as "subject.value",
+            SQ_日程候補.最小開始日時 as "earliestStartDateTime.value",
+            SQ_日程候補.最大終了日時 as "latestEndDateTime.value"
+        FROM
+            ミーティング.ミーティング AS ミーティング
+            LEFT OUTER JOIN
+            ミーティング.ミーティングメモ AS ミーティングメモ
+                ON
+                ミーティングメモ.ミーティングID = ミーティング.ミーティングID
+            INNER JOIN
+                ミーティング.主催者端末 AS 主催者端末
+                ON
+                主催者端末.ミーティングID = ミーティング.ミーティングID
+            INNER JOIN (
+                SELECT
+                    ミーティングID,
+                    MIN(開始日時) AS 最小開始日時,
+                    MAX(終了日時) AS 最大終了日時
+                FROM
+                    日程候補.日程候補
+                WHERE
+                    開始日時 &lt;= #{endDateTime}
+                    AND 終了日時 &gt;= #{startDateTime}
+                GROUP BY
+                    ミーティングID
+            ) AS SQ_日程候補
+                ON
+                SQ_日程候補.ミーティングid = ミーティング.ミーティングID
+        WHERE
+            主催者端末.IPアドレス = #{ipAddress.value}
+            AND 主催者端末.OSファミリー = #{osFamily.value}
+            AND 主催者端末.ユーザーエージェントファミリー = #{userAgentFamily.value}
+            <if test="keyword != null and keyword.value != null">
+                AND (ミーティング.件名 LIKE #{keywordCondition}
+                        OR ミーティングメモ.メモ LIKE #{keywordCondition})
+            </if>
+        ORDER BY
+            SQ_日程候補.最小開始日時,
+            SQ_日程候補.最大終了日時,
+            ミーティング.件名,
+            ミーティング.登録日時
+        LIMIT 20
+    </select>
 </mapper>

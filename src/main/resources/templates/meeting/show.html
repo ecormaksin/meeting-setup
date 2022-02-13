@@ -16,7 +16,7 @@
         <a th:href="@{/meeting/__${meetingId}__/edit}">ミーティングの編集・削除</a>
       </div>
     </div>
-    <form method="get" th:object="${meeting}" th:action="@{/meeting/__${meetingId}__/attendance/input}">
+    <form method="get" action="#" th:object="${meeting}" th:action="@{/meeting/__${meetingId}__/attendance/input}">
       <label>件名</label>
       <p class="meeting-show__detail" th:text="${meeting.subject()}" />
 

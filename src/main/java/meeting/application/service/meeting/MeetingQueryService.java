@@ -2,8 +2,8 @@ package meeting.application.service.meeting;
 
 import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingId;
-import meeting.domain.model.meeting.OrganizerMeetingList;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
+import meeting.domain.model.meeting.MeetingSearchRequest;
+import meeting.domain.model.meeting.meeting_list.MeetingList;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +21,7 @@ public class MeetingQueryService {
         return meetingRepository.meetingOf(meetingId);
     }
 
-    public OrganizerMeetingList organizerMeetingList(ClientBrowser organizerTerminal) {
-        return meetingRepository.organizerMeetingList(organizerTerminal);
+    public MeetingList search(MeetingSearchRequest meetingSearchRequest) {
+        return meetingRepository.search(meetingSearchRequest);
     }
 }

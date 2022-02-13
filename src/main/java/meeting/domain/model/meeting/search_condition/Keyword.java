@@ -14,6 +14,10 @@ public class Keyword {
         return value;
     }
 
+    public static Keyword empty() {
+        return new Keyword("");
+    }
+
     @Override
     public String toString() {
         return value;

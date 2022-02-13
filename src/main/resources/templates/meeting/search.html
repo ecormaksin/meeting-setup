@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<head>
+  <th:block th:replace="_parts/head :: meta"/>
+  <title>作成したミーティングの検索</title>
+  <th:block th:replace="_parts/head :: css"/>
+</head>
+<body>
+<header th:replace="_parts/navigation :: home_only"></header>
+
+<main>
+  <article>
+    <h1>作成したミーティングの検索</h1>
+
+    <h2>検索条件</h2>
+    <form method="get" action="#"
+          th:object="${meetingSearchRequest}" th:action="@{/meeting/search}">
+
+      <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
+        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+      </ul>
+
+      <label>キーワード（件名とメモに含まれるものを検索します。空白で全件を検索します。）</label>
+      <input type="text" placeholder="キーワード" th:field="*{searchCondition.keyword.value}" class="meeting-search__keyword">
+
+      <label>検索期間（日程候補の中で期間が含まれるものを検索します。）</label>
+      <div class="meeting-search__search-period-parent">
+        <input type="date" th:field="*{searchCondition.startDate.value}">
+        <div>～</div>
+        <input type="date" th:field="*{searchCondition.endDate.value}">
+      </div>
+      <p th:if="${#fields.hasErrors('searchCondition.startDate.value')}">
+        <mark><span th:errors="*{searchCondition.startDate.value}"></span></mark>
+      </p>
+      <p th:if="${#fields.hasErrors('searchCondition.endDate.value')}">
+        <mark><span th:errors="*{searchCondition.endDate.value}"></span></mark>
+      </p>
+      <p th:if="${#fields.hasErrors('searchCondition')}">
+        <mark><span th:errors="*{searchCondition}"></span></mark>
+      </p>
+
+      <input type="hidden" th:field="*{organizerTerminal.ipAddress.value}">
+      <input type="hidden" th:field="*{organizerTerminal.osFamily.value}">
+      <input type="hidden" th:field="*{organizerTerminal.userAgentFamily.value}">
+
+      <button class="small-button" name="exec">検索する</button>
+    </form>
+
+    <h2>検索結果</h2>
+
+    <p>検索結果が20件を超える場合は、次の順序で条件に該当する先頭20件が表示されます。: 最も早い開始日時 → 最も遅い終了日時 → 件名 → 登録・編集した日時</p>
+    <p>該当するミーティングが見つからない場合は、条件を変更してください。</p>
+
+    <table th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.meeting_list.MeetingListItemAvailability).HAVE_ITEMS}">
+      <thead>
+        <tr>
+          <th></th>
+          <th>件名</th>
+          <th>最も早い開始日時</th>
+          <th>最も遅い終了日時</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="meetingListItem, meetingListItemStat : ${meetingList.asList()}">
+          <td th:text="${meetingListItemStat.count}">1</td>
+          <td>
+            <a th:href="@{/meeting/__${meetingListItem.meetingId()}__/show}" th:text="${meetingListItem.subject().value()}"></a>
+          </td>
+          <td th:text="${meetingListItem.earliestStartDateTime().show()}"></td>
+          <td th:text="${meetingListItem.latestEndDateTime().show()}"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.meeting_list.MeetingListItemAvailability).HAVE_NO_ITEMS}">
+      条件に該当するミーティングが見つかりませんでした。
+    </p>
+
+  </article>
+</main>
+<footer th:replace="_parts/footer :: default"></footer>
+</body>
+</html>

@@ -2,6 +2,7 @@ package meeting.domain.model.meeting.search_condition;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 public class StartDate {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull(message = "{meeting.domain.model.meeting.search_condition.StartDate.NotNull.message}")
     LocalDate value;
 
     public StartDate(LocalDate value) {

@@ -12,15 +12,7 @@
     <h1>ミーティング調整サービス メニュー</h1>
     <ul>
       <li><a th:href="@{/meeting/create}">ミーティングの作成</a></li>
-      <th:block th:if="${organizerMeetingList.itemAvailability() == T(meeting.domain.model.meeting.OrganizerMeetingListItemAvailability).HAVE_ITEMS}">
-      <li>ミーティングの編集
-        <ul>
-          <th:block th:each="meetingListItem: ${organizerMeetingList.asList()}">
-          <li><a th:href="@{/meeting/__${meetingListItem.meetingId()}__/show}" th:text="${meetingListItem.subject().value()}"></a></li>
-          </th:block>
-        </ul>
-      </li>
-      </th:block>
+      <li><a th:href="@{/meeting/search}">作成したミーティングの検索</a></li>
     </ul>
   </article>
 </main>

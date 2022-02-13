@@ -31,8 +31,8 @@ public class MeetingShowController {
     }
 
     @GetMapping
-    String show(Model model, @PathVariable("meetingId") MeetingId meetingId, HttpServletRequest req) {
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(req);
+    String show(Model model, @PathVariable("meetingId") MeetingId meetingId, HttpServletRequest request) {
+        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
         Meeting meeting = meetingShowScenario.meetingOf(meetingId);
 
         boolean isEditable = (meeting.editability(clientBrowser) == MeetingEditability.編集可);

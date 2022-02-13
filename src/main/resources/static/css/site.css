@@ -65,8 +65,14 @@ th *, td * {
     border-color: red;
 }
 
-.hidden-delete-submit-button {
-    display: none;
+.url-copy-button {
+    word-break: keep-all;
+    margin-left: 1rem;
+    width: 60ch;
+}
+
+.url-copy-button-copied {
+    background-color: green;
 }
 
 .meeting__subject {
@@ -99,6 +105,10 @@ th *, td * {
     align-items: center;
 }
 
+.meeting-show__detail {
+    margin-bottom: 5rem;
+}
+
 .meeting-show__location-parent {
     display: flex;
 }
@@ -115,18 +125,12 @@ th *, td * {
     align-items: center;
 }
 
-.url-copy-button {
-    word-break: keep-all;
-    margin-left: 1rem;
-    width: 60ch;
+.meeting-search__keyword {
+    width: 80%;
 }
 
-.url-copy-button-copied {
-    background-color: green;
-}
-
-.meeting-show__detail {
-    margin-bottom: 5rem;
+.meeting-search__search-period-parent {
+    display: flex;
 }
 
 .participant-name {
