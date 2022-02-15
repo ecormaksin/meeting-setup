@@ -38,3 +38,4 @@ out/
 
 ### customised ###
 src/test/resources/schema.sql
+/src/main/resources/schema.sql
