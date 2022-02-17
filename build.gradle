@@ -69,3 +69,11 @@ task copySchemaFileToTestResource(type: Copy) {
     into 'src/test/resources'
 }
 processTestResources.dependsOn(copySchemaFileToTestResource)
+
+jar {
+    manifest{
+        attributes(
+                'Main-Class': 'meeting.Application'
+        )
+    }
+}
