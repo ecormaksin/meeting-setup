@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar build/libs/*.jar --server.port=$PORT --spring.profiles.active=heroku --spring.datasource.url=${SPRING_DATASOURCE_URL} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+web: java -jar build/libs/meeting-setup-0.0.1-SNAPSHOT.jar --spring.profiles.active=heroku --spring.datasource.url=${SPRING_DATASOURCE_URL} --spring.datasource.username=${SPRING_DATASOURCE_USERNAME} --spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
