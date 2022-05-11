@@ -2,7 +2,7 @@ package meeting.infrastructure.datasource.meeting;
 
 import meeting.MeetingDBTest;
 import meeting.domain.model.meeting.Meeting;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
@@ -109,15 +109,15 @@ class MeetingDatasourceTest {
         return param;
     }
 
-    private MeetingId createdMeetingId(MvcResult result) {
+    private MeetingNumber createdMeetingId(MvcResult result) {
         FlashMap flashMap = result.getFlashMap();
         String meetingIdValue = (String) flashMap.get("meetingId");
-        return new MeetingId(meetingIdValue);
+        return new MeetingNumber(meetingIdValue);
     }
 
     private Meeting findMeeting(MvcResult result) {
-        MeetingId meetingId = createdMeetingId(result);
-        return meetingDatasource.meetingOf(meetingId);
+        MeetingNumber meetingNumber = createdMeetingId(result);
+        return meetingDatasource.meetingOf(meetingNumber);
     }
 
     @Nested

@@ -64,7 +64,7 @@
         <tr th:each="meetingListItem, meetingListItemStat : ${meetingList.asList()}">
           <td th:text="${meetingListItemStat.count}">1</td>
           <td>
-            <a th:href="@{/meeting/__${meetingListItem.meetingId()}__/show}" th:text="${meetingListItem.subject().value()}"></a>
+            <a th:href="@{/meeting/__${meetingListItem.meetingNumber()}__/show}" th:text="${meetingListItem.subject().value()}"></a>
           </td>
           <td th:text="${meetingListItem.earliestStartDateTime().show()}"></td>
           <td th:text="${meetingListItem.latestEndDateTime().show()}"></td>

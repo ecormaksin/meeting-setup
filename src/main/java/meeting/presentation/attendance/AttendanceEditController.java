@@ -5,7 +5,7 @@ import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.attendance.convenience.Conveniences;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,10 +36,10 @@ public class AttendanceEditController {
 
     @GetMapping
     String init(Model model,
-                @PathVariable("meetingId") MeetingId meetingId,
+                @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                 @PathVariable("attendanceId") AttendanceId attendanceId) {
 
-        Schedules schedules = attendanceEditScenario.schedules(meetingId);
+        Schedules schedules = attendanceEditScenario.schedules(meetingNumber);
         Attendance attendance = attendanceEditScenario.attendanceOf(attendanceId);
         AttendanceEditRequest attendanceEditRequest = new AttendanceEditRequest(
                 attendanceId,
@@ -55,7 +55,7 @@ public class AttendanceEditController {
     }
 
     @PostMapping
-    String edit(@PathVariable("meetingId") MeetingId meetingId,
+    String edit(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
                  @PathVariable("attendanceId") AttendanceId attendanceId,
                  @Validated @ModelAttribute("attendanceEditRequest") AttendanceEditRequest attendanceEditRequest,
                  BindingResult bindingResult, RedirectAttributes attributes,
@@ -67,7 +67,7 @@ public class AttendanceEditController {
 
         ParticipantNameDuplicationStatus participantNameDuplicationStatus =
                 attendanceEditScenario.participantNameDuplicationStatus(
-                        meetingId,
+                        meetingNumber,
                         attendanceId,
                         attendanceEditRequest.participantName());
         if (participantNameDuplicationStatus == あり) {
@@ -75,14 +75,14 @@ public class AttendanceEditController {
             return "attendance/edit/form";
         }
 
-        attendanceEditScenario.edit(meetingId, attendanceEditRequest);
+        attendanceEditScenario.edit(meetingNumber, attendanceEditRequest);
 
-        attributes.addFlashAttribute("meetingId", meetingId.value());
+        attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
         attributes.addFlashAttribute("attendanceId", attendanceId.value());
 
         URI uri = builder.path(
                         String.format("meeting/%s/attendance/%s/edit/completed",
-                                meetingId.value(),
+                                meetingNumber.value(),
                                 attendanceId.value()
                     )).build().toUri();
         return "redirect:" + uri.toString();
@@ -121,7 +121,7 @@ public class AttendanceEditController {
     }
 
     @PostMapping(params={"delete"})
-    String delete(@PathVariable("meetingId") MeetingId meetingId,
+    String delete(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
                   @PathVariable("attendanceId") AttendanceId attendanceId,
                   UriComponentsBuilder builder) {
 
@@ -129,7 +129,7 @@ public class AttendanceEditController {
 
         URI uri = builder.path(
                 String.format("meeting/%s/attendance/%s/delete/completed",
-                        meetingId.value(),
+                        meetingNumber.value(),
                         attendanceId.value()
                 )).build().toUri();
         return "redirect:" + uri.toString();

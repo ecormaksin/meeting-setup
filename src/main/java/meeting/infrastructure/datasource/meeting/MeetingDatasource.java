@@ -36,45 +36,45 @@ public class MeetingDatasource implements MeetingRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public MeetingId create(MeetingCreationRequest meetingCreationRequest) {
-        MeetingId meetingId = MeetingId.newId();
+    public MeetingNumber create(MeetingCreationRequest meetingCreationRequest) {
+        MeetingNumber meetingNumber = MeetingNumber.newNumber();
 
-        insertMeeting(meetingId, meetingCreationRequest.subject());
-        insertMeetingMemo(meetingId, meetingCreationRequest.memo());
-        insertSchedules(meetingId, meetingCreationRequest.schedules());
-        insertOrganizerTerminal(meetingId, meetingCreationRequest.organizerTerminal());
+        insertMeeting(meetingNumber, meetingCreationRequest.subject());
+        insertMeetingMemo(meetingNumber, meetingCreationRequest.memo());
+        insertSchedules(meetingNumber, meetingCreationRequest.schedules());
+        insertOrganizerTerminal(meetingNumber, meetingCreationRequest.organizerTerminal());
 
-        return meetingId;
+        return meetingNumber;
     }
 
     @Override
-    public Meeting meetingOf(MeetingId meetingId) {
+    public Meeting meetingOf(MeetingNumber meetingNumber) {
         boolean meetingNotFound = false;
 
-        Optional<Subject> optSubject = meetingMapper.selectSubject(meetingId);
+        Optional<Subject> optSubject = meetingMapper.selectSubject(meetingNumber);
         if (!optSubject.isPresent()) {
             meetingNotFound = true;
         }
 
-        Optional<Memo> optMemo = meetingMapper.selectMemo(meetingId);
+        Optional<Memo> optMemo = meetingMapper.selectMemo(meetingNumber);
 
-        Optional<ClientBrowser> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingId);
+        Optional<ClientBrowser> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingNumber);
         if (!optOrganizerTerminal.isPresent()) {
             meetingNotFound = true;
         }
 
-        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingId(meetingId);
+        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingId(meetingNumber);
         if (scheduleList.isEmpty()) {
             meetingNotFound = true;
         }
 
         if (meetingNotFound) {
-            throw new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティングIDを確認してください。: %s", meetingId.value()));
+            throw new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティング番号を確認してください。: %s", meetingNumber.value()));
         }
 
-        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingId(meetingId);
+        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingId(meetingNumber);
 
-        return new Meeting(meetingId,
+        return new Meeting(meetingNumber,
                 optSubject.get(),
                 optMemo.orElse(null),
                 new Schedules(scheduleList),
@@ -85,23 +85,23 @@ public class MeetingDatasource implements MeetingRepository {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
-        MeetingId meetingId = meetingEditRequest.meetingId();
+        MeetingNumber meetingNumber = meetingEditRequest.meetingId();
 
         // 既存のレコードを削除
-        deleteMeetingWithWholeAggregate(meetingId);
+        deleteMeetingWithWholeAggregate(meetingNumber);
 
         // 再追加
-        insertMeeting(meetingId, meetingEditRequest.subject());
-        insertMeetingMemo(meetingId, meetingEditRequest.memo());
-        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingId, meetingEditRequest.schedules());
-        insertOrganizerTerminal(meetingId, meetingEditRequest.organizerTerminal());
-        insertAttendances(meetingId, meeting.attendances(), scheduleNumbers);
+        insertMeeting(meetingNumber, meetingEditRequest.subject());
+        insertMeetingMemo(meetingNumber, meetingEditRequest.memo());
+        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, meetingEditRequest.schedules());
+        insertOrganizerTerminal(meetingNumber, meetingEditRequest.organizerTerminal());
+        insertAttendances(meetingNumber, meeting.attendances(), scheduleNumbers);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(MeetingId meetingId) {
-        deleteMeetingWithWholeAggregate(meetingId);
+    public void delete(MeetingNumber meetingNumber) {
+        deleteMeetingWithWholeAggregate(meetingNumber);
     }
 
     @Override
@@ -123,16 +123,16 @@ public class MeetingDatasource implements MeetingRepository {
         return MeetingList.of(list);
     }
 
-    private void insertMeeting(MeetingId meetingId, Subject subject) {
-        meetingMapper.insertMeeting(meetingId, subject);
+    private void insertMeeting(MeetingNumber meetingNumber, Subject subject) {
+        meetingMapper.insertMeeting(meetingNumber, subject);
     }
 
-    private void insertMeetingMemo(MeetingId meetingId, Memo memo) {
+    private void insertMeetingMemo(MeetingNumber meetingNumber, Memo memo) {
         if (memo.inputStatus() == MemoInputStatus.なし) return;
-        meetingMapper.insertMeetingMemo(meetingId, memo);
+        meetingMapper.insertMeetingMemo(meetingNumber, memo);
     }
 
-    private Set<ScheduleNumber> insertSchedules(MeetingId meetingId, Schedules schedules) {
+    private Set<ScheduleNumber> insertSchedules(MeetingNumber meetingNumber, Schedules schedules) {
         Set<ScheduleNumber> scheduleNumbers = new HashSet<>();
         List<Schedule> scheduleList = schedules.asList();
         scheduleList.stream().forEach(schedule -> {
@@ -146,7 +146,7 @@ public class MeetingDatasource implements MeetingRepository {
                     schedule.scheduleNumber().value();
             scheduleMapper.insertSchedule(
                     scheduleNumber,
-                    meetingId,
+                    meetingNumber,
                     schedule.startDateTime(),
                     schedule.endDateTime()
             );
@@ -156,32 +156,32 @@ public class MeetingDatasource implements MeetingRepository {
         return scheduleNumbers;
     }
 
-    private void insertOrganizerTerminal(MeetingId meetingId, ClientBrowser clientBrowser) {
-        meetingMapper.insertOrganizerTerminal(meetingId,
+    private void insertOrganizerTerminal(MeetingNumber meetingNumber, ClientBrowser clientBrowser) {
+        meetingMapper.insertOrganizerTerminal(meetingNumber,
                 clientBrowser.ipAddress(),
                 clientBrowser.osFamily(),
                 clientBrowser.userAgentFamily()
         );
     }
 
-    private void deleteMeetingWithWholeAggregate(MeetingId meetingId) {
+    private void deleteMeetingWithWholeAggregate(MeetingNumber meetingNumber) {
 
-        attendanceMapper.deleteAttendanceCommentsByMeetingId(meetingId);
-        attendanceMapper.deleteConveniencesByMeetingId(meetingId);
-        attendanceMapper.deleteAttendancesByMeetingId(meetingId);
+        attendanceMapper.deleteAttendanceCommentsByMeetingId(meetingNumber);
+        attendanceMapper.deleteConveniencesByMeetingId(meetingNumber);
+        attendanceMapper.deleteAttendancesByMeetingId(meetingNumber);
 
-        scheduleMapper.deleteSchedulesByMeetingId(meetingId);
+        scheduleMapper.deleteSchedulesByMeetingId(meetingNumber);
 
-        meetingMapper.deleteOrganizerTerminal(meetingId);
-        meetingMapper.deleteMeetingMemo(meetingId);
-        meetingMapper.deleteMeeting(meetingId);
+        meetingMapper.deleteOrganizerTerminal(meetingNumber);
+        meetingMapper.deleteMeetingMemo(meetingNumber);
+        meetingMapper.deleteMeeting(meetingNumber);
     }
 
-    private void insertAttendances(MeetingId meetingId, Attendances attendances, Set<ScheduleNumber> scheduleNumbers) {
+    private void insertAttendances(MeetingNumber meetingNumber, Attendances attendances, Set<ScheduleNumber> scheduleNumbers) {
 
         for (Attendance attendance : attendances.asList()) {
             AttendanceId attendanceId = attendance.attendanceId();
-            attendanceMapper.insertAttendance(meetingId, attendanceId, attendance.participantName());
+            attendanceMapper.insertAttendance(meetingNumber, attendanceId, attendance.participantName());
             insertConveniences(attendanceId, attendance.conveniences(), scheduleNumbers);
 
             AttendanceComment attendanceComment = attendance.attendanceComment();

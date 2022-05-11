@@ -1,6 +1,6 @@
 package meeting.presentation.attendance;
 
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("meeting/{meetingId}/attendance/{attendanceId}/delete")
 public class AttendanceDeleteController {
     @GetMapping("completed")
-    String completed(@PathVariable("meetingId") MeetingId meetingId) {
+    String completed(@PathVariable("meetingNumber") MeetingNumber meetingNumber) {
         return "attendance/delete/completed";
     }
 }

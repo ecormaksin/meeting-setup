@@ -7,7 +7,7 @@ import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
 import meeting.domain.model.attendance.ParticipantName;
 import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Service;
 
@@ -28,15 +28,15 @@ public class AttendanceInputScenario {
         this.scheduleQueryService = scheduleQueryService;
     }
 
-    public AttendanceId input(MeetingId meetingId, AttendanceInputRequest attendanceInputRequest) {
-        return attendanceRecordService.input(meetingId, attendanceInputRequest);
+    public AttendanceId input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
+        return attendanceRecordService.input(meetingNumber, attendanceInputRequest);
     }
 
-    public Schedules schedules(MeetingId meetingId) {
-        return scheduleQueryService.schedules(meetingId);
+    public Schedules schedules(MeetingNumber meetingNumber) {
+        return scheduleQueryService.schedules(meetingNumber);
     }
 
-    public ParticipantNameDuplicationStatus participantNameDuplicationStatus(MeetingId meetingId, ParticipantName participantName) {
-        return attendanceQueryService.participantNameDuplicationStatus(meetingId, participantName);
+    public ParticipantNameDuplicationStatus participantNameDuplicationStatus(MeetingNumber meetingNumber, ParticipantName participantName) {
+        return attendanceQueryService.participantNameDuplicationStatus(meetingNumber, participantName);
     }
 }

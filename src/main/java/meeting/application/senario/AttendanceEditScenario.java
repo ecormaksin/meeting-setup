@@ -4,7 +4,7 @@ import meeting.application.service.attendance.AttendanceQueryService;
 import meeting.application.service.attendance.AttendanceRecordService;
 import meeting.application.service.schedule.ScheduleQueryService;
 import meeting.domain.model.attendance.*;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Service;
 
@@ -29,20 +29,20 @@ public class AttendanceEditScenario {
         return attendanceQueryService.attendanceOf(attendanceId);
     }
 
-    public void edit(MeetingId meetingId, AttendanceEditRequest attendanceEdittRequest) {
-        attendanceRecordService.edit(meetingId, attendanceEdittRequest);
+    public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEdittRequest) {
+        attendanceRecordService.edit(meetingNumber, attendanceEdittRequest);
     }
 
-    public Schedules schedules(MeetingId meetingId) {
-        return scheduleQueryService.schedules(meetingId);
+    public Schedules schedules(MeetingNumber meetingNumber) {
+        return scheduleQueryService.schedules(meetingNumber);
     }
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
-            MeetingId meetingId,
+            MeetingNumber meetingNumber,
             AttendanceId attendanceId,
             ParticipantName participantName) {
 
-        return attendanceQueryService.participantNameDuplicationStatus(meetingId, attendanceId, participantName);
+        return attendanceQueryService.participantNameDuplicationStatus(meetingNumber, attendanceId, participantName);
     }
 
     public void delete(AttendanceId attendanceId) {

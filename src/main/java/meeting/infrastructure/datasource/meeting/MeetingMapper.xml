@@ -5,18 +5,18 @@
 <mapper namespace="meeting.infrastructure.datasource.meeting.MeetingMapper">
 
     <insert id="insertMeeting">
-        INSERT INTO ミーティング.ミーティング(ミーティングID, 件名)
-        VALUES (#{meetingId.value}, #{subject.value})
+        INSERT INTO ミーティング.ミーティング(ミーティング番号, 件名)
+        VALUES (#{meetingNumber.value}, #{subject.value})
     </insert>
 
     <insert id="insertMeetingMemo">
-        INSERT INTO ミーティング.ミーティングメモ(ミーティングID, メモ)
-        VALUES (#{meetingId.value}, #{memo.value})
+        INSERT INTO ミーティング.ミーティングメモ(ミーティング番号, メモ)
+        VALUES (#{meetingNumber.value}, #{memo.value})
     </insert>
 
     <insert id="insertOrganizerTerminal">
-        INSERT INTO ミーティング.主催者端末(ミーティングID, IPアドレス, OSファミリー, ユーザーエージェントファミリー)
-        VALUES (#{meetingId.value}, #{ipAddress.value}, #{osFamily.value}, #{userAgentFamily.value})
+        INSERT INTO ミーティング.主催者端末(ミーティング番号, IPアドレス, OSファミリー, ユーザーエージェントファミリー)
+        VALUES (#{meetingNumber.value}, #{ipAddress.value}, #{osFamily.value}, #{userAgentFamily.value})
     </insert>
 
     <select id="selectSubject" resultType="meeting.domain.model.meeting.Subject">
@@ -25,7 +25,7 @@
         FROM
             ミーティング.ミーティング
         WHERE
-            ミーティングID = #{meetingId.value}
+            ミーティング番号 = #{meetingNumber.value}
     </select>
 
     <select id="selectMemo" resultType="meeting.domain.model.meeting.Memo">
@@ -34,7 +34,7 @@
         FROM
             ミーティング.ミーティングメモ
         WHERE
-            ミーティングID = #{meetingId.value}
+            ミーティング番号 = #{meetingNumber.value}
     </select>
 
     <select id="selectOrganizerTerminal" resultType="meeting.domain.model.meeting.organizer.ClientBrowser">
@@ -45,34 +45,34 @@
         FROM
             ミーティング.主催者端末
         WHERE
-            ミーティングID = #{meetingId.value}
+            ミーティング番号 = #{meetingNumber.value}
     </select>
 
     <delete id="deleteOrganizerTerminal">
         DELETE FROM ミーティング.主催者端末
-        WHERE ミーティングID = #{meetingId.value}
+        WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 
     <delete id="deleteMeetingMemo">
         DELETE FROM ミーティング.ミーティングメモ
-        WHERE ミーティングID = #{meetingId.value}
+        WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 
     <delete id="deleteMeeting">
         DELETE FROM ミーティング.ミーティング
-        WHERE ミーティングID = #{meetingId.value}
+        WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 
     <select id="organizerMeetingListItems" resultType="meeting.domain.model.meeting.meeting_list.MeetingListItem">
         SELECT
-            ミーティング.ミーティングID as "meetingId.value",
+            ミーティング.ミーティング番号 as "meetingNumber.value",
             ミーティング.件名 as "subject.value"
         FROM
             ミーティング.ミーティング AS ミーティング
             INNER JOIN
                 ミーティング.主催者端末 AS 主催者端末
                     ON
-                    主催者端末.ミーティングID = ミーティング.ミーティングID
+                    主催者端末.ミーティング番号 = ミーティング.ミーティング番号
         WHERE
             主催者端末.IPアドレス = #{ipAddress.value}
             AND 主催者端末.OSファミリー = #{osFamily.value}
@@ -86,7 +86,7 @@
             <bind name="keywordCondition" value="'%' + keyword.value + '%'" />
         </if>
         SELECT
-            ミーティング.ミーティングID as "meetingId.value",
+            ミーティング.ミーティング番号 as "meetingNumber.value",
             ミーティング.件名 as "subject.value",
             SQ_日程候補.最小開始日時 as "earliestStartDateTime.value",
             SQ_日程候補.最大終了日時 as "latestEndDateTime.value"
@@ -95,14 +95,14 @@
             LEFT OUTER JOIN
             ミーティング.ミーティングメモ AS ミーティングメモ
                 ON
-                ミーティングメモ.ミーティングID = ミーティング.ミーティングID
+                ミーティングメモ.ミーティング番号 = ミーティング.ミーティング番号
             INNER JOIN
                 ミーティング.主催者端末 AS 主催者端末
                 ON
-                主催者端末.ミーティングID = ミーティング.ミーティングID
+                主催者端末.ミーティング番号 = ミーティング.ミーティング番号
             INNER JOIN (
                 SELECT
-                    ミーティングID,
+                    ミーティング番号,
                     MIN(開始日時) AS 最小開始日時,
                     MAX(終了日時) AS 最大終了日時
                 FROM
@@ -111,10 +111,10 @@
                     開始日時 &lt;= #{endDateTime}
                     AND 終了日時 &gt;= #{startDateTime}
                 GROUP BY
-                    ミーティングID
+                    ミーティング番号
             ) AS SQ_日程候補
                 ON
-                SQ_日程候補.ミーティングid = ミーティング.ミーティングID
+                SQ_日程候補.ミーティング番号 = ミーティング.ミーティング番号
         WHERE
             主催者端末.IPアドレス = #{ipAddress.value}
             AND 主催者端末.OSファミリー = #{osFamily.value}

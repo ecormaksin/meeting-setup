@@ -81,7 +81,7 @@ public class MeetingTest {
                 "Windows",
                 "Chrome");
 
-        Meeting meeting = new Meeting(MeetingId.newId(),
+        Meeting meeting = new Meeting(MeetingNumber.newNumber(),
                 new Subject("件名テスト"),
                 new Memo("メモテスト"),
                 Schedules.of(scheduleList),

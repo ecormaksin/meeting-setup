@@ -1,6 +1,6 @@
 package meeting.infrastructure.datasource.meeting;
 
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.Memo;
 import meeting.domain.model.meeting.Subject;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
@@ -18,21 +18,21 @@ import java.util.Optional;
 
 @Mapper
 public interface MeetingMapper {
-    void insertMeeting(@Param("meetingId") MeetingId meetingId, @Param("subject") Subject subject);
-    void insertMeetingMemo(@Param("meetingId") MeetingId meetingId, @Param("memo") Memo memo);
+    void insertMeeting(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("subject") Subject subject);
+    void insertMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("memo") Memo memo);
     void insertOrganizerTerminal(
-            @Param("meetingId") MeetingId meetingId,
+            @Param("meetingNumber") MeetingNumber meetingNumber,
             @Param("ipAddress") IpAddress ipAddress,
             @Param("osFamily") OSFamily osFamily,
             @Param("userAgentFamily") UserAgentFamily userAgentFamily);
 
-    Optional<Subject> selectSubject(@Param("meetingId") MeetingId meetingId);
-    Optional<Memo> selectMemo(@Param("meetingId") MeetingId meetingId);
-    Optional<ClientBrowser> selectOrganizerTerminal(@Param("meetingId") MeetingId meetingId);
+    Optional<Subject> selectSubject(@Param("meetingNumber") MeetingNumber meetingNumber);
+    Optional<Memo> selectMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
+    Optional<ClientBrowser> selectOrganizerTerminal(@Param("meetingNumber") MeetingNumber meetingNumber);
 
-    void deleteOrganizerTerminal(@Param("meetingId") MeetingId meetingId);
-    void deleteMeetingMemo(@Param("meetingId") MeetingId meetingId);
-    void deleteMeeting(@Param("meetingId") MeetingId meetingId);
+    void deleteOrganizerTerminal(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);
 
     List<MeetingListItem> organizerMeetingListItems(
             @Param("ipAddress") IpAddress ipAddress,

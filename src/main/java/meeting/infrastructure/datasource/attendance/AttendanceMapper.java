@@ -6,7 +6,7 @@ import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.ParticipantName;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.ScheduleNumber;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,11 +15,11 @@ import java.util.List;
 
 @Mapper
 public interface AttendanceMapper {
-    boolean participantNameDuplicated(@Param("meetingId") MeetingId meetingId,
+    boolean participantNameDuplicated(@Param("meetingNumber") MeetingNumber meetingNumber,
                                       @Param("attendanceId") AttendanceId attendanceId,
                                       @Param("participantName") ParticipantName participantName);
 
-    void insertAttendance(@Param("meetingId") MeetingId meetingId,
+    void insertAttendance(@Param("meetingNumber") MeetingNumber meetingNumber,
                           @Param("attendanceId") AttendanceId attendanceId,
                           @Param("participantName") ParticipantName participantName);
 
@@ -33,12 +33,12 @@ public interface AttendanceMapper {
                                  @Param("attendanceComment") AttendanceComment attendanceComment);
 
     Attendance selectAttendance(@Param("attendanceId") AttendanceId attendanceId);
-    List<Attendance> selectAttendancesByMeetingId(@Param("meetingId") MeetingId meetingId);
+    List<Attendance> selectAttendancesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
     List<Convenience> selectConveniencesByAttendanceId(@Param("attendanceId") AttendanceId attendanceId);
 
-    void deleteAttendanceCommentsByMeetingId(@Param("meetingId") MeetingId meetingId);
-    void deleteConveniencesByMeetingId(@Param("meetingId") MeetingId meetingId);
-    void deleteAttendancesByMeetingId(@Param("meetingId") MeetingId meetingId);
+    void deleteAttendanceCommentsByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteConveniencesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteAttendancesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
 
     void deleteAttendanceComment(@Param("attendanceId") AttendanceId attendanceId);
     void deleteConveniences(@Param("attendanceId") AttendanceId attendanceId);

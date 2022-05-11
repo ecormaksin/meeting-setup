@@ -4,7 +4,7 @@ import meeting.domain.model.attendance.Attendance;
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.ParticipantName;
 import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,17 +23,17 @@ public class AttendanceQueryService {
     }
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
-            MeetingId meetingId,
+            MeetingNumber meetingNumber,
             ParticipantName participantName) {
 
-        return attendanceRepository.participantNameDuplicationStatus(meetingId, participantName);
+        return attendanceRepository.participantNameDuplicationStatus(meetingNumber, participantName);
     }
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
-            MeetingId meetingId,
+            MeetingNumber meetingNumber,
             AttendanceId attendanceId,
             ParticipantName participantName) {
 
-        return attendanceRepository.participantNameDuplicationStatus(meetingId, attendanceId, participantName);
+        return attendanceRepository.participantNameDuplicationStatus(meetingNumber, attendanceId, participantName);
     }
 }

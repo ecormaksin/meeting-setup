@@ -7,13 +7,13 @@ import meeting.domain.model.meeting.meeting_list.MeetingList;
  * ミーティング リポジトリ
  */
 public interface MeetingRepository {
-    MeetingId create(MeetingCreationRequest meetingCreationRequest);
+    MeetingNumber create(MeetingCreationRequest meetingCreationRequest);
 
-    Meeting meetingOf(MeetingId meetingId);
+    Meeting meetingOf(MeetingNumber meetingNumber);
 
     void edit(Meeting meeting, MeetingEditRequest meetingEditRequest);
 
-    void delete(MeetingId meetingId);
+    void delete(MeetingNumber meetingNumber);
 
     MeetingList search(MeetingSearchRequest meetingSearchRequest);
 }

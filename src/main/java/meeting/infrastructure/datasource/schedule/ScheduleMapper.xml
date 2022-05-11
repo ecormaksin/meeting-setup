@@ -8,8 +8,8 @@
     </select>
 
     <insert id="insertSchedule">
-        INSERT INTO 日程候補.日程候補(日程候補番号, ミーティングID, 開始日時, 終了日時)
-        VALUES (#{scheduleNumber}, #{meetingId.value}, #{startDateTime}, #{endDateTime})
+        INSERT INTO 日程候補.日程候補(日程候補番号, ミーティング番号, 開始日時, 終了日時)
+        VALUES (#{scheduleNumber}, #{meetingNumber.value}, #{startDateTime}, #{endDateTime})
     </insert>
 
     <select id="selectSchedulesByMeetingId" resultType="meeting.domain.model.schedule.Schedule">
@@ -21,7 +21,7 @@
         FROM
             日程候補.日程候補
         WHERE
-            ミーティングid = #{meetingId.value}
+            ミーティング番号 = #{meetingNumber.value}
         ORDER BY
             開始日時 ASC,
             終了日時 ASC
@@ -29,6 +29,6 @@
 
     <delete id="deleteSchedulesByMeetingId">
         DELETE FROM 日程候補.日程候補
-        WHERE ミーティングid = #{meetingId.value}
+        WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 </mapper>

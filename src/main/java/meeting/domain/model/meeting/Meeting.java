@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Meeting {
     @Valid
-    MeetingId meetingId;
+    MeetingNumber meetingNumber;
 
     @Valid
     Subject subject;
@@ -35,13 +35,13 @@ public class Meeting {
     @Valid
     ClientBrowser organizerTerminal;
 
-    public Meeting(@Valid MeetingId meetingId,
+    public Meeting(@Valid MeetingNumber meetingNumber,
                    @Valid Subject subject,
                    @Valid Memo memo,
                    @Valid Schedules schedules,
                    @Valid Attendances attendances,
                    @Valid ClientBrowser clientBrowser) {
-        this.meetingId = meetingId;
+        this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;
         this.schedules = schedules;
@@ -53,8 +53,8 @@ public class Meeting {
     Meeting() {
     }
 
-    public MeetingId meetingId() {
-        return meetingId;
+    public MeetingNumber meetingId() {
+        return meetingNumber;
     }
 
     public Subject subject() {

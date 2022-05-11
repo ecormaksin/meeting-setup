@@ -1,5 +1,5 @@
 select
-	mt.ミーティングid,
+	mt.ミーティング番号,
 	mt.件名 ,
 	mm.メモ ,
 	ot.ipアドレス ,
@@ -13,14 +13,14 @@ from
 left join
 	ミーティング.ミーティングメモ mm
 		on
-	mm.ミーティングid = mt.ミーティングid
+	mm.ミーティング番号 = mt.ミーティング番号
 inner join 
 	ミーティング.主催者端末 ot
 		on
-	ot.ミーティングid = mt.ミーティングid
+	ot.ミーティング番号 = mt.ミーティング番号
 inner join 
 	日程候補.日程候補 sc
 		on
-	sc.ミーティングid = mt.ミーティングid
+	sc.ミーティング番号 = mt.ミーティング番号
 where
-	mt.ミーティングid = 'a74a9135c79143ab94e092a0d805b4c6'
+	mt.ミーティング番号 = 'a74a9135c79143ab94e092a0d805b4c6'

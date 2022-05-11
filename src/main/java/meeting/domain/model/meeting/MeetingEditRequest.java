@@ -11,7 +11,7 @@ import javax.validation.Valid;
 public class MeetingEditRequest {
 
     @Valid
-    MeetingId meetingId;
+    MeetingNumber meetingNumber;
 
     @Valid
     Subject subject;
@@ -25,12 +25,12 @@ public class MeetingEditRequest {
     @Valid
     ClientBrowser organizerTerminal;
 
-    public MeetingEditRequest(@Valid MeetingId meetingId,
+    public MeetingEditRequest(@Valid MeetingNumber meetingNumber,
                               @Valid Subject subject,
                               @Valid Memo memo,
                               @Valid Schedules schedules,
                               @Valid ClientBrowser clientBrowser) {
-        this.meetingId = meetingId;
+        this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;
         this.schedules = schedules;
@@ -41,8 +41,8 @@ public class MeetingEditRequest {
     MeetingEditRequest() {
     }
 
-    public MeetingId meetingId() {
-        return meetingId;
+    public MeetingNumber meetingId() {
+        return meetingNumber;
     }
 
     public Subject subject() {

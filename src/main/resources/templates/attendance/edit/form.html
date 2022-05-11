@@ -6,13 +6,13 @@
   <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
-<header th:replace="_parts/navigation :: meeting-show_only (meetingId=${meetingId})"></header>
+<header th:replace="_parts/navigation :: meeting-show_only (meetingNumber=${meetingNumber})"></header>
 
 <main>
   <article>
     <h1>出欠の編集</h1>
     <form method="post" action="#"
-          th:object="${attendanceEditRequest}" th:action="@{/meeting/__${meetingId}__/attendance/__${attendanceId}__/edit}">
+          th:object="${attendanceEditRequest}" th:action="@{/meeting/__${meetingNumber}__/attendance/__${attendanceId}__/edit}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>

@@ -4,7 +4,7 @@ import meeting.application.senario.AttendanceInputScenario;
 import meeting.domain.model.attendance.AttendanceId;
 import meeting.domain.model.attendance.AttendanceInputRequest;
 import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +32,9 @@ public class AttendanceInputController {
     }
 
     @GetMapping
-    String init(Model model, @PathVariable("meetingId") MeetingId meetingId) {
+    String init(Model model, @PathVariable("meetingNumber") MeetingNumber meetingNumber) {
 
-        Schedules schedules = attendanceInputScenario.schedules(meetingId);
+        Schedules schedules = attendanceInputScenario.schedules(meetingNumber);
         AttendanceInputRequest attendanceInputRequest = AttendanceInputRequest.empty(schedules);
 
         model.addAttribute("attendanceInputRequest", attendanceInputRequest);
@@ -43,7 +43,7 @@ public class AttendanceInputController {
     }
 
     @PostMapping
-    String input(@PathVariable("meetingId") MeetingId meetingId,
+    String input(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
                  @Validated @ModelAttribute("attendanceInputRequest") AttendanceInputRequest attendanceInputRequest,
                  BindingResult bindingResult, RedirectAttributes attributes,
                  UriComponentsBuilder builder) {
@@ -52,19 +52,19 @@ public class AttendanceInputController {
 
         ParticipantNameDuplicationStatus participantNameDuplicationStatus =
                 attendanceInputScenario.participantNameDuplicationStatus(
-                        meetingId,
+                        meetingNumber,
                         attendanceInputRequest.participantName());
         if (participantNameDuplicationStatus == あり) {
             bindingResult.rejectValue("participantName.value", "error.code.participantName.duplicated");
             return "attendance/input/form";
         }
 
-        AttendanceId attendanceId = attendanceInputScenario.input(meetingId, attendanceInputRequest);
+        AttendanceId attendanceId = attendanceInputScenario.input(meetingNumber, attendanceInputRequest);
 
-        attributes.addFlashAttribute("meetingId", meetingId.value());
+        attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
         attributes.addFlashAttribute("attendanceId", attendanceId.value());
 
-        URI uri = builder.path(String.format("meeting/%s/attendance/input/completed", meetingId.value())).build().toUri();
+        URI uri = builder.path(String.format("meeting/%s/attendance/input/completed", meetingNumber.value())).build().toUri();
         return "redirect:" + uri.toString();
     }
 

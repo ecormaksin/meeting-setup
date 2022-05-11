@@ -3,7 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingShowScenario;
 import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingEditability;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
@@ -31,9 +31,9 @@ public class MeetingShowController {
     }
 
     @GetMapping
-    String show(Model model, @PathVariable("meetingId") MeetingId meetingId, HttpServletRequest request) {
+    String show(Model model, @PathVariable("meetingNumber") MeetingNumber meetingNumber, HttpServletRequest request) {
         ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
-        Meeting meeting = meetingShowScenario.meetingOf(meetingId);
+        Meeting meeting = meetingShowScenario.meetingOf(meetingNumber);
 
         boolean isEditable = (meeting.editability(clientBrowser) == MeetingEditability.編集可);
 

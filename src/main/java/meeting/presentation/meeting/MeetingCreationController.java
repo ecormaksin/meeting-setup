@@ -2,7 +2,7 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
@@ -71,9 +71,9 @@ public class MeetingCreationController {
 
         if (bindingResult.hasErrors()) return "meeting/create/form";
 
-        MeetingId meetingId = meetingCreationScenario.create(meetingCreationRequest);
+        MeetingNumber meetingNumber = meetingCreationScenario.create(meetingCreationRequest);
 
-        attributes.addFlashAttribute("meetingId", meetingId.value());
+        attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
 
         URI uri = builder.path("/meeting/create/completed").build().toUri();
         return "redirect:" + uri.toString();

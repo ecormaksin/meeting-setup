@@ -9,19 +9,19 @@
         </nav>
     </header>
 
-    <header th:fragment="meeting-show_only (meetingId)">
+    <header th:fragment="meeting-show_only (meetingNumber)">
         <nav>
             <ul>
-                <li><a th:href="@{/meeting/__${meetingId}__/show}">ミーティングの詳細</a></li>
+                <li><a th:href="@{/meeting/__${meetingNumber}__/show}">ミーティングの詳細</a></li>
             </ul>
         </nav>
     </header>
 
-    <header th:fragment="home_meeting-show (meetingId)">
+    <header th:fragment="home_meeting-show (meetingNumber)">
         <nav>
             <ul>
                 <li><a th:href="@{/}">ホーム</a></li>
-                <li><a th:href="@{/meeting/__${meetingId}__/show}">ミーティングの詳細</a></li>
+                <li><a th:href="@{/meeting/__${meetingNumber}__/show}">ミーティングの詳細</a></li>
             </ul>
         </nav>
     </header>

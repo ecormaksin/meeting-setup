@@ -1,6 +1,6 @@
 package meeting.infrastructure.datasource.schedule;
 
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.Schedule;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,11 +13,11 @@ public interface ScheduleMapper {
 
     int newScheduleNumber();
     void insertSchedule(@Param("scheduleNumber") int scheduleNumber,
-                        @Param("meetingId") MeetingId meetingId,
+                        @Param("meetingNumber") MeetingNumber meetingNumber,
                         @Param("startDateTime") LocalDateTime startDateTime,
                         @Param("endDateTime") LocalDateTime endDateTime);
 
-    List<Schedule> selectSchedulesByMeetingId(@Param("meetingId") MeetingId meetingId);
+    List<Schedule> selectSchedulesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
 
-    void deleteSchedulesByMeetingId(@Param("meetingId") MeetingId meetingId);
+    void deleteSchedulesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
 }

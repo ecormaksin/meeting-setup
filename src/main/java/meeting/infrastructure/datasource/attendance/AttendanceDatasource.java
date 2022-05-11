@@ -4,7 +4,7 @@ import meeting.application.service.attendance.AttendanceRepository;
 import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.Conveniences;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,29 +23,29 @@ public class AttendanceDatasource implements AttendanceRepository {
 
     @Override
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
-            MeetingId meetingId,
+            MeetingNumber meetingNumber,
             ParticipantName participantName) {
 
-        return participantNameDuplicationStatus(meetingId, null, participantName);
+        return participantNameDuplicationStatus(meetingNumber, null, participantName);
     }
 
     @Override
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
-            MeetingId meetingId,
+            MeetingNumber meetingNumber,
             AttendanceId attendanceId,
             ParticipantName participantName) {
 
-        boolean duplicated = attendanceMapper.participantNameDuplicated(meetingId, attendanceId, participantName);
+        boolean duplicated = attendanceMapper.participantNameDuplicated(meetingNumber, attendanceId, participantName);
         if (duplicated) return あり;
         return なし;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AttendanceId input(MeetingId meetingId, AttendanceInputRequest attendanceInputRequest) {
+    public AttendanceId input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
         AttendanceId attendanceId = AttendanceId.newId();
 
-        insertAttendance(meetingId, attendanceId, attendanceInputRequest.participantName());
+        insertAttendance(meetingNumber, attendanceId, attendanceInputRequest.participantName());
         insertConveniences(attendanceId, attendanceInputRequest.conveniences());
         insertAttendanceComment(attendanceId, attendanceInputRequest.attendanceComment());
 
@@ -59,14 +59,14 @@ public class AttendanceDatasource implements AttendanceRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void edit(MeetingId meetingId, AttendanceEditRequest attendanceEditRequest) {
+    public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest) {
         AttendanceId attendanceId = attendanceEditRequest.attendanceId();
 
         // 既存のレコードを削除
         deleteAttendanceWithWholeAggregate(attendanceId);
 
         // 再追加
-        insertAttendance(meetingId, attendanceId, attendanceEditRequest.participantName());
+        insertAttendance(meetingNumber, attendanceId, attendanceEditRequest.participantName());
         insertConveniences(attendanceId, attendanceEditRequest.conveniences());
         insertAttendanceComment(attendanceId, attendanceEditRequest.attendanceComment());
     }
@@ -77,8 +77,8 @@ public class AttendanceDatasource implements AttendanceRepository {
         deleteAttendanceWithWholeAggregate(attendanceId);
     }
 
-    private void insertAttendance(MeetingId meetingId, AttendanceId attendanceId, ParticipantName participantName) {
-        attendanceMapper.insertAttendance(meetingId, attendanceId, participantName);
+    private void insertAttendance(MeetingNumber meetingNumber, AttendanceId attendanceId, ParticipantName participantName) {
+        attendanceMapper.insertAttendance(meetingNumber, attendanceId, participantName);
     }
 
     private void insertConveniences(AttendanceId attendanceId, Conveniences conveniences) {

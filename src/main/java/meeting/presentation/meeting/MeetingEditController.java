@@ -34,18 +34,18 @@ public class MeetingEditController {
 
     @GetMapping
     String init(Model model,
-                @PathVariable("meetingId") MeetingId meetingId,
+                @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                 HttpServletRequest request) {
 
         ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
-        Meeting meeting = meetingEditScenario.meetingOf(meetingId);
+        Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
         if (meeting.editability(clientBrowser) != MeetingEditability.編集可) {
             throw new MeetingCannotEditException();
         }
 
         model.addAttribute("meetingEditRequest", new MeetingEditRequest(
-                meetingId,
+                meetingNumber,
                 meeting.subject(),
                 meeting.memo(),
                 meeting.schedules(),
@@ -56,14 +56,14 @@ public class MeetingEditController {
     }
 
     @PostMapping(params={"addSchedule"})
-    String addSchedule(@PathVariable("meetingId") MeetingId meetingId,
+    String addSchedule(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
                        @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest) {
         meetingEditRequest.addEmptySchedule();
         return "meeting/edit/form";
     }
 
     @PostMapping(params={"removeSchedule"})
-    String removeSchedule(@PathVariable("meetingId") MeetingId meetingId,
+    String removeSchedule(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
                           @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
                           HttpServletRequest request) {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
@@ -83,7 +83,7 @@ public class MeetingEditController {
 
     @PostMapping
     String edit(HttpServletRequest request,
-                    @PathVariable("meetingId") MeetingId meetingId,
+                    @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                     @Validated @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
                     BindingResult bindingResult,
                     RedirectAttributes attributes,
@@ -91,7 +91,7 @@ public class MeetingEditController {
 
         checkIfClientBrowserFalsified(request, meetingEditRequest);
 
-        Meeting meeting = meetingEditScenario.meetingOf(meetingId);
+        Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
         if (meeting.editability(meetingEditRequest.organizerTerminal()) != MeetingEditability.編集可) {
             throw new MeetingCannotEditException();
@@ -101,10 +101,10 @@ public class MeetingEditController {
 
         meetingEditScenario.edit(meeting, meetingEditRequest);
 
-        attributes.addFlashAttribute("meetingId", meetingId.value());
+        attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
 
         URI uri = builder.path(
-                            String.format("/meeting/%s/edit/completed", meetingId.value())
+                            String.format("/meeting/%s/edit/completed", meetingNumber.value())
                         ).build().toUri();
         return "redirect:" + uri.toString();
     }
@@ -123,22 +123,22 @@ public class MeetingEditController {
 
     @PostMapping(params={"delete"})
     String delete(HttpServletRequest request,
-                  @PathVariable("meetingId") MeetingId meetingId,
+                  @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                   @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
                   UriComponentsBuilder builder) {
 
         checkIfClientBrowserFalsified(request, meetingEditRequest);
 
-        Meeting meeting = meetingEditScenario.meetingOf(meetingId);
+        Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
         if (meeting.editability(meetingEditRequest.organizerTerminal()) != MeetingEditability.編集可) {
             throw new MeetingCannotDeleteException();
         }
 
-        meetingEditScenario.delete(meetingId);
+        meetingEditScenario.delete(meetingNumber);
 
         URI uri = builder.path(
-                String.format("/meeting/%s/delete/completed", meetingId.value())
+                String.format("/meeting/%s/delete/completed", meetingNumber.value())
         ).build().toUri();
         return "redirect:" + uri.toString();
     }

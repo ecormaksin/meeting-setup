@@ -13,10 +13,10 @@
     <div class="meeting-show__h1-section">
       <h1>ミーティングの詳細</h1>
       <div th:if="${isEditable}">
-        <a th:href="@{/meeting/__${meetingId}__/edit}">ミーティングの編集・削除</a>
+        <a th:href="@{/meeting/__${meetingNumber}__/edit}">ミーティングの編集・削除</a>
       </div>
     </div>
-    <form method="get" action="#" th:object="${meeting}" th:action="@{/meeting/__${meetingId}__/attendance/input}">
+    <form method="get" action="#" th:object="${meeting}" th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
       <label>件名</label>
       <p class="meeting-show__detail" th:text="${meeting.subject()}" />
 
@@ -35,7 +35,7 @@
             <!-- 参加者名 -->
             <th th:each="attendance, attendanceStat: *{attendances.asList()}">
               <a class="participant-name__link"
-                 th:href="@{/meeting/__${meetingId}__/attendance/__${attendance.attendanceId.value}__/edit}">
+                 th:href="@{/meeting/__${meetingNumber}__/attendance/__${attendance.attendanceId.value}__/edit}">
                 <span th:text="${attendance.participantName.value}"></span>
               </a>
             </th>

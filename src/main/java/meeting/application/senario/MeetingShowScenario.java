@@ -2,7 +2,7 @@ package meeting.application.senario;
 
 import meeting.application.service.meeting.MeetingQueryService;
 import meeting.domain.model.meeting.Meeting;
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,7 +16,7 @@ public class MeetingShowScenario {
         this.meetingQueryService = meetingQueryService;
     }
 
-    public Meeting meetingOf(MeetingId meetingId) {
-        return meetingQueryService.meetingOf(meetingId);
+    public Meeting meetingOf(MeetingNumber meetingNumber) {
+        return meetingQueryService.meetingOf(meetingNumber);
     }
 }

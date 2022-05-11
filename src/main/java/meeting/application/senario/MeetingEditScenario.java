@@ -19,15 +19,15 @@ public class MeetingEditScenario {
         this.meetingQueryService = meetingQueryService;
     }
 
-    public Meeting meetingOf(MeetingId meetingId) {
-        return meetingQueryService.meetingOf(meetingId);
+    public Meeting meetingOf(MeetingNumber meetingNumber) {
+        return meetingQueryService.meetingOf(meetingNumber);
     }
 
     public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
         meetingRecordService.edit(meeting, meetingEditRequest);
     }
 
-    public void delete(MeetingId meetingId) {
-        meetingRecordService.delete(meetingId);
+    public void delete(MeetingNumber meetingNumber) {
+        meetingRecordService.delete(meetingNumber);
     }
 }

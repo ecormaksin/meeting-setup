@@ -8,7 +8,7 @@
         SELECT EXISTS (
             SELECT 参加者名 FROM 出欠.出欠
             WHERE
-                ミーティングID = #{meetingId.value}
+                ミーティング番号 = #{meetingNumber.value}
             <if test="attendanceId != null and attendanceId.value != null">
                 AND 出欠ID != #{attendanceId.value}
             </if>
@@ -17,8 +17,8 @@
     </select>
 
     <insert id="insertAttendance">
-        INSERT INTO 出欠.出欠(出欠ID, ミーティングID, 参加者名)
-        VALUES (#{attendanceId.value}, #{meetingId.value}, #{participantName.value})
+        INSERT INTO 出欠.出欠(出欠ID, ミーティング番号, 参加者名)
+        VALUES (#{attendanceId.value}, #{meetingNumber.value}, #{participantName.value})
     </insert>
 
     <insert id="insertAttendanceComment">
@@ -72,7 +72,7 @@
                 ON
                 出欠コメント.出欠ID = 出欠.出欠ID
         WHERE
-            出欠.ミーティングID = #{meetingId.value}
+            出欠.ミーティング番号 = #{meetingNumber.value}
         ORDER BY
             出欠.参加者名 ASC
     </select>
@@ -88,9 +88,9 @@
                 都合.日程候補番号 = 日程候補.日程候補番号
                 AND 都合.出欠ID = #{value}
         WHERE
-            日程候補.ミーティングID IN (
+            日程候補.ミーティング番号 IN (
                 SELECT
-                    ミーティングID
+                    ミーティング番号
                 FROM
                     出欠.出欠
                 WHERE
@@ -109,7 +109,7 @@
             FROM
                 出欠.出欠
             WHERE
-                ミーティングID = #{meetingId.value}
+                ミーティング番号 = #{meetingNumber.value}
         )
     </delete>
 
@@ -121,13 +121,13 @@
             FROM
                 出欠.出欠
             WHERE
-                ミーティングID = #{meetingId.value}
+                ミーティング番号 = #{meetingNumber.value}
         )
     </delete>
 
     <delete id="deleteAttendancesByMeetingId">
         DELETE FROM 出欠.出欠
-        WHERE ミーティングID = #{meetingId.value}
+        WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 
     <delete id="deleteAttendanceComment">

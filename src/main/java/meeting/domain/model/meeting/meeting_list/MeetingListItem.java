@@ -1,6 +1,6 @@
 package meeting.domain.model.meeting.meeting_list;
 
-import meeting.domain.model.meeting.MeetingId;
+import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.Subject;
 
 /**
@@ -8,16 +8,16 @@ import meeting.domain.model.meeting.Subject;
  */
 public class MeetingListItem {
 
-    MeetingId meetingId;
+    MeetingNumber meetingNumber;
     Subject subject;
     EarliestStartDateTime earliestStartDateTime;
     LatestEndDateTime latestEndDateTime;
 
-    public MeetingListItem(MeetingId meetingId,
+    public MeetingListItem(MeetingNumber meetingNumber,
                            Subject subject,
                            EarliestStartDateTime earliestStartDateTime,
                            LatestEndDateTime latestEndDateTime) {
-        this.meetingId = meetingId;
+        this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.earliestStartDateTime = earliestStartDateTime;
         this.latestEndDateTime = latestEndDateTime;
@@ -27,8 +27,8 @@ public class MeetingListItem {
     MeetingListItem() {
     }
 
-    public MeetingId meetingId() {
-        return meetingId;
+    public MeetingNumber meetingId() {
+        return meetingNumber;
     }
 
     public Subject subject() {
