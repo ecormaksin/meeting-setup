@@ -27,10 +27,10 @@ public class MeetingNumberTest {
 
     @Test
     void _既定内の値の場合はエラーにならない() {
-        MeetingNumber createdMeetingNumber = MeetingNumber.newNumber();
-        MeetingNumber testTargetMeetingNumber = new MeetingNumber(createdMeetingNumber.value());
+        MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        MeetingNumber testTargetMeetingNumber = new MeetingNumber(meetingNumber.value());
 
-        Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(testTargetMeetingNumber);
+        Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -42,16 +42,20 @@ public class MeetingNumberTest {
 
         Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
 
-        assertEquals("ミーティング番号は32桁の英数字で指定してください。", constraintViolations.iterator().next().getMessage());
+        assertEquals(1, constraintViolations.size());
+        assertEquals("ミーティング番号は26桁の半角英数字で指定してください。", constraintViolations.iterator().next().getMessage());
     }
 
     static List<String> invalidInputs() {
+        MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        String validValue = meetingNumber.value();
+        String sizeShortValue = validValue.substring(0, MeetingNumber.SIZE - 1);
         return Arrays.asList(
                 null,
                 "",
-                "0123456789012345678901234567890", // 桁数不足
-                "012345678901234567890123456789012", // 桁数超過
-                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$" // 記号が含まれている
+                sizeShortValue, // 桁数不足
+                validValue + "a", // 桁数超過
+                sizeShortValue + "$" // 記号が含まれている
         );
     }
 }

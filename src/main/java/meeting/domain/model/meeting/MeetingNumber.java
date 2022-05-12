@@ -1,24 +1,25 @@
 package meeting.domain.model.meeting;
 
-import javax.validation.constraints.NotBlank;
+import de.huxhorn.sulky.ulid.ULID;
+
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.UUID;
 
 /**
  * ミーティング番号
  */
 public class MeetingNumber {
 
-    private static final int SIZE = 32;
+    static final int SIZE = 26;
+    private static final String MESSAGE = "ミーティング番号は" + SIZE + "桁の半角英数字で指定してください。";
 
-    @NotBlank(message = "ミーティング番号は32桁の英数字で指定してください。")
-    @Pattern(regexp="[0-9a-z]{32}", message = "ミーティング番号は32桁の英数字で指定してください。")
+    @NotNull(message = MESSAGE)
+    @Pattern(regexp="[0-9a-z]{" + SIZE + "}", message = MESSAGE)
     String value;
 
     public static MeetingNumber newNumber() {
-        UUID uuid = UUID.randomUUID();
-        String uuidString = uuid.toString();
-        return new MeetingNumber(uuidString.replace("-", ""));
+        ULID ulid = new ULID();
+        return new MeetingNumber(ulid.nextULID().toLowerCase());
     }
 
     public MeetingNumber(String value) {
