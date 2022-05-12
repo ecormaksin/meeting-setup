@@ -28,7 +28,6 @@ public class MeetingNumberTest {
     @Test
     void _既定内の値の場合はエラーにならない() {
         MeetingNumber meetingNumber = MeetingNumber.newNumber();
-        MeetingNumber testTargetMeetingNumber = new MeetingNumber(meetingNumber.value());
 
         Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
 
