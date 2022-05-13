@@ -26,10 +26,10 @@ public class MeetingNumberTest {
     }
 
     @Test
-    void _既定内の値の場合はエラーにならない() {
-        MeetingNumber meetingNumber = MeetingNumber.newNumber();
+    void _ミーティング番号が既定内の値の場合はエラーにならない() {
+        final MeetingNumber meetingNumber = MeetingNumber.newNumber();
 
-        Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
+        final Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -37,24 +37,25 @@ public class MeetingNumberTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _ミーティング番号が規定外の値の場合はエラーになる(String inputValue) {
-        MeetingNumber meetingNumber = new MeetingNumber(inputValue);
+        final MeetingNumber meetingNumber = new MeetingNumber(inputValue);
 
-        Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
+        final Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("ミーティング番号は26桁の半角英数字で指定してください。", constraintViolations.iterator().next().getMessage());
     }
 
     static List<String> invalidInputs() {
-        MeetingNumber meetingNumber = MeetingNumber.newNumber();
-        String validValue = meetingNumber.value();
-        String sizeShortValue = validValue.substring(0, MeetingNumber.SIZE - 1);
+        final MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        final String validValue = meetingNumber.value();
+        final String sizeShortValue = validValue.substring(0, MeetingNumber.SIZE - 1);
+        final String sizeOverValue = validValue + "a";
+        final String symbolIncluded = sizeShortValue + "$";
         return Arrays.asList(
                 null,
                 "",
-                sizeShortValue, // 桁数不足
-                validValue + "a", // 桁数超過
-                sizeShortValue + "$" // 記号が含まれている
-        );
+                sizeShortValue,
+                sizeOverValue,
+                symbolIncluded);
     }
 }

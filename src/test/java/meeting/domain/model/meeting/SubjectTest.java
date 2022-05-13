@@ -1,0 +1,57 @@
+package meeting.domain.model.meeting;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class SubjectTest {
+
+    private static Validator validator;
+
+    @BeforeAll
+    static void setUpValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
+    @Test
+    void _件名が既定内の値の場合はエラーにならない() {
+        final Subject meetingNumber = new Subject("a".repeat(Subject.MAX_SIZE));
+
+        final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(meetingNumber);
+
+        assertEquals(0, constraintViolations.size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidInputs")
+    void _件名が規定外の値の場合はエラーになる(String inputValue) {
+        final Subject meetingNumber = new Subject(inputValue);
+
+        final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(meetingNumber);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("件名は100文字以内で必ず入力してください。", constraintViolations.iterator().next().getMessage());
+    }
+
+    static List<String> invalidInputs() {
+        final String sizeOverValue = "a".repeat(Subject.MAX_SIZE + 1);
+        return Arrays.asList(
+                null,
+                "",
+                " ",
+                "　",
+                sizeOverValue);
+    }
+}
