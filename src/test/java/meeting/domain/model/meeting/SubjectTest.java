@@ -27,9 +27,9 @@ public class SubjectTest {
     @ParameterizedTest
     @MethodSource("validInputs")
     void _件名が既定内の値の場合はエラーにならない(String inputValue) {
-        final Subject meetingNumber = new Subject(inputValue);
+        final Subject subject = new Subject(inputValue);
 
-        final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(meetingNumber);
+        final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(subject);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -52,9 +52,9 @@ public class SubjectTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _件名が規定外の値の場合はエラーになる(String inputValue) {
-        final Subject meetingNumber = new Subject(inputValue);
+        final Subject subject = new Subject(inputValue);
 
-        final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(meetingNumber);
+        final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(subject);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("件名は30文字以内で必ず入力してください。", constraintViolations.iterator().next().getMessage());
