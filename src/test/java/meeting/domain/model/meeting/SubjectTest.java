@@ -1,7 +1,6 @@
 package meeting.domain.model.meeting;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -25,13 +24,29 @@ public class SubjectTest {
         validator = factory.getValidator();
     }
 
-    @Test
-    void _件名が既定内の値の場合はエラーにならない() {
-        final Subject meetingNumber = new Subject("a".repeat(Subject.MAX_SIZE));
+    @ParameterizedTest
+    @MethodSource("validInputs")
+    void _件名が既定内の値の場合はエラーにならない(String inputValue) {
+        final Subject meetingNumber = new Subject(inputValue);
 
         final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(meetingNumber);
 
         assertEquals(0, constraintViolations.size());
+    }
+
+    static List<String> validInputs() {
+        return Arrays.asList(
+                "あ",
+                " あ",
+                "あ ",
+                " あ ",
+                "あ い",
+                "　あ",
+                "あ　",
+                "　あ　",
+                "あ　い",
+                "あ".repeat(Subject.MAX_SIZE)
+        );
     }
 
     @ParameterizedTest
