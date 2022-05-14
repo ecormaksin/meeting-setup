@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public class Subject {
 
-    static final int MAX_SIZE = 100;
+    static final int MAX_SIZE = 30;
 
     private static final String MESSAGE = "件名は" + MAX_SIZE + "文字以内で必ず入力してください。";
 

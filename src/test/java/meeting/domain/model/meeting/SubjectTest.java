@@ -57,11 +57,11 @@ public class SubjectTest {
         final Set<ConstraintViolation<Subject>> constraintViolations = validator.validate(meetingNumber);
 
         assertEquals(1, constraintViolations.size());
-        assertEquals("件名は100文字以内で必ず入力してください。", constraintViolations.iterator().next().getMessage());
+        assertEquals("件名は30文字以内で必ず入力してください。", constraintViolations.iterator().next().getMessage());
     }
 
     static List<String> invalidInputs() {
-        final String sizeOverValue = "a".repeat(Subject.MAX_SIZE + 1);
+        final String sizeOverValue = "あ".repeat(Subject.MAX_SIZE + 1);
         return Arrays.asList(
                 null,
                 "",
