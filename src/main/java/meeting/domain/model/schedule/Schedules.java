@@ -23,7 +23,7 @@ public class Schedules {
     Schedules() {
     }
 
-    public static Schedules of(List<Schedule> source) {
+    public static Schedules of(List<@Valid Schedule> source) {
         return new Schedules(source);
     }
 

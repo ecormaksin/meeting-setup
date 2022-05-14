@@ -11,14 +11,14 @@ CREATE SCHEMA 出欠;
 -- ミーティング スキーマ
 CREATE TABLE ミーティング.ミーティング
 (
-  ミーティング番号 CHAR(32) PRIMARY KEY,
-  件名 VARCHAR(40) NOT NULL,
+  ミーティング番号 CHAR(26) PRIMARY KEY,
+  件名 VARCHAR(30) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ミーティング.主催者端末
 (
-  ミーティング番号 CHAR(32) PRIMARY KEY REFERENCES ミーティング.ミーティング,
+  ミーティング番号 CHAR(26) PRIMARY KEY REFERENCES ミーティング.ミーティング,
   IPアドレス VARCHAR(40) NOT NULL,
   OSファミリー VARCHAR(10) NOT NULL,
   ユーザーエージェントファミリー VARCHAR(30) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE ミーティング.主催者端末
 
 CREATE TABLE ミーティング.ミーティングメモ
 (
-  ミーティング番号 CHAR(32) PRIMARY KEY REFERENCES ミーティング.ミーティング,
+  ミーティング番号 CHAR(26) PRIMARY KEY REFERENCES ミーティング.ミーティング,
   メモ TEXT NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -38,7 +38,7 @@ CREATE SEQUENCE 日程候補.日程候補番号;
 CREATE TABLE 日程候補.日程候補
 (
   日程候補番号 INTEGER PRIMARY KEY,
-  ミーティング番号 CHAR(32) NOT NULL REFERENCES ミーティング.ミーティング,
+  ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング.ミーティング,
   開始日時 TIMESTAMP NOT NULL,
   終了日時 TIMESTAMP NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -49,7 +49,7 @@ CREATE TABLE 日程候補.日程候補
 CREATE TABLE 出欠.出欠
 (
   出欠ID CHAR(32) PRIMARY KEY,
-  ミーティング番号 CHAR(32) NOT NULL REFERENCES ミーティング.ミーティング,
+  ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング.ミーティング,
   参加者名 VARCHAR(40) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (ミーティング番号, 参加者名)

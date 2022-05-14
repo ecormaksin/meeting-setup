@@ -2,6 +2,7 @@ package meeting.domain.model.schedule.construct;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -11,10 +12,11 @@ import java.util.Objects;
  */
 public class MeetingDate {
 
+    @NotNull(message = "開催日は'yyyy-MM-dd'形式で必ず入力してください。")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate value;
 
-    public MeetingDate(LocalDate value) {
+    public MeetingDate(final LocalDate value) {
         this.value = value;
     }
 
@@ -31,7 +33,7 @@ public class MeetingDate {
     }
 
     @Deprecated
-    public MeetingDate() {
+    MeetingDate() {
     }
 
     @Override

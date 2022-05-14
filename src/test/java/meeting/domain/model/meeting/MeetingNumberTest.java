@@ -46,11 +46,13 @@ public class MeetingNumberTest {
     }
 
     static List<String> invalidInputs() {
+
         final MeetingNumber meetingNumber = MeetingNumber.newNumber();
         final String validValue = meetingNumber.value();
         final String sizeShortValue = validValue.substring(0, MeetingNumber.SIZE - 1);
         final String sizeOverValue = validValue + "a";
         final String symbolIncluded = sizeShortValue + "$";
+
         return Arrays.asList(
                 null,
                 "",
