@@ -1,11 +1,16 @@
 package meeting.domain.model.meeting;
 
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 /**
  * メモ
  */
 public class Memo {
+
+    static final int MAX_SIZE = 100;
+
+    @Size(max = MAX_SIZE, message = "メモは" + MAX_SIZE + "文字以内で入力してください。")
     String value;
 
     public Memo(String value) {
