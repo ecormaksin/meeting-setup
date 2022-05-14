@@ -12,6 +12,13 @@ public class DurationInput {
 
     String value;
 
+    public DurationInput(String value) {
+        this.value = value;
+    }
+
+    @Deprecated
+    DurationInput() {}
+
     @AssertTrue(message = "会議時間は30分単位・2時間以内で入力してください。")
     public boolean isValid() {
         if (Objects.isNull(value)) return true;
@@ -33,13 +40,6 @@ public class DurationInput {
             return false;
         }
     }
-
-    public DurationInput(String value) {
-        this.value = value;
-    }
-
-    @Deprecated
-    DurationInput() {}
 
     public static DurationInput empty() {
         return new DurationInput("");

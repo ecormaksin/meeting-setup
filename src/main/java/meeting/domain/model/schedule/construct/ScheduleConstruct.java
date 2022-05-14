@@ -1,5 +1,6 @@
 package meeting.domain.model.schedule.construct;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -10,43 +11,45 @@ import java.util.Objects;
 @ScheduleConstructValid
 public class ScheduleConstruct {
 
+    @Valid
     MeetingDate meetingDate;
-    StartTime startTime;
-    EndTime endTime;
 
-    public ScheduleConstruct(MeetingDate meetingDate, StartTime startTime, EndTime endTime) {
+    @Valid
+    StartHour startHour;
+
+    @Valid
+    StartMinute startMinute;
+
+    @Valid
+    Duration duration;
+
+    public ScheduleConstruct(@Valid MeetingDate meetingDate,
+                             @Valid StartHour startHour,
+                             @Valid StartMinute startMinute,
+                             @Valid Duration duration) {
         this.meetingDate = meetingDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-
-    public static ScheduleConstruct empty() {
-        return new ScheduleConstruct(MeetingDate.empty(), StartTime.empty(), EndTime.empty());
-    }
-
-    public static ScheduleConstruct of(LocalDate noWrappedMeetingDate,
-                                       LocalTime noWrappedStartTime,
-                                       LocalTime noWrappedEndTime) {
-        return new ScheduleConstruct(
-                new MeetingDate(noWrappedMeetingDate),
-                new StartTime(noWrappedStartTime),
-                new EndTime(noWrappedEndTime)
-        );
+        this.startHour = startHour;
+        this.startMinute = startMinute;
+        this.duration = duration;
     }
 
     @Deprecated
     ScheduleConstruct() {}
 
     public MeetingDate meetingDate() {
-        return this.meetingDate;
+        return meetingDate;
     }
 
-    public StartTime startTime() {
-        return this.startTime;
+    public StartHour startHour() {
+        return startHour;
     }
 
-    public EndTime endTime() {
-        return this.endTime;
+    public StartMinute startMinute() {
+        return startMinute;
+    }
+
+    public Duration duration() {
+        return duration;
     }
 
     public ScheduleConstructValidity validity() {
