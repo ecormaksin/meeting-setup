@@ -1,12 +1,16 @@
 package meeting.domain.model.schedule.construct;
 
+import library.ValidationConcern;
+
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * 開始時刻
  */
-public class StartHour {
+public class StartHour extends ValidationConcern {
 
     public static final int MIN = 9;
     public static final int MAX = 17;
@@ -17,14 +21,19 @@ public class StartHour {
     @Max(value = MAX, message = MESSAGE)
     int value;
 
-    public StartHour(int value) {
-        this.value = value;
-    }
-
     @Deprecated
     StartHour() {}
 
-    public boolean isSame(StartHour other) {
+    public StartHour(int value) {
+        this.value = value;
+        this.validate(this);
+    }
+
+    public boolean isSame(@NotNull @Valid StartHour other) {
         return this.value == other.value;
+    }
+
+    public int value() {
+        return value;
     }
 }

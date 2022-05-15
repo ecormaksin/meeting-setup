@@ -8,31 +8,36 @@ import java.util.Objects;
 /**
  * 会議時間（入力用）
  */
-public class DurationInput {
+public class DurationInput implements Element {
 
     String value;
+
+    /**
+     * @deprecated  Use DurationInput(String value) or empty()
+     */
+    @Deprecated
+    DurationInput() {}
 
     public DurationInput(String value) {
         this.value = value;
     }
 
-    @Deprecated
-    DurationInput() {}
+    static DurationInput empty() {
+        return new DurationInput("");
+    }
 
     @AssertTrue(message = "会議時間は30分単位・2時間以内で入力してください。")
-    public boolean isValid() {
-        if (Objects.isNull(value)) return true;
-        if (value.isEmpty()) return true;
-        if (isNotNumeric()) return false;
-
+    boolean isValid() {
+        if (isEmpty()) return true;
         return isValidAsDomain();
     }
 
-    private boolean isNotNumeric() {
-        return !(value.chars().allMatch(Character::isDigit));
+    public boolean isEmpty() {
+        if (Objects.isNull(value)) return true;
+        return value.isEmpty();
     }
 
-    private boolean isValidAsDomain() {
+    public boolean isValidAsDomain() {
         try {
             Duration.fromValue(Integer.valueOf(value));
             return true;
@@ -41,19 +46,11 @@ public class DurationInput {
         }
     }
 
-    public static DurationInput empty() {
-        return new DurationInput("");
+    public boolean isSame(DurationInput other) {
+        return this.value.equals(other.value);
     }
 
     public String value() {
         return value;
-    }
-
-    public boolean isEmpty() {
-        return value.isEmpty();
-    }
-
-    public boolean isSame(DurationInput other) {
-        return this.value.equals(other.value);
     }
 }

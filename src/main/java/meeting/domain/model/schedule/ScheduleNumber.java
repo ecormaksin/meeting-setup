@@ -1,48 +1,34 @@
 package meeting.domain.model.schedule;
 
-import java.util.Objects;
+import library.ValidationConcern;
+
+import javax.validation.constraints.Min;
 
 /**
- * 日程候補番号
+ * 日程番号
  */
-public class ScheduleNumber {
+public class ScheduleNumber extends ValidationConcern {
+
+    @Min(value = 0, message = "日程番号には自然数を指定してください。")
     int value;
 
-    public ScheduleNumber(int value) {
+    @Deprecated
+    ScheduleNumber() {}
+
+    public ScheduleNumber(final int value) {
         this.value = value;
+        this.validate(this);
+    }
+
+    public static ScheduleNumber prepare() {
+        return new ScheduleNumber(0);
     }
 
     public int value() {
         return value;
     }
 
-    public static ScheduleNumber empty() {
-        return new ScheduleNumber(0);
-    }
-
-    public ScheduleNumberIssuedStatus issuedStatus() {
-        if (value <= 0) return ScheduleNumberIssuedStatus.未発番;
-        return ScheduleNumberIssuedStatus.発番済;
-    }
-
-    @Override
-    public String toString() {
-        return String.valueOf(value);
-    }
-
-    @Deprecated
-    ScheduleNumber() {
-    }
-
-    @Override
-    public boolean equals(Object anObject) {
-        if (Objects.isNull(anObject)) return false;
-        if (!(anObject instanceof ScheduleNumber other)) return false;
-        return this.value == other.value;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
+    public boolean issued() {
+        return value >= 0;
     }
 }

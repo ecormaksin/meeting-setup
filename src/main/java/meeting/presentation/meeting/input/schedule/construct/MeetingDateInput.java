@@ -1,54 +1,55 @@
 package meeting.presentation.meeting.input.schedule.construct;
 
+import meeting.domain.model.schedule.construct.MeetingDate;
+
 import javax.validation.constraints.AssertTrue;
-import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 /**
- * ミーティング開催日（入力用）
+ * 開催日（入力用）
  */
-public class MeetingDateInput {
+public class MeetingDateInput implements Element {
 
     String value;
+
+    @Deprecated
+    MeetingDateInput() {}
 
     public MeetingDateInput(String value) {
         this.value = value;
     }
 
-    @Deprecated
-    MeetingDateInput() {}
+    static MeetingDateInput empty() {
+        return new MeetingDateInput("");
+    }
 
-    @AssertTrue(message = "ミーティング開催日は'yyyy-MM-dd'形式で入力してください。")
-    public boolean isValid() {
-        if (Objects.isNull(value)) return true;
-        if (value.isEmpty()) return true;
-
+    @AssertTrue(message = "開催日は'yyyy-MM-dd'形式で入力してください。")
+    boolean isValid() {
+        if (isEmpty()) return true;
         return isValidAsDomain();
     }
 
-    private boolean isValidAsDomain() {
+    public boolean isEmpty() {
+        if (Objects.isNull(value)) return true;
+        return value.isEmpty();
+    }
+
+    public boolean isValidAsDomain() {
+        if (isEmpty()) return false;
         try {
-            LocalDate.parse(value);
+            MeetingDate.fromString(value);
             return true;
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeParseException | IllegalArgumentException e) {
             return false;
         }
     }
 
-    public static MeetingDateInput empty() {
-        return new MeetingDateInput("");
+    public boolean isSame(MeetingDateInput other) {
+        return this.value.equals(other.value);
     }
 
     public String value() {
         return value;
-    }
-
-    public boolean isEmpty() {
-        return value.isEmpty();
-    }
-
-    public boolean isSame(MeetingDateInput other) {
-        return this.value.equals(other.value);
     }
 }

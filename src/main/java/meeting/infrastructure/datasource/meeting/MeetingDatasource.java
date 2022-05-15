@@ -52,14 +52,14 @@ public class MeetingDatasource implements MeetingRepository {
         boolean meetingNotFound = false;
 
         Optional<Subject> optSubject = meetingMapper.selectSubject(meetingNumber);
-        if (!optSubject.isPresent()) {
+        if (optSubject.isEmpty()) {
             meetingNotFound = true;
         }
 
         Optional<Memo> optMemo = meetingMapper.selectMemo(meetingNumber);
 
         Optional<ClientBrowser> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingNumber);
-        if (!optOrganizerTerminal.isPresent()) {
+        if (optOrganizerTerminal.isEmpty()) {
             meetingNotFound = true;
         }
 
@@ -128,29 +128,28 @@ public class MeetingDatasource implements MeetingRepository {
     }
 
     private void insertMeetingMemo(MeetingNumber meetingNumber, Memo memo) {
-        if (memo.inputStatus() == MemoInputStatus.なし) return;
+        if (memo.isBlank()) return;
         meetingMapper.insertMeetingMemo(meetingNumber, memo);
     }
 
     private Set<ScheduleNumber> insertSchedules(MeetingNumber meetingNumber, Schedules schedules) {
         Set<ScheduleNumber> scheduleNumbers = new HashSet<>();
         List<Schedule> scheduleList = schedules.asList();
-        scheduleList.stream().forEach(schedule -> {
-            if (schedule.validity() != ScheduleValidity.妥当) {
-                return;
-            }
+        scheduleList.forEach(schedule -> {
 
-            int scheduleNumber = schedule.scheduleNumberIssuedStatus() == ScheduleNumberIssuedStatus.未発番 ?
-                    scheduleMapper.newScheduleNumber()
+            ScheduleNumber scheduleNumber = schedule.scheduleNumberIssued() ?
+                    new ScheduleNumber(scheduleMapper.newScheduleNumber())
                     :
-                    schedule.scheduleNumber().value();
+                    schedule.scheduleNumber();
             scheduleMapper.insertSchedule(
                     scheduleNumber,
                     meetingNumber,
-                    schedule.startDateTime(),
-                    schedule.endDateTime()
+                    schedule.meetingDate(),
+                    String.valueOf(schedule.startHourValue()),
+                    schedule.startMinuteLabel(),
+                    String.valueOf(schedule.durationValue())
             );
-            scheduleNumbers.add(new ScheduleNumber(scheduleNumber));
+            scheduleNumbers.add(scheduleNumber);
         });
 
         return scheduleNumbers;

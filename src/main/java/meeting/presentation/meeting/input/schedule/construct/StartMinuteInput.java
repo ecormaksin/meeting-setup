@@ -8,52 +8,47 @@ import java.util.Objects;
 /**
  * 開始分（入力用）
  */
-public class StartMinuteInput {
+public class StartMinuteInput implements Element {
 
     String value;
 
-    @AssertTrue(message = "開始分は30分単位で入力してください。")
-    public boolean isValid() {
-        if (Objects.isNull(value)) return true;
-        if (value.isEmpty()) return true;
-        if (isNotNumeric()) return false;
+    @Deprecated
+    StartMinuteInput() {}
 
+    public StartMinuteInput(String value) {
+        this.value = value;
+    }
+
+    static StartMinuteInput empty() {
+        return new StartMinuteInput("");
+    }
+
+    @AssertTrue(message = "開始分は30分単位で入力してください。")
+    boolean isValid() {
+        if (isEmpty()) return true;
         return isValidAsDomain();
     }
 
-    private boolean isNotNumeric() {
-        return !(value.chars().allMatch(Character::isDigit));
+    public boolean isEmpty() {
+        if (Objects.isNull(value)) return true;
+        return value.isEmpty();
     }
 
-    private boolean isValidAsDomain() {
+    public boolean isValidAsDomain() {
+        if (isEmpty()) return false;
         try {
-            StartMinute.fromValue(Integer.valueOf(value));
+            StartMinute.fromStringValue(value);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
         }
     }
 
-    public StartMinuteInput(String value) {
-        this.value = value;
-    }
-
-    @Deprecated
-    StartMinuteInput() {}
-
-    public static StartMinuteInput empty() {
-        return new StartMinuteInput("");
+    public boolean isSame(StartMinuteInput other) {
+        return this.value.equals(other.value);
     }
 
     public String value() {
         return value;
-    }
-
-    public boolean isEmpty() {
-        return value.isEmpty();
-    }
-
-    public boolean isSame(StartMinuteInput other) {
-        return this.value.equals(other.value);
     }
 }

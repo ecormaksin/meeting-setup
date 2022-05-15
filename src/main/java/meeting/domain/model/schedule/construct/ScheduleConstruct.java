@@ -1,14 +1,15 @@
 package meeting.domain.model.schedule.construct;
 
+import meeting.domain.type.time.TimeFormatter;
+
 import javax.validation.Valid;
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 
 /**
  * 日程の構成要素
  */
-@ScheduleConstructValid
 public class ScheduleConstruct {
 
     @Valid
@@ -23,18 +24,23 @@ public class ScheduleConstruct {
     @Valid
     Duration duration;
 
-    public ScheduleConstruct(@Valid MeetingDate meetingDate,
-                             @Valid StartHour startHour,
-                             @Valid StartMinute startMinute,
-                             @Valid Duration duration) {
+    @NotNull
+    LocalDateTime dateTimeForCompare;
+
+    @Deprecated
+    ScheduleConstruct() {}
+
+    public ScheduleConstruct(@Valid final MeetingDate meetingDate,
+                             @Valid final StartHour startHour,
+                             @Valid final StartMinute startMinute,
+                             @Valid final Duration duration,
+                             @NotNull final LocalDateTime dateTimeForCompare) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
+        this.dateTimeForCompare = dateTimeForCompare;
     }
-
-    @Deprecated
-    ScheduleConstruct() {}
 
     public MeetingDate meetingDate() {
         return meetingDate;
@@ -52,60 +58,20 @@ public class ScheduleConstruct {
         return duration;
     }
 
-    public ScheduleConstructValidity validity() {
-        if (areAllEmpty()) return ScheduleConstructValidity.妥当_すべて未入力;
-        if (areAnyEmpty()) return ScheduleConstructValidity.不当_一部未入力あり;
-        if (isTimeRelationInvalid()) return ScheduleConstructValidity.不当_時刻の前後関係が不当;
-        return ScheduleConstructValidity.妥当_すべて入力済;
+    public boolean isFuture() {
+        final String timeString = String.format("%s:%s", startHour.value(), startMinute.value());
+        final LocalTime localTime = LocalTime.parse(timeString, TimeFormatter.ofPattern());
+        final LocalDateTime localDateTime = LocalDateTime.of(meetingDate.value(), localTime);
+
+        return localDateTime.isAfter(dateTimeForCompare);
     }
 
-    private boolean areAllEmpty() {
-        if (!meetingDate.isEmpty()) return false;
-        if (!startTime.isEmpty()) return false;
-        if (!endTime.isEmpty()) return false;
+    public boolean isSame(@NotNull @Valid ScheduleConstruct other) {
+        if (!this.meetingDate.isSame(other.meetingDate)) return false;
+        if (!this.startHour.isSame(other.startHour)) return false;
+        if (this.startMinute != other.startMinute) return false;
+        if (this.duration != other.duration) return false;
+
         return true;
-    }
-
-    private boolean areAnyEmpty() {
-        if (meetingDate.isEmpty()) return true;
-        if (startTime.isEmpty()) return true;
-        if (endTime.isEmpty()) return true;
-        return false;
-    }
-
-    private boolean isTimeRelationInvalid() {
-        return startTime.value.compareTo(endTime.value) >= 0;
-    }
-
-    @Override
-    public boolean equals(Object anObject) {
-        if (Objects.isNull(anObject)) return false;
-        if (!(anObject instanceof ScheduleConstruct other)) return false;
-        if (!meetingDate.isEmpty()
-                && !other.meetingDate.isEmpty()
-                && !meetingDate.equals(other.meetingDate)) return false;
-        if (!startTime.isEmpty()
-                && !other.startTime.isEmpty()
-                && !startTime.equals(other.startTime)) return false;
-        if (!endTime.isEmpty()
-                && !other.endTime.isEmpty()
-                && !endTime.equals(other.endTime)) return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(meetingDate, startTime, endTime);
-    }
-
-    @Override
-    public String toString() {
-        // @formatter:off
-        return "ScheduleConstruct{" +
-                "meetingDate=" + meetingDate +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                '}';
-        // @formatter:on
     }
 }

@@ -8,6 +8,15 @@ CREATE SCHEMA 日程候補;
 DROP SCHEMA IF EXISTS 出欠 CASCADE;
 CREATE SCHEMA 出欠;
 
+DROP TYPE IF EXISTS 日程候補.開始時間 CASCADE;
+CREATE TYPE 日程候補.開始時間 AS ENUM ('9', '10', '11', '12', '13', '14', '15', '16', '17');
+
+DROP TYPE IF EXISTS 日程候補.開始分 CASCADE;
+CREATE TYPE 日程候補.開始分 AS ENUM ('00', '30');
+
+DROP TYPE IF EXISTS 日程候補.会議時間 CASCADE;
+CREATE TYPE 日程候補.会議時間 AS ENUM ('30', '60', '90', '120');
+
 -- ミーティング スキーマ
 CREATE TABLE ミーティング.ミーティング
 (
@@ -33,22 +42,24 @@ CREATE TABLE ミーティング.ミーティングメモ
 );
 
 -- 日程候補 スキーマ
-CREATE SEQUENCE 日程候補.日程候補番号;
+CREATE SEQUENCE 日程候補.日程番号;
 
-CREATE TABLE 日程候補.日程候補
+CREATE TABLE 日程候補.日程
 (
-  日程候補番号 INTEGER PRIMARY KEY,
+  日程番号 INTEGER PRIMARY KEY,
   ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング.ミーティング,
-  開始日時 TIMESTAMP NOT NULL,
-  終了日時 TIMESTAMP NOT NULL,
+  開催日 DATE NOT NULL,
+  開始時間 開始時間 NOT NULL,
+  開始分 開始分 NOT NULL,
+  会議時間 会議時間 NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (ミーティング番号, 開始日時, 終了日時)
+  UNIQUE (ミーティング番号, 開催日, 開始時間, 開始分, 会議時間)
 );
 
 -- 出欠 スキーマ
 CREATE TABLE 出欠.出欠
 (
-  出欠ID CHAR(32) PRIMARY KEY,
+  出欠番号 CHAR(32) PRIMARY KEY,
   ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング.ミーティング,
   参加者名 VARCHAR(40) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -60,16 +71,16 @@ CREATE SEQUENCE 出欠.都合番号;
 CREATE TABLE 出欠.都合
 (
   都合番号 INTEGER PRIMARY KEY,
-  出欠ID CHAR(32) NOT NULL REFERENCES 出欠.出欠,
-  日程候補番号 INTEGER NOT NULL REFERENCES 日程候補.日程候補,
+  出欠番号 CHAR(32) NOT NULL REFERENCES 出欠.出欠,
+  日程番号 INTEGER NOT NULL REFERENCES 日程候補.日程,
   都合種別 VARCHAR(16) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (出欠ID, 日程候補番号)
+  UNIQUE (出欠番号, 日程番号)
 );
 
 CREATE TABLE 出欠.出欠コメント
 (
-  出欠ID CHAR(32) PRIMARY KEY REFERENCES 出欠.出欠,
+  出欠番号 CHAR(32) PRIMARY KEY REFERENCES 出欠.出欠,
   出欠コメント VARCHAR(255) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

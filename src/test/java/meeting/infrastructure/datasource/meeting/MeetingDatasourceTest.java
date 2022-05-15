@@ -5,7 +5,9 @@ import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedule;
+import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.construct.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,6 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.servlet.FlashMap;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +39,15 @@ class MeetingDatasourceTest {
     MockMvc mockMvc;
 
     LocalDateTime currentDateTime = LocalDateTime.now();
+    LocalDate currentDate = currentDateTime.toLocalDate();
+
+    ScheduleConstruct firstScheduleConstruct = new ScheduleConstruct(
+            new MeetingDate(currentDate),
+            new StartHour(10),
+            StartMinute.JUST,
+            Duration.ONE_HOUR,
+            currentDateTime
+    );
     LocalDateTime firstScheduleStart = LocalDateTime.of(
             currentDateTime.getYear(),
             currentDateTime.getMonth(),
@@ -44,17 +56,21 @@ class MeetingDatasourceTest {
             0
             ).plusDays(1);
     LocalDateTime firstScheduleEnd = firstScheduleStart.plusHours(1);
-    Schedule firstSchedule = Schedule.of(firstScheduleStart.toLocalDate(),
-            firstScheduleStart.toLocalTime(),
-            firstScheduleEnd.toLocalTime());
+    Schedule firstSchedule = new Schedule(ScheduleNumber.prepare(), firstScheduleConstruct);
 
     LocalDateTime secondScheduleStart = firstScheduleStart
             .plusDays(1)
             .plusHours(1);
     LocalDateTime secondScheduleEnd = secondScheduleStart.plusHours(1);
-    Schedule secondSchedule = Schedule.of(secondScheduleStart.toLocalDate(),
-            secondScheduleStart.toLocalTime(),
-            secondScheduleEnd.toLocalTime());
+
+    ScheduleConstruct secondScheduleConstruct = new ScheduleConstruct(
+            new MeetingDate(currentDate.plusDays(1)),
+            new StartHour(11),
+            StartMinute.JUST,
+            Duration.ONE_HOUR,
+            currentDateTime
+    );
+    Schedule secondSchedule = new Schedule(ScheduleNumber.prepare(), firstScheduleConstruct);
 
     private MockHttpServletRequestBuilder postMeetingCreation() {
         return post("/meeting/create");
@@ -196,7 +212,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void 作成時の日程候補1件目に日程候補番号が発番されている() throws Exception {
+        void 作成時の日程候補1件目に日程番号が発番されている() throws Exception {
             assertTrue(firstSchedule().scheduleNumber().value() > 0);
         }
 
@@ -221,7 +237,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void 作成時の日程候補2件目に日程候補番号が発番されている() throws Exception {
+        void 作成時の日程候補2件目に日程番号が発番されている() throws Exception {
             assertTrue(secondSchedule().scheduleNumber().value() > 0);
         }
 
@@ -238,30 +254,6 @@ class MeetingDatasourceTest {
         @Test
         void 日程候補2件目の終了時刻が作成時と同じ() throws Exception {
             assertEquals(secondScheduleEnd.toLocalTime(), secondSchedule().endTime().value() );
-        }
-
-        private ClientBrowser organizerTerminal() {
-            return meeting.organizerTerminal();
-        }
-
-        @Test
-        void 主催者端末がNULLではない() throws Exception {
-            assertNotNull(organizerTerminal());
-        }
-
-        @Test
-        void 作成時のIPアドレスと同じ() throws Exception {
-            assertEquals("127.0.0.1", organizerTerminal().ipAddress().value());
-        }
-
-        @Test
-        void 作成時のOSファミリーと同じ() throws Exception {
-            assertEquals("Windows", organizerTerminal().osFamily().value());
-        }
-
-        @Test
-        void 作成時のブラウザと同じ() throws Exception {
-            assertEquals("Chrome", organizerTerminal().userAgentFamily().value());
         }
     }
 

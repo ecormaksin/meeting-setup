@@ -13,26 +13,20 @@ public class Memo {
     @Size(max = MAX_SIZE, message = "メモは" + MAX_SIZE + "文字以内で入力してください。")
     String value;
 
-    public Memo(String value) {
+    @Deprecated
+    Memo() {}
+
+    public Memo(final String value) {
         this.value = value;
+    }
+
+    public boolean isBlank() {
+        if (Objects.isNull(value)) return true;
+        if (value.isBlank()) return true;
+        return false;
     }
 
     public String value() {
         return value;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    public MemoInputStatus inputStatus() {
-        if (Objects.isNull(value)) return MemoInputStatus.なし;
-        if (value.isBlank()) return MemoInputStatus.なし;
-        return MemoInputStatus.あり;
-    }
-
-    @Deprecated
-    Memo() {
     }
 }

@@ -4,22 +4,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meeting.infrastructure.datasource.schedule.ScheduleMapper">
     <select id="newScheduleNumber" resultType="int">
-        SELECT NEXTVAL('日程候補.日程候補番号')
+        SELECT NEXTVAL('日程候補.日程番号')
     </select>
 
     <insert id="insertSchedule">
-        INSERT INTO 日程候補.日程候補(日程候補番号, ミーティング番号, 開始日時, 終了日時)
-        VALUES (#{scheduleNumber}, #{meetingNumber.value}, #{startDateTime}, #{endDateTime})
+        INSERT INTO 日程候補.日程(
+            日程番号,
+            ミーティング番号,
+            開催日,
+            開始時間,
+            開始分,
+            会議時間
+        ) VALUES (
+            #{scheduleNumber.value},
+            #{meetingNumber.value},
+            #{meetingDate.value},
+            #{startHourValue},
+            #{startMinuteLabel},
+            #{durationValue})
     </insert>
 
     <select id="selectSchedulesByMeetingId" resultType="meeting.domain.model.schedule.Schedule">
         SELECT
-            日程候補番号 as "scheduleNumber.value",
+            日程番号 as "scheduleNumber.value",
             CAST(開始日時 AS DATE) AS "scheduleConstruct.meetingDate.value",
             CAST(開始日時 AS TIME) AS "scheduleConstruct.startTime.value",
             CAST(終了日時 AS TIME) AS "scheduleConstruct.endTime.value"
         FROM
-            日程候補.日程候補
+            日程候補.日程
         WHERE
             ミーティング番号 = #{meetingNumber.value}
         ORDER BY
@@ -28,7 +40,7 @@
     </select>
 
     <delete id="deleteSchedulesByMeetingId">
-        DELETE FROM 日程候補.日程候補
+        DELETE FROM 日程候補.日程
         WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 </mapper>

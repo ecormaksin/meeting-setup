@@ -10,19 +10,19 @@
             WHERE
                 ミーティング番号 = #{meetingNumber.value}
             <if test="attendanceId != null and attendanceId.value != null">
-                AND 出欠ID != #{attendanceId.value}
+                AND 出欠番号 != #{attendanceId.value}
             </if>
             AND 参加者名 = #{participantName.value}
         )
     </select>
 
     <insert id="insertAttendance">
-        INSERT INTO 出欠.出欠(出欠ID, ミーティング番号, 参加者名)
+        INSERT INTO 出欠.出欠(出欠番号, ミーティング番号, 参加者名)
         VALUES (#{attendanceId.value}, #{meetingNumber.value}, #{participantName.value})
     </insert>
 
     <insert id="insertAttendanceComment">
-        INSERT INTO 出欠.出欠コメント(出欠ID, 出欠コメント)
+        INSERT INTO 出欠.出欠コメント(出欠番号, 出欠コメント)
         VALUES (#{attendanceId.value}, #{attendanceComment.value})
     </insert>
 
@@ -32,7 +32,7 @@
     </select>
 
     <insert id="insertConvenience">
-        INSERT INTO 出欠.都合(都合番号, 出欠ID, 日程候補番号, 都合種別)
+        INSERT INTO 出欠.都合(都合番号, 出欠番号, 日程番号, 都合種別)
         VALUES (#{convenienceNumber}, #{attendanceId.value}, #{scheduleNumber.value}, #{convenienceCategory})
     </insert>
 
@@ -49,28 +49,28 @@
 
     <select id="selectAttendance" resultMap="attendance">
         SELECT
-            出欠.出欠ID AS "attendanceId.value",
+            出欠.出欠番号 AS "attendanceId.value",
             出欠.参加者名 AS "participantName.value",
             COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
         FROM
             出欠.出欠 AS 出欠
             LEFT OUTER JOIN 出欠.出欠コメント AS 出欠コメント
                 ON
-                出欠コメント.出欠ID = 出欠.出欠ID
+                出欠コメント.出欠番号 = 出欠.出欠番号
         WHERE
-            出欠.出欠ID = #{attendanceId.value}
+            出欠.出欠番号 = #{attendanceId.value}
     </select>
 
     <select id="selectAttendancesByMeetingId" resultMap="attendance">
         SELECT
-            出欠.出欠ID AS "attendanceId.value",
+            出欠.出欠番号 AS "attendanceId.value",
             出欠.参加者名 AS "participantName.value",
             COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
         FROM
             出欠.出欠 AS 出欠
             LEFT OUTER JOIN 出欠.出欠コメント AS 出欠コメント
                 ON
-                出欠コメント.出欠ID = 出欠.出欠ID
+                出欠コメント.出欠番号 = 出欠.出欠番号
         WHERE
             出欠.ミーティング番号 = #{meetingNumber.value}
         ORDER BY
@@ -79,14 +79,14 @@
 
     <select id="selectConveniencesByAttendanceId" resultType="meeting.domain.model.attendance.convenience.Convenience">
         SELECT
-            日程候補.日程候補番号 AS "scheduleNumber.value",
+            日程候補.日程番号 AS "scheduleNumber.value",
             COALESCE(都合.都合種別, '未回答') AS "convenienceCategory"
         FROM
-            日程候補.日程候補 AS 日程候補
+            日程候補.日程 AS 日程候補
             LEFT OUTER JOIN 出欠.都合 AS 都合
                 ON
-                都合.日程候補番号 = 日程候補.日程候補番号
-                AND 都合.出欠ID = #{value}
+                都合.日程番号 = 日程候補.日程番号
+                AND 都合.出欠番号 = #{value}
         WHERE
             日程候補.ミーティング番号 IN (
                 SELECT
@@ -94,7 +94,7 @@
                 FROM
                     出欠.出欠
                 WHERE
-                    出欠ID = #{value}
+                    出欠番号 = #{value}
             )
         ORDER BY
             日程候補.開始日時 ASC,
@@ -103,9 +103,9 @@
 
     <delete id="deleteAttendanceCommentsByMeetingId">
         DELETE FROM 出欠.出欠コメント
-        WHERE 出欠ID IN (
+        WHERE 出欠番号 IN (
             SELECT
-                出欠ID
+                出欠番号
             FROM
                 出欠.出欠
             WHERE
@@ -115,9 +115,9 @@
 
     <delete id="deleteConveniencesByMeetingId">
         DELETE FROM 出欠.都合
-        WHERE 出欠ID IN (
+        WHERE 出欠番号 IN (
             SELECT
-                出欠ID
+                出欠番号
             FROM
                 出欠.出欠
             WHERE
@@ -132,17 +132,17 @@
 
     <delete id="deleteAttendanceComment">
         DELETE FROM 出欠.出欠コメント
-        WHERE 出欠ID = #{attendanceId.value}
+        WHERE 出欠番号 = #{attendanceId.value}
     </delete>
 
     <delete id="deleteConveniences">
         DELETE FROM 出欠.都合
-        WHERE 出欠ID = #{attendanceId.value}
+        WHERE 出欠番号 = #{attendanceId.value}
     </delete>
 
     <delete id="deleteAttendance">
         DELETE FROM 出欠.出欠
-        WHERE 出欠ID = #{attendanceId.value}
+        WHERE 出欠番号 = #{attendanceId.value}
     </delete>
 
 </mapper>

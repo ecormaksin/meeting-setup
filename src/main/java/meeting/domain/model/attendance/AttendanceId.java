@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * 出欠ID
+ * 出欠番号
  */
 public class AttendanceId {
 

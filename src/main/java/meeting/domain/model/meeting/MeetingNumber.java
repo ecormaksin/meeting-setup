@@ -17,24 +17,19 @@ public class MeetingNumber {
     @Pattern(regexp="[0-9a-z]{" + SIZE + "}", message = MESSAGE)
     String value;
 
-    public static MeetingNumber newNumber() {
-        ULID ulid = new ULID();
-        return new MeetingNumber(ulid.nextULID().toLowerCase());
-    }
+    @Deprecated
+    MeetingNumber() {}
 
     public MeetingNumber(String value) {
         this.value = value;
     }
 
+    public static MeetingNumber newNumber() {
+        ULID ulid = new ULID();
+        return new MeetingNumber(ulid.nextULID().toLowerCase());
+    }
+
     public String value() {
         return value;
     }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Deprecated
-    MeetingNumber() {}
 }

@@ -5,7 +5,7 @@ select
 	ot.ipアドレス ,
 	ot.osファミリー ,
 	ot.ユーザーエージェントファミリー ,
-	sc.日程候補番号 ,
+	sc.日程番号 ,
 	sc.開始日時 ,
 	sc.終了日時
 from
@@ -19,7 +19,7 @@ inner join
 		on
 	ot.ミーティング番号 = mt.ミーティング番号
 inner join 
-	日程候補.日程候補 sc
+	日程候補.日程 sc
 		on
 	sc.ミーティング番号 = mt.ミーティング番号
 where

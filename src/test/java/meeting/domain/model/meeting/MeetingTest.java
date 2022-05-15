@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MeetingTest {
 
-    @ParameterizedTest(name = "ケース番号 兼 日程候補番号: {0}, " +
+    @ParameterizedTest(name = "ケース番号 兼 日程番号: {0}, " +
             "参加者1の都合: ''{1}'', " +
             "参加者2の都合: ''{2}'', " +
             "参加者3の都合: ''{3}'', " +
