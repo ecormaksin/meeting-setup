@@ -25,7 +25,7 @@ public class ScheduleConstruct {
     Duration duration;
 
     @NotNull
-    LocalDateTime dateTimeForCompare;
+    LocalDateTime dateTimeToCompare;
 
     @Deprecated
     ScheduleConstruct() {}
@@ -34,12 +34,12 @@ public class ScheduleConstruct {
                              @Valid final StartHour startHour,
                              @Valid final StartMinute startMinute,
                              @Valid final Duration duration,
-                             @NotNull final LocalDateTime dateTimeForCompare) {
+                             @NotNull final LocalDateTime dateTimeToCompare) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
-        this.dateTimeForCompare = dateTimeForCompare;
+        this.dateTimeToCompare = dateTimeToCompare;
     }
 
     public MeetingDate meetingDate() {
@@ -63,7 +63,7 @@ public class ScheduleConstruct {
         final LocalTime localTime = LocalTime.parse(timeString, TimeFormatter.ofPattern());
         final LocalDateTime localDateTime = LocalDateTime.of(meetingDate.value(), localTime);
 
-        return localDateTime.isAfter(dateTimeForCompare);
+        return localDateTime.isAfter(dateTimeToCompare);
     }
 
     public boolean isSame(@NotNull @Valid ScheduleConstruct other) {

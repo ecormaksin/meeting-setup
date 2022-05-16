@@ -3,6 +3,7 @@ package meeting.presentation.meeting.input.schedule.construct;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class ScheduleConstructInput {
     @Valid
     DurationInput duration;
 
+    @NotNull
+    LocalDateTime dateTimeToCompare;
+
     /**
      * @deprecated Use AllArgsConstructor or empty()
      */
@@ -36,18 +40,25 @@ public class ScheduleConstructInput {
     public ScheduleConstructInput(@NotNull @Valid final MeetingDateInput meetingDate,
                                   @NotNull @Valid final StartHourInput startHour,
                                   @NotNull @Valid final StartMinuteInput startMinute,
-                                  @NotNull @Valid final DurationInput duration) {
+                                  @NotNull @Valid final DurationInput duration,
+                                  @NotNull final LocalDateTime dateTimeToCompare) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
+        this.dateTimeToCompare = dateTimeToCompare;
     }
 
     public static ScheduleConstructInput empty() {
+        return empty(LocalDateTime.now());
+    }
+
+    public static ScheduleConstructInput empty(@NotNull final LocalDateTime dateTimeToCompare) {
         return new ScheduleConstructInput(MeetingDateInput.empty(),
-                                            StartHourInput.empty(),
-                                            StartMinuteInput.empty(),
-                                            DurationInput.empty());
+                StartHourInput.empty(),
+                StartMinuteInput.empty(),
+                DurationInput.empty(),
+                LocalDateTime.now());
     }
 
     @AssertTrue(message = "日程のすべての項目を入力してください。")

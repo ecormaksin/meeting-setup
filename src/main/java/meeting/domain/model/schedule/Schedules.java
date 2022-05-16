@@ -26,10 +26,14 @@ public class Schedules {
 
     @AssertTrue(message = "日程は重複のないように指定してください。")
     boolean isNotDuplicated() {
-        return list.stream()
-                .map(s -> s.scheduleConstruct)
-                .distinct()
-                .count() <= 1;
+        for (int i = 0; i < list.size(); i++) {
+            final Schedule outer = list.get(i);
+            for (int j = i + 1; j < list.size(); j++) {
+                final Schedule inner = list.get(j);
+                if (inner.isDuplicated(outer)) return false;
+            }
+        }
+        return true;
     }
 
     public List<Schedule> asList() {

@@ -20,15 +20,14 @@ public class ScheduleNumber extends ValidationConcern {
         this.validate(this);
     }
 
-    public static ScheduleNumber prepare() {
+    public boolean issued() {
+        return value >= 0;
+    }
+    public static ScheduleNumber initialize() {
         return new ScheduleNumber(0);
     }
 
     public int value() {
         return value;
-    }
-
-    public boolean issued() {
-        return value >= 0;
     }
 }

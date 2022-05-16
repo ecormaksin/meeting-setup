@@ -5,6 +5,7 @@ import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructIn
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
  * 日程（入力用）
@@ -29,6 +30,10 @@ public class ScheduleInput {
     }
 
     public static ScheduleInput newInput() {
-        return new ScheduleInput(ScheduleNumber.prepare(), ScheduleConstructInput.empty());
+        return newInput(LocalDateTime.now());
+    }
+
+    public static ScheduleInput newInput(@NotNull final LocalDateTime dateTimeToCompare) {
+        return new ScheduleInput(ScheduleNumber.initialize(), ScheduleConstructInput.empty(dateTimeToCompare));
     }
 }

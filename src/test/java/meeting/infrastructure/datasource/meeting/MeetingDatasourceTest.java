@@ -3,7 +3,6 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.MeetingDBTest;
 import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingNumber;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
@@ -56,7 +55,7 @@ class MeetingDatasourceTest {
             0
             ).plusDays(1);
     LocalDateTime firstScheduleEnd = firstScheduleStart.plusHours(1);
-    Schedule firstSchedule = new Schedule(ScheduleNumber.prepare(), firstScheduleConstruct);
+    Schedule firstSchedule = new Schedule(ScheduleNumber.initialize(), firstScheduleConstruct);
 
     LocalDateTime secondScheduleStart = firstScheduleStart
             .plusDays(1)
@@ -70,7 +69,7 @@ class MeetingDatasourceTest {
             Duration.ONE_HOUR,
             currentDateTime
     );
-    Schedule secondSchedule = new Schedule(ScheduleNumber.prepare(), firstScheduleConstruct);
+    Schedule secondSchedule = new Schedule(ScheduleNumber.initialize(), firstScheduleConstruct);
 
     private MockHttpServletRequestBuilder postMeetingCreation() {
         return post("/meeting/create");
