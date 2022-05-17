@@ -44,9 +44,7 @@ class MeetingDatasourceTest {
             new MeetingDate(currentDate),
             new StartHour(10),
             StartMinute.JUST,
-            Duration.ONE_HOUR,
-            currentDateTime
-    );
+            Duration.ONE_HOUR);
     LocalDateTime firstScheduleStart = LocalDateTime.of(
             currentDateTime.getYear(),
             currentDateTime.getMonth(),
@@ -66,9 +64,7 @@ class MeetingDatasourceTest {
             new MeetingDate(currentDate.plusDays(1)),
             new StartHour(11),
             StartMinute.JUST,
-            Duration.ONE_HOUR,
-            currentDateTime
-    );
+            Duration.ONE_HOUR);
     Schedule secondSchedule = new Schedule(ScheduleNumber.initialize(), firstScheduleConstruct);
 
     private MockHttpServletRequestBuilder postMeetingCreation() {

@@ -30,10 +30,12 @@ public class ScheduleInput {
     }
 
     public static ScheduleInput newInput() {
-        return newInput(LocalDateTime.now());
+        return new ScheduleInput(ScheduleNumber.initialize(), ScheduleConstructInput.empty());
     }
 
-    public static ScheduleInput newInput(@NotNull final LocalDateTime dateTimeToCompare) {
-        return new ScheduleInput(ScheduleNumber.initialize(), ScheduleConstructInput.empty(dateTimeToCompare));
+    public boolean isFutureWhenAdd(@NotNull final LocalDateTime dateTimeToCompare) {
+        if (scheduleNumber.issued()) return true;
+
+        return false;
     }
 }

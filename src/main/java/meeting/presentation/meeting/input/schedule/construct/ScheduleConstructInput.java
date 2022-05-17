@@ -3,7 +3,6 @@ package meeting.presentation.meeting.input.schedule.construct;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,8 +27,7 @@ public class ScheduleConstructInput {
     @Valid
     DurationInput duration;
 
-    @NotNull
-    LocalDateTime dateTimeToCompare;
+    private List<Element> elements;
 
     /**
      * @deprecated Use AllArgsConstructor or empty()
@@ -40,43 +38,39 @@ public class ScheduleConstructInput {
     public ScheduleConstructInput(@NotNull @Valid final MeetingDateInput meetingDate,
                                   @NotNull @Valid final StartHourInput startHour,
                                   @NotNull @Valid final StartMinuteInput startMinute,
-                                  @NotNull @Valid final DurationInput duration,
-                                  @NotNull final LocalDateTime dateTimeToCompare) {
+                                  @NotNull @Valid final DurationInput duration) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
-        this.dateTimeToCompare = dateTimeToCompare;
-    }
 
-    public static ScheduleConstructInput empty() {
-        return empty(LocalDateTime.now());
-    }
-
-    public static ScheduleConstructInput empty(@NotNull final LocalDateTime dateTimeToCompare) {
-        return new ScheduleConstructInput(MeetingDateInput.empty(),
-                StartHourInput.empty(),
-                StartMinuteInput.empty(),
-                DurationInput.empty(),
-                LocalDateTime.now());
-    }
-
-    @AssertTrue(message = "日程のすべての項目を入力してください。")
-    boolean isValid() {
-
-        List<Element> elements = Arrays.asList(
+        elements = Arrays.asList(
                 meetingDate,
                 startHour,
                 startMinute,
                 duration);
+    }
 
-        final boolean allEmpty = elements.stream().allMatch(e -> e.isEmpty());
-        if (allEmpty) return true;
+    public static ScheduleConstructInput empty() {
+        return new ScheduleConstructInput(MeetingDateInput.empty(),
+                StartHourInput.empty(),
+                StartMinuteInput.empty(),
+                DurationInput.empty());
+    }
 
-        final boolean allValidAsDomain = elements.stream().allMatch(e -> e.isValidAsDomain());
-        if (allValidAsDomain) return true;
-
+    @AssertTrue(message = "日程のすべての項目を入力してください。")
+    boolean isValid() {
+        if (areAllEmpty()) return true;
+        if (areAllValidAsDomain()) return true;
         return false;
+    }
+
+    private boolean areAllEmpty() {
+        return elements.stream().allMatch(e -> e.isEmpty());
+    }
+
+    private boolean areAllValidAsDomain() {
+        return elements.stream().allMatch(e -> e.isValidAsDomain());
     }
 
     public MeetingDateInput meetingDate() {

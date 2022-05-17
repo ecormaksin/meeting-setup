@@ -1,10 +1,11 @@
 package meeting.domain.model.schedule;
 
-import meeting.domain.model.schedule.construct.*;
+import meeting.domain.model.schedule.construct.MeetingDate;
+import meeting.domain.model.schedule.construct.ScheduleConstruct;
 
 import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
  * 日程
@@ -33,10 +34,9 @@ public class Schedule {
         return this.scheduleConstruct.isSame(other.scheduleConstruct);
     }
 
-    @AssertTrue(message = "日程を追加する時は、未来の日時を指定してください。")
-    boolean isFutureWhenAdd() {
+    public boolean isFutureWhenAdd(@NotNull final LocalDateTime dateTimeToCompare) {
         if (scheduleNumberIssued()) return true;
-        return scheduleConstruct.isFuture();
+        return scheduleConstruct.isFuture(dateTimeToCompare);
     }
 
     public ScheduleNumber scheduleNumber() {

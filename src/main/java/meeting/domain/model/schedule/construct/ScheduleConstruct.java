@@ -24,22 +24,17 @@ public class ScheduleConstruct {
     @Valid
     Duration duration;
 
-    @NotNull
-    LocalDateTime dateTimeToCompare;
-
     @Deprecated
     ScheduleConstruct() {}
 
     public ScheduleConstruct(@Valid final MeetingDate meetingDate,
                              @Valid final StartHour startHour,
                              @Valid final StartMinute startMinute,
-                             @Valid final Duration duration,
-                             @NotNull final LocalDateTime dateTimeToCompare) {
+                             @Valid final Duration duration) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
-        this.dateTimeToCompare = dateTimeToCompare;
     }
 
     public MeetingDate meetingDate() {
@@ -58,7 +53,7 @@ public class ScheduleConstruct {
         return duration;
     }
 
-    public boolean isFuture() {
+    public boolean isFuture(@NotNull final LocalDateTime dateTimeToCompare) {
         final String timeString = String.format("%s:%s", startHour.value(), startMinute.value());
         final LocalTime localTime = LocalTime.parse(timeString, TimeFormatter.ofPattern());
         final LocalDateTime localDateTime = LocalDateTime.of(meetingDate.value(), localTime);

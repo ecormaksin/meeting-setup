@@ -3,6 +3,7 @@ package meeting.domain.model.schedule;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  */
 public class Schedules {
     @NotNull
+    @Size(min = 1, message = "日程を1件以上指定してください。")
     List<@NotNull @Valid Schedule> list;
 
     @Deprecated
@@ -25,7 +27,7 @@ public class Schedules {
     }
 
     @AssertTrue(message = "日程は重複のないように指定してください。")
-    boolean isNotDuplicated() {
+    boolean areNotDuplicated() {
         for (int i = 0; i < list.size(); i++) {
             final Schedule outer = list.get(i);
             for (int j = i + 1; j < list.size(); j++) {
