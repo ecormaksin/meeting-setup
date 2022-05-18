@@ -38,7 +38,7 @@ public class MeetingDateInput implements Element {
     public boolean isValidAsDomain() {
         if (isEmpty()) return false;
         try {
-            MeetingDate.fromString(value);
+            toDomainObject();
             return true;
         } catch (DateTimeParseException | IllegalArgumentException e) {
             return false;
@@ -47,6 +47,10 @@ public class MeetingDateInput implements Element {
 
     public boolean isSame(MeetingDateInput other) {
         return this.value.equals(other.value);
+    }
+
+    public MeetingDate toDomainObject() {
+        return MeetingDate.fromString(value);
     }
 
     public String value() {

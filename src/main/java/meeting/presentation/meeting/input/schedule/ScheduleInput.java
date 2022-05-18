@@ -35,7 +35,6 @@ public class ScheduleInput {
 
     public boolean isFutureWhenAdd(@NotNull final LocalDateTime dateTimeToCompare) {
         if (scheduleNumber.issued()) return true;
-
-        return false;
+        return scheduleConstruct.isFuture(dateTimeToCompare);
     }
 }

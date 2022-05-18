@@ -39,7 +39,7 @@ public class DurationInput implements Element {
 
     public boolean isValidAsDomain() {
         try {
-            Duration.fromValue(Integer.valueOf(value));
+            toDomainObject();
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -48,6 +48,10 @@ public class DurationInput implements Element {
 
     public boolean isSame(DurationInput other) {
         return this.value.equals(other.value);
+    }
+
+    public Duration toDomainObject() {
+        return Duration.fromString(value);
     }
 
     public String value() {

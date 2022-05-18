@@ -1,8 +1,11 @@
 package meeting.presentation.meeting.input.schedule.construct;
 
+import meeting.domain.model.schedule.construct.ScheduleConstruct;
+
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,6 +61,14 @@ public class ScheduleConstructInput {
                 DurationInput.empty());
     }
 
+    public boolean isFuture(@NotNull final LocalDateTime dateTimeToCompare) {
+        if (!areAllValidAsDomain()) {
+            throw new IllegalStateException("ミーティングの開催日時として正しくありません。設定内容を確認してください。");
+        }
+        ScheduleConstruct scheduleConstruct = toDomainObject();
+        return scheduleConstruct.isFuture(dateTimeToCompare);
+    }
+
     @AssertTrue(message = "日程のすべての項目を入力してください。")
     boolean isValid() {
         if (areAllEmpty()) return true;
@@ -71,6 +82,13 @@ public class ScheduleConstructInput {
 
     private boolean areAllValidAsDomain() {
         return elements.stream().allMatch(e -> e.isValidAsDomain());
+    }
+
+    public ScheduleConstruct toDomainObject() {
+        return new ScheduleConstruct(meetingDate.toDomainObject(),
+                startHour.toDomainObject(),
+                startMinute.toDomainObject(),
+                duration.toDomainObject());
     }
 
     public MeetingDateInput meetingDate() {

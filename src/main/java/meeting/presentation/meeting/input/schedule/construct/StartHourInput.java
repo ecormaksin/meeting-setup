@@ -37,7 +37,7 @@ public class StartHourInput implements Element {
     public boolean isValidAsDomain() {
         if (isEmpty()) return false;
         try {
-            new StartHour(Integer.valueOf(value));
+            toDomainObject();
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -46,6 +46,10 @@ public class StartHourInput implements Element {
 
     public boolean isSame(StartHourInput other) {
         return this.value.equals(other.value);
+    }
+
+    public StartHour toDomainObject() {
+        return StartHour.fromString(value);
     }
 
     public String value() {

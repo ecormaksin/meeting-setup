@@ -35,6 +35,10 @@ public enum Duration {
         );
     }
 
+    public static Duration fromString(final String strigValue) {
+        return fromValue(Integer.valueOf(strigValue));
+    }
+
     public int value() {
         return value;
     }
