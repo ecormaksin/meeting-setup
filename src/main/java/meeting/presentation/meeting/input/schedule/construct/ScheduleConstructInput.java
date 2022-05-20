@@ -76,12 +76,21 @@ public class ScheduleConstructInput {
         return false;
     }
 
-    private boolean areAllEmpty() {
+    public boolean areAllEmpty() {
         return elements.stream().allMatch(e -> e.isEmpty());
     }
 
-    private boolean areAllValidAsDomain() {
+    public boolean areAllValidAsDomain() {
         return elements.stream().allMatch(e -> e.isValidAsDomain());
+    }
+
+    public boolean isSame(@NotNull @Valid ScheduleConstructInput other) {
+        if (!this.meetingDate.isSame(other.meetingDate)) return false;
+        if (!this.startHour.isSame(other.startHour)) return false;
+        if (this.startMinute != other.startMinute) return false;
+        if (this.duration != other.duration) return false;
+
+        return true;
     }
 
     public ScheduleConstruct toDomainObject() {

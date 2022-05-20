@@ -33,6 +33,18 @@ public class ScheduleInput {
         return new ScheduleInput(ScheduleNumber.initialize(), ScheduleConstructInput.empty());
     }
 
+    public boolean isEmpty() {
+        return scheduleConstruct.areAllEmpty();
+    }
+
+    public boolean isValidAsDomain() {
+        return scheduleConstruct.areAllValidAsDomain();
+    }
+
+    public boolean isDuplicated(@NotNull @Valid ScheduleInput other) {
+        return this.scheduleConstruct.isSame(other.scheduleConstruct);
+    }
+
     public boolean isFutureWhenAdd(@NotNull final LocalDateTime dateTimeToCompare) {
         if (scheduleNumber.issued()) return true;
         return scheduleConstruct.isFuture(dateTimeToCompare);

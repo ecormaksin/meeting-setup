@@ -28,7 +28,7 @@ public class Schedules {
 
     @AssertTrue(message = "日程は重複のないように指定してください。")
     boolean areNotDuplicated() {
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size()-1; i++) {
             final Schedule outer = list.get(i);
             for (int j = i + 1; j < list.size(); j++) {
                 final Schedule inner = list.get(j);

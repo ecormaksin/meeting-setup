@@ -7,7 +7,7 @@ import meeting.domain.model.meeting.Subject;
 
 import javax.validation.Valid;
 
-public class MeetingForm {
+public class MeetingInputForm {
 
     @Valid
     MeetingNumber meetingNumber;
@@ -20,4 +20,11 @@ public class MeetingForm {
 
     @Valid
     OrganizerNumber organizerNumber;
+
+    public MeetingInputForm(@Valid MeetingNumber meetingNumber,
+                            @Valid Subject subject,
+                            @Valid Memo memo,
+                            @Valid OrganizerNumber organizerNumber) {
+
+    }
 }
