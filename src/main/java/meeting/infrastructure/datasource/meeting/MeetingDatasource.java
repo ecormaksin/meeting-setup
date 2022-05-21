@@ -94,7 +94,6 @@ public class MeetingDatasource implements MeetingRepository {
         insertMeeting(meetingNumber, meetingEditRequest.subject());
         insertMeetingMemo(meetingNumber, meetingEditRequest.memo());
         Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, meetingEditRequest.schedules());
-        insertOrganizerTerminal(meetingNumber, meetingEditRequest.organizerTerminal());
         insertAttendances(meetingNumber, meeting.attendances(), scheduleNumbers);
     }
 
@@ -153,14 +152,6 @@ public class MeetingDatasource implements MeetingRepository {
         });
 
         return scheduleNumbers;
-    }
-
-    private void insertOrganizerTerminal(MeetingNumber meetingNumber, ClientBrowser clientBrowser) {
-        meetingMapper.insertOrganizerTerminal(meetingNumber,
-                clientBrowser.ipAddress(),
-                clientBrowser.osFamily(),
-                clientBrowser.userAgentFamily()
-        );
     }
 
     private void deleteMeetingWithWholeAggregate(MeetingNumber meetingNumber) {

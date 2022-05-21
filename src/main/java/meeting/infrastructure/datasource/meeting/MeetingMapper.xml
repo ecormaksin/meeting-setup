@@ -14,11 +14,6 @@
         VALUES (#{meetingNumber.value}, #{memo.value})
     </insert>
 
-    <insert id="insertOrganizerTerminal">
-        INSERT INTO ミーティング.主催者端末(ミーティング番号, IPアドレス, OSファミリー, ユーザーエージェントファミリー)
-        VALUES (#{meetingNumber.value}, #{ipAddress.value}, #{osFamily.value}, #{userAgentFamily.value})
-    </insert>
-
     <select id="selectSubject" resultType="meeting.domain.model.meeting.Subject">
         SELECT
             件名 as "value"

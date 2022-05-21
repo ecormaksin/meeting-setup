@@ -48,8 +48,7 @@ public class MeetingEditController {
                 meetingNumber,
                 meeting.subject(),
                 meeting.memo(),
-                meeting.schedules(),
-                clientBrowser
+                meeting.schedules()
         ));
 
         return "meeting/edit/form";

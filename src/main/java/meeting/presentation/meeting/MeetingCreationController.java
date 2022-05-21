@@ -50,7 +50,7 @@ public class MeetingCreationController {
 
     @PostMapping(params={"removeSchedule"})
     String removeSchedule(Model model,
-                          @ModelAttribute("meetingCreationRequest") final MeetingInputForm meetingInputForm,
+                          @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                           HttpServletRequest request) {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
         final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
@@ -60,27 +60,26 @@ public class MeetingCreationController {
 
     @PostMapping
     String create(HttpServletRequest request,
-                  @Validated @ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
+                  @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                   BindingResult bindingResult,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return "meeting/create/form";
 
-        MeetingNumber meetingNumber = meetingCreationScenario.create(meetingCreationRequest);
+        MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest();
+        meetingCreationScenario.create(meetingCreationRequest);
 
-        attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
+        attributes.addFlashAttribute("meetingNumber", meetingInputForm.meetingNumber());
 
         URI uri = builder.path("/meeting/create/completed").build().toUri();
         return "redirect:" + uri.toString();
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingNumber") String meetingNumber, Model model, UriComponentsBuilder builder) {
+    String completed(@ModelAttribute("meetingNumber") MeetingNumber meetingNumber, Model model, UriComponentsBuilder builder) {
 
-        model.addAttribute("meetingNumber", meetingNumber);
-
-        URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber.value())).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
         return "meeting/create/completed";

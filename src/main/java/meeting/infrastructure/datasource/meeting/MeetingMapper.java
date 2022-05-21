@@ -20,11 +20,6 @@ import java.util.Optional;
 public interface MeetingMapper {
     void insertMeeting(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("subject") Subject subject);
     void insertMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("memo") Memo memo);
-    void insertOrganizerTerminal(
-            @Param("meetingNumber") MeetingNumber meetingNumber,
-            @Param("ipAddress") IpAddress ipAddress,
-            @Param("osFamily") OSFamily osFamily,
-            @Param("userAgentFamily") UserAgentFamily userAgentFamily);
 
     Optional<Subject> selectSubject(@Param("meetingNumber") MeetingNumber meetingNumber);
     Optional<Memo> selectMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
