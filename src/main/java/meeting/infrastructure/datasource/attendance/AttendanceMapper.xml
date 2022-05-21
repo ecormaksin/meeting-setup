@@ -61,7 +61,7 @@
             出欠.出欠番号 = #{attendanceId.value}
     </select>
 
-    <select id="selectAttendancesByMeetingId" resultMap="attendance">
+    <select id="selectAttendancesByMeetingNumber" resultMap="attendance">
         SELECT
             出欠.出欠番号 AS "attendanceId.value",
             出欠.参加者名 AS "participantName.value",
@@ -101,7 +101,7 @@
             日程候補.終了日時 ASC
     </select>
 
-    <delete id="deleteAttendanceCommentsByMeetingId">
+    <delete id="deleteAttendanceCommentsByMeetingNumber">
         DELETE FROM 出欠.出欠コメント
         WHERE 出欠番号 IN (
             SELECT
@@ -113,7 +113,7 @@
         )
     </delete>
 
-    <delete id="deleteConveniencesByMeetingId">
+    <delete id="deleteConveniencesByMeetingNumber">
         DELETE FROM 出欠.都合
         WHERE 出欠番号 IN (
             SELECT
@@ -125,7 +125,7 @@
         )
     </delete>
 
-    <delete id="deleteAttendancesByMeetingId">
+    <delete id="deleteAttendancesByMeetingNumber">
         DELETE FROM 出欠.出欠
         WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>

@@ -14,7 +14,7 @@ public class MeetingNumber {
     private static final String MESSAGE = "ミーティング番号は" + SIZE + "桁の半角英数字で指定してください。";
 
     @NotNull(message = MESSAGE)
-    @Pattern(regexp="[0-9a-z]{" + SIZE + "}", message = MESSAGE)
+    @Pattern(regexp="[\\da-z]{" + SIZE + "}", message = MESSAGE)
     String value;
 
     @Deprecated

@@ -41,7 +41,7 @@ public class MeetingEditRequest {
     MeetingEditRequest() {
     }
 
-    public MeetingNumber meetingId() {
+    public MeetingNumber meetingNumber() {
         return meetingNumber;
     }
 

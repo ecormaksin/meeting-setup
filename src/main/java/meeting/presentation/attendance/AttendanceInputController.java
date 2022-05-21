@@ -23,7 +23,7 @@ import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.�
  * 出欠入力画面
  */
 @Controller
-@RequestMapping("meeting/{meetingId}/attendance/input")
+@RequestMapping("meeting/{meetingNumber}/attendance/input")
 public class AttendanceInputController {
     AttendanceInputScenario attendanceInputScenario;
 
@@ -69,13 +69,13 @@ public class AttendanceInputController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingId") String meetingId,
+    String completed(@ModelAttribute("meetingNumber") String meetingNumber,
                      @ModelAttribute("attendanceId") String attendanceId,
                      Model model, UriComponentsBuilder builder) {
 
-        model.addAttribute("meetingId", meetingId);
+        model.addAttribute("meetingNumber", meetingNumber);
 
-        URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingId, attendanceId)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingNumber, attendanceId)).build().toUri();
         model.addAttribute("attendanceEditLocation", uri.toString());
 
         return "attendance/input/completed";

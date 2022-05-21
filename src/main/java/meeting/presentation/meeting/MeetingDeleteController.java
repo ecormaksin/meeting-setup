@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * ミーティング削除画面
  */
 @Controller
-@RequestMapping("meeting/{meetingId}/delete")
+@RequestMapping("meeting/{meetingNumber}/delete")
 public class MeetingDeleteController {
     @GetMapping("completed")
     String completed() {

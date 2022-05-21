@@ -62,9 +62,7 @@ public class ScheduleConstructInput {
     }
 
     public boolean isFuture(@NotNull final LocalDateTime dateTimeToCompare) {
-        if (!areAllValidAsDomain()) {
-            throw new IllegalStateException("ミーティングの開催日時として正しくありません。設定内容を確認してください。");
-        }
+        validateAsDomain();
         ScheduleConstruct scheduleConstruct = toDomainObject();
         return scheduleConstruct.isFuture(dateTimeToCompare);
     }
@@ -84,16 +82,21 @@ public class ScheduleConstructInput {
         return elements.stream().allMatch(e -> e.isValidAsDomain());
     }
 
-    public boolean isSame(@NotNull @Valid ScheduleConstructInput other) {
-        if (!this.meetingDate.isSame(other.meetingDate)) return false;
-        if (!this.startHour.isSame(other.startHour)) return false;
-        if (this.startMinute != other.startMinute) return false;
-        if (this.duration != other.duration) return false;
+    private void validateAsDomain() {
+        if (areAllValidAsDomain()) return;
+        throw new IllegalStateException("ミーティングの開催日時として正しくありません。設定内容を確認してください。");
+    }
 
-        return true;
+    public boolean isSame(@NotNull @Valid ScheduleConstructInput other) {
+
+        return this.meetingDate.isSame(other.meetingDate)
+                && this.startHour.isSame(other.startHour)
+                && this.startMinute.isSame(other.startMinute)
+                && this.duration.isSame(other.duration);
     }
 
     public ScheduleConstruct toDomainObject() {
+        validateAsDomain();
         return new ScheduleConstruct(meetingDate.toDomainObject(),
                 startHour.toDomainObject(),
                 startMinute.toDomainObject(),

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * ミーティング表示画面
  */
 @Controller
-@RequestMapping("meeting/{meetingId}/show")
+@RequestMapping("meeting/{meetingNumber}/show")
 public class MeetingShowController {
     MeetingShowScenario meetingShowScenario;
 

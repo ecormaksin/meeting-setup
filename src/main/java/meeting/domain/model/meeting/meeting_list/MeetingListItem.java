@@ -27,7 +27,7 @@ public class MeetingListItem {
     MeetingListItem() {
     }
 
-    public MeetingNumber meetingId() {
+    public MeetingNumber meetingNumber() {
         return meetingNumber;
     }
 

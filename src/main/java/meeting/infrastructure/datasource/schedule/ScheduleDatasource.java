@@ -18,7 +18,7 @@ public class ScheduleDatasource implements ScheduleRepository {
 
     @Override
     public Schedules findByMeeingId(MeetingNumber meetingNumber) {
-        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingId(meetingNumber);
+        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingNumber(meetingNumber);
         if (scheduleList.isEmpty()) {
             throw new IllegalArgumentException(String.format("ミーティングの日程候補が見つかりませんでした。主催者に次のミーティング番号を確認してください。: %s", meetingNumber.value()));
         }

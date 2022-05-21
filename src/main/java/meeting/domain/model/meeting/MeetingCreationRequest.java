@@ -1,6 +1,5 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
@@ -11,29 +10,37 @@ import javax.validation.Valid;
 public class MeetingCreationRequest {
 
     @Valid
+    MeetingNumber meetingNumber;
+
+    @Valid
     Subject subject;
 
     @Valid
     Memo memo;
 
     @Valid
-    Schedules schedules;
+    OrganizerNumber organizerNumber;
 
     @Valid
-    ClientBrowser organizerTerminal;
-
-    public MeetingCreationRequest(@Valid Subject subject,
-                                  @Valid Memo memo,
-                                  @Valid Schedules schedules,
-                                  @Valid ClientBrowser clientBrowser) {
-        this.subject = subject;
-        this.memo = memo;
-        this.schedules = schedules;
-        this.organizerTerminal = clientBrowser;
-    }
+    Schedules schedules;
 
     @Deprecated
-    MeetingCreationRequest() {
+    MeetingCreationRequest() {}
+
+    public MeetingCreationRequest(@Valid MeetingNumber meetingNumber,
+                                  @Valid Subject subject,
+                                  @Valid Memo memo,
+                                  @Valid OrganizerNumber organizerNumber,
+                                  @Valid Schedules schedules) {
+        this.meetingNumber = meetingNumber;
+        this.subject = subject;
+        this.memo = memo;
+        this.organizerNumber = organizerNumber;
+        this.schedules = schedules;
+    }
+
+    public MeetingNumber meetingNumber() {
+        return meetingNumber;
     }
 
     public Subject subject() {
@@ -44,26 +51,11 @@ public class MeetingCreationRequest {
         return memo;
     }
 
+    public OrganizerNumber organizerNumber() {
+        return organizerNumber;
+    }
+
     public Schedules schedules() {
         return schedules;
-    }
-
-    public ClientBrowser organizerTerminal() {
-        return organizerTerminal;
-    }
-
-    public void addEmptySchedule() {
-        schedules = schedules.addNew();
-    }
-
-    public void removeSchedule(int index) {
-        schedules = schedules.remove(index);
-    }
-
-    public static MeetingCreationRequest empty(ClientBrowser clientBrowser) {
-        MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest();
-        meetingCreationRequest.schedules = Schedules.initialEmptyList();
-        meetingCreationRequest.organizerTerminal = clientBrowser;
-        return meetingCreationRequest;
     }
 }

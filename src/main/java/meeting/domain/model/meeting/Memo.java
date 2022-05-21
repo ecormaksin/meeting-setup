@@ -20,6 +20,10 @@ public class Memo {
         this.value = value;
     }
 
+    public static Memo empty() {
+        return new Memo("");
+    }
+
     public boolean isBlank() {
         if (Objects.isNull(value)) return true;
         if (value.isBlank()) return true;

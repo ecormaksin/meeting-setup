@@ -33,12 +33,12 @@ public interface AttendanceMapper {
                                  @Param("attendanceComment") AttendanceComment attendanceComment);
 
     Attendance selectAttendance(@Param("attendanceId") AttendanceId attendanceId);
-    List<Attendance> selectAttendancesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
+    List<Attendance> selectAttendancesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
     List<Convenience> selectConveniencesByAttendanceId(@Param("attendanceId") AttendanceId attendanceId);
 
-    void deleteAttendanceCommentsByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
-    void deleteConveniencesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
-    void deleteAttendancesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteAttendanceCommentsByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteConveniencesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteAttendancesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
 
     void deleteAttendanceComment(@Param("attendanceId") AttendanceId attendanceId);
     void deleteConveniences(@Param("attendanceId") AttendanceId attendanceId);

@@ -1,5 +1,6 @@
 package meeting.presentation.meeting.input.schedule;
 
+import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 
@@ -48,5 +49,9 @@ public class ScheduleInput {
     public boolean isFutureWhenAdd(@NotNull final LocalDateTime dateTimeToCompare) {
         if (scheduleNumber.issued()) return true;
         return scheduleConstruct.isFuture(dateTimeToCompare);
+    }
+
+    public Schedule toDomainObject() {
+        return new Schedule(scheduleNumber, scheduleConstruct.toDomainObject());
     }
 }

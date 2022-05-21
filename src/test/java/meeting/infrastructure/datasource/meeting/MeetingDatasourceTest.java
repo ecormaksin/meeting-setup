@@ -120,14 +120,14 @@ class MeetingDatasourceTest {
         return param;
     }
 
-    private MeetingNumber createdMeetingId(MvcResult result) {
+    private MeetingNumber createdMeetingNumber(MvcResult result) {
         FlashMap flashMap = result.getFlashMap();
-        String meetingIdValue = (String) flashMap.get("meetingId");
-        return new MeetingNumber(meetingIdValue);
+        String meetingNumberValue = (String) flashMap.get("meetingNumber");
+        return new MeetingNumber(meetingNumberValue);
     }
 
     private Meeting findMeeting(MvcResult result) {
-        MeetingNumber meetingNumber = createdMeetingId(result);
+        MeetingNumber meetingNumber = createdMeetingNumber(result);
         return meetingDatasource.meetingOf(meetingNumber);
     }
 

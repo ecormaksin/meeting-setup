@@ -3,8 +3,8 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.presentation.ClientInfoGetter;
+import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,25 +35,26 @@ public class MeetingCreationController {
     }
 
     @GetMapping
-    String init(Model model, HttpServletRequest request) {
-
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
-        model.addAttribute("meetingCreationRequest", MeetingCreationRequest.empty(clientBrowser));
+    String init(Model model) {
+        model.addAttribute("meetingInputForm", MeetingInputForm.empty());
 
         return "meeting/create/form";
     }
 
     @PostMapping(params={"addSchedule"})
-    String addSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest) {
-        meetingCreationRequest.addEmptySchedule();
+    String addSchedule(Model model, @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm) {
+        final MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
+        model.addAttribute("meetingInputForm", scheduleAdded);
         return "meeting/create/form";
     }
 
     @PostMapping(params={"removeSchedule"})
-    String removeSchedule(@ModelAttribute("meetingCreationRequest") MeetingCreationRequest meetingCreationRequest,
+    String removeSchedule(Model model,
+                          @ModelAttribute("meetingCreationRequest") final MeetingInputForm meetingInputForm,
                           HttpServletRequest request) {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
-        meetingCreationRequest.removeSchedule(index.intValue());
+        final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
+        model.addAttribute("meetingInputForm", scheduleRemoved);
         return "meeting/create/form";
     }
 
@@ -63,11 +64,6 @@ public class MeetingCreationController {
                   BindingResult bindingResult,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
-
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
-        if (!clientBrowser.equals(meetingCreationRequest.organizerTerminal())) {
-            throw new ClientBrowserFalsifiedException();
-        }
 
         if (bindingResult.hasErrors()) return "meeting/create/form";
 
@@ -80,11 +76,11 @@ public class MeetingCreationController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingId") String meetingId, Model model, UriComponentsBuilder builder) {
+    String completed(@ModelAttribute("meetingNumber") String meetingNumber, Model model, UriComponentsBuilder builder) {
 
-        model.addAttribute("meetingId", meetingId);
+        model.addAttribute("meetingNumber", meetingNumber);
 
-        URI uri = builder.path(String.format("/meeting/%s/show", meetingId)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
         return "meeting/create/completed";
@@ -93,12 +89,11 @@ public class MeetingCreationController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
+                "meetingNumber.value",
                 "subject.value",
                 "memo.value",
-                "schedules.list[*",
-                "organizerTerminal.ipAddress.value",
-                "organizerTerminal.osFamily.value",
-                "organizerTerminal.userAgentFamily.value"
+                "organizerNumber.value",
+                "scheduleInputs.list[*"
         );
     }
 }

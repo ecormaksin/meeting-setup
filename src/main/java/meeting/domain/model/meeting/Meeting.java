@@ -53,7 +53,7 @@ public class Meeting {
     Meeting() {
     }
 
-    public MeetingNumber meetingId() {
+    public MeetingNumber meetingNumber() {
         return meetingNumber;
     }
 

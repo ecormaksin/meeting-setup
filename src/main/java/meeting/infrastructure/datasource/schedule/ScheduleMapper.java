@@ -20,7 +20,7 @@ public interface ScheduleMapper {
                         @Param("startMinuteLabel") String startMinuteLabel,
                         @Param("durationValue") String durationValue);
 
-    List<Schedule> selectSchedulesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
+    List<Schedule> selectSchedulesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
 
-    void deleteSchedulesByMeetingId(@Param("meetingNumber") MeetingNumber meetingNumber);
+    void deleteSchedulesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
 }

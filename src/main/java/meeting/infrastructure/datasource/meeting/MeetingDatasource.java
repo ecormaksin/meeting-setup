@@ -63,7 +63,7 @@ public class MeetingDatasource implements MeetingRepository {
             meetingNotFound = true;
         }
 
-        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingId(meetingNumber);
+        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingNumber(meetingNumber);
         if (scheduleList.isEmpty()) {
             meetingNotFound = true;
         }
@@ -72,7 +72,7 @@ public class MeetingDatasource implements MeetingRepository {
             throw new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティング番号を確認してください。: %s", meetingNumber.value()));
         }
 
-        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingId(meetingNumber);
+        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);
 
         return new Meeting(meetingNumber,
                 optSubject.get(),
@@ -85,7 +85,7 @@ public class MeetingDatasource implements MeetingRepository {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
-        MeetingNumber meetingNumber = meetingEditRequest.meetingId();
+        MeetingNumber meetingNumber = meetingEditRequest.meetingNumber();
 
         // 既存のレコードを削除
         deleteMeetingWithWholeAggregate(meetingNumber);
@@ -165,11 +165,11 @@ public class MeetingDatasource implements MeetingRepository {
 
     private void deleteMeetingWithWholeAggregate(MeetingNumber meetingNumber) {
 
-        attendanceMapper.deleteAttendanceCommentsByMeetingId(meetingNumber);
-        attendanceMapper.deleteConveniencesByMeetingId(meetingNumber);
-        attendanceMapper.deleteAttendancesByMeetingId(meetingNumber);
+        attendanceMapper.deleteAttendanceCommentsByMeetingNumber(meetingNumber);
+        attendanceMapper.deleteConveniencesByMeetingNumber(meetingNumber);
+        attendanceMapper.deleteAttendancesByMeetingNumber(meetingNumber);
 
-        scheduleMapper.deleteSchedulesByMeetingId(meetingNumber);
+        scheduleMapper.deleteSchedulesByMeetingNumber(meetingNumber);
 
         meetingMapper.deleteOrganizerTerminal(meetingNumber);
         meetingMapper.deleteMeetingMemo(meetingNumber);

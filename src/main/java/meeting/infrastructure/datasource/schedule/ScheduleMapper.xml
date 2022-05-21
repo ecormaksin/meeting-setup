@@ -24,7 +24,7 @@
             #{durationValue})
     </insert>
 
-    <select id="selectSchedulesByMeetingId" resultType="meeting.domain.model.schedule.Schedule">
+    <select id="selectSchedulesByMeetingNumber" resultType="meeting.domain.model.schedule.Schedule">
         SELECT
             日程番号 as "scheduleNumber.value",
             CAST(開始日時 AS DATE) AS "scheduleConstruct.meetingDate.value",
@@ -39,7 +39,7 @@
             終了日時 ASC
     </select>
 
-    <delete id="deleteSchedulesByMeetingId">
+    <delete id="deleteSchedulesByMeetingNumber">
         DELETE FROM 日程候補.日程
         WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>

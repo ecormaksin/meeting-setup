@@ -20,6 +20,10 @@ public class Subject {
         this.value = value;
     }
 
+    public static Subject empty() {
+        return new Subject("");
+    }
+
     @AssertTrue(message = MESSAGE)
     boolean isValid() {
         if ( Objects.isNull(value) ) return false;

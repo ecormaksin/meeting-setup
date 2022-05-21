@@ -20,7 +20,7 @@ import java.net.URI;
  * ミーティング編集画面
  */
 @Controller
-@RequestMapping("meeting/{meetingId}/edit")
+@RequestMapping("meeting/{meetingNumber}/edit")
 public class MeetingEditController {
     MeetingEditScenario meetingEditScenario;
 
@@ -110,12 +110,12 @@ public class MeetingEditController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingId") String meetingId,
+    String completed(@ModelAttribute("meetingNumber") String meetingNumber,
                      Model model, UriComponentsBuilder builder) {
 
-        model.addAttribute("meetingId", meetingId);
+        model.addAttribute("meetingNumber", meetingNumber);
 
-        URI uri = builder.path(String.format("/meeting/%s/show", meetingId)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber)).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
         return "meeting/edit/completed";
@@ -146,7 +146,7 @@ public class MeetingEditController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
-                "meetingId.value",
+                "meetingNumber.value",
                 "subject.value",
                 "memo.value",
                 "schedules.list[*",
