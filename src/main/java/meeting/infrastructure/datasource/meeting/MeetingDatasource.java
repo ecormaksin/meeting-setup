@@ -39,7 +39,9 @@ public class MeetingDatasource implements MeetingRepository {
     public MeetingNumber create(MeetingCreationRequest meetingCreationRequest) {
         MeetingNumber meetingNumber = MeetingNumber.newNumber();
 
-        insertMeeting(meetingNumber, meetingCreationRequest.subject());
+        insertMeeting(meetingNumber,
+                meetingCreationRequest.subject(),
+                meetingCreationRequest.organizerNumber());
         insertMeetingMemo(meetingNumber, meetingCreationRequest.memo());
         insertSchedules(meetingNumber, meetingCreationRequest.schedules());
 
@@ -50,8 +52,8 @@ public class MeetingDatasource implements MeetingRepository {
     public Meeting meetingOf(MeetingNumber meetingNumber) {
         boolean meetingNotFound = false;
 
-        Optional<Subject> optSubject = meetingMapper.selectSubject(meetingNumber);
-        if (optSubject.isEmpty()) {
+        Optional<MeetingResource> optMeetingResource = meetingMapper.selectMeetingResource(meetingNumber);
+        if (optMeetingResource.isEmpty()) {
             meetingNotFound = true;
         }
 
@@ -73,12 +75,16 @@ public class MeetingDatasource implements MeetingRepository {
 
         List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);
 
+        final MeetingResource meetingResource = optMeetingResource.get();
+        final Subject subject = meetingResource.subject();
+        final OrganizerNumber organizerNumber = meetingResource.organizerNumber();
+
         return new Meeting(meetingNumber,
-                optSubject.get(),
-                optMemo.orElse(null),
+                subject,
+                optMemo.orElse(Memo.empty()),
+                organizerNumber,
                 new Schedules(scheduleList),
-                Attendances.of(attendanceList),
-                optOrganizerTerminal.get());
+                Attendances.of(attendanceList));
     }
 
     @Override
@@ -90,7 +96,9 @@ public class MeetingDatasource implements MeetingRepository {
         deleteMeetingWithWholeAggregate(meetingNumber);
 
         // 再追加
-        insertMeeting(meetingNumber, meetingEditRequest.subject());
+        insertMeeting(meetingNumber,
+                meetingEditRequest.subject(),
+                meetingEditRequest.organizerNumber());
         insertMeetingMemo(meetingNumber, meetingEditRequest.memo());
         Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, meetingEditRequest.schedules());
         insertAttendances(meetingNumber, meeting.attendances(), scheduleNumbers);
@@ -121,8 +129,8 @@ public class MeetingDatasource implements MeetingRepository {
         return MeetingList.of(list);
     }
 
-    private void insertMeeting(MeetingNumber meetingNumber, Subject subject) {
-        meetingMapper.insertMeeting(meetingNumber, subject);
+    private void insertMeeting(MeetingNumber meetingNumber, Subject subject, OrganizerNumber organizerNumber) {
+        meetingMapper.insertMeeting(meetingNumber, subject, organizerNumber);
     }
 
     private void insertMeetingMemo(MeetingNumber meetingNumber, Memo memo) {

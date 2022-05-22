@@ -5,8 +5,8 @@
 <mapper namespace="meeting.infrastructure.datasource.meeting.MeetingMapper">
 
     <insert id="insertMeeting">
-        INSERT INTO ミーティング._ミーティング(ミーティング番号, 件名)
-        VALUES (#{meetingNumber.value}, #{subject.value})
+        INSERT INTO ミーティング._ミーティング(ミーティング番号, 件名, 主催者番号)
+        VALUES (#{meetingNumber.value}, #{subject.value}, #{organizerNumber.value})
     </insert>
 
     <insert id="insertMeetingMemo">
@@ -14,9 +14,10 @@
         VALUES (#{meetingNumber.value}, #{memo.value})
     </insert>
 
-    <select id="selectSubject" resultType="meeting.domain.model.meeting.Subject">
+    <select id="MeetingResource" resultType="meeting.infrastructure.datasource.meeting.MeetingResource">
         SELECT
-            件名 as "value"
+            件名 as "subject.value",
+            主催者番号 as "organizerNumber.value"
         FROM
             ミーティング._ミーティング
         WHERE

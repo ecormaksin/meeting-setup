@@ -2,6 +2,7 @@ package meeting.infrastructure.datasource.meeting;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.Memo;
+import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.domain.model.meeting.Subject;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
 import meeting.domain.model.meeting.organizer.ClientBrowser;
@@ -18,10 +19,12 @@ import java.util.Optional;
 
 @Mapper
 public interface MeetingMapper {
-    void insertMeeting(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("subject") Subject subject);
+    void insertMeeting(@Param("meetingNumber") MeetingNumber meetingNumber,
+                       @Param("subject") Subject subject,
+                       @Param("organizerNumber") OrganizerNumber organizerNumber);
     void insertMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("memo") Memo memo);
 
-    Optional<Subject> selectSubject(@Param("meetingNumber") MeetingNumber meetingNumber);
+    Optional<MeetingResource> selectMeetingResource(@Param("meetingNumber") MeetingNumber meetingNumber);
     Optional<Memo> selectMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
     Optional<ClientBrowser> selectOrganizerTerminal(@Param("meetingNumber") MeetingNumber meetingNumber);
 
