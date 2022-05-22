@@ -2,6 +2,7 @@ package meeting.presentation.meeting.input.schedule;
 
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
+import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 
 import javax.validation.Valid;
@@ -32,6 +33,13 @@ public class ScheduleInput {
 
     public static ScheduleInput newInput() {
         return new ScheduleInput(ScheduleNumber.initialize(), ScheduleConstructInput.empty());
+    }
+
+    public static ScheduleInput fromDomainObject(final Schedule schedule) {
+        final ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
+        return new ScheduleInput(
+                schedule.scheduleNumber(),
+                ScheduleConstructInput.fromDomainObject(scheduleConstruct));
     }
 
     public boolean isEmpty() {

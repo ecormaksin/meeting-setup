@@ -1,6 +1,5 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
@@ -8,11 +7,11 @@ import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.construct.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,38 +56,39 @@ public class MeetingTest {
             "26, '×', '×', '△', 0, 1, 2",
             "27, '×', '×', '×', 0, 0, 3",
     })
-    void 指定した日程候補の都合種別ごとの人数を取得できる(int patternNumber,
-                    String participant1Attendance,
-                    String participant2Attendance,
-                    String participant3Attendance,
+    void 指定した日程の都合種別ごとの人数を取得できる(int patternNumber,
+                    String participant1Convenience,
+                    String participant2Convenience,
+                    String participant3Convenience,
                     int numberOfParticipantMaru,
                     int numberOfParticipantSankaku,
                     int numberOfParticipantsBatsu) {
 
-        List<Schedule> scheduleList = Arrays.asList(
-                Schedule.of(patternNumber,
-                        LocalDate.of(2021, 12, patternNumber),
-                        LocalTime.of(10, 0),
-                        LocalTime.of(11, 0))
+        final ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
+        final LocalDate meetingDateValue = LocalDate.of(2021, 12, patternNumber);
+        final MeetingDate meetingDate = new MeetingDate(meetingDateValue);
+        final ScheduleConstruct scheduleConstruct = new ScheduleConstruct(
+                meetingDate,
+                new StartHour(10),
+                StartMinute.JUST,
+                Duration.ONE_HOUR);
+
+        final List<Schedule> scheduleList = Arrays.asList(
+                new Schedule(scheduleNumber, scheduleConstruct)
         );
 
         Attendances attendances = createAttendances(patternNumber,
-                                        Arrays.asList(participant1Attendance,
-                                                        participant2Attendance,
-                                                        participant3Attendance));
-        ClientBrowser clientBrowser = ClientBrowser.of(
-                "127.0.0.1",
-                "Windows",
-                "Chrome");
+                                        Arrays.asList(participant1Convenience,
+                                                        participant2Convenience,
+                                                        participant3Convenience));
 
         Meeting meeting = new Meeting(MeetingNumber.newNumber(),
                 new Subject("件名テスト"),
                 new Memo("メモテスト"),
+                OrganizerNumber.newNumber(),
                 Schedules.of(scheduleList),
-                attendances,
-                clientBrowser);
+                attendances);
 
-        ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
         assertEquals(numberOfParticipantMaru,
                 meeting.totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル).value(),
                 String.format("◯と回答した人数は%d", numberOfParticipantMaru));

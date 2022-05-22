@@ -42,7 +42,6 @@ public class MeetingDatasource implements MeetingRepository {
         insertMeeting(meetingNumber, meetingCreationRequest.subject());
         insertMeetingMemo(meetingNumber, meetingCreationRequest.memo());
         insertSchedules(meetingNumber, meetingCreationRequest.schedules());
-        insertOrganizerTerminal(meetingNumber, meetingCreationRequest.organizerTerminal());
 
         return meetingNumber;
     }

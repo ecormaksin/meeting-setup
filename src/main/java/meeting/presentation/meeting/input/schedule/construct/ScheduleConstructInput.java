@@ -1,6 +1,6 @@
 package meeting.presentation.meeting.input.schedule.construct;
 
-import meeting.domain.model.schedule.construct.ScheduleConstruct;
+import meeting.domain.model.schedule.construct.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -55,10 +55,24 @@ public class ScheduleConstructInput {
     }
 
     public static ScheduleConstructInput empty() {
-        return new ScheduleConstructInput(MeetingDateInput.empty(),
+        return new ScheduleConstructInput(
+                MeetingDateInput.empty(),
                 StartHourInput.empty(),
                 StartMinuteInput.empty(),
                 DurationInput.empty());
+    }
+
+    public static ScheduleConstructInput fromDomainObject(final ScheduleConstruct scheduleConstruct) {
+        final MeetingDate meetingDate = scheduleConstruct.meetingDate();
+        final StartHour startHour = scheduleConstruct.startHour();
+        final StartMinute startMinute = scheduleConstruct.startMinute();
+        final Duration duration = scheduleConstruct.duration();
+
+        return new ScheduleConstructInput(
+                MeetingDateInput.fromDomainObject(meetingDate),
+                StartHourInput.fromDomainObject(startHour),
+                StartMinuteInput.fromDomainObject(startMinute),
+                DurationInput.fromDomainObject(duration));
     }
 
     public boolean isFuture(@NotNull final LocalDateTime dateTimeToCompare) {

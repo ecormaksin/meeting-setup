@@ -37,6 +37,16 @@ public class ScheduleInputs {
         return of(initialList);
     }
 
+    public static ScheduleInputs fromDomainObject(final Schedules schedules) {
+        List<ScheduleInput> inputs = new ArrayList<>();
+        for (Schedule schedule : schedules.asList()) {
+            ScheduleInput input = ScheduleInput.fromDomainObject(schedule);
+            inputs.add(input);
+        }
+
+        return of(inputs);
+    }
+
     @AssertTrue(message = "日程を1件以上指定してください。")
     boolean haveAtLeastOne() {
         return list.stream().anyMatch(s -> s.isValidAsDomain());

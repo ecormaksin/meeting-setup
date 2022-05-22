@@ -65,6 +65,16 @@ public class MeetingInputForm {
                 scheduleInputs.remove(index));
     }
 
+    public MeetingCreationRequest toCreationRequest() {
+        final Schedules schedules = scheduleInputs.toDomainObject();
+        return new MeetingCreationRequest(meetingNumber, subject, memo, organizerNumber, schedules);
+    }
+
+    public MeetingEditRequest toEditRequest() {
+        final Schedules schedules = scheduleInputs.toDomainObject();
+        return new MeetingEditRequest(meetingNumber, subject, memo, organizerNumber, schedules);
+    }
+
     public MeetingNumber meetingNumber() {
         return meetingNumber;
     }
@@ -83,10 +93,5 @@ public class MeetingInputForm {
 
     public ScheduleInputs scheduleInputs() {
         return scheduleInputs;
-    }
-
-    public MeetingCreationRequest toCreationRequest() {
-        final Schedules schedules = scheduleInputs.toDomainObject();
-        return new MeetingCreationRequest(meetingNumber, subject, memo, organizerNumber, schedules);
     }
 }

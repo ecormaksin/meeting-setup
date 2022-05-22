@@ -18,36 +18,28 @@ DROP TYPE IF EXISTS 日程候補.会議時間 CASCADE;
 CREATE TYPE 日程候補.会議時間 AS ENUM ('30', '60', '90', '120');
 
 -- ミーティング スキーマ
-CREATE TABLE ミーティング.ミーティング
+CREATE TABLE ミーティング._ミーティング
 (
   ミーティング番号 CHAR(26) PRIMARY KEY,
   件名 VARCHAR(30) NOT NULL,
+  主催者番号 CHAR(26) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ミーティング.主催者端末
+CREATE TABLE ミーティング._ミーティングメモ
 (
-  ミーティング番号 CHAR(26) PRIMARY KEY REFERENCES ミーティング.ミーティング,
-  IPアドレス VARCHAR(40) NOT NULL,
-  OSファミリー VARCHAR(10) NOT NULL,
-  ユーザーエージェントファミリー VARCHAR(30) NOT NULL,
-  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ミーティング.ミーティングメモ
-(
-  ミーティング番号 CHAR(26) PRIMARY KEY REFERENCES ミーティング.ミーティング,
-  メモ TEXT NOT NULL,
+  ミーティング番号 CHAR(26) PRIMARY KEY REFERENCES ミーティング._ミーティング,
+  メモ VARCHAR(100) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 日程候補 スキーマ
 CREATE SEQUENCE 日程候補.日程番号;
 
-CREATE TABLE 日程候補.日程
+CREATE TABLE 日程候補._日程
 (
   日程番号 INTEGER PRIMARY KEY,
-  ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング.ミーティング,
+  ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング._ミーティング,
   開催日 DATE NOT NULL,
   開始時間 開始時間 NOT NULL,
   開始分 開始分 NOT NULL,
@@ -57,10 +49,10 @@ CREATE TABLE 日程候補.日程
 );
 
 -- 出欠 スキーマ
-CREATE TABLE 出欠.出欠
+CREATE TABLE 出欠._出欠
 (
   出欠番号 CHAR(32) PRIMARY KEY,
-  ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング.ミーティング,
+  ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング._ミーティング,
   参加者名 VARCHAR(40) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (ミーティング番号, 参加者名)
@@ -68,19 +60,19 @@ CREATE TABLE 出欠.出欠
 
 CREATE SEQUENCE 出欠.都合番号;
 
-CREATE TABLE 出欠.都合
+CREATE TABLE 出欠._都合
 (
   都合番号 INTEGER PRIMARY KEY,
-  出欠番号 CHAR(32) NOT NULL REFERENCES 出欠.出欠,
-  日程番号 INTEGER NOT NULL REFERENCES 日程候補.日程,
+  出欠番号 CHAR(32) NOT NULL REFERENCES 出欠._出欠,
+  日程番号 INTEGER NOT NULL REFERENCES 日程候補._日程,
   都合種別 VARCHAR(16) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (出欠番号, 日程番号)
 );
 
-CREATE TABLE 出欠.出欠コメント
+CREATE TABLE 出欠._出欠コメント
 (
-  出欠番号 CHAR(32) PRIMARY KEY REFERENCES 出欠.出欠,
+  出欠番号 CHAR(32) PRIMARY KEY REFERENCES 出欠._出欠,
   出欠コメント VARCHAR(255) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

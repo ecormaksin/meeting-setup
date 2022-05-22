@@ -5,12 +5,12 @@
 <mapper namespace="meeting.infrastructure.datasource.meeting.MeetingMapper">
 
     <insert id="insertMeeting">
-        INSERT INTO ミーティング.ミーティング(ミーティング番号, 件名)
+        INSERT INTO ミーティング._ミーティング(ミーティング番号, 件名)
         VALUES (#{meetingNumber.value}, #{subject.value})
     </insert>
 
     <insert id="insertMeetingMemo">
-        INSERT INTO ミーティング.ミーティングメモ(ミーティング番号, メモ)
+        INSERT INTO ミーティング._ミーティングメモ(ミーティング番号, メモ)
         VALUES (#{meetingNumber.value}, #{memo.value})
     </insert>
 
@@ -18,7 +18,7 @@
         SELECT
             件名 as "value"
         FROM
-            ミーティング.ミーティング
+            ミーティング._ミーティング
         WHERE
             ミーティング番号 = #{meetingNumber.value}
     </select>
@@ -27,7 +27,7 @@
         SELECT
             メモ as "value"
         FROM
-            ミーティング.ミーティングメモ
+            ミーティング._ミーティングメモ
         WHERE
             ミーティング番号 = #{meetingNumber.value}
     </select>
@@ -49,25 +49,25 @@
     </delete>
 
     <delete id="deleteMeetingMemo">
-        DELETE FROM ミーティング.ミーティングメモ
+        DELETE FROM ミーティング._ミーティングメモ
         WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 
     <delete id="deleteMeeting">
-        DELETE FROM ミーティング.ミーティング
+        DELETE FROM ミーティング._ミーティング
         WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 
     <select id="organizerMeetingListItems" resultType="meeting.domain.model.meeting.meeting_list.MeetingListItem">
         SELECT
-            ミーティング.ミーティング番号 as "meetingNumber.value",
+            ミーティング._ミーティング番号 as "meetingNumber.value",
             ミーティング.件名 as "subject.value"
         FROM
-            ミーティング.ミーティング AS ミーティング
+            ミーティング._ミーティング AS ミーティング
             INNER JOIN
                 ミーティング.主催者端末 AS 主催者端末
                     ON
-                    主催者端末.ミーティング番号 = ミーティング.ミーティング番号
+                    主催者端末.ミーティング番号 = ミーティング._ミーティング番号
         WHERE
             主催者端末.IPアドレス = #{ipAddress.value}
             AND 主催者端末.OSファミリー = #{osFamily.value}
@@ -81,20 +81,20 @@
             <bind name="keywordCondition" value="'%' + keyword.value + '%'" />
         </if>
         SELECT
-            ミーティング.ミーティング番号 as "meetingNumber.value",
+            ミーティング._ミーティング番号 as "meetingNumber.value",
             ミーティング.件名 as "subject.value",
             SQ_日程候補.最小開始日時 as "earliestStartDateTime.value",
             SQ_日程候補.最大終了日時 as "latestEndDateTime.value"
         FROM
-            ミーティング.ミーティング AS ミーティング
+            ミーティング._ミーティング AS ミーティング
             LEFT OUTER JOIN
-            ミーティング.ミーティングメモ AS ミーティングメモ
+            ミーティング._ミーティングメモ AS ミーティングメモ
                 ON
-                ミーティングメモ.ミーティング番号 = ミーティング.ミーティング番号
+                ミーティングメモ.ミーティング番号 = ミーティング._ミーティング番号
             INNER JOIN
                 ミーティング.主催者端末 AS 主催者端末
                 ON
-                主催者端末.ミーティング番号 = ミーティング.ミーティング番号
+                主催者端末.ミーティング番号 = ミーティング._ミーティング番号
             INNER JOIN (
                 SELECT
                     ミーティング番号,
@@ -109,7 +109,7 @@
                     ミーティング番号
             ) AS SQ_日程候補
                 ON
-                SQ_日程候補.ミーティング番号 = ミーティング.ミーティング番号
+                SQ_日程候補.ミーティング番号 = ミーティング._ミーティング番号
         WHERE
             主催者端末.IPアドレス = #{ipAddress.value}
             AND 主催者端末.OSファミリー = #{osFamily.value}

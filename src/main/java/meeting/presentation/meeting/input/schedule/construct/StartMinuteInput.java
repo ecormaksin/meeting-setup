@@ -23,6 +23,12 @@ public class StartMinuteInput implements Element {
         return new StartMinuteInput("");
     }
 
+    public static StartMinuteInput fromDomainObject(final StartMinute startMinute) {
+        final int intValue = startMinute.value();
+        final String stringValue = String.valueOf(intValue);
+        return new StartMinuteInput(stringValue);
+    }
+
     @AssertTrue(message = "開始分は30分単位で入力してください。")
     boolean isValid() {
         if (isEmpty()) return true;

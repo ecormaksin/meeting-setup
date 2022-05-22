@@ -3,7 +3,6 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
-import meeting.presentation.ClientInfoGetter;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +24,8 @@ import java.net.URI;
 public class MeetingCreationController {
     MeetingCreationScenario meetingCreationScenario;
 
-    ClientInfoGetter clientInfoGetter;
-
-    public MeetingCreationController(MeetingCreationScenario meetingCreationScenario,
-                                     ClientInfoGetter clientInfoGetter) {
-
+    public MeetingCreationController(MeetingCreationScenario meetingCreationScenario) {
         this.meetingCreationScenario = meetingCreationScenario;
-        this.clientInfoGetter = clientInfoGetter;
     }
 
     @GetMapping
@@ -59,15 +53,14 @@ public class MeetingCreationController {
     }
 
     @PostMapping
-    String create(HttpServletRequest request,
-                  @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+    String create(@Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                   BindingResult bindingResult,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return "meeting/create/form";
 
-        MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest();
+        final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest();
         meetingCreationScenario.create(meetingCreationRequest);
 
         attributes.addFlashAttribute("meetingNumber", meetingInputForm.meetingNumber());
@@ -77,7 +70,11 @@ public class MeetingCreationController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingNumber") MeetingNumber meetingNumber, Model model, UriComponentsBuilder builder) {
+    String completed(Model model,
+                     @ModelAttribute("meetingNumber") MeetingNumber meetingNumber,
+                     UriComponentsBuilder builder) {
+
+        model.addAttribute("meetingNumber", meetingNumber);
 
         URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber.value())).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
@@ -92,7 +89,6 @@ public class MeetingCreationController {
                 "subject.value",
                 "memo.value",
                 "organizerNumber.value",
-                "scheduleInputs.list[*"
-        );
+                "scheduleInputs.list[*");
     }
 }

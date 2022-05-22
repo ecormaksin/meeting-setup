@@ -26,6 +26,12 @@ public class DurationInput implements Element {
         return new DurationInput("");
     }
 
+    public static DurationInput fromDomainObject(final Duration duration) {
+        final int intValue = duration.value();
+        final String stringValue = String.valueOf(intValue);
+        return new DurationInput(stringValue);
+    }
+
     @AssertTrue(message = "会議時間は30分単位・2時間以内で入力してください。")
     boolean isValid() {
         if (isEmpty()) return true;

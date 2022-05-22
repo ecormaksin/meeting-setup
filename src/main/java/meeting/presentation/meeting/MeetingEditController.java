@@ -2,8 +2,10 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingEditScenario;
 import meeting.domain.model.meeting.*;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
+import meeting.domain.model.schedule.Schedules;
 import meeting.presentation.ClientInfoGetter;
+import meeting.presentation.meeting.input.meeting.MeetingInputForm;
+import meeting.presentation.meeting.input.schedule.ScheduleInputs;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,73 +36,70 @@ public class MeetingEditController {
 
     @GetMapping
     String init(Model model,
-                @PathVariable("meetingNumber") MeetingNumber meetingNumber,
+                @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber,
+                @PathVariable("meetingNumber") final MeetingNumber meetingNumber,
                 HttpServletRequest request) {
 
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
-        if (meeting.editability(clientBrowser) != MeetingEditability.編集可) {
+        if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
             throw new MeetingCannotEditException();
         }
 
-        model.addAttribute("meetingEditRequest", new MeetingEditRequest(
+        final Schedules schedules = meeting.schedules();
+
+        model.addAttribute("meetingInputForm", new MeetingInputForm(
                 meetingNumber,
                 meeting.subject(),
                 meeting.memo(),
-                meeting.schedules()
+                meeting.organizerNumber(),
+                ScheduleInputs.fromDomainObject(schedules)
         ));
 
         return "meeting/edit/form";
     }
 
     @PostMapping(params={"addSchedule"})
-    String addSchedule(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                       @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest) {
-        meetingEditRequest.addEmptySchedule();
+    String addSchedule(Model model,
+                       @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm) {
+
+        final MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
+        model.addAttribute("meetingInputForm", scheduleAdded);
         return "meeting/edit/form";
     }
 
     @PostMapping(params={"removeSchedule"})
-    String removeSchedule(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                          @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
+    String removeSchedule(Model model,
+                          @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                           HttpServletRequest request) {
+
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
-        meetingEditRequest.removeSchedule(index.intValue());
+        final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
+        model.addAttribute("meetingInputForm", scheduleRemoved);
         return "meeting/edit/form";
-    }
-
-    private void checkIfClientBrowserFalsified(HttpServletRequest request,
-                                               MeetingEditRequest meetingEditRequest) {
-
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
-
-        if (clientBrowser.equals(meetingEditRequest.organizerTerminal())) return;
-
-        throw new ClientBrowserFalsifiedException();
     }
 
     @PostMapping
     String edit(HttpServletRequest request,
-                    @PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                    @Validated @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
+                    @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber,
+                    @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                     BindingResult bindingResult,
                     RedirectAttributes attributes,
                     UriComponentsBuilder builder) {
 
-        checkIfClientBrowserFalsified(request, meetingEditRequest);
-
+        final MeetingNumber meetingNumber = meetingInputForm.meetingNumber();
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
-        if (meeting.editability(meetingEditRequest.organizerTerminal()) != MeetingEditability.編集可) {
+        if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
             throw new MeetingCannotEditException();
         }
 
         if (bindingResult.hasErrors()) return "meeting/edit/form";
 
+        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest();
         meetingEditScenario.edit(meeting, meetingEditRequest);
 
-        attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
+        attributes.addFlashAttribute("meetingNumber", meetingNumber);
 
         URI uri = builder.path(
                             String.format("/meeting/%s/edit/completed", meetingNumber.value())
@@ -109,28 +108,24 @@ public class MeetingEditController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingNumber") String meetingNumber,
+    String completed(@ModelAttribute("meetingNumber") MeetingNumber meetingNumber,
                      Model model, UriComponentsBuilder builder) {
 
-        model.addAttribute("meetingNumber", meetingNumber);
-
-        URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber)).build().toUri();
+        URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber.value())).build().toUri();
         model.addAttribute("meetingShowLocation", uri.toString());
 
         return "meeting/edit/completed";
     }
 
     @PostMapping(params={"delete"})
-    String delete(HttpServletRequest request,
+    String delete(@RequestHeader("organizerNumber") final OrganizerNumber organizerNumber,
                   @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                   @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
                   UriComponentsBuilder builder) {
 
-        checkIfClientBrowserFalsified(request, meetingEditRequest);
-
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
-        if (meeting.editability(meetingEditRequest.organizerTerminal()) != MeetingEditability.編集可) {
+        if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
             throw new MeetingCannotDeleteException();
         }
 
@@ -148,10 +143,7 @@ public class MeetingEditController {
                 "meetingNumber.value",
                 "subject.value",
                 "memo.value",
-                "schedules.list[*",
-                "organizerTerminal.ipAddress.value",
-                "organizerTerminal.osFamily.value",
-                "organizerTerminal.userAgentFamily.value"
-        );
+                "organizerNumber.value",
+                "scheduleInputs.list[*");
     }
 }

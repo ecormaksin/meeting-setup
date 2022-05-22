@@ -24,6 +24,10 @@ public class MeetingDateInput implements Element {
         return new MeetingDateInput("");
     }
 
+    public static MeetingDateInput fromDomainObject(final MeetingDate meetingDate) {
+        return new MeetingDateInput(meetingDate.stringValue());
+    }
+
     @AssertTrue(message = "開催日は'yyyy-MM-dd'形式で入力してください。")
     boolean isValid() {
         if (isEmpty()) return true;

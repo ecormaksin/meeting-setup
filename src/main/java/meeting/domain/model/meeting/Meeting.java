@@ -6,7 +6,6 @@ import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.attendance.TotalNumberOfParticipant;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
@@ -27,30 +26,29 @@ public class Meeting {
     Memo memo;
 
     @Valid
+    OrganizerNumber organizerNumber;
+
+    @Valid
     Schedules schedules;
 
     @Valid
     Attendances attendances;
 
-    @Valid
-    ClientBrowser organizerTerminal;
+    @Deprecated
+    Meeting() {}
 
     public Meeting(@Valid MeetingNumber meetingNumber,
                    @Valid Subject subject,
                    @Valid Memo memo,
+                   @Valid OrganizerNumber organizerNumber,
                    @Valid Schedules schedules,
-                   @Valid Attendances attendances,
-                   @Valid ClientBrowser clientBrowser) {
+                   @Valid Attendances attendances) {
         this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;
+        this.organizerNumber = organizerNumber;
         this.schedules = schedules;
         this.attendances = attendances;
-        this.organizerTerminal = clientBrowser;
-    }
-
-    @Deprecated
-    Meeting() {
     }
 
     public MeetingNumber meetingNumber() {
@@ -69,12 +67,12 @@ public class Meeting {
         return schedules;
     }
 
-    public Attendances attendances() {
-        return attendances;
+    public OrganizerNumber organizerNumber() {
+        return organizerNumber;
     }
 
-    public ClientBrowser organizerTerminal() {
-        return organizerTerminal;
+    public Attendances attendances() {
+        return attendances;
     }
 
     public TotalNumberOfParticipant totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
@@ -111,8 +109,8 @@ public class Meeting {
         return ConvenienceCategory.未回答;
     }
 
-    public MeetingEditability editability(ClientBrowser clientBrowser) {
-        if (clientBrowser.equals(organizerTerminal)) {
+    public MeetingEditability editability(final OrganizerNumber organizerNumber) {
+        if (this.organizerNumber.isSame(organizerNumber)) {
             return MeetingEditability.編集可;
         }
         return MeetingEditability.編集不可;

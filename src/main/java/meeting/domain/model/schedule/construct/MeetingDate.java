@@ -37,6 +37,10 @@ public class MeetingDate extends ValidationConcern {
         return this.value;
     }
 
+    public String stringValue() {
+        return value.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
     public String show() {
         return value.format(DateTimeFormatter.ofPattern("MM/dd(E)"));
     }
