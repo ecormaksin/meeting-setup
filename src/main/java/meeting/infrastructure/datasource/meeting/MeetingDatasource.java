@@ -151,10 +151,9 @@ public class MeetingDatasource implements MeetingRepository {
                     scheduleNumber,
                     meetingNumber,
                     schedule.meetingDate(),
-                    String.valueOf(schedule.startHourValue()),
+                    schedule.startHourStringValue(),
                     schedule.startMinuteLabel(),
-                    String.valueOf(schedule.durationValue())
-            );
+                    schedule.durationStringValue());
             scheduleNumbers.add(scheduleNumber);
         });
 

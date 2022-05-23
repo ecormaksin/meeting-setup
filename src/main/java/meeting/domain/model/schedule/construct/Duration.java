@@ -43,6 +43,10 @@ public enum Duration {
         return value;
     }
 
+    public String stringValue() {
+        return String.valueOf(value);
+    }
+
     public String label() {
         return label;
     }

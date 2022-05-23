@@ -62,4 +62,8 @@ public class ScheduleInput {
     public Schedule toDomainObject() {
         return new Schedule(scheduleNumber, scheduleConstruct.toDomainObject());
     }
+
+    public ScheduleConstructInput scheduleConstructInput() {
+        return scheduleConstruct;
+    }
 }

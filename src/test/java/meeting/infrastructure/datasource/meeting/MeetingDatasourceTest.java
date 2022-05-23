@@ -3,10 +3,13 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.MeetingDBTest;
 import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.*;
+import meeting.presentation.meeting.input.schedule.ScheduleInput;
+import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,18 +40,18 @@ class MeetingDatasourceTest {
     @Autowired
     MockMvc mockMvc;
 
-    LocalDateTime currentDateTime = LocalDateTime.now();
-    LocalDate currentDate = currentDateTime.toLocalDate();
+    LocalDateTime testDateTime = LocalDateTime.now().plusDays(1);
+    LocalDate testDate = testDateTime.toLocalDate();
 
     ScheduleConstruct firstScheduleConstruct = new ScheduleConstruct(
-            new MeetingDate(currentDate),
+            new MeetingDate(testDate),
             new StartHour(10),
             StartMinute.JUST,
             Duration.ONE_HOUR);
     LocalDateTime firstScheduleStart = LocalDateTime.of(
-            currentDateTime.getYear(),
-            currentDateTime.getMonth(),
-            currentDateTime.getDayOfMonth(),
+            testDateTime.getYear(),
+            testDateTime.getMonth(),
+            testDateTime.getDayOfMonth(),
             10,
             0
             ).plusDays(1);
@@ -61,14 +64,20 @@ class MeetingDatasourceTest {
     LocalDateTime secondScheduleEnd = secondScheduleStart.plusHours(1);
 
     ScheduleConstruct secondScheduleConstruct = new ScheduleConstruct(
-            new MeetingDate(currentDate.plusDays(1)),
+            new MeetingDate(testDate.plusDays(1)),
             new StartHour(11),
             StartMinute.JUST,
             Duration.ONE_HOUR);
-    Schedule secondSchedule = new Schedule(ScheduleNumber.initialize(), firstScheduleConstruct);
+    Schedule secondSchedule = new Schedule(ScheduleNumber.initialize(), secondScheduleConstruct);
 
     private MockHttpServletRequestBuilder postMeetingCreation() {
         return post("/meeting/create");
+    }
+
+    private MultiValueMap<String, String> meetingNumberParam() {
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("meetingNumber.value", MeetingNumber.newNumber().value());
+        return param;
     }
 
     private MultiValueMap<String, String> subjectParam() {
@@ -89,6 +98,12 @@ class MeetingDatasourceTest {
         return param;
     }
 
+    private MultiValueMap<String, String> organizerNumberParam() {
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("organizerNumber.value", OrganizerNumber.newNumber().value());
+        return param;
+    }
+
     private MultiValueMap<String, String> orderedSchedulesParam() {
         List<Schedule> scheduleList = Arrays.asList(firstSchedule, secondSchedule);
         return schedulesParam(scheduleList);
@@ -103,31 +118,31 @@ class MeetingDatasourceTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
         for (int i = 0; i < scheduleList.size(); i++) {
-            Schedule schedule = scheduleList.get(i);
-            params.add("schedules.list[" + i + "].scheduleConstruct.meetingDate.value", schedule.meetingDate().toString());
-            params.add("schedules.list[" + i + "].scheduleConstruct.startTime.value", schedule.startTime().toString());
-            params.add("schedules.list[" + i + "].scheduleConstruct.endTime.value", schedule.endTime().toString());
+            final Schedule schedule = scheduleList.get(i);
+            final ScheduleInput scheduleInput = ScheduleInput.fromDomainObject(schedule);
+            final ScheduleConstructInput scheduleConstructInput = scheduleInput.scheduleConstructInput();
+
+            params.add("scheduleInputs.list[" + i + "].scheduleConstruct.meetingDate.value",
+                        scheduleConstructInput.meetingDate().value());
+            params.add("scheduleInputs.list[" + i + "].scheduleConstruct.startHour.value",
+                    scheduleConstructInput.startHour().value());
+            params.add("scheduleInputs.list[" + i + "].scheduleConstruct.startMinute.value",
+                    scheduleConstructInput.startMinute().value());
+            params.add("scheduleInputs.list[" + i + "].scheduleConstruct.duration.value",
+                    scheduleConstructInput.duration().value());
         }
 
         return params;
     }
 
-    private MultiValueMap<String, String> organizerTerminalParam() {
-        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
-        param.add("organizerTerminal.ipAddress.value", "127.0.0.1");
-        param.add("organizerTerminal.osFamily.value", "Windows");
-        param.add("organizerTerminal.userAgentFamily.value", "Chrome");
-        return param;
-    }
-
     private MeetingNumber createdMeetingNumber(MvcResult result) {
-        FlashMap flashMap = result.getFlashMap();
-        String meetingNumberValue = (String) flashMap.get("meetingNumber");
+        final FlashMap flashMap = result.getFlashMap();
+        final String meetingNumberValue = (String) flashMap.get("meetingNumber");
         return new MeetingNumber(meetingNumberValue);
     }
 
     private Meeting findMeeting(MvcResult result) {
-        MeetingNumber meetingNumber = createdMeetingNumber(result);
+        final MeetingNumber meetingNumber = createdMeetingNumber(result);
         return meetingDatasource.meetingOf(meetingNumber);
     }
 
@@ -150,10 +165,11 @@ class MeetingDatasourceTest {
         private MvcResult performPostRequest() throws Exception {
             return mockMvc.perform(
                     MeetingDatasourceTest.this.postMeetingCreation()
+                            .params(MeetingDatasourceTest.this.meetingNumberParam())
                             .params(MeetingDatasourceTest.this.subjectParam())
                             .params(MeetingDatasourceTest.this.memoParam())
+                            .params(MeetingDatasourceTest.this.organizerNumberParam())
                             .params(MeetingDatasourceTest.this.orderedSchedulesParam())
-                            .params(MeetingDatasourceTest.this.organizerTerminalParam())
                     )
                     .andReturn();
         }
@@ -271,10 +287,11 @@ class MeetingDatasourceTest {
         private MvcResult performPostRequest() throws Exception {
             return mockMvc.perform(
                             MeetingDatasourceTest.this.postMeetingCreation()
+                                    .params(MeetingDatasourceTest.this.meetingNumberParam())
                                     .params(MeetingDatasourceTest.this.subjectParam())
                                     .params(MeetingDatasourceTest.this.memoWithoutValueParam())
+                                    .params(MeetingDatasourceTest.this.organizerNumberParam())
                                     .params(MeetingDatasourceTest.this.reverseOrderedSchedulesParam())
-                                    .params(MeetingDatasourceTest.this.organizerTerminalParam())
                     )
                     .andReturn();
         }

@@ -5,7 +5,6 @@ import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingEditability;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.OrganizerNumber;
-import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 public class MeetingShowController {
     MeetingShowScenario meetingShowScenario;
 
-    ClientInfoGetter clientInfoGetter;
-
-    public MeetingShowController(MeetingShowScenario meetingShowScenario,
-                                 ClientInfoGetter clientInfoGetter) {
+    public MeetingShowController(MeetingShowScenario meetingShowScenario) {
         this.meetingShowScenario = meetingShowScenario;
-        this.clientInfoGetter = clientInfoGetter;
     }
 
     @GetMapping

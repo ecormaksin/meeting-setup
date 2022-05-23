@@ -51,15 +51,15 @@ public class Schedule {
         return scheduleConstruct.meetingDate();
     }
 
-    public int startHourValue() {
-        return scheduleConstruct.startHour().value();
+    public String startHourStringValue() {
+        return scheduleConstruct.startHour().stringValue();
     }
 
     public String startMinuteLabel() {
         return scheduleConstruct.startMinute().label();
     }
 
-    public int durationValue() {
-        return scheduleConstruct.duration().value();
+    public String durationStringValue() {
+        return scheduleConstruct.duration().stringValue();
     }
 }
