@@ -1,11 +1,11 @@
 package meeting.domain.model.schedule;
 
+import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.model.schedule.construct.MeetingDate;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 /**
  * 日程
@@ -34,9 +34,9 @@ public class Schedule {
         return this.scheduleConstruct.isSame(other.scheduleConstruct);
     }
 
-    public boolean isFutureWhenAdd(@NotNull final LocalDateTime dateTimeToCompare) {
+    public boolean isFutureThanWhenAdd(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
         if (scheduleNumberIssued()) return true;
-        return scheduleConstruct.isFuture(dateTimeToCompare);
+        return scheduleConstruct.isFutureThan(registrationRequestDateTime);
     }
 
     public ScheduleNumber scheduleNumber() {

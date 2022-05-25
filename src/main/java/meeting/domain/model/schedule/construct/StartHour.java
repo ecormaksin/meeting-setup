@@ -1,6 +1,6 @@
 package meeting.domain.model.schedule.construct;
 
-import library.ValidationConcern;
+import meeting.domain.ValidationConcern;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;

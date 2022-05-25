@@ -1,6 +1,6 @@
 package meeting.domain.model.schedule.construct;
 
-import library.ValidationConcern;
+import meeting.domain.ValidationConcern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;

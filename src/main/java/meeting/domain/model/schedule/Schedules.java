@@ -1,5 +1,7 @@
 package meeting.domain.model.schedule;
 
+import meeting.domain.ValidationConcern;
+
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,7 @@ import java.util.List;
 /**
  * 日程候補
  */
-public class Schedules {
+public class Schedules extends ValidationConcern {
     @NotNull
     @Size(min = 1, message = "日程を1件以上指定してください。")
     List<@NotNull @Valid Schedule> list;
@@ -20,6 +22,7 @@ public class Schedules {
 
     public Schedules(@NotNull final List<@NotNull @Valid Schedule> list) {
         this.list = list;
+        this.validate(this);
     }
 
     public static Schedules of(@NotNull final List<@NotNull @Valid Schedule> source) {

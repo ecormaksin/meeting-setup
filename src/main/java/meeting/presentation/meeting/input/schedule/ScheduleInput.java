@@ -1,5 +1,6 @@
 package meeting.presentation.meeting.input.schedule;
 
+import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
@@ -7,7 +8,6 @@ import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructIn
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 /**
  * 日程（入力用）
@@ -54,9 +54,9 @@ public class ScheduleInput {
         return this.scheduleConstruct.isSame(other.scheduleConstruct);
     }
 
-    public boolean isFutureWhenAdd(@NotNull final LocalDateTime dateTimeToCompare) {
+    public boolean isFutureThanWhenAdd(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
         if (scheduleNumber.issued()) return true;
-        return scheduleConstruct.isFuture(dateTimeToCompare);
+        return scheduleConstruct.isFuture(registrationRequestDateTime);
     }
 
     public Schedule toDomainObject() {

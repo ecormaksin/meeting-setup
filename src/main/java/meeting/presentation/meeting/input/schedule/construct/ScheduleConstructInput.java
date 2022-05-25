@@ -1,11 +1,11 @@
 package meeting.presentation.meeting.input.schedule.construct;
 
+import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.model.schedule.construct.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,10 +75,10 @@ public class ScheduleConstructInput {
                 DurationInput.fromDomainObject(duration));
     }
 
-    public boolean isFuture(@NotNull final LocalDateTime dateTimeToCompare) {
+    public boolean isFuture(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
         validateAsDomain();
         ScheduleConstruct scheduleConstruct = toDomainObject();
-        return scheduleConstruct.isFuture(dateTimeToCompare);
+        return scheduleConstruct.isFutureThan(registrationRequestDateTime);
     }
 
     @AssertTrue(message = "日程のすべての項目を入力してください。")

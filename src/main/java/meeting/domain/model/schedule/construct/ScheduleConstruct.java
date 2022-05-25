@@ -1,5 +1,6 @@
 package meeting.domain.model.schedule.construct;
 
+import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.type.time.TimeFormatter;
 
 import javax.validation.Valid;
@@ -53,12 +54,12 @@ public class ScheduleConstruct {
         return duration;
     }
 
-    public boolean isFuture(@NotNull final LocalDateTime dateTimeToCompare) {
+    public boolean isFutureThan(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
         final String timeString = String.format("%s:%s", startHour.value(), startMinute.value());
         final LocalTime localTime = LocalTime.parse(timeString, TimeFormatter.ofPattern());
         final LocalDateTime localDateTime = LocalDateTime.of(meetingDate.value(), localTime);
 
-        return localDateTime.isAfter(dateTimeToCompare);
+        return localDateTime.isAfter(registrationRequestDateTime.value());
     }
 
     public boolean isSame(@NotNull @Valid ScheduleConstruct other) {

@@ -1,4 +1,4 @@
-package library;
+package meeting.domain;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
