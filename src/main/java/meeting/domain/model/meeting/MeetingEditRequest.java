@@ -16,7 +16,8 @@ public class MeetingEditRequest extends MeetingRegistrationRequest {
                               @Valid Subject subject,
                               @Valid Memo memo,
                               @Valid OrganizerNumber organizerNumber,
-                              @Valid Schedules schedules) {
-        super(meetingNumber, subject, memo, organizerNumber, schedules);
+                              @Valid Schedules schedules,
+                              @Valid RegistrationRequestDateTime registrationRequestDateTime) {
+        super(meetingNumber, subject, memo, organizerNumber, schedules, registrationRequestDateTime);
     }
 }

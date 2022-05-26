@@ -5,6 +5,7 @@ import meeting.domain.model.schedule.construct.MeetingDate;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -26,16 +27,17 @@ public class Schedule {
         this.scheduleConstruct = scheduleConstruct;
     }
 
-    public boolean scheduleNumberIssued() {
-        return scheduleNumber.issued();
+    public ScheduleRegistrationStatus registrationStatus() {
+        return scheduleNumber.registrationStatus();
     }
 
     public boolean isDuplicated(@NotNull @Valid Schedule other) {
         return this.scheduleConstruct.isSame(other.scheduleConstruct);
     }
 
+    @AssertTrue(message = "日程を追加する時は未来の日時を指定してください。")
     public boolean isFutureThanWhenAdd(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
-        if (scheduleNumberIssued()) return true;
+        if (registrationStatus() == ScheduleRegistrationStatus.編集) return true;
         return scheduleConstruct.isFutureThan(registrationRequestDateTime);
     }
 

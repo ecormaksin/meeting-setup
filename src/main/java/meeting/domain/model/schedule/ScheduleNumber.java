@@ -17,8 +17,11 @@ public class ScheduleNumber {
         this.value = value;
     }
 
-    public boolean issued() {
-        return value > 0;
+    public ScheduleRegistrationStatus registrationStatus() {
+        return value > 0 ?
+                ScheduleRegistrationStatus.編集
+                :
+                ScheduleRegistrationStatus.追加;
     }
     public static ScheduleNumber initialize() {
         return new ScheduleNumber(0);

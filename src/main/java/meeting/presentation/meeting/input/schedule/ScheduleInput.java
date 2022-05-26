@@ -3,6 +3,7 @@ package meeting.presentation.meeting.input.schedule;
 import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
+import meeting.domain.model.schedule.ScheduleRegistrationStatus;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 
@@ -55,7 +56,7 @@ public class ScheduleInput {
     }
 
     public boolean isFutureThanWhenAdd(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
-        if (scheduleNumber.issued()) return true;
+        if (scheduleNumber.registrationStatus() == ScheduleRegistrationStatus.編集) return true;
         return scheduleConstruct.isFuture(registrationRequestDateTime);
     }
 

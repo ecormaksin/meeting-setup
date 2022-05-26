@@ -67,12 +67,22 @@ public class MeetingInputForm {
 
     public MeetingCreationRequest toCreationRequest() {
         final Schedules schedules = scheduleInputs.toDomainObject();
-        return new MeetingCreationRequest(meetingNumber, subject, memo, organizerNumber, schedules);
+        return new MeetingCreationRequest(meetingNumber,
+                                            subject,
+                                            memo,
+                                            organizerNumber,
+                                            schedules,
+                                            RegistrationRequestDateTime.now());
     }
 
     public MeetingEditRequest toEditRequest() {
         final Schedules schedules = scheduleInputs.toDomainObject();
-        return new MeetingEditRequest(meetingNumber, subject, memo, organizerNumber, schedules);
+        return new MeetingEditRequest(meetingNumber,
+                                        subject,
+                                        memo,
+                                        organizerNumber,
+                                        schedules,
+                                        RegistrationRequestDateTime.now());
     }
 
     public MeetingNumber meetingNumber() {

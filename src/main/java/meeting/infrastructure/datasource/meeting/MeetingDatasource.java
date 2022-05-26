@@ -143,7 +143,7 @@ public class MeetingDatasource implements MeetingRepository {
         List<Schedule> scheduleList = schedules.asList();
         scheduleList.forEach(schedule -> {
 
-            ScheduleNumber scheduleNumber = schedule.scheduleNumberIssued() ?
+            ScheduleNumber scheduleNumber = schedule.registrationStatus() == ScheduleRegistrationStatus.追加 ?
                     new ScheduleNumber(scheduleMapper.newScheduleNumber())
                     :
                     schedule.scheduleNumber();

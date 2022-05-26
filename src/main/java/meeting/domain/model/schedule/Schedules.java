@@ -1,6 +1,7 @@
 package meeting.domain.model.schedule;
 
 import meeting.domain.ValidationConcern;
+import meeting.domain.model.meeting.RegistrationRequestDateTime;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -27,6 +28,10 @@ public class Schedules extends ValidationConcern {
 
     public static Schedules of(@NotNull final List<@NotNull @Valid Schedule> source) {
         return new Schedules(source);
+    }
+
+    public boolean areAllValidStartDateTime(@NotNull @Valid final RegistrationRequestDateTime registrationRequestDateTime) {
+        return list.stream().allMatch(schedule -> schedule.isFutureThanWhenAdd(registrationRequestDateTime));
     }
 
     @AssertTrue(message = "日程は重複のないように指定してください。")
