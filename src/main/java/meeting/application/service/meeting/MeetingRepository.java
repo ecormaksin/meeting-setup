@@ -7,7 +7,7 @@ import meeting.domain.model.meeting.meeting_list.MeetingList;
  * ミーティング リポジトリ
  */
 public interface MeetingRepository {
-    MeetingNumber create(MeetingCreationRequest meetingCreationRequest);
+    void create(MeetingCreationRequest meetingCreationRequest);
 
     Meeting meetingOf(MeetingNumber meetingNumber);
 

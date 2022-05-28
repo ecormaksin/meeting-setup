@@ -41,6 +41,10 @@ public class StartHour extends ValidationConcern {
         return value;
     }
 
+    public String formattedValue() {
+        return String.format("%02d", value);
+    }
+
     public String stringValue() {
         return String.valueOf(value);
     }

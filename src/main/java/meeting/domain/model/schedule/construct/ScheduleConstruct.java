@@ -55,7 +55,7 @@ public class ScheduleConstruct {
     }
 
     public boolean isFutureThan(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
-        final String timeString = String.format("%s:%s", startHour.value(), startMinute.value());
+        final String timeString = String.format("%s:%s", startHour.formattedValue(), startMinute.label());
         final LocalTime localTime = LocalTime.parse(timeString, TimeFormatter.ofPattern());
         final LocalDateTime localDateTime = LocalDateTime.of(meetingDate.value(), localTime);
 

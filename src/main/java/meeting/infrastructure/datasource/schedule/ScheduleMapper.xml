@@ -8,7 +8,7 @@
     </select>
 
     <insert id="insertSchedule">
-        INSERT INTO 日程候補.日程(
+        INSERT INTO 日程候補._日程(
             日程番号,
             ミーティング番号,
             開催日,
@@ -40,7 +40,7 @@
     </select>
 
     <delete id="deleteSchedulesByMeetingNumber">
-        DELETE FROM 日程候補.日程
+        DELETE FROM 日程候補._日程
         WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 </mapper>

@@ -80,7 +80,7 @@
                     MIN(開始日時) AS 最小開始日時,
                     MAX(終了日時) AS 最大終了日時
                 FROM
-                    日程候補.日程
+                    日程候補._日程
                 WHERE
                     開始日時 &lt;= #{endDateTime}
                     AND 終了日時 &gt;= #{startDateTime}

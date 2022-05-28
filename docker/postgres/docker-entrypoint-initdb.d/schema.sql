@@ -41,9 +41,9 @@ CREATE TABLE 日程候補._日程
   日程番号 INTEGER PRIMARY KEY,
   ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング._ミーティング,
   開催日 DATE NOT NULL,
-  開始時間 開始時間 NOT NULL,
-  開始分 開始分 NOT NULL,
-  会議時間 会議時間 NOT NULL,
+  開始時間 日程候補.開始時間 NOT NULL,
+  開始分 日程候補.開始分 NOT NULL,
+  会議時間 日程候補.会議時間 NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (ミーティング番号, 開催日, 開始時間, 開始分, 会議時間)
 );

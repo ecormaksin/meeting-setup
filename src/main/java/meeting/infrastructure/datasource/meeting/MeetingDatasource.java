@@ -38,16 +38,15 @@ public class MeetingDatasource implements MeetingRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public MeetingNumber create(MeetingCreationRequest meetingCreationRequest) {
-        MeetingNumber meetingNumber = MeetingNumber.newNumber();
+    public void create(MeetingCreationRequest meetingCreationRequest) {
+
+        final MeetingNumber meetingNumber = meetingCreationRequest.meetingNumber();
 
         insertMeeting(meetingNumber,
                 meetingCreationRequest.subject(),
                 meetingCreationRequest.organizerNumber());
         insertMeetingMemo(meetingNumber, meetingCreationRequest.memo());
         insertSchedules(meetingNumber, meetingCreationRequest.schedules());
-
-        return meetingNumber;
     }
 
     @Override

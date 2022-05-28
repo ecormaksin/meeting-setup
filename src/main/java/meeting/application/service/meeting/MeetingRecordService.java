@@ -17,8 +17,8 @@ public class MeetingRecordService {
         this.meetingRepository = meetingRepository;
     }
 
-    public MeetingNumber create(MeetingCreationRequest meetingCreationRequest) {
-        return meetingRepository.create(meetingCreationRequest);
+    public void create(MeetingCreationRequest meetingCreationRequest) {
+        meetingRepository.create(meetingCreationRequest);
     }
 
     public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {

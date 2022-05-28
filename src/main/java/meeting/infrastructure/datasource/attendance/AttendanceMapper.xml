@@ -82,8 +82,8 @@
             日程候補.日程番号 AS "scheduleNumber.value",
             COALESCE(都合.都合種別, '未回答') AS "convenienceCategory"
         FROM
-            日程候補.日程 AS 日程候補
-            LEFT OUTER JOIN 出欠.都合 AS 都合
+            日程候補._日程 AS 日程候補
+            LEFT OUTER JOIN 出欠._都合 AS 都合
                 ON
                 都合.日程番号 = 日程候補.日程番号
                 AND 都合.出欠番号 = #{value}
