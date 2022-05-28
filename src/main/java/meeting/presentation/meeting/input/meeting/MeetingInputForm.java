@@ -42,7 +42,7 @@ public class MeetingInputForm {
         return new MeetingInputForm(
                 MeetingNumber.newNumber(),
                 Subject.empty(),
-                Memo.empty(),
+                Memo.blank(),
                 OrganizerNumber.newNumber(),
                 ScheduleInputs.initialEmptyList());
     }

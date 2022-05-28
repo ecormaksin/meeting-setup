@@ -6,8 +6,11 @@ import javax.validation.constraints.NotBlank;
  * 参加者名
  */
 public class ParticipantName {
-    @NotBlank(message = "{meeting.domain.model.attendance.ParticipantName.NotBlank.message}")
+    @NotBlank(message = "参加者名を入力してください。")
     String value;
+
+    @Deprecated
+    ParticipantName() {}
 
     public ParticipantName(String value) {
         this.value = value;
@@ -15,14 +18,5 @@ public class ParticipantName {
 
     public String value() {
         return value;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Deprecated
-    ParticipantName() {
     }
 }

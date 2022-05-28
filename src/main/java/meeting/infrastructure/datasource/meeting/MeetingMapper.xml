@@ -33,22 +33,6 @@
             ミーティング番号 = #{meetingNumber.value}
     </select>
 
-    <select id="selectOrganizerTerminal" resultType="meeting.domain.model.meeting.organizer.ClientBrowser">
-        SELECT
-            IPアドレス as "ipAddress.value",
-            OSファミリー as "osFamily.value",
-            ユーザーエージェントファミリー as "userAgentFamily.value"
-        FROM
-            ミーティング.主催者端末
-        WHERE
-            ミーティング番号 = #{meetingNumber.value}
-    </select>
-
-    <delete id="deleteOrganizerTerminal">
-        DELETE FROM ミーティング.主催者端末
-        WHERE ミーティング番号 = #{meetingNumber.value}
-    </delete>
-
     <delete id="deleteMeetingMemo">
         DELETE FROM ミーティング._ミーティングメモ
         WHERE ミーティング番号 = #{meetingNumber.value}
@@ -65,14 +49,8 @@
             ミーティング.件名 as "subject.value"
         FROM
             ミーティング._ミーティング AS ミーティング
-            INNER JOIN
-                ミーティング.主催者端末 AS 主催者端末
-                    ON
-                    主催者端末.ミーティング番号 = ミーティング._ミーティング番号
         WHERE
-            主催者端末.IPアドレス = #{ipAddress.value}
-            AND 主催者端末.OSファミリー = #{osFamily.value}
-            AND 主催者端末.ユーザーエージェントファミリー = #{userAgentFamily.value}
+            ミーティング.主催者番号 = #{organizerNumber.value}
         ORDER BY
             ミーティング.登録日時
     </select>

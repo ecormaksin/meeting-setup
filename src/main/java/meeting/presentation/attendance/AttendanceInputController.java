@@ -55,7 +55,8 @@ public class AttendanceInputController {
                         meetingNumber,
                         attendanceInputRequest.participantName());
         if (participantNameDuplicationStatus == あり) {
-            bindingResult.rejectValue("participantName.value", "error.code.participantName.duplicated");
+            bindingResult.rejectValue("participantName.value", null,
+                    participantNameDuplicationStatus.errorMessage());
             return "attendance/input/form";
         }
 

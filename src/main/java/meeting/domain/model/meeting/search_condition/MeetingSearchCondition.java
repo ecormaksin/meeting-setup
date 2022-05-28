@@ -1,11 +1,11 @@
 package meeting.domain.model.meeting.search_condition;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
 
 import static meeting.domain.model.meeting.search_condition.MeetingSearchConditionValidity.*;
 
-@StartDateLessThanEqualsEndDate
 public class MeetingSearchCondition {
     Keyword keyword;
 
@@ -15,6 +15,9 @@ public class MeetingSearchCondition {
     @Valid
     EndDate endDate;
 
+    @Deprecated
+    MeetingSearchCondition() {}
+
     public MeetingSearchCondition(Keyword keyword,
                                   @Valid StartDate startDate,
                                   @Valid EndDate endDate) {
@@ -23,7 +26,7 @@ public class MeetingSearchCondition {
         this.endDate = endDate;
     }
 
-    public static MeetingSearchCondition initial() {
+    public static MeetingSearchCondition initialize() {
         LocalDate currentDate = LocalDate.now();
 
         return new MeetingSearchCondition(Keyword.empty(),
@@ -31,15 +34,16 @@ public class MeetingSearchCondition {
                 new EndDate(currentDate.plusDays(7)));
     }
 
+    @AssertTrue(message = "「検索開始日 ≦ 検索終了日」となるように入力してください。")
+    boolean isDurationValid() {
+        return startDate.isSameOrAfter(endDate);
+    }
+
     public MeetingSearchConditionValidity validity() {
         if (startDate.isEmpty()) return 不当_検索開始日が未入力;
         if (endDate.isEmpty()) return 不当_検索終了日が未入力;
         if (endDate.value().isBefore(startDate.value())) return 不当_検索開始日と検索終了日の前後関係が逆;
         return 妥当;
-    }
-
-    @Deprecated
-    MeetingSearchCondition() {
     }
 
     public Keyword keyword() {

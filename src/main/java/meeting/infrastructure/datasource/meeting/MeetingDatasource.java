@@ -7,9 +7,11 @@ import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.meeting_list.MeetingList;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
-import meeting.domain.model.schedule.*;
+import meeting.domain.model.schedule.Schedule;
+import meeting.domain.model.schedule.ScheduleNumber;
+import meeting.domain.model.schedule.ScheduleRegistrationStatus;
+import meeting.domain.model.schedule.Schedules;
 import meeting.infrastructure.datasource.attendance.AttendanceMapper;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
@@ -59,11 +61,6 @@ public class MeetingDatasource implements MeetingRepository {
 
         Optional<Memo> optMemo = meetingMapper.selectMemo(meetingNumber);
 
-        Optional<ClientBrowser> optOrganizerTerminal = meetingMapper.selectOrganizerTerminal(meetingNumber);
-        if (optOrganizerTerminal.isEmpty()) {
-            meetingNotFound = true;
-        }
-
         List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingNumber(meetingNumber);
         if (scheduleList.isEmpty()) {
             meetingNotFound = true;
@@ -81,7 +78,7 @@ public class MeetingDatasource implements MeetingRepository {
 
         return new Meeting(meetingNumber,
                 subject,
-                optMemo.orElse(Memo.empty()),
+                optMemo.orElse(Memo.blank()),
                 organizerNumber,
                 new Schedules(scheduleList),
                 Attendances.of(attendanceList));
@@ -112,16 +109,14 @@ public class MeetingDatasource implements MeetingRepository {
 
     @Override
     public MeetingList search(MeetingSearchRequest meetingSearchRequest) {
-        ClientBrowser organizerTerminal = meetingSearchRequest.organizerTerminal();
+        OrganizerNumber organizerNumber = meetingSearchRequest.organizerNumber();
         MeetingSearchCondition searchCondition = meetingSearchRequest.searchCondition();
 
         LocalDateTime startDateTime = LocalDateTime.of(searchCondition.startDate().value(), LocalTime.of(0,0,0));
         LocalDateTime endDateTime = LocalDateTime.of(searchCondition.endDate().value(), LocalTime.of(23, 59, 59));
 
         List<MeetingListItem> list = meetingMapper.search(
-                organizerTerminal.ipAddress(),
-                organizerTerminal.osFamily(),
-                organizerTerminal.userAgentFamily(),
+                organizerNumber,
                 searchCondition.keyword(),
                 startDateTime,
                 endDateTime);
@@ -168,7 +163,6 @@ public class MeetingDatasource implements MeetingRepository {
 
         scheduleMapper.deleteSchedulesByMeetingNumber(meetingNumber);
 
-        meetingMapper.deleteOrganizerTerminal(meetingNumber);
         meetingMapper.deleteMeetingMemo(meetingNumber);
         meetingMapper.deleteMeeting(meetingNumber);
     }

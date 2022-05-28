@@ -71,7 +71,8 @@ public class AttendanceEditController {
                         attendanceId,
                         attendanceEditRequest.participantName());
         if (participantNameDuplicationStatus == あり) {
-            bindingResult.rejectValue("participantName.value", "error.code.participantName.duplicated");
+            bindingResult.rejectValue("participantName.value", null,
+                    participantNameDuplicationStatus.errorMessage());
             return "attendance/edit/form";
         }
 
@@ -101,7 +102,7 @@ public class AttendanceEditController {
             }
             existNotInputConvenience = true;
             bindingResult.rejectValue("conveniences.list[" + i + "].convenienceCategory",
-                    "error.code.convenience.notInput");
+                    null, "都合を入力してください。");
         }
 
         return existNotInputConvenience;

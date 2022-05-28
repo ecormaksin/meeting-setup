@@ -1,6 +1,5 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.meeting.organizer.ClientBrowser;
 import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
 
 import javax.validation.Valid;
@@ -11,30 +10,28 @@ import javax.validation.Valid;
 public class MeetingSearchRequest {
 
     @Valid
-    ClientBrowser organizerTerminal;
+    OrganizerNumber organizerNumber;
 
     @Valid
     MeetingSearchCondition searchCondition;
 
-    public MeetingSearchRequest(@Valid ClientBrowser clientBrowser,
+    @Deprecated
+    MeetingSearchRequest() {}
+
+    public MeetingSearchRequest(@Valid OrganizerNumber organizerNumber,
                                 @Valid MeetingSearchCondition searchCondition) {
-        this.organizerTerminal = clientBrowser;
+        this.organizerNumber = organizerNumber;
         this.searchCondition = searchCondition;
     }
-
-    @Deprecated
-    MeetingSearchRequest() {
+    public static MeetingSearchRequest initialize(OrganizerNumber organizerNumber) {
+        return new MeetingSearchRequest(organizerNumber, MeetingSearchCondition.initialize());
     }
 
-    public ClientBrowser organizerTerminal() {
-        return organizerTerminal;
+    public OrganizerNumber organizerNumber() {
+        return organizerNumber;
     }
 
     public MeetingSearchCondition searchCondition() {
         return searchCondition;
-    }
-
-    public static MeetingSearchRequest initial(ClientBrowser clientBrowser) {
-        return new MeetingSearchRequest(clientBrowser, MeetingSearchCondition.initial());
     }
 }

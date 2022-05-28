@@ -31,12 +31,12 @@ public class MeetingRegistrationRequest extends ValidationConcern  {
     @Deprecated
     MeetingRegistrationRequest() {}
 
-    public MeetingRegistrationRequest(@Valid MeetingNumber meetingNumber,
-                                      @Valid Subject subject,
-                                      @Valid Memo memo,
-                                      @Valid OrganizerNumber organizerNumber,
-                                      @Valid Schedules schedules,
-                                      @Valid RegistrationRequestDateTime registrationRequestDateTime) {
+    public MeetingRegistrationRequest(@Valid final MeetingNumber meetingNumber,
+                                      @Valid final Subject subject,
+                                      @Valid final Memo memo,
+                                      @Valid final OrganizerNumber organizerNumber,
+                                      @Valid final Schedules schedules,
+                                      @Valid final RegistrationRequestDateTime registrationRequestDateTime) {
         this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;

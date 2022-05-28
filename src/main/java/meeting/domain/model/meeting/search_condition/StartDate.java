@@ -12,11 +12,19 @@ import java.util.Objects;
 public class StartDate {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @NotNull(message = "{meeting.domain.model.meeting.search_condition.StartDate.NotNull.message}")
+    @NotNull(message = "検索開始日を入力してください。")
     LocalDate value;
+
+    @Deprecated
+    StartDate() {}
 
     public StartDate(LocalDate value) {
         this.value = value;
+    }
+
+    public boolean isSameOrAfter(EndDate endDate) {
+        final LocalDate endDateValue = endDate.value();
+        return value.equals(endDateValue) || value.isAfter(endDateValue);
     }
 
     public LocalDate value() {
@@ -29,10 +37,6 @@ public class StartDate {
 
     public boolean isEmpty() {
         return Objects.isNull(value);
-    }
-
-    @Deprecated
-    public StartDate() {
     }
 
     @Override

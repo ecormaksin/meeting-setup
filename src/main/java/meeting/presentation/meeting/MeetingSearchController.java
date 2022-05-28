@@ -2,20 +2,14 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingSearchScenario;
 import meeting.domain.model.meeting.MeetingSearchRequest;
+import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.domain.model.meeting.meeting_list.MeetingList;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
-import meeting.presentation.ClientInfoGetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ミーティング検索画面
@@ -25,22 +19,18 @@ import javax.servlet.http.HttpServletRequest;
 public class MeetingSearchController {
     MeetingSearchScenario meetingSearchScenario;
 
-    ClientInfoGetter clientInfoGetter;
-
-    public MeetingSearchController(MeetingSearchScenario meetingSearchScenario,
-                                   ClientInfoGetter clientInfoGetter) {
+    public MeetingSearchController(MeetingSearchScenario meetingSearchScenario) {
         this.meetingSearchScenario = meetingSearchScenario;
-        this.clientInfoGetter = clientInfoGetter;
     }
 
     @GetMapping
-    String init(Model model, HttpServletRequest request) {
+    String init(Model model,
+                @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber) {
 
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
-        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.initial(clientBrowser);
+        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.initialize(organizerNumber);
         MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
 
-        model.addAttribute("meetingSearchRequest", MeetingSearchRequest.initial(clientBrowser));
+        model.addAttribute("meetingSearchRequest", meetingSearchRequest);
         model.addAttribute("meetingList", meetingList);
 
         return "meeting/search";
@@ -48,12 +38,11 @@ public class MeetingSearchController {
 
     @GetMapping(params = {"exec"})
     String search(Model model,
-                  HttpServletRequest request,
+                  @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber,
                   @Validated @ModelAttribute("meetingSearchRequest") MeetingSearchRequest meetingSearchRequest,
                   BindingResult bindingResult) {
 
-        ClientBrowser clientBrowser = clientInfoGetter.clientBrowser(request);
-        if (!clientBrowser.equals(meetingSearchRequest.organizerTerminal())) {
+        if (organizerNumber.isDifferent(meetingSearchRequest.organizerNumber())) {
             throw new ClientBrowserFalsifiedException();
         }
 
@@ -76,9 +65,7 @@ public class MeetingSearchController {
                 "searchCondition.keyword.value",
                 "searchCondition.startDate.value",
                 "searchCondition.endDate.value",
-                "organizerTerminal.ipAddress.value",
-                "organizerTerminal.osFamily.value",
-                "organizerTerminal.userAgentFamily.value"
+                "organizerNumber.value"
         );
     }
 }

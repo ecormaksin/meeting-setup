@@ -3,7 +3,6 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingEditScenario;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.schedule.Schedules;
-import meeting.presentation.ClientInfoGetter;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputs;
 import org.springframework.stereotype.Controller;
@@ -26,12 +25,8 @@ import java.net.URI;
 public class MeetingEditController {
     MeetingEditScenario meetingEditScenario;
 
-    ClientInfoGetter clientInfoGetter;
-
-    public MeetingEditController(MeetingEditScenario meetingEditScenario,
-                                 ClientInfoGetter clientInfoGetter) {
+    public MeetingEditController(MeetingEditScenario meetingEditScenario) {
         this.meetingEditScenario = meetingEditScenario;
-        this.clientInfoGetter = clientInfoGetter;
     }
 
     @GetMapping

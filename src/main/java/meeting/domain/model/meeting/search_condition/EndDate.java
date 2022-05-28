@@ -12,8 +12,11 @@ import java.util.Objects;
 public class EndDate {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @NotNull(message = "{meeting.domain.model.meeting.search_condition.EndDate.NotNull.message}")
+    @NotNull(message = "検索終了日を入力してください。")
     LocalDate value;
+
+    @Deprecated
+    EndDate() {}
 
     public EndDate(LocalDate value) {
         this.value = value;
@@ -29,10 +32,6 @@ public class EndDate {
 
     public boolean isEmpty() {
         return Objects.isNull(value);
-    }
-
-    @Deprecated
-    public EndDate() {
     }
 
     @Override

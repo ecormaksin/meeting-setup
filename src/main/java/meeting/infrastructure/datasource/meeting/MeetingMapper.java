@@ -5,10 +5,6 @@ import meeting.domain.model.meeting.Memo;
 import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.domain.model.meeting.Subject;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
-import meeting.domain.model.meeting.organizer.ClientBrowser;
-import meeting.domain.model.meeting.organizer.IpAddress;
-import meeting.domain.model.meeting.organizer.OSFamily;
-import meeting.domain.model.meeting.organizer.UserAgentFamily;
 import meeting.domain.model.meeting.search_condition.Keyword;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,21 +22,15 @@ public interface MeetingMapper {
 
     Optional<MeetingResource> selectMeetingResource(@Param("meetingNumber") MeetingNumber meetingNumber);
     Optional<Memo> selectMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
-    Optional<ClientBrowser> selectOrganizerTerminal(@Param("meetingNumber") MeetingNumber meetingNumber);
 
-    void deleteOrganizerTerminal(@Param("meetingNumber") MeetingNumber meetingNumber);
     void deleteMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
     void deleteMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);
 
     List<MeetingListItem> organizerMeetingListItems(
-            @Param("ipAddress") IpAddress ipAddress,
-            @Param("osFamily") OSFamily osFamily,
-            @Param("userAgentFamily") UserAgentFamily userAgentFamily);
+            @Param("organizerNumber") OrganizerNumber organizerNumber);
 
     List<MeetingListItem> search(
-            @Param("ipAddress") IpAddress ipAddress,
-            @Param("osFamily") OSFamily osFamily,
-            @Param("userAgentFamily") UserAgentFamily userAgentFamily,
+            @Param("organizerNumber") OrganizerNumber organizerNumber,
             @Param("keyword") Keyword keyword,
             @Param("startDateTime") LocalDateTime startDateTime,
             @Param("endDateTime") LocalDateTime endDateTime);

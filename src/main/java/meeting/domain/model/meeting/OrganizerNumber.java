@@ -34,6 +34,10 @@ public class OrganizerNumber {
         return this.value.equals(other.value);
     }
 
+    public boolean isDifferent(@NotNull @Valid final OrganizerNumber other) {
+        return !isSame(other);
+    }
+
     public String value() {
         return value;
     }
