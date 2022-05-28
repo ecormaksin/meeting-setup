@@ -8,15 +8,6 @@ CREATE SCHEMA 日程候補;
 DROP SCHEMA IF EXISTS 出欠 CASCADE;
 CREATE SCHEMA 出欠;
 
-DROP TYPE IF EXISTS 日程候補.開始時間 CASCADE;
-CREATE TYPE 日程候補.開始時間 AS ENUM ('9', '10', '11', '12', '13', '14', '15', '16', '17');
-
-DROP TYPE IF EXISTS 日程候補.開始分 CASCADE;
-CREATE TYPE 日程候補.開始分 AS ENUM ('00', '30');
-
-DROP TYPE IF EXISTS 日程候補.会議時間 CASCADE;
-CREATE TYPE 日程候補.会議時間 AS ENUM ('30', '60', '90', '120');
-
 -- ミーティング スキーマ
 CREATE TABLE ミーティング._ミーティング
 (
@@ -41,9 +32,9 @@ CREATE TABLE 日程候補._日程
   日程番号 INTEGER PRIMARY KEY,
   ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング._ミーティング,
   開催日 DATE NOT NULL,
-  開始時間 日程候補.開始時間 NOT NULL,
-  開始分 日程候補.開始分 NOT NULL,
-  会議時間 日程候補.会議時間 NOT NULL,
+  開始時間 INTEGER NOT NULL CHECK(開始時間 >= 9 AND 開始時間 <= 17),
+  開始分 INTEGER NOT NULL CHECK(開始分 = 0 OR 開始分 = 30),
+  会議時間 INTEGER NOT NULL CHECK(会議時間 >= 30 AND 会議時間 <= 120 AND MOD(会議時間, 30) = 0),
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (ミーティング番号, 開催日, 開始時間, 開始分, 会議時間)
 );

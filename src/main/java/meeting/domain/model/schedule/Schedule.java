@@ -3,6 +3,7 @@ package meeting.domain.model.schedule;
 import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.model.schedule.construct.MeetingDate;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
+import meeting.domain.model.schedule.construct.StartHour;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -53,15 +54,15 @@ public class Schedule {
         return scheduleConstruct.meetingDate();
     }
 
-    public String startHourStringValue() {
-        return scheduleConstruct.startHour().stringValue();
+    public StartHour startHour() {
+        return scheduleConstruct.startHour();
     }
 
-    public String startMinuteLabel() {
-        return scheduleConstruct.startMinute().label();
+    public int startMinuteValue() {
+        return scheduleConstruct.startMinute().value();
     }
 
-    public String durationStringValue() {
-        return scheduleConstruct.duration().stringValue();
+    public int durationValue() {
+        return scheduleConstruct.duration().value();
     }
 }

@@ -4,6 +4,7 @@ import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.construct.MeetingDate;
+import meeting.domain.model.schedule.construct.StartHour;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,9 +17,9 @@ public interface ScheduleMapper {
     void insertSchedule(@Param("scheduleNumber") ScheduleNumber scheduleNumber,
                         @Param("meetingNumber") MeetingNumber meetingNumber,
                         @Param("meetingDate") MeetingDate meetingDate,
-                        @Param("startHourValue") String startHourValue,
-                        @Param("startMinuteLabel") String startMinuteLabel,
-                        @Param("durationValue") String durationValue);
+                        @Param("startHour") StartHour startHour,
+                        @Param("startMinuteValue") int startMinuteValue,
+                        @Param("durationValue") int durationValue);
 
     List<Schedule> selectSchedulesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
 

@@ -19,8 +19,8 @@
             #{scheduleNumber.value},
             #{meetingNumber.value},
             #{meetingDate.value},
-            #{startHourValue},
-            #{startMinuteLabel},
+            #{startHour.value},
+            #{startMinuteValue},
             #{durationValue})
     </insert>
 
