@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @MeetingDBTest
 class MeetingDatasourceTest {
 
@@ -31,6 +33,11 @@ class MeetingDatasourceTest {
 
         // Act
         meetingDatasource.create(request);
+        final MeetingNumber meetingNumber = request.meetingNumber();
+        final Meeting meeting = meetingDatasource.meetingOf(meetingNumber);
+
+        // Assert
+        assertNotNull(meeting);
     }
 
     private MeetingCreationRequest creationRequest() {

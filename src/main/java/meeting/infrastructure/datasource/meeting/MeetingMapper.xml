@@ -14,7 +14,7 @@
         VALUES (#{meetingNumber.value}, #{memo.value})
     </insert>
 
-    <select id="MeetingResource" resultType="meeting.infrastructure.datasource.meeting.MeetingResource">
+    <select id="selectMeetingResource" resultType="meeting.infrastructure.datasource.meeting.MeetingResource">
         SELECT
             件名 as "subject.value",
             主催者番号 as "organizerNumber.value"
