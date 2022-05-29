@@ -24,13 +24,27 @@
             #{durationValue})
     </insert>
 
-    <select id="selectSchedulesByMeetingNumber" resultType="meeting.domain.model.schedule.Schedule">
+    <resultMap id="schedulesByMeetingNumberMap" type="meeting.domain.model.schedule.Schedule">
+        <id property="scheduleNumber.value" column="日程番号" javaType="int"/>
+        <association property="scheduleConstruct" javaType="meeting.domain.model.schedule.construct.ScheduleConstruct">
+            <result property="meetingDate.value" column="開催日" javaType="java.time.LocalDate"/>
+            <result property="startHour.value" column="開始時間" javaType="int"/>
+            <result property="startMinute" column="開始分"
+                         javaType="meeting.domain.model.schedule.construct.StartMinute"
+                         typeHandler="meeting.infrastructure.datasource.schedule.construct.StartMinuteTypeHandler"/>
+            <result property="duration" column="会議時間"
+                         javaType="meeting.domain.model.schedule.construct.Duration"
+                         typeHandler="meeting.infrastructure.datasource.schedule.construct.DurationTypeHandler"/>
+        </association>
+    </resultMap>
+
+    <select id="selectSchedulesByMeetingNumber" resultMap="schedulesByMeetingNumberMap">
         SELECT
-            日程番号 as "scheduleNumber.value",
-            開催日 AS "scheduleConstruct.meetingDate.value",
-            開始時間 AS "scheduleConstruct.startHour.value",
-            開始分 AS "scheduleConstruct.startMinute.value",
-            会議時間 AS "scheduleConstruct.duration.value"
+            日程番号,
+            開催日,
+            開始時間,
+            開始分,
+            会議時間
         FROM
             日程候補._日程
         WHERE
