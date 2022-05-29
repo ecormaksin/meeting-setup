@@ -7,5 +7,5 @@ import meeting.domain.model.schedule.Schedules;
  * 日程候補 リポジトリ
  */
 public interface ScheduleRepository {
-    Schedules findByMeeingId(MeetingNumber meetingNumber);
+    Schedules findByMeeingNumber(MeetingNumber meetingNumber);
 }

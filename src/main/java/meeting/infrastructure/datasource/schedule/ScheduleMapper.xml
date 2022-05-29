@@ -25,15 +25,13 @@
     </insert>
 
     <resultMap id="schedulesByMeetingNumberMap" type="meeting.domain.model.schedule.Schedule">
-        <id property="scheduleNumber.value" column="日程番号" javaType="int"/>
+        <id property="scheduleNumber.value" column="日程番号"/>
         <association property="scheduleConstruct" javaType="meeting.domain.model.schedule.construct.ScheduleConstruct">
-            <result property="meetingDate.value" column="開催日" javaType="java.time.LocalDate"/>
-            <result property="startHour.value" column="開始時間" javaType="int"/>
+            <result property="meetingDate.value" column="開催日"/>
+            <result property="startHour.value" column="開始時間"/>
             <result property="startMinute" column="開始分"
-                         javaType="meeting.domain.model.schedule.construct.StartMinute"
                          typeHandler="meeting.infrastructure.datasource.schedule.construct.StartMinuteTypeHandler"/>
             <result property="duration" column="会議時間"
-                         javaType="meeting.domain.model.schedule.construct.Duration"
                          typeHandler="meeting.infrastructure.datasource.schedule.construct.DurationTypeHandler"/>
         </association>
     </resultMap>

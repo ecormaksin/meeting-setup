@@ -16,6 +16,6 @@ public class ScheduleQueryService {
     }
 
     public Schedules schedules(MeetingNumber meetingNumber) {
-        return scheduleRepository.findByMeeingId(meetingNumber);
+        return scheduleRepository.findByMeeingNumber(meetingNumber);
     }
 }
