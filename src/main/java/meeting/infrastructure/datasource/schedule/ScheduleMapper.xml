@@ -20,8 +20,8 @@
             #{meetingNumber.value},
             #{meetingDate.value},
             #{startHour.value},
-            #{startMinuteValue},
-            #{durationValue})
+            #{startMinute, typeHandler=meeting.infrastructure.datasource.schedule.construct.StartMinuteTypeHandler},
+            #{duration, typeHandler=meeting.infrastructure.datasource.schedule.construct.DurationTypeHandler})
     </insert>
 
     <resultMap id="schedulesByMeetingNumberMap" type="meeting.domain.model.schedule.Schedule">

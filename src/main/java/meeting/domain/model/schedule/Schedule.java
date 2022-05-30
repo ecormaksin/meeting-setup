@@ -1,9 +1,7 @@
 package meeting.domain.model.schedule;
 
 import meeting.domain.model.meeting.RegistrationRequestDateTime;
-import meeting.domain.model.schedule.construct.MeetingDate;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
-import meeting.domain.model.schedule.construct.StartHour;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -48,21 +46,5 @@ public class Schedule {
 
     public ScheduleConstruct scheduleConstruct() {
         return scheduleConstruct;
-    }
-
-    public MeetingDate meetingDate() {
-        return scheduleConstruct.meetingDate();
-    }
-
-    public StartHour startHour() {
-        return scheduleConstruct.startHour();
-    }
-
-    public int startMinuteValue() {
-        return scheduleConstruct.startMinute().value();
-    }
-
-    public int durationValue() {
-        return scheduleConstruct.duration().value();
     }
 }

@@ -12,6 +12,7 @@ import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.ScheduleRegistrationStatus;
 import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.infrastructure.datasource.attendance.AttendanceMapper;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
@@ -141,13 +142,14 @@ public class MeetingDatasource implements MeetingRepository {
                     new ScheduleNumber(scheduleMapper.newScheduleNumber())
                     :
                     schedule.scheduleNumber();
+            final ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
             scheduleMapper.insertSchedule(
                     scheduleNumber,
                     meetingNumber,
-                    schedule.meetingDate(),
-                    schedule.startHour(),
-                    schedule.startMinuteValue(),
-                    schedule.durationValue());
+                    scheduleConstruct.meetingDate(),
+                    scheduleConstruct.startHour(),
+                    scheduleConstruct.startMinute(),
+                    scheduleConstruct.duration());
             scheduleNumbers.add(scheduleNumber);
         });
 
