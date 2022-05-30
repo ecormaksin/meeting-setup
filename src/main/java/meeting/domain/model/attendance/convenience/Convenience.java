@@ -2,8 +2,6 @@ package meeting.domain.model.attendance.convenience;
 
 import meeting.domain.model.schedule.ScheduleNumber;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * 都合
  */
@@ -15,7 +13,7 @@ public class Convenience {
     public static Convenience of(int primitiveScheduleNumber,
                                  String symbol) {
         return new Convenience(new ScheduleNumber(primitiveScheduleNumber),
-                                ConvenienceCategory.of(symbol));
+                                ConvenienceCategory.fromSymbol(symbol));
     }
 
     public Convenience(ScheduleNumber scheduleNumber,

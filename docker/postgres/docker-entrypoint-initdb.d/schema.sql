@@ -8,6 +8,9 @@ CREATE SCHEMA 日程候補;
 DROP SCHEMA IF EXISTS 出欠 CASCADE;
 CREATE SCHEMA 出欠;
 
+DROP TYPE IF EXISTS 出欠.都合種別 CASCADE;
+CREATE TYPE 出欠.都合種別 AS ENUM ('○', '△', '✕', '－');
+
 -- ミーティング スキーマ
 CREATE TABLE ミーティング._ミーティング
 (
@@ -56,7 +59,7 @@ CREATE TABLE 出欠._都合
   都合番号 INTEGER PRIMARY KEY,
   出欠番号 CHAR(32) NOT NULL REFERENCES 出欠._出欠,
   日程番号 INTEGER NOT NULL REFERENCES 日程候補._日程,
-  都合種別 VARCHAR(16) NOT NULL,
+  都合種別 出欠.都合種別 NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (出欠番号, 日程番号)
 );

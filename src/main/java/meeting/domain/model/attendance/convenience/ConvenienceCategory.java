@@ -10,11 +10,11 @@ public enum ConvenienceCategory {
     マル("○"),
     サンカク("△"),
     バツ("×"),
-    未回答("未回答");
+    未回答("－");
 
     String symbol;
 
-    public static ConvenienceCategory of(String symbol) {
+    public static ConvenienceCategory fromSymbol(String symbol) {
         for (ConvenienceCategory convenienceCategory : ConvenienceCategory.values()) {
             if (convenienceCategory.symbol().equals(symbol)) {
                 return convenienceCategory;
