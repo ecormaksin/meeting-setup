@@ -21,7 +21,7 @@ public enum Duration {
         this.label = label;
     }
 
-    public static Duration fromValue(final int value) {
+    public static Duration of(final int value) {
         List<String> candidates = new ArrayList<>();
         for (Duration duration : Duration.values()) {
             if (duration.value == value) {
@@ -36,7 +36,7 @@ public enum Duration {
     }
 
     public static Duration fromString(final String strigValue) {
-        return fromValue(Integer.valueOf(strigValue));
+        return of(Integer.valueOf(strigValue));
     }
 
     public int value() {

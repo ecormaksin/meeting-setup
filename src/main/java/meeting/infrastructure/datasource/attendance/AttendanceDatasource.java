@@ -32,74 +32,74 @@ public class AttendanceDatasource implements AttendanceRepository {
     @Override
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
             MeetingNumber meetingNumber,
-            AttendanceId attendanceId,
+            AttendanceNumber attendanceNumber,
             ParticipantName participantName) {
 
-        boolean duplicated = attendanceMapper.participantNameDuplicated(meetingNumber, attendanceId, participantName);
+        boolean duplicated = attendanceMapper.participantNameDuplicated(meetingNumber, attendanceNumber, participantName);
         if (duplicated) return あり;
         return なし;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AttendanceId input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
-        AttendanceId attendanceId = AttendanceId.newId();
+    public AttendanceNumber input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
+        AttendanceNumber attendanceNumber = AttendanceNumber.newNumber();
 
-        insertAttendance(meetingNumber, attendanceId, attendanceInputRequest.participantName());
-        insertConveniences(attendanceId, attendanceInputRequest.conveniences());
-        insertAttendanceComment(attendanceId, attendanceInputRequest.attendanceComment());
+        insertAttendance(meetingNumber, attendanceNumber, attendanceInputRequest.participantName());
+        insertConveniences(attendanceNumber, attendanceInputRequest.conveniences());
+        insertAttendanceComment(attendanceNumber, attendanceInputRequest.attendanceComment());
 
-        return attendanceId;
+        return attendanceNumber;
     }
 
     @Override
-    public Attendance attendanceOf(AttendanceId attendanceId) {
-        return attendanceMapper.selectAttendance(attendanceId);
+    public Attendance attendanceOf(AttendanceNumber attendanceNumber) {
+        return attendanceMapper.selectAttendance(attendanceNumber);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest) {
-        AttendanceId attendanceId = attendanceEditRequest.attendanceId();
+        AttendanceNumber attendanceNumber = attendanceEditRequest.attendanceId();
 
         // 既存のレコードを削除
-        deleteAttendanceWithWholeAggregate(attendanceId);
+        deleteAttendanceWithWholeAggregate(attendanceNumber);
 
         // 再追加
-        insertAttendance(meetingNumber, attendanceId, attendanceEditRequest.participantName());
-        insertConveniences(attendanceId, attendanceEditRequest.conveniences());
-        insertAttendanceComment(attendanceId, attendanceEditRequest.attendanceComment());
+        insertAttendance(meetingNumber, attendanceNumber, attendanceEditRequest.participantName());
+        insertConveniences(attendanceNumber, attendanceEditRequest.conveniences());
+        insertAttendanceComment(attendanceNumber, attendanceEditRequest.attendanceComment());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(AttendanceId attendanceId) {
-        deleteAttendanceWithWholeAggregate(attendanceId);
+    public void delete(AttendanceNumber attendanceNumber) {
+        deleteAttendanceWithWholeAggregate(attendanceNumber);
     }
 
-    private void insertAttendance(MeetingNumber meetingNumber, AttendanceId attendanceId, ParticipantName participantName) {
-        attendanceMapper.insertAttendance(meetingNumber, attendanceId, participantName);
+    private void insertAttendance(MeetingNumber meetingNumber, AttendanceNumber attendanceNumber, ParticipantName participantName) {
+        attendanceMapper.insertAttendance(meetingNumber, attendanceNumber, participantName);
     }
 
-    private void insertConveniences(AttendanceId attendanceId, Conveniences conveniences) {
+    private void insertConveniences(AttendanceNumber attendanceNumber, Conveniences conveniences) {
         List<Convenience> convenienceList = conveniences.asList();
         convenienceList.stream().forEach(convenience -> {
             int convenienceNumber = attendanceMapper.newConvenienceNumber();
             attendanceMapper.insertConvenience(convenienceNumber,
-                    attendanceId,
+                    attendanceNumber,
                     convenience.scheduleNumber(),
                     convenience.convenienceCategory());
         });
     }
 
-    private void insertAttendanceComment(AttendanceId attendanceId, AttendanceComment attendanceComment) {
+    private void insertAttendanceComment(AttendanceNumber attendanceNumber, AttendanceComment attendanceComment) {
         if (attendanceComment.inputStatus() == AttendanceCommentInputStatus.なし) return;
-        attendanceMapper.insertAttendanceComment(attendanceId, attendanceComment);
+        attendanceMapper.insertAttendanceComment(attendanceNumber, attendanceComment);
     }
 
-    private void deleteAttendanceWithWholeAggregate(AttendanceId attendanceId) {
-        attendanceMapper.deleteAttendanceComment(attendanceId);
-        attendanceMapper.deleteConveniences(attendanceId);
-        attendanceMapper.deleteAttendance(attendanceId);
+    private void deleteAttendanceWithWholeAggregate(AttendanceNumber attendanceNumber) {
+        attendanceMapper.deleteAttendanceComment(attendanceNumber);
+        attendanceMapper.deleteConveniences(attendanceNumber);
+        attendanceMapper.deleteAttendance(attendanceNumber);
     }
 }

@@ -20,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
@@ -81,7 +79,33 @@ public class MeetingDatasource implements MeetingRepository {
                 optMemo.orElse(Memo.blank()),
                 organizerNumber,
                 new Schedules(scheduleList),
-                Attendances.of(attendanceList));
+                new Attendances(attendanceList));
+    }
+
+    @Override
+    public Meeting findBy(MeetingNumber meetingNumber) {
+        Optional<Meeting> optionalMeeting = meetingMapper.selectMeeting(meetingNumber);
+        optionalMeeting.orElseThrow(() ->
+                        new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティング番号を確認してください。: %s", meetingNumber.value()))
+                );
+
+        final Meeting temporaryMeeting = optionalMeeting.get();
+        final Attendances attendances = temporaryMeeting.attendances();
+        final List<Attendance> attendanceList = attendances.asList()
+                .stream().filter(attendance -> {
+                    final AttendanceNumber attendanceNumber = attendance.attendanceNumber();
+                    return Objects.nonNull(attendanceNumber);
+                })
+                .collect(Collectors.toList());
+
+        return new Meeting(
+                meetingNumber,
+                temporaryMeeting.subject(),
+                temporaryMeeting.memo(),
+                temporaryMeeting.organizerNumber(),
+                temporaryMeeting.schedules(),
+                new Attendances(attendanceList)
+        );
     }
 
     @Override
@@ -171,17 +195,17 @@ public class MeetingDatasource implements MeetingRepository {
     private void insertAttendances(MeetingNumber meetingNumber, Attendances attendances, Set<ScheduleNumber> scheduleNumbers) {
 
         for (Attendance attendance : attendances.asList()) {
-            AttendanceId attendanceId = attendance.attendanceId();
-            attendanceMapper.insertAttendance(meetingNumber, attendanceId, attendance.participantName());
-            insertConveniences(attendanceId, attendance.conveniences(), scheduleNumbers);
+            AttendanceNumber attendanceNumber = attendance.attendanceNumber();
+            attendanceMapper.insertAttendance(meetingNumber, attendanceNumber, attendance.participantName());
+            insertConveniences(attendanceNumber, attendance.conveniences(), scheduleNumbers);
 
             AttendanceComment attendanceComment = attendance.attendanceComment();
             if (attendanceComment.inputStatus() == AttendanceCommentInputStatus.なし) continue;
-            attendanceMapper.insertAttendanceComment(attendanceId, attendanceComment);
+            attendanceMapper.insertAttendanceComment(attendanceNumber, attendanceComment);
         }
     }
 
-    private void insertConveniences(AttendanceId attendanceId, Conveniences conveniences, Set<ScheduleNumber> scheduleNumbers) {
+    private void insertConveniences(AttendanceNumber attendanceNumber, Conveniences conveniences, Set<ScheduleNumber> scheduleNumbers) {
 
         for (Convenience convenience : conveniences.asList()) {
             if (isScheduleDeleted(scheduleNumbers, convenience.scheduleNumber())) {
@@ -189,7 +213,7 @@ public class MeetingDatasource implements MeetingRepository {
             }
             int convenienceNumber = attendanceMapper.newConvenienceNumber();
             attendanceMapper.insertConvenience(convenienceNumber,
-                    attendanceId,
+                    attendanceNumber,
                     convenience.scheduleNumber(),
                     convenience.convenienceCategory());
         }

@@ -25,8 +25,8 @@ public class AttendanceEditScenario {
         this.scheduleQueryService = scheduleQueryService;
     }
 
-    public Attendance attendanceOf(AttendanceId attendanceId) {
-        return attendanceQueryService.attendanceOf(attendanceId);
+    public Attendance attendanceOf(AttendanceNumber attendanceNumber) {
+        return attendanceQueryService.attendanceOf(attendanceNumber);
     }
 
     public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEdittRequest) {
@@ -39,13 +39,13 @@ public class AttendanceEditScenario {
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
             MeetingNumber meetingNumber,
-            AttendanceId attendanceId,
+            AttendanceNumber attendanceNumber,
             ParticipantName participantName) {
 
-        return attendanceQueryService.participantNameDuplicationStatus(meetingNumber, attendanceId, participantName);
+        return attendanceQueryService.participantNameDuplicationStatus(meetingNumber, attendanceNumber, participantName);
     }
 
-    public void delete(AttendanceId attendanceId) {
-        attendanceRecordService.delete(attendanceId);
+    public void delete(AttendanceNumber attendanceNumber) {
+        attendanceRecordService.delete(attendanceNumber);
     }
 }

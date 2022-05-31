@@ -14,47 +14,82 @@
         VALUES (#{meetingNumber.value}, #{memo.value})
     </insert>
 
+    <resultMap id="meeting" type="meeting.domain.model.meeting.Meeting">
+        <id property="meetingNumber.value" column="ミーティング番号"/>
+        <result property="subject.value" column="件名"/>
+        <result property="organizerNumber.value" column="主催者番号"/>
+        <result property="memo.value" column="メモ"/>
+        <collection property="schedules.list"
+                    ofType="meeting.domain.model.schedule.Schedule">
+            <id property="scheduleNumber.value" column="日程番号"/>
+            <association property="scheduleConstruct"
+                         javaType="meeting.domain.model.schedule.construct.ScheduleConstruct">
+                <result property="meetingDate.value" column="開催日"/>
+                <result property="startHour.value" column="開始時間"/>
+                <result property="startMinute" column="開始分"
+                        typeHandler="meeting.infrastructure.datasource.schedule.construct.StartMinuteTypeHandler"/>
+                <result property="duration" column="会議時間"
+                        typeHandler="meeting.infrastructure.datasource.schedule.construct.DurationTypeHandler"/>
+            </association>
+        </collection>
+        <collection property="attendances.list"
+                    ofType="meeting.domain.model.attendance.Attendance">
+            <id property="attendanceNumber.value" column="出欠番号"/>
+            <result property="participantName.value" column="参加者名"/>
+            <result property="attendanceComment.value" column="出欠コメント"/>
+            <collection property="conveniences.list"
+                        ofType="meeting.domain.model.attendance.convenience.Convenience">
+                <id property="scheduleNumber.value" column="都合_日程番号"/>
+                <result property="convenienceCategory" column="都合種別"
+                        typeHandler="meeting.infrastructure.datasource.attendance.ConvenienceCategoryTypeHandler"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="selectMeeting" resultMap="meeting">
+        SELECT
+            ミーティング.ミーティング番号,
+            ミーティング.件名,
+            ミーティング.主催者番号,
+            ミーティングメモ.メモ,
+            日程.日程番号,
+            日程.開催日,
+            日程.開始時間,
+            日程.開始分,
+            日程.会議時間,
+            出欠.出欠番号,
+            出欠.参加者名,
+            出欠コメント.出欠コメント,
+            都合.日程番号 AS 都合_日程番号,
+            都合.都合種別
+        FROM
+            ミーティング._ミーティング AS ミーティング
+            LEFT OUTER JOIN ミーティング._ミーティングメモ AS ミーティングメモ
+                ON
+                ミーティングメモ.ミーティング番号 = ミーティング.ミーティング番号
+            INNER JOIN 日程候補._日程 AS 日程
+                ON
+                日程.ミーティング番号 = ミーティング.ミーティング番号
+            LEFT OUTER JOIN 出欠._出欠 AS 出欠
+                ON
+                出欠.ミーティング番号 = ミーティング.ミーティング番号
+            LEFT OUTER JOIN 出欠._出欠コメント AS 出欠コメント
+                ON
+                出欠コメント.出欠番号 = 出欠.出欠番号
+            LEFT OUTER JOIN 出欠._都合 AS 都合
+                ON
+                都合.出欠番号 = 出欠.出欠番号
+                AND 都合.日程番号 = 日程.日程番号
+        WHERE
+            ミーティング.ミーティング番号 = #{meetingNumber.value}
+        ORDER BY
+            日程.開催日 ASC,
+            日程.開始時間 ASC,
+            日程.開始分 ASC,
+            日程.会議時間 ASC,
+            出欠.出欠番号 ASC
+    </select>
     <!--
-    SELECT
-        ミーティング.ミーティング番号,
-        ミーティング.件名,
-        ミーティング.主催者番号,
-        ミーティングメモ.メモ,
-        日程.日程番号,
-        日程.開催日,
-        日程.開始時間,
-        日程.開始分,
-        日程.会議時間,
-        出欠.出欠番号,
-        出欠.参加者名,
-        出欠コメント.出欠コメント,
-        都合.都合種別
-    FROM
-        ミーティング._ミーティング AS ミーティング
-        LEFT OUTER JOIN ミーティング._ミーティングメモ AS ミーティングメモ
-            ON
-            ミーティングメモ.ミーティング番号 = ミーティング.ミーティング番号
-        INNER JOIN 日程候補._日程 AS 日程
-            ON
-            日程.ミーティング番号 = ミーティング.ミーティング番号
-        LEFT OUTER JOIN 出欠._出欠 AS 出欠
-            ON
-            出欠.ミーティング番号 = ミーティング.ミーティング番号
-        LEFT OUTER JOIN 出欠._出欠コメント AS 出欠コメント
-            ON
-            出欠コメント.出欠番号 = 出欠.出欠番号
-        LEFT OUTER JOIN 出欠._都合 AS 都合
-            ON
-            都合.出欠番号 = 出欠.出欠番号
-            AND 都合.日程番号 = 日程.日程番号
-    WHERE
-        ミーティング.ミーティング番号 = #{meetingNumber.value}
-    ORDER BY
-        日程.開催日 ASC,
-        日程.開始時間 ASC,
-        日程.開始分 ASC,
-        日程.会議時間 ASC,
-        出欠.出欠番号 ASC
     -->
 
     <select id="selectMeetingResource" resultType="meeting.infrastructure.datasource.meeting.MeetingResource">

@@ -1,7 +1,7 @@
 package meeting.application.service.attendance;
 
 import meeting.domain.model.attendance.Attendance;
-import meeting.domain.model.attendance.AttendanceId;
+import meeting.domain.model.attendance.AttendanceNumber;
 import meeting.domain.model.attendance.ParticipantName;
 import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
 import meeting.domain.model.meeting.MeetingNumber;
@@ -18,8 +18,8 @@ public class AttendanceQueryService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public Attendance attendanceOf(AttendanceId attendanceId) {
-        return attendanceRepository.attendanceOf(attendanceId);
+    public Attendance attendanceOf(AttendanceNumber attendanceNumber) {
+        return attendanceRepository.attendanceOf(attendanceNumber);
     }
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
@@ -31,9 +31,9 @@ public class AttendanceQueryService {
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
             MeetingNumber meetingNumber,
-            AttendanceId attendanceId,
+            AttendanceNumber attendanceNumber,
             ParticipantName participantName) {
 
-        return attendanceRepository.participantNameDuplicationStatus(meetingNumber, attendanceId, participantName);
+        return attendanceRepository.participantNameDuplicationStatus(meetingNumber, attendanceNumber, participantName);
     }
 }

@@ -10,11 +10,8 @@ public class Convenience {
 
     ConvenienceCategory convenienceCategory;
 
-    public static Convenience of(int primitiveScheduleNumber,
-                                 String symbol) {
-        return new Convenience(new ScheduleNumber(primitiveScheduleNumber),
-                                ConvenienceCategory.fromSymbol(symbol));
-    }
+    @Deprecated
+    Convenience() {}
 
     public Convenience(ScheduleNumber scheduleNumber,
                        ConvenienceCategory convenienceCategory) {
@@ -22,24 +19,11 @@ public class Convenience {
         this.convenienceCategory = convenienceCategory;
     }
 
-    @Deprecated
-    Convenience() {}
-
     public ScheduleNumber scheduleNumber() {
         return scheduleNumber;
     }
 
     public ConvenienceCategory convenienceCategory() {
         return convenienceCategory;
-    }
-
-    @Override
-    public String toString() {
-        // @formatter:off
-        return "Convenience{" +
-                "scheduleNumber=" + scheduleNumber +
-                ", convenienceCategory=" + convenienceCategory +
-                '}';
-        // @formatter:on
     }
 }

@@ -1,9 +1,6 @@
 package meeting.infrastructure.datasource.meeting;
 
-import meeting.domain.model.meeting.MeetingNumber;
-import meeting.domain.model.meeting.Memo;
-import meeting.domain.model.meeting.OrganizerNumber;
-import meeting.domain.model.meeting.Subject;
+import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
 import meeting.domain.model.meeting.search_condition.Keyword;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,6 +19,8 @@ public interface MeetingMapper {
 
     Optional<MeetingResource> selectMeetingResource(@Param("meetingNumber") MeetingNumber meetingNumber);
     Optional<Memo> selectMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
+
+    Optional<Meeting> selectMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);
 
     void deleteMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
     void deleteMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);

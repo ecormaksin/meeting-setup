@@ -3,7 +3,7 @@ package meeting.application.senario;
 import meeting.application.service.attendance.AttendanceQueryService;
 import meeting.application.service.attendance.AttendanceRecordService;
 import meeting.application.service.schedule.ScheduleQueryService;
-import meeting.domain.model.attendance.AttendanceId;
+import meeting.domain.model.attendance.AttendanceNumber;
 import meeting.domain.model.attendance.AttendanceInputRequest;
 import meeting.domain.model.attendance.ParticipantName;
 import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
@@ -28,7 +28,7 @@ public class AttendanceInputScenario {
         this.scheduleQueryService = scheduleQueryService;
     }
 
-    public AttendanceId input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
+    public AttendanceNumber input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
         return attendanceRecordService.input(meetingNumber, attendanceInputRequest);
     }
 

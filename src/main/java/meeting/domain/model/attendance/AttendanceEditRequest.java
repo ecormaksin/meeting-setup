@@ -11,7 +11,7 @@ import javax.validation.Valid;
 public class AttendanceEditRequest {
 
     @Valid
-    AttendanceId attendanceId;
+    AttendanceNumber attendanceNumber;
 
     @Valid
     ParticipantName participantName;
@@ -24,12 +24,12 @@ public class AttendanceEditRequest {
 
     Schedules schedules;
 
-    public AttendanceEditRequest(@Valid AttendanceId attendanceId,
+    public AttendanceEditRequest(@Valid AttendanceNumber attendanceNumber,
                                  @Valid ParticipantName participantName,
                                  @Valid Conveniences conveniences,
                                  @Valid AttendanceComment attendanceComment,
                                  Schedules schedules) {
-        this.attendanceId = attendanceId;
+        this.attendanceNumber = attendanceNumber;
         this.participantName = participantName;
         this.conveniences = conveniences;
         this.attendanceComment = attendanceComment;
@@ -39,8 +39,8 @@ public class AttendanceEditRequest {
     @Deprecated
     AttendanceEditRequest() {}
 
-    public AttendanceId attendanceId() {
-        return attendanceId;
+    public AttendanceNumber attendanceId() {
+        return attendanceNumber;
     }
 
     public ParticipantName participantName() {

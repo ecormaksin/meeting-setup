@@ -10,14 +10,14 @@ public interface AttendanceRepository {
     ParticipantNameDuplicationStatus participantNameDuplicationStatus(MeetingNumber meetingNumber, ParticipantName participantName);
 
     ParticipantNameDuplicationStatus participantNameDuplicationStatus(MeetingNumber meetingNumber,
-                                                                      AttendanceId attendanceId,
+                                                                      AttendanceNumber attendanceNumber,
                                                                       ParticipantName participantName);
 
-    AttendanceId input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest);
+    AttendanceNumber input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest);
 
-    Attendance attendanceOf(AttendanceId attendanceId);
+    Attendance attendanceOf(AttendanceNumber attendanceNumber);
 
     void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest);
 
-    void delete(AttendanceId attendanceId);
+    void delete(AttendanceNumber attendanceNumber);
 }

@@ -1,5 +1,7 @@
 package meeting.domain.model.attendance;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,30 +9,18 @@ import java.util.List;
  * 出欠リスト
  */
 public class Attendances {
-    List<Attendance> list;
 
-    Attendances(List<Attendance> list) {
-        this.list = list;
-    }
+    @NotNull
+    List<@NotNull @Valid Attendance> list;
 
     @Deprecated
-    public Attendances() {
-    }
+    Attendances() {}
 
-    public static Attendances of(List<Attendance> source) {
-        return new Attendances(source);
+    public Attendances(@NotNull final List<@NotNull @Valid Attendance> list) {
+        this.list = list;
     }
 
     public List<Attendance> asList() {
         return Collections.unmodifiableList(list);
-    }
-
-    @Override
-    public String toString() {
-        // @formatter:off
-        return "Attendances{" +
-                "list=" + list +
-                '}';
-        // @formatter:on
     }
 }

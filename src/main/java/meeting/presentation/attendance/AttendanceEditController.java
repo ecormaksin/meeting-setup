@@ -37,12 +37,12 @@ public class AttendanceEditController {
     @GetMapping
     String init(Model model,
                 @PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                @PathVariable("attendanceId") AttendanceId attendanceId) {
+                @PathVariable("attendanceNumber") AttendanceNumber attendanceNumber) {
 
         Schedules schedules = attendanceEditScenario.schedules(meetingNumber);
-        Attendance attendance = attendanceEditScenario.attendanceOf(attendanceId);
+        Attendance attendance = attendanceEditScenario.attendanceOf(attendanceNumber);
         AttendanceEditRequest attendanceEditRequest = new AttendanceEditRequest(
-                attendanceId,
+                attendanceNumber,
                 attendance.participantName(),
                 attendance.conveniences(),
                 attendance.attendanceComment(),
@@ -56,7 +56,7 @@ public class AttendanceEditController {
 
     @PostMapping
     String edit(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                 @PathVariable("attendanceId") AttendanceId attendanceId,
+                 @PathVariable("attendanceNumber") AttendanceNumber attendanceNumber,
                  @Validated @ModelAttribute("attendanceEditRequest") AttendanceEditRequest attendanceEditRequest,
                  BindingResult bindingResult, RedirectAttributes attributes,
                  UriComponentsBuilder builder) {
@@ -68,7 +68,7 @@ public class AttendanceEditController {
         ParticipantNameDuplicationStatus participantNameDuplicationStatus =
                 attendanceEditScenario.participantNameDuplicationStatus(
                         meetingNumber,
-                        attendanceId,
+                        attendanceNumber,
                         attendanceEditRequest.participantName());
         if (participantNameDuplicationStatus == あり) {
             bindingResult.rejectValue("participantName.value", null,
@@ -79,12 +79,12 @@ public class AttendanceEditController {
         attendanceEditScenario.edit(meetingNumber, attendanceEditRequest);
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
-        attributes.addFlashAttribute("attendanceId", attendanceId.value());
+        attributes.addFlashAttribute("attendanceNumber", attendanceNumber.value());
 
         URI uri = builder.path(
                         String.format("meeting/%s/attendance/%s/edit/completed",
                                 meetingNumber.value(),
-                                attendanceId.value()
+                                attendanceNumber.value()
                     )).build().toUri();
         return "redirect:" + uri.toString();
     }
@@ -123,15 +123,15 @@ public class AttendanceEditController {
 
     @PostMapping(params={"delete"})
     String delete(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                  @PathVariable("attendanceId") AttendanceId attendanceId,
+                  @PathVariable("attendanceNumber") AttendanceNumber attendanceNumber,
                   UriComponentsBuilder builder) {
 
-        attendanceEditScenario.delete(attendanceId);
+        attendanceEditScenario.delete(attendanceNumber);
 
         URI uri = builder.path(
                 String.format("meeting/%s/attendance/%s/delete/completed",
                         meetingNumber.value(),
-                        attendanceId.value()
+                        attendanceNumber.value()
                 )).build().toUri();
         return "redirect:" + uri.toString();
     }

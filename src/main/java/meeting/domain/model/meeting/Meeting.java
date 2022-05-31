@@ -1,7 +1,7 @@
 package meeting.domain.model.meeting;
 
 import meeting.domain.model.attendance.Attendance;
-import meeting.domain.model.attendance.AttendanceId;
+import meeting.domain.model.attendance.AttendanceNumber;
 import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.attendance.TotalNumberOfParticipant;
 import meeting.domain.model.attendance.convenience.Convenience;
@@ -93,10 +93,10 @@ public class Meeting {
         return new TotalNumberOfParticipant(number);
     }
 
-    public ConvenienceCategory convenienceCategoryOf(AttendanceId attendanceId, ScheduleNumber scheduleNumber) {
+    public ConvenienceCategory convenienceCategoryOf(AttendanceNumber attendanceNumber, ScheduleNumber scheduleNumber) {
 
         for (Attendance attendance : attendances.asList()) {
-            if (!attendance.attendanceId().equals(attendanceId)) {
+            if (!attendance.attendanceNumber().equals(attendanceNumber)) {
                 continue;
             }
             for (Convenience convenience : attendance.conveniences().asList()) {

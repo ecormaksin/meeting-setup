@@ -77,7 +77,7 @@ public class ScheduleConstructInput {
 
     public boolean isFuture(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
         validateAsDomain();
-        ScheduleConstruct scheduleConstruct = toDomainObject();
+        ScheduleConstruct scheduleConstruct = toScheduleConstruct();
         return scheduleConstruct.isFutureThan(registrationRequestDateTime);
     }
 
@@ -109,12 +109,12 @@ public class ScheduleConstructInput {
                 && this.duration.isSame(other.duration);
     }
 
-    public ScheduleConstruct toDomainObject() {
+    public ScheduleConstruct toScheduleConstruct() {
         validateAsDomain();
-        return new ScheduleConstruct(meetingDate.toDomainObject(),
-                startHour.toDomainObject(),
-                startMinute.toDomainObject(),
-                duration.toDomainObject());
+        return new ScheduleConstruct(meetingDate.toMeetingDate(),
+                startHour.toStartHour(),
+                startMinute.toStartMinute(),
+                duration.toDuration());
     }
 
     public MeetingDateInput meetingDate() {

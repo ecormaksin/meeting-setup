@@ -60,8 +60,8 @@ public class ScheduleInput {
         return scheduleConstruct.isFuture(registrationRequestDateTime);
     }
 
-    public Schedule toDomainObject() {
-        return new Schedule(scheduleNumber, scheduleConstruct.toDomainObject());
+    public Schedule toSchedule() {
+        return new Schedule(scheduleNumber, scheduleConstruct.toScheduleConstruct());
     }
 
     public ScheduleConstructInput scheduleConstructInput() {

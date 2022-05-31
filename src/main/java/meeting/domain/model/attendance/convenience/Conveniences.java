@@ -9,28 +9,14 @@ import java.util.List;
 public class Conveniences {
     List<Convenience> list;
 
+    @Deprecated
+    Conveniences() {}
+
     public Conveniences(List<Convenience> list) {
         this.list = list;
     }
 
-    @Deprecated
-    Conveniences() {
-    }
-
-    public static Conveniences of(List<Convenience> source) {
-        return new Conveniences(source);
-    }
-
     public List<Convenience> asList() {
         return Collections.unmodifiableList(list);
-    }
-
-    @Override
-    public String toString() {
-        // @formatter:off
-        return "Conveniences{" +
-                    "list=" + list +
-                '}';
-        // @formatter:on
     }
 }

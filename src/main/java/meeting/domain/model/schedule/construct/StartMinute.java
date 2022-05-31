@@ -19,7 +19,7 @@ public enum StartMinute {
         this.label = label;
     }
 
-    public static StartMinute fromValue(final int value) {
+    public static StartMinute of(final int value) {
         List<String> candidates = new ArrayList<>();
         for (StartMinute startMinute : StartMinute.values()) {
             if (startMinute.value == value) {
@@ -34,7 +34,7 @@ public enum StartMinute {
     }
 
     public static StartMinute fromString(final String stringValue) {
-        return fromValue(Integer.valueOf(stringValue));
+        return of(Integer.valueOf(stringValue));
     }
 
     public int value() {

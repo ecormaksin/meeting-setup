@@ -9,8 +9,8 @@
             SELECT 参加者名 FROM 出欠._出欠
             WHERE
                 ミーティング番号 = #{meetingNumber.value}
-            <if test="attendanceId != null and attendanceId.value != null">
-                AND 出欠番号 != #{attendanceId.value}
+            <if test="attendanceNumber != null and attendanceNumber.value != null">
+                AND 出欠番号 != #{attendanceNumber.value}
             </if>
             AND 参加者名 = #{participantName.value}
         )
@@ -18,12 +18,12 @@
 
     <insert id="insertAttendance">
         INSERT INTO 出欠._出欠(出欠番号, ミーティング番号, 参加者名)
-        VALUES (#{attendanceId.value}, #{meetingNumber.value}, #{participantName.value})
+        VALUES (#{attendanceNumber.value}, #{meetingNumber.value}, #{participantName.value})
     </insert>
 
     <insert id="insertAttendanceComment">
         INSERT INTO 出欠._出欠コメント(出欠番号, 出欠コメント)
-        VALUES (#{attendanceId.value}, #{attendanceComment.value})
+        VALUES (#{attendanceNumber.value}, #{attendanceComment.value})
     </insert>
 
 
@@ -33,15 +33,15 @@
 
     <insert id="insertConvenience">
         INSERT INTO 出欠._都合(都合番号, 出欠番号, 日程番号, 都合種別)
-        VALUES (#{convenienceNumber}, #{attendanceId.value}, #{scheduleNumber.value}, #{convenienceCategory})
+        VALUES (#{convenienceNumber}, #{attendanceNumber.value}, #{scheduleNumber.value}, #{convenienceCategory})
     </insert>
 
     <resultMap id="attendance" type="meeting.domain.model.attendance.Attendance">
-        <id property="attendanceId.value" column="attendanceId.value" />
+        <id property="attendanceNumber.value" column="attendanceNumber.value" />
         <result property="participantName.value" column="participantName.value" />
         <result property="attendanceComment.value" column="attendanceComment.value" />
         <collection property="conveniences.list"
-            column="attendanceId.value"
+            column="attendanceNumber.value"
             ofType="meeting.domain.model.attendance.convenience.Convenience"
             select="meeting.infrastructure.datasource.attendance.AttendanceMapper.selectConveniencesByAttendanceId">
         </collection>
@@ -49,7 +49,7 @@
 
     <select id="selectAttendance" resultMap="attendance">
         SELECT
-            出欠.出欠番号 AS "attendanceId.value",
+            出欠.出欠番号 AS "attendanceNumber.value",
             出欠.参加者名 AS "participantName.value",
             COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
         FROM
@@ -58,12 +58,12 @@
                 ON
                 出欠コメント.出欠番号 = 出欠.出欠番号
         WHERE
-            出欠.出欠番号 = #{attendanceId.value}
+            出欠.出欠番号 = #{attendanceNumber.value}
     </select>
 
     <select id="selectAttendancesByMeetingNumber" resultMap="attendance">
         SELECT
-            出欠.出欠番号 AS "attendanceId.value",
+            出欠.出欠番号 AS "attendanceNumber.value",
             出欠.参加者名 AS "participantName.value",
             COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
         FROM
@@ -134,17 +134,17 @@
 
     <delete id="deleteAttendanceComment">
         DELETE FROM 出欠._出欠コメント
-        WHERE 出欠番号 = #{attendanceId.value}
+        WHERE 出欠番号 = #{attendanceNumber.value}
     </delete>
 
     <delete id="deleteConveniences">
         DELETE FROM 出欠._都合
-        WHERE 出欠番号 = #{attendanceId.value}
+        WHERE 出欠番号 = #{attendanceNumber.value}
     </delete>
 
     <delete id="deleteAttendance">
         DELETE FROM 出欠._出欠
-        WHERE 出欠番号 = #{attendanceId.value}
+        WHERE 出欠番号 = #{attendanceNumber.value}
     </delete>
 
 </mapper>

@@ -100,21 +100,22 @@ public class MeetingTest {
                 String.format("×と回答した人数は%d", numberOfParticipantsBatsu));
     }
 
-    private Attendances createAttendances(int primitiveScheduleNumber, List<String> attendanceTextList) {
+    private Attendances createAttendances(int primitiveScheduleNumber, List<String> convenienceSymbols) {
 
         List<Attendance> attendanceList = new ArrayList<>();
 
-        for (int i = 0; i < attendanceTextList.size(); i++) {
-            String attendanceText = attendanceTextList.get(i);
+        for (int i = 0; i < convenienceSymbols.size(); i++) {
+            String convenienceSymbol = convenienceSymbols.get(i);
 
             List<Convenience> convenienceList = Arrays.asList(
-                    Convenience.of(primitiveScheduleNumber, attendanceText)
+                    new Convenience(new ScheduleNumber(primitiveScheduleNumber),
+                            ConvenienceCategory.fromSymbol(convenienceSymbol))
             );
-            Conveniences conveniences = Conveniences.of(convenienceList);
+            Conveniences conveniences = new Conveniences(convenienceList);
 
             String participantNameText = "参加者テスト" + (i + 1);
             Attendance attendance = new Attendance(
-                    AttendanceId.newId(),
+                    AttendanceNumber.newNumber(),
                     new ParticipantName(participantNameText),
                     conveniences,
                     new AttendanceComment(participantNameText + "_出欠コメント")
@@ -123,6 +124,6 @@ public class MeetingTest {
             attendanceList.add(attendance);
         }
 
-        return Attendances.of(attendanceList);
+        return new Attendances(attendanceList);
     }
 }

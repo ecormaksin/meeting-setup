@@ -10,6 +10,7 @@ public interface MeetingRepository {
     void create(MeetingCreationRequest meetingCreationRequest);
 
     Meeting meetingOf(MeetingNumber meetingNumber);
+    Meeting findBy(MeetingNumber meetingNumber);
 
     void edit(Meeting meeting, MeetingEditRequest meetingEditRequest);
 

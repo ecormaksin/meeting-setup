@@ -1,7 +1,7 @@
 package meeting.presentation.attendance;
 
 import meeting.application.senario.AttendanceInputScenario;
-import meeting.domain.model.attendance.AttendanceId;
+import meeting.domain.model.attendance.AttendanceNumber;
 import meeting.domain.model.attendance.AttendanceInputRequest;
 import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
 import meeting.domain.model.meeting.MeetingNumber;
@@ -60,10 +60,10 @@ public class AttendanceInputController {
             return "attendance/input/form";
         }
 
-        AttendanceId attendanceId = attendanceInputScenario.input(meetingNumber, attendanceInputRequest);
+        AttendanceNumber attendanceNumber = attendanceInputScenario.input(meetingNumber, attendanceInputRequest);
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
-        attributes.addFlashAttribute("attendanceId", attendanceId.value());
+        attributes.addFlashAttribute("attendanceNumber", attendanceNumber.value());
 
         URI uri = builder.path(String.format("meeting/%s/attendance/input/completed", meetingNumber.value())).build().toUri();
         return "redirect:" + uri.toString();

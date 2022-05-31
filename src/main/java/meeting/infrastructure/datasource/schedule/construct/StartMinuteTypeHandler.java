@@ -19,16 +19,16 @@ public class StartMinuteTypeHandler extends BaseTypeHandler<StartMinute> {
 
     @Override
     public StartMinute getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        return StartMinute.fromValue(rs.getInt(columnName));
+        return StartMinute.of(rs.getInt(columnName));
     }
 
     @Override
     public StartMinute getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        return StartMinute.fromValue(rs.getInt(columnIndex));
+        return StartMinute.of(rs.getInt(columnIndex));
     }
 
     @Override
     public StartMinute getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        return StartMinute.fromValue(cs.getInt(columnIndex));
+        return StartMinute.of(cs.getInt(columnIndex));
     }
 }

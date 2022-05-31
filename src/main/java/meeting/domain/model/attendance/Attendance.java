@@ -6,26 +6,26 @@ import meeting.domain.model.attendance.convenience.Conveniences;
  * 出欠
  */
 public class Attendance {
-    AttendanceId attendanceId;
+    AttendanceNumber attendanceNumber;
     ParticipantName participantName;
     Conveniences conveniences;
     AttendanceComment attendanceComment;
 
-    public Attendance(AttendanceId attendanceId,
+    @Deprecated
+    Attendance() {}
+
+    public Attendance(AttendanceNumber attendanceNumber,
                       ParticipantName participantName,
                       Conveniences conveniences,
                       AttendanceComment attendanceComment) {
-        this.attendanceId = attendanceId;
+        this.attendanceNumber = attendanceNumber;
         this.participantName = participantName;
         this.conveniences = conveniences;
         this.attendanceComment = attendanceComment;
     }
 
-    @Deprecated
-    public Attendance() {}
-
-    public AttendanceId attendanceId() {
-        return attendanceId;
+    public AttendanceNumber attendanceNumber() {
+        return attendanceNumber;
     }
 
     public ParticipantName participantName() {
@@ -38,17 +38,5 @@ public class Attendance {
 
     public AttendanceComment attendanceComment() {
         return attendanceComment;
-    }
-
-    @Override
-    public String toString() {
-        // @formatter:off
-        return "Attendance{" +
-                "attendanceId=" + attendanceId +
-                ", participantName=" + participantName +
-                ", conveniences=" + conveniences +
-                ", attendanceComment=" + attendanceComment +
-                '}';
-        // @formatter:on
     }
 }

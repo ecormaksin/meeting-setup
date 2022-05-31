@@ -89,12 +89,12 @@ public class ScheduleInputs {
         return of(newList);
     }
 
-    public Schedules toDomainObject() {
+    public Schedules toSchedules() {
         final List<ScheduleInput> validInputs = validInputs();
 
         List<Schedule> source = new ArrayList<>();
         for (ScheduleInput scheduleInput : validInputs) {
-            Schedule schedule = scheduleInput.toDomainObject();
+            Schedule schedule = scheduleInput.toSchedule();
             source.add(schedule);
         }
 
