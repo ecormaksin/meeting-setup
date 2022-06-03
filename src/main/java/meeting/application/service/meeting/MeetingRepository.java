@@ -9,8 +9,7 @@ import meeting.domain.model.meeting.meeting_list.MeetingList;
 public interface MeetingRepository {
     void create(MeetingCreationRequest meetingCreationRequest);
 
-    Meeting meetingOf(MeetingNumber meetingNumber);
-    Meeting findBy(MeetingNumber meetingNumber);
+    Meeting get(MeetingNumber meetingNumber);
 
     void edit(Meeting meeting, MeetingEditRequest meetingEditRequest);
 

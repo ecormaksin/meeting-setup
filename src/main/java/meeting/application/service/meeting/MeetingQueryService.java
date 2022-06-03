@@ -18,7 +18,7 @@ public class MeetingQueryService {
     }
 
     public Meeting meetingOf(MeetingNumber meetingNumber) {
-        return meetingRepository.meetingOf(meetingNumber);
+        return meetingRepository.get(meetingNumber);
     }
 
     public MeetingList search(MeetingSearchRequest meetingSearchRequest) {

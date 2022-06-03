@@ -36,7 +36,7 @@ class MeetingDatasourceTest {
         // Act
         meetingDatasource.create(request);
         final MeetingNumber requestMeetingNumber = request.meetingNumber();
-        final Meeting meeting = meetingDatasource.findBy(requestMeetingNumber);
+        final Meeting meeting = meetingDatasource.get(requestMeetingNumber);
 
         // Assert
         assertNotNull(meeting);

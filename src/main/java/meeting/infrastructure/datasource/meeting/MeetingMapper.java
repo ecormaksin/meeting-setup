@@ -17,10 +17,7 @@ public interface MeetingMapper {
                        @Param("organizerNumber") OrganizerNumber organizerNumber);
     void insertMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("memo") Memo memo);
 
-    Optional<MeetingResource> selectMeetingResource(@Param("meetingNumber") MeetingNumber meetingNumber);
-    Optional<Memo> selectMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
-
-    Optional<Meeting> selectMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);
+    Optional<MeetingWithoutSchedulesAndAttendances> selectMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);
 
     void deleteMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber);
     void deleteMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);

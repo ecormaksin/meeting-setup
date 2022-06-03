@@ -20,8 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
@@ -49,17 +51,15 @@ public class MeetingDatasource implements MeetingRepository {
     }
 
     @Override
-    public Meeting meetingOf(MeetingNumber meetingNumber) {
+    public Meeting get(MeetingNumber meetingNumber) {
         boolean meetingNotFound = false;
 
-        Optional<MeetingResource> optMeetingResource = meetingMapper.selectMeetingResource(meetingNumber);
-        if (optMeetingResource.isEmpty()) {
+        final Optional<MeetingWithoutSchedulesAndAttendances> optionalMeetingWithoutSchedulesAndAttendances = meetingMapper.selectMeeting(meetingNumber);
+        if (optionalMeetingWithoutSchedulesAndAttendances.isEmpty()) {
             meetingNotFound = true;
         }
 
-        Optional<Memo> optMemo = meetingMapper.selectMemo(meetingNumber);
-
-        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingNumber(meetingNumber);
+        final List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingNumber(meetingNumber);
         if (scheduleList.isEmpty()) {
             meetingNotFound = true;
         }
@@ -68,44 +68,16 @@ public class MeetingDatasource implements MeetingRepository {
             throw new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティング番号を確認してください。: %s", meetingNumber.value()));
         }
 
-        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);
+        final List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);
 
-        final MeetingResource meetingResource = optMeetingResource.get();
-        final Subject subject = meetingResource.subject();
-        final OrganizerNumber organizerNumber = meetingResource.organizerNumber();
+        final MeetingWithoutSchedulesAndAttendances meetingResource = optionalMeetingWithoutSchedulesAndAttendances.get();
 
         return new Meeting(meetingNumber,
-                subject,
-                optMemo.orElse(Memo.blank()),
-                organizerNumber,
+                meetingResource.subject(),
+                meetingResource.memo(),
+                meetingResource.organizerNumber(),
                 new Schedules(scheduleList),
                 new Attendances(attendanceList));
-    }
-
-    @Override
-    public Meeting findBy(MeetingNumber meetingNumber) {
-        Optional<Meeting> optionalMeeting = meetingMapper.selectMeeting(meetingNumber);
-        optionalMeeting.orElseThrow(() ->
-                        new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティング番号を確認してください。: %s", meetingNumber.value()))
-                );
-
-        final Meeting temporaryMeeting = optionalMeeting.get();
-        final Attendances attendances = temporaryMeeting.attendances();
-        final List<Attendance> attendanceList = attendances.asList()
-                .stream().filter(attendance -> {
-                    final AttendanceNumber attendanceNumber = attendance.attendanceNumber();
-                    return Objects.nonNull(attendanceNumber);
-                })
-                .collect(Collectors.toList());
-
-        return new Meeting(
-                meetingNumber,
-                temporaryMeeting.subject(),
-                temporaryMeeting.memo(),
-                temporaryMeeting.organizerNumber(),
-                temporaryMeeting.schedules(),
-                new Attendances(attendanceList)
-        );
     }
 
     @Override
