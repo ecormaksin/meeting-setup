@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -92,10 +91,55 @@ class MeetingDatasourceTest {
         test(testParameter);
     }
 
-    private void test(TestParameter testParameter) throws Exception {
+    @Test
+    void _メモなし_日程2件降順の場合() throws Exception {
+
+        final String meetingNumberValue = meetingNumberValue(2);
+        final String subjectValue = "件名テスト2";
+        final String memoValue = "";
+        final String organizerNumberValue = organizerNumberValue(2);
+        final LocalDateTime registrationRequestDateTime = LocalDateTime.of(2022, 3, 2, 11, 0, 0);
+
+        final ScheduleParameter scheduleParameter1 = new ScheduleParameter(
+                LocalDate.of(2022, 4, 3),15, 0,60
+        );
+
+        final ScheduleParameter scheduleParameter2 = new ScheduleParameter(
+                LocalDate.of(2022, 4, 3),14, 30,30
+        );
+
+        final List<ScheduleParameter> scheduleRequestParameters = Arrays.asList(
+                scheduleParameter1, scheduleParameter2
+        );
+
+        final List<ScheduleParameter> scheduleExpectedParameters = Arrays.asList(
+                scheduleParameter2, scheduleParameter1
+        );
+
+        final RequestParameter requestParameter = new RequestParameter(
+                meetingNumberValue,
+                subjectValue,
+                memoValue,
+                organizerNumberValue,
+                registrationRequestDateTime,
+                scheduleRequestParameters);
+
+        final ExpectedParameter expectedParameter = new ExpectedParameter(
+                meetingNumberValue,
+                subjectValue,
+                memoValue,
+                organizerNumberValue,
+                scheduleExpectedParameters);
+
+        final TestParameter testParameter = new TestParameter(requestParameter, expectedParameter);
+
+        test(testParameter);
+    }
+
+    private void test(final TestParameter testParameter) throws Exception {
 
         // Arrange
-        final MeetingCreationRequest request = creationRequest(testParameter.requestParameter());
+        final MeetingCreationRequest request = createRequest(testParameter.requestParameter());
 
         // Act
         meetingDatasource.create(request);
@@ -103,7 +147,11 @@ class MeetingDatasourceTest {
         final Meeting meeting = meetingDatasource.get(requestMeetingNumber);
 
         // Assert
-        ExpectedParameter expectedParameter = testParameter.expectedParameter();
+        doAssertion(testParameter.expectedParameter(), meeting);
+    }
+
+    private void doAssertion(final ExpectedParameter expectedParameter, final Meeting meeting) {
+
         assertNotNull(meeting);
 
         final MeetingNumber actualMeetingNumber = meeting.meetingNumber();
@@ -151,7 +199,7 @@ class MeetingDatasourceTest {
         assertEquals(0, attendanceList.size());
     }
 
-    private MeetingCreationRequest creationRequest(RequestParameter requestParameter) {
+    private MeetingCreationRequest createRequest(RequestParameter requestParameter) {
 
         final MeetingNumber meetingNumber = new MeetingNumber(requestParameter.meetingNumberValue());
         final Subject subject = new Subject(requestParameter.subjectValue());
