@@ -9,7 +9,7 @@ import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.*;
 import org.junit.ClassRule;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -27,7 +27,98 @@ class MeetingDatasourceTest {
 
     @Autowired
     MeetingDatasource meetingDatasource;
+    Meeting createMeeting(
+                final String meetingNumberValue,
+                final String subjectValue,
+                final String memoValue,
+                final String organizerNumberValue,
+                final List<Schedule> scheduleList,
+                final LocalDateTime registrationRequestDateTimeValue
+    ) {
 
+        final MeetingNumber meetingNumber = new MeetingNumber(meetingNumberValue);
+        final Subject subject = new Subject(subjectValue);
+        final Memo memo = new Memo(memoValue);
+        final OrganizerNumber organizerNumber = new OrganizerNumber(organizerNumberValue);
+        final Schedules schedules = new Schedules(scheduleList);
+        final RegistrationRequestDateTime registrationRequestDateTime
+                = new RegistrationRequestDateTime(registrationRequestDateTimeValue);
+
+        final MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest(
+                meetingNumber,
+                subject,
+                memo,
+                organizerNumber,
+                schedules,
+                registrationRequestDateTime);
+
+        meetingDatasource.create(meetingCreationRequest);
+        return meetingDatasource.get(meetingNumber);
+    }
+
+    private Schedule schedule(
+            final LocalDate meetingDateValue,
+            final int startHourValue,
+            final int startMinuteValue,
+            final int durationValue) {
+
+        final ScheduleConstruct scheduleConstruct = scheduleConstruct(
+                                    meetingDateValue,
+                                    startHourValue,
+                                    startMinuteValue,
+                                    durationValue);
+
+        return new Schedule(ScheduleNumber.initialize(), scheduleConstruct);
+    }
+    private ScheduleConstruct scheduleConstruct(
+            final LocalDate meetingDateValue,
+            final int startHourValue,
+            final int startMinuteValue,
+            final int durationValue) {
+
+        final MeetingDate meetingDate = new MeetingDate(meetingDateValue);
+        final StartHour startHour = new StartHour(startHourValue);
+        final StartMinute startMinute = StartMinute.of(startMinuteValue);
+        final Duration duration = Duration.of(durationValue);
+
+        return new ScheduleConstruct(meetingDate, startHour, startMinute, duration);
+    }
+
+    @Nested
+    @MeetingDBTest
+    @DisplayName("メモあり・日程1件の場合")
+    class MeetingWithMemoAndOneSchedule {
+
+        Meeting meeting;
+
+        @BeforeEach
+        void setup() throws Exception {
+
+            final List<Schedule> scheduleList = Arrays.asList(
+                    schedule(LocalDate.of(2022, 4, 1),10, 0,60)
+            );
+            meeting = MeetingDatasourceTest.this.createMeeting(
+                    "mt123456789012345678900001",
+                    "件名テスト１",
+                    "メモテスト１",
+                    "og123456789012345678900001",
+                    scheduleList,
+                    LocalDateTime.of(2022, 3, 2, 9, 30, 0));
+        }
+
+        @Test
+        void _ミーティングを取得できること() throws Exception {
+            assertNotNull(meeting);
+        }
+
+        @Test
+        void _件名が入力した通りであること() throws Exception {
+            final Subject subject = meeting.subject();
+            assertEquals("件名テスト１", subject.value());
+        }
+    }
+
+/*
     record ScheduleParameter(LocalDate meetingDateValue,
                              int startHourValue,
                              int startMinuteValue,
@@ -238,4 +329,6 @@ class MeetingDatasourceTest {
                 StartMinute.of(scheduleParameter.startMinuteValue()),
                 Duration.of(scheduleParameter.durationValue()));
     }
+*/
+
 }
