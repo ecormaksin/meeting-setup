@@ -1,8 +1,6 @@
 package meeting.infrastructure.datasource.meeting;
 
 import meeting.MeetingDBTest;
-import meeting.domain.model.attendance.Attendance;
-import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
@@ -16,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,14 +85,13 @@ class MeetingDatasourceTest {
 
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    @MeetingDBTest
     @DisplayName("メモあり・日程1件の場合")
-    class MeetingWithMemoAndOneSchedule {
+    class MeetingWithMemoAnd1Schedule {
 
         Meeting meeting;
 
         @BeforeAll
-        void initAll() throws Exception {
+        void initAll() {
 
             final List<Schedule> scheduleList = Arrays.asList(
                     MeetingDatasourceTest.this.schedule(LocalDate.of(2022, 4, 1),10, 0,60)
@@ -108,30 +106,30 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void _ミーティングを取得できること() throws Exception {
+        void _ミーティングを取得できること() {
             assertNotNull(meeting);
         }
 
         @Test
-        void _ミーティング番号が設定した通りであること() throws Exception {
+        void _ミーティング番号が設定した通りであること() {
             final MeetingNumber meetingNumber = meeting.meetingNumber();
             assertEquals("mt123456789012345678900001", meetingNumber.value());
         }
 
         @Test
-        void _件名が設定した通りであること() throws Exception {
+        void _件名が設定した通りであること() {
             final Subject subject = meeting.subject();
             assertEquals("件名テスト１", subject.value());
         }
 
         @Test
-        void _メモが設定した通りであること() throws Exception {
+        void _メモが設定した通りであること() {
             final Memo memo = meeting.memo();
             assertEquals("メモテスト１", memo.value());
         }
 
         @Test
-        void _主催者番号が設定した通りであること() throws Exception {
+        void _主催者番号が設定した通りであること() {
             final OrganizerNumber organizerNumber = meeting.organizerNumber();
             assertEquals("og123456789012345678900001", organizerNumber.value());
         }
@@ -142,7 +140,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void _日程候補が1件であること() throws Exception {
+        void _日程候補が1件であること() {
             final List<Schedule> scheduleList =  scheduleList();
             assertEquals(1, scheduleList.size());
         }
@@ -153,7 +151,7 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void _日程番号が発番されていること() throws Exception {
+        void _日程番号が発番されていること() {
             final Schedule schedule = schedule();
             final ScheduleNumber scheduleNumber = schedule.scheduleNumber();
             assertTrue(scheduleNumber.value() > 0);
@@ -179,231 +177,76 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void _開始分が設定した通りであること() throws Exception {
+        void _開始分が設定した通りであること() {
             final ScheduleConstruct scheduleConstruct = scheduleConstruct();
             final StartMinute startMinute = scheduleConstruct.startMinute();
             assertEquals(0, startMinute.value());
         }
 
         @Test
-        void _会議時間が設定した通りであること() throws Exception {
+        void _会議時間が設定した通りであること() {
             final ScheduleConstruct scheduleConstruct = scheduleConstruct();
             final Duration duration = scheduleConstruct.duration();
             assertEquals(60, duration.value());
         }
     }
 
-/*
-    record ScheduleParameter(LocalDate meetingDateValue,
-                             int startHourValue,
-                             int startMinuteValue,
-                             int durationValue) {}
+    @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DisplayName("メモなし・日程候補2件(日付の設定順序が逆)の場合")
+    class MeetingWithoutMemoAndReverseOrdered2Schedules {
 
-    record RequestParameter(String meetingNumberValue,
-                            String subjectValue,
-                            String memoValue,
-                            String organizerNumberValue,
-                            LocalDateTime registrationRequestDateTimeValue,
-                            List<ScheduleParameter> scheduleParameters) {}
+        Meeting meeting;
 
-    record ExpectedParameter(String meetingNumberValue,
-                             String subjectValue,
-                             String memoValue,
-                             String organizerNumberValue,
-                             List<ScheduleParameter> scheduleParameters) {}
+        Schedule firstSchedule;
+        Schedule secondSchedule;
 
-    record TestParameter(RequestParameter requestParameter, ExpectedParameter expectedParameter) {}
+        @BeforeAll
+        void initAll() {
 
-    private String meetingNumberValue(final int number) {
-        return "mt" + String.format("%024d", number);
-    }
-
-    private String organizerNumberValue(final int number) {
-        return "og" + String.format("%024d", number);
-    }
-
-    @Test
-    void _メモあり_日程1件の場合() throws Exception {
-
-        final String meetingNumberValue = meetingNumberValue(1);
-        final String subjectValue = "件名テスト1";
-        final String memoValue = "メモ テスト1";
-        final String organizerNumberValue = organizerNumberValue(1);
-        final LocalDateTime registrationRequestDateTime = LocalDateTime.of(2022, 3, 1, 10, 0, 0);
-
-        List<ScheduleParameter> scheduleParameters = Arrays.asList(
-                new ScheduleParameter(
-                        LocalDate.of(2022, 4, 1),10, 0,60
-                )
-        );
-
-        RequestParameter requestParameter = new RequestParameter(
-                meetingNumberValue,
-                subjectValue,
-                memoValue,
-                organizerNumberValue,
-                registrationRequestDateTime,
-                scheduleParameters);
-
-        ExpectedParameter expectedParameter = new ExpectedParameter(
-                meetingNumberValue,
-                subjectValue,
-                memoValue,
-                organizerNumberValue,
-                scheduleParameters);
-
-        TestParameter testParameter = new TestParameter(requestParameter, expectedParameter);
-
-        test(testParameter);
-    }
-
-    @Test
-    void _メモなし_日程2件降順の場合() throws Exception {
-
-        final String meetingNumberValue = meetingNumberValue(2);
-        final String subjectValue = "件名テスト2";
-        final String memoValue = "";
-        final String organizerNumberValue = organizerNumberValue(2);
-        final LocalDateTime registrationRequestDateTime = LocalDateTime.of(2022, 3, 2, 11, 0, 0);
-
-        final ScheduleParameter scheduleParameter1 = new ScheduleParameter(
-                LocalDate.of(2022, 4, 3),15, 0,60
-        );
-
-        final ScheduleParameter scheduleParameter2 = new ScheduleParameter(
-                LocalDate.of(2022, 4, 3),14, 30,30
-        );
-
-        final List<ScheduleParameter> scheduleRequestParameters = Arrays.asList(
-                scheduleParameter1, scheduleParameter2
-        );
-
-        final List<ScheduleParameter> scheduleExpectedParameters = Arrays.asList(
-                scheduleParameter2, scheduleParameter1
-        );
-
-        final RequestParameter requestParameter = new RequestParameter(
-                meetingNumberValue,
-                subjectValue,
-                memoValue,
-                organizerNumberValue,
-                registrationRequestDateTime,
-                scheduleRequestParameters);
-
-        final ExpectedParameter expectedParameter = new ExpectedParameter(
-                meetingNumberValue,
-                subjectValue,
-                memoValue,
-                organizerNumberValue,
-                scheduleExpectedParameters);
-
-        final TestParameter testParameter = new TestParameter(requestParameter, expectedParameter);
-
-        test(testParameter);
-    }
-
-    private void test(final TestParameter testParameter) throws Exception {
-
-        // Arrange
-        final MeetingCreationRequest request = createRequest(testParameter.requestParameter());
-
-        // Act
-        meetingDatasource.create(request);
-        final MeetingNumber requestMeetingNumber = request.meetingNumber();
-        final Meeting meeting = meetingDatasource.get(requestMeetingNumber);
-
-        // Assert
-        doAssertion(testParameter.expectedParameter(), meeting);
-    }
-
-    private void doAssertion(final ExpectedParameter expectedParameter, final Meeting meeting) {
-
-        assertNotNull(meeting);
-
-        final MeetingNumber actualMeetingNumber = meeting.meetingNumber();
-        assertEquals(expectedParameter.meetingNumberValue(), actualMeetingNumber.value());
-
-        final Subject subject = meeting.subject();
-        assertEquals(expectedParameter.subjectValue(), subject.value());
-
-        final Memo memo = meeting.memo();
-        assertEquals(expectedParameter.memoValue(), memo.value());
-
-        final OrganizerNumber organizerNumber = meeting.organizerNumber();
-        assertEquals(expectedParameter.organizerNumberValue(), organizerNumber.value());
-
-        List<ScheduleParameter> scheduleParameters = expectedParameter.scheduleParameters();
-        final Schedules schedules = meeting.schedules();
-
-        final List<Schedule> scheduleList = schedules.asList();
-        assertEquals(scheduleParameters.size(), scheduleList.size());
-
-        for (int i = 0; i < scheduleParameters.size(); i++) {
-            ScheduleParameter scheduleParameter = scheduleParameters.get(i);
-            final Schedule schedule = scheduleList.get(i);
-
-            final ScheduleNumber scheduleNumber = schedule.scheduleNumber();
-            assertTrue(scheduleNumber.value() > 0);
-
-            final ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
-
-            final MeetingDate meetingDate = scheduleConstruct.meetingDate();
-            assertEquals(scheduleParameter.meetingDateValue(), meetingDate.value());
-
-            final StartHour startHour = scheduleConstruct.startHour();
-            assertEquals(scheduleParameter.startHourValue(), startHour.value());
-
-            final StartMinute startMinute = scheduleConstruct.startMinute();
-            assertEquals(scheduleParameter.startMinuteValue(), startMinute.value());
-
-            final Duration duration = scheduleConstruct.duration();
-            assertEquals(scheduleParameter.durationValue(), duration.value());
+            firstSchedule = MeetingDatasourceTest.this.schedule(LocalDate.of(2022, 4, 3),12, 0,90);
+            secondSchedule = MeetingDatasourceTest.this.schedule(LocalDate.of(2022, 4, 2),11, 30,30);
+            final List<Schedule> scheduleList = Arrays.asList(
+                    firstSchedule, secondSchedule
+            );
+            meeting = MeetingDatasourceTest.this.createMeeting(
+                    "mt123456789012345678900002",
+                    "件名テスト２",
+                    "",
+                    "og123456789012345678900002",
+                    scheduleList,
+                    LocalDateTime.of(2022, 4, 2, 11, 00, 0));
         }
 
-        final Attendances attendances = meeting.attendances();
-        final List<Attendance> attendanceList = attendances.asList();
-        assertEquals(0, attendanceList.size());
+        @Test
+        void _メモは未設定であること() {
+            final Memo memo = meeting.memo();
+            assertEquals("", memo.value());
+        }
+
+        private List<Schedule> scheduleList() {
+            final Schedules schedules = meeting.schedules();
+            return  schedules.asList();
+        }
+
+        @Test
+        void _日程候補が2件であること() {
+            final List<Schedule> scheduleList =  scheduleList();
+            assertEquals(2, scheduleList.size());
+        }
+
+        @Test
+        void _日程候補が日時の昇順であること() {
+            final List<ScheduleConstruct> expected = Arrays.asList(
+                    secondSchedule.scheduleConstruct(),
+                    firstSchedule.scheduleConstruct()
+            );
+            final List<Schedule> scheduleList =  scheduleList();
+            final List<ScheduleConstruct> actual = scheduleList.stream()
+                    .map(c -> c.scheduleConstruct())
+                    .collect(Collectors.toList());
+            assertEquals(expected, actual);
+        }
+
     }
-
-    private MeetingCreationRequest createRequest(RequestParameter requestParameter) {
-
-        final MeetingNumber meetingNumber = new MeetingNumber(requestParameter.meetingNumberValue());
-        final Subject subject = new Subject(requestParameter.subjectValue());
-        final Memo memo = new Memo(requestParameter.memoValue());
-        final OrganizerNumber organizerNumber = new OrganizerNumber(requestParameter.organizerNumberValue());
-        final Schedules schedules = schedules(requestParameter.scheduleParameters());
-        final RegistrationRequestDateTime requestDateTime
-                = new RegistrationRequestDateTime(
-                requestParameter.registrationRequestDateTimeValue());
-
-        return new MeetingCreationRequest(
-                meetingNumber,
-                subject,
-                memo,
-                organizerNumber,
-                schedules,
-                requestDateTime);
-    }
-
-    private Schedules schedules(List<ScheduleParameter> scheduleParameters) {
-        List<Schedule> list = scheduleParameters.stream().map(scheduleParameter -> {
-            return schedule(scheduleParameter);
-        }).toList();
-
-        return Schedules.of(list);
-    }
-
-    private Schedule schedule(ScheduleParameter scheduleParameter) {
-        return new Schedule(ScheduleNumber.initialize(), scheduleConstruct(scheduleParameter));
-    }
-    private ScheduleConstruct scheduleConstruct(ScheduleParameter scheduleParameter) {
-
-        return new ScheduleConstruct(
-                new MeetingDate(scheduleParameter.meetingDateValue()),
-                new StartHour(scheduleParameter.startHourValue()),
-                StartMinute.of(scheduleParameter.startMinuteValue()),
-                Duration.of(scheduleParameter.durationValue()));
-    }
-*/
-
 }
