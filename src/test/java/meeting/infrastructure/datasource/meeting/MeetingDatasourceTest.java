@@ -85,17 +85,18 @@ class MeetingDatasourceTest {
     }
 
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @MeetingDBTest
     @DisplayName("メモあり・日程1件の場合")
     class MeetingWithMemoAndOneSchedule {
 
         Meeting meeting;
 
-        @BeforeEach
-        void setup() throws Exception {
+        @BeforeAll
+        void initAll() throws Exception {
 
             final List<Schedule> scheduleList = Arrays.asList(
-                    schedule(LocalDate.of(2022, 4, 1),10, 0,60)
+                    MeetingDatasourceTest.this.schedule(LocalDate.of(2022, 4, 1),10, 0,60)
             );
             meeting = MeetingDatasourceTest.this.createMeeting(
                     "mt123456789012345678900001",
@@ -112,9 +113,83 @@ class MeetingDatasourceTest {
         }
 
         @Test
-        void _件名が入力した通りであること() throws Exception {
+        void _ミーティング番号が設定した通りであること() throws Exception {
+            final MeetingNumber meetingNumber = meeting.meetingNumber();
+            assertEquals("mt123456789012345678900001", meetingNumber.value());
+        }
+
+        @Test
+        void _件名が設定した通りであること() throws Exception {
             final Subject subject = meeting.subject();
             assertEquals("件名テスト１", subject.value());
+        }
+
+        @Test
+        void _メモが設定した通りであること() throws Exception {
+            final Memo memo = meeting.memo();
+            assertEquals("メモテスト１", memo.value());
+        }
+
+        @Test
+        void _主催者番号が設定した通りであること() throws Exception {
+            final OrganizerNumber organizerNumber = meeting.organizerNumber();
+            assertEquals("og123456789012345678900001", organizerNumber.value());
+        }
+
+        private List<Schedule> scheduleList() {
+            final Schedules schedules = meeting.schedules();
+            return  schedules.asList();
+        }
+
+        @Test
+        void _日程候補が1件であること() throws Exception {
+            final List<Schedule> scheduleList =  scheduleList();
+            assertEquals(1, scheduleList.size());
+        }
+
+        private Schedule schedule() {
+            final List<Schedule> scheduleList =  scheduleList();
+            return scheduleList.get(0);
+        }
+
+        @Test
+        void _日程番号が発番されていること() throws Exception {
+            final Schedule schedule = schedule();
+            final ScheduleNumber scheduleNumber = schedule.scheduleNumber();
+            assertTrue(scheduleNumber.value() > 0);
+        }
+
+        private ScheduleConstruct scheduleConstruct() {
+            final Schedule schedule = schedule();
+            return schedule.scheduleConstruct();
+        }
+
+        @Test
+        void _開催日が設定した通りであること() {
+            final ScheduleConstruct scheduleConstruct = scheduleConstruct();
+            final MeetingDate meetingDate = scheduleConstruct.meetingDate();
+            assertEquals(LocalDate.of(2022, 4, 1), meetingDate.value());
+        }
+
+        @Test
+        void _開始時刻が設定した通りであること() {
+            final ScheduleConstruct scheduleConstruct = scheduleConstruct();
+            final StartHour startHour = scheduleConstruct.startHour();
+            assertEquals(10, startHour.value());
+        }
+
+        @Test
+        void _開始分が設定した通りであること() throws Exception {
+            final ScheduleConstruct scheduleConstruct = scheduleConstruct();
+            final StartMinute startMinute = scheduleConstruct.startMinute();
+            assertEquals(0, startMinute.value());
+        }
+
+        @Test
+        void _会議時間が設定した通りであること() throws Exception {
+            final ScheduleConstruct scheduleConstruct = scheduleConstruct();
+            final Duration duration = scheduleConstruct.duration();
+            assertEquals(60, duration.value());
         }
     }
 
