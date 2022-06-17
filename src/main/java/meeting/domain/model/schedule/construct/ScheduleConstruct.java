@@ -76,6 +76,7 @@ public class ScheduleConstruct {
         return true;
     }
 
+    @Deprecated
     @Override
     public final boolean equals(final Object anObject) {
         if (anObject == this) return true;
@@ -83,6 +84,7 @@ public class ScheduleConstruct {
         return isSame(other);
     }
 
+    @Deprecated
     @Override
     public final int hashCode() {
         return Objects.hash(meetingDate, startHour, startMinute, duration);

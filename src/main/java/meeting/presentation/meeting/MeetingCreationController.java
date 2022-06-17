@@ -4,6 +4,8 @@ import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
+import meeting.presentation.meeting.input.schedule.construct.DurationOptions;
+import meeting.presentation.meeting.input.schedule.construct.StartMinuteOptions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +33,8 @@ public class MeetingCreationController {
     @GetMapping
     String init(Model model) {
         model.addAttribute("meetingInputForm", MeetingInputForm.empty());
+        model.addAttribute("startMinuteOptions", StartMinuteOptions.initialize());
+        model.addAttribute("durationOptions", DurationOptions.initialize());
 
         return "meeting/create/form";
     }

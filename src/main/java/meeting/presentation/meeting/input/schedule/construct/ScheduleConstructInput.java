@@ -70,7 +70,7 @@ public class ScheduleConstructInput {
 
         return new ScheduleConstructInput(
                 MeetingDateInput.fromDomainObject(meetingDate),
-                StartHourInput.fromDomainObject(startHour),
+                StartHourInput.fromStartHour(startHour),
                 StartMinuteInput.fromDomainObject(startMinute),
                 DurationInput.fromDomainObject(duration));
     }

@@ -23,7 +23,7 @@ public class StartHourInput implements Element {
         return new StartHourInput("");
     }
 
-    public static StartHourInput fromDomainObject(final StartHour startHour) {
+    public static StartHourInput fromStartHour(final StartHour startHour) {
         final int intValue = startHour.value();
         final String stringValue = String.valueOf(intValue);
         return new StartHourInput(stringValue);
