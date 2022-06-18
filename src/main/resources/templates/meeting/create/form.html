@@ -12,13 +12,13 @@
   <article>
     <h1>ミーティングの作成</h1>
     <form method="post" action="#"
-          th:object="${meetingCreationRequest}" th:action="@{/meeting/create}">
+          th:object="${meetingInputForm}" th:action="@{/meeting/create}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <th:block th:replace="_parts/meeting :: form (subject=*{subject}, memo=*{memo}, schedules=*{schedules}, organizerTerminal=*{organizerTerminal})"></th:block>
+      <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
 
       <div>
         <button>作成</button>

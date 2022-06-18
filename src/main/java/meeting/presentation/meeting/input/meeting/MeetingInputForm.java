@@ -3,6 +3,8 @@ package meeting.presentation.meeting.input.meeting;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.schedule.Schedules;
 import meeting.presentation.meeting.input.schedule.ScheduleInputs;
+import meeting.presentation.meeting.input.schedule.construct.DurationOptions;
+import meeting.presentation.meeting.input.schedule.construct.StartMinuteOptions;
 
 import javax.validation.Valid;
 
@@ -23,6 +25,9 @@ public class MeetingInputForm {
     @Valid
     ScheduleInputs scheduleInputs;
 
+    StartMinuteOptions startMinuteOptions;
+    DurationOptions durationOptions;
+
     @Deprecated
     MeetingInputForm() {}
 
@@ -36,6 +41,9 @@ public class MeetingInputForm {
         this.memo = memo;
         this.organizerNumber = organizerNumber;
         this.scheduleInputs = scheduleInputs;
+
+        this.startMinuteOptions = StartMinuteOptions.initialize();
+        this.durationOptions = DurationOptions.initialize();
     }
 
     public static MeetingInputForm empty() {

@@ -69,10 +69,10 @@ public class ScheduleConstructInput {
         final Duration duration = scheduleConstruct.duration();
 
         return new ScheduleConstructInput(
-                MeetingDateInput.fromDomainObject(meetingDate),
+                MeetingDateInput.fromMeetingDate(meetingDate),
                 StartHourInput.fromStartHour(startHour),
-                StartMinuteInput.fromDomainObject(startMinute),
-                DurationInput.fromDomainObject(duration));
+                StartMinuteInput.fromStartMinute(startMinute),
+                DurationInput.fromDuration(duration));
     }
 
     public boolean isFuture(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {

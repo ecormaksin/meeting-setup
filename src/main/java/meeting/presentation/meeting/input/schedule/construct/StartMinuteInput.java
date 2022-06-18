@@ -23,7 +23,7 @@ public class StartMinuteInput implements Element {
         return new StartMinuteInput("");
     }
 
-    public static StartMinuteInput fromDomainObject(final StartMinute startMinute) {
+    public static StartMinuteInput fromStartMinute(final StartMinute startMinute) {
         final int intValue = startMinute.value();
         final String stringValue = String.valueOf(intValue);
         return new StartMinuteInput(stringValue);

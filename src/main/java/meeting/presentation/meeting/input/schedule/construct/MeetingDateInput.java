@@ -24,7 +24,7 @@ public class MeetingDateInput implements Element {
         return new MeetingDateInput("");
     }
 
-    public static MeetingDateInput fromDomainObject(final MeetingDate meetingDate) {
+    public static MeetingDateInput fromMeetingDate(final MeetingDate meetingDate) {
         return new MeetingDateInput(meetingDate.stringValue());
     }
 

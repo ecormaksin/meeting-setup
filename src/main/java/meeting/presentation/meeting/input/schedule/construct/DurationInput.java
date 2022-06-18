@@ -3,13 +3,14 @@ package meeting.presentation.meeting.input.schedule.construct;
 import meeting.domain.model.schedule.construct.Duration;
 
 import javax.validation.constraints.AssertTrue;
-import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 /**
  * 会議時間（入力用）
  */
 public class DurationInput implements Element {
 
+    @NotNull
     String value;
 
     /**
@@ -18,7 +19,7 @@ public class DurationInput implements Element {
     @Deprecated
     DurationInput() {}
 
-    public DurationInput(String value) {
+    public DurationInput(@NotNull final String value) {
         this.value = value;
     }
 
@@ -26,7 +27,7 @@ public class DurationInput implements Element {
         return new DurationInput("");
     }
 
-    public static DurationInput fromDomainObject(final Duration duration) {
+    public static DurationInput fromDuration(final Duration duration) {
         final int intValue = duration.value();
         final String stringValue = String.valueOf(intValue);
         return new DurationInput(stringValue);
@@ -39,7 +40,6 @@ public class DurationInput implements Element {
     }
 
     public boolean isEmpty() {
-        if (Objects.isNull(value)) return true;
         return value.isEmpty();
     }
 

@@ -3,6 +3,7 @@ package meeting.presentation.meeting.input.schedule.construct;
 import meeting.domain.model.schedule.construct.StartHour;
 
 import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -10,12 +11,13 @@ import java.util.Objects;
  */
 public class StartHourInput implements Element {
 
+    @NotNull
     String value;
 
     @Deprecated
     StartHourInput() {}
 
-    public StartHourInput(String value) {
+    public StartHourInput(@NotNull final String value) {
         this.value = value;
     }
 
@@ -36,7 +38,6 @@ public class StartHourInput implements Element {
     }
 
     public boolean isEmpty() {
-        if (Objects.isNull(value)) return true;
         return value.isEmpty();
     }
 
