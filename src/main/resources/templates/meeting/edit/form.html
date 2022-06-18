@@ -12,13 +12,13 @@
   <article>
     <h1>ミーティングの編集</h1>
     <form method="post" action="#"
-          th:object="${meetingEditRequest}" th:action="@{/meeting/__${meetingNumber}__/edit}">
+          th:object="${meetingInputForm}" th:action="@{/meeting/__${meetingNumber}__/edit}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
-      <th:block th:replace="_parts/meeting :: form (subject=*{subject}, memo=*{memo}, schedules=*{schedules}, organizerTerminal=*{organizerTerminal})"></th:block>
+      <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
 
       <p>
         削除すると元に戻せません。

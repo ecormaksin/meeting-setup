@@ -112,4 +112,12 @@ public class MeetingInputForm {
     public ScheduleInputs scheduleInputs() {
         return scheduleInputs;
     }
+
+    public StartMinuteOptions startMinuteOptions() {
+        return startMinuteOptions;
+    }
+
+    public DurationOptions durationOptions() {
+        return durationOptions;
+    }
 }

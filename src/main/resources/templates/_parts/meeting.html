@@ -28,7 +28,7 @@
             <tr>
                 <th></th>
                 <th>開催日</th>
-                <th colspan="2">開始時刻</th>
+                <th colspan="3">開始時刻</th>
                 <th>会議時間</th>
                 <th></th>
             </tr>
@@ -45,16 +45,32 @@
                         </p>
                     </td>
                     <td>
-                        <input type="time" th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startHour.value}">
+                        <input type="number" th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startHour.value}"  step="1"
+                            th:min="${T(meeting.domain.model.schedule.construct.StartHour).MIN}"
+                               th:max="${T(meeting.domain.model.schedule.construct.StartHour).MAX}">
                         <p th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startHour.value')}">
                             <mark><span th:errors="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startHour.value}"></span></mark>
                         </p>
                     </td>
-                    <td>～</td>
+                    <td>:</td>
                     <td>
-                        <input type="time" th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startMinute.value}">
+                        <select th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startMinute.value}">
+                            <option th:each="startMinuteOpt : ${meetingInputForm.startMinuteOptions.asList()}"
+                                    th:value="${startMinuteOpt.value()}"
+                                    th:text="${startMinuteOpt.label()}"></option>
+                        </select>
                         <p th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startMinute.value')}">
                             <mark><span th:errors="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startMinute.value}"></span></mark>
+                        </p>
+                    </td>
+                    <td>
+                        <select th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.duration.value}">
+                            <option th:each="durationOpt : ${meetingInputForm.durationOptions.asList()}"
+                                    th:value="${durationOpt.value()}"
+                                    th:text="${durationOpt.label()}"></option>
+                        </select>
+                        <p th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.duration.value')}">
+                            <mark><span th:errors="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.duration.value}"></span></mark>
                         </p>
                     </td>
                     <td>
