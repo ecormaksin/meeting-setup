@@ -21,6 +21,12 @@ public class CreationPage extends LoadableComponent<CreationPage> {
     @FindBy(id = "meetingNumber.value")
     private WebElement meetingNumber;
 
+    @FindBy(id = "subject.value")
+    private WebElement subject;
+
+    @FindBy(id = "memo.value")
+    private WebElement memo;
+
     @FindBy(id = "organizerNumber.value")
     private WebElement organizerNumber;
 
@@ -43,6 +49,14 @@ public class CreationPage extends LoadableComponent<CreationPage> {
 
     String meetingNumberValue() {
         return meetingNumber.getAttribute("value");
+    }
+
+    String subjectValue() {
+        return subject.getAttribute("value");
+    }
+
+    String memoValue() {
+        return memo.getAttribute("value");
     }
 
     String organizerNumberValue() {
