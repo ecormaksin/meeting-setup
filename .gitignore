@@ -37,6 +37,9 @@ out/
 .vscode/
 
 ### customised ###
-src/test/resources/schema.sql
+/src/test/resources/schema.sql
 /src/main/resources/schema.sql
 /src/test/java/WorkTest.java
+/gradle-dependencies.txt
+/LOG_FILE_IS_UNDEFINED
+/meeting-setup-test.log*
