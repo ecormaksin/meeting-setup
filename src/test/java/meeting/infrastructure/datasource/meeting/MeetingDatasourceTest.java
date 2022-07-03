@@ -6,7 +6,7 @@ import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.*;
-import meeting.infrastructure.datasource.fw.MeetingDBTestContainer;
+import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

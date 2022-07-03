@@ -1,4 +1,4 @@
-package meeting.infrastructure.datasource.fw;
+package meeting.infrastructure.datasource;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 

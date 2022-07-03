@@ -1,4 +1,4 @@
-package meeting.infrastructure.datasource.fw;
+package meeting.infrastructure.datasource;
 
 import com.github.springtestdbunit.dataset.AbstractDataSetLoader;
 import org.dbunit.dataset.IDataSet;
