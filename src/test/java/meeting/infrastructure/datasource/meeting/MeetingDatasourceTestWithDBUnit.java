@@ -250,38 +250,4 @@ public class MeetingDatasourceTestWithDBUnit {
             }
         }
     }
-
-    @Test
-    @ExpectedDatabase(value = "testdata/create_meeting_with_memo_one_schedule.xlsx",
-            assertionMode = DatabaseAssertionMode.NON_STRICT,
-            columnFilters = { ScheduleNumberColumnFilter.class })
-    void メモあり_日程候補1件の場合() throws Exception {
-
-        final List<Schedule> scheduleList = Arrays.asList(
-                schedule(LocalDate.of(2022, 4, 1),10, 0,60)
-        );
-        createMeeting(
-                1,
-                "件名テスト１",
-                "メモテスト１",
-                1,
-                scheduleList,
-                LocalDateTime.of(2022, 3, 2, 9, 30, 0));
-//        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-//            @Override
-//            protected void doInTransactionWithoutResult(TransactionStatus status) {
-//
-//                final List<Schedule> scheduleList = Arrays.asList(
-//                        schedule(LocalDate.of(2022, 4, 1),10, 0,60)
-//                );
-//                createMeeting(
-//                        1,
-//                        "件名テスト１",
-//                        "メモテスト１",
-//                        1,
-//                        scheduleList,
-//                        LocalDateTime.of(2022, 3, 2, 9, 30, 0));
-//            }
-//        });
-    }
 }
