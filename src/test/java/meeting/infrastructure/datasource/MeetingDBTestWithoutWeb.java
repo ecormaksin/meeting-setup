@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@Transactional
 @Rollback
 @ActiveProfiles("test")
 public @interface MeetingDBTestWithoutWeb {
