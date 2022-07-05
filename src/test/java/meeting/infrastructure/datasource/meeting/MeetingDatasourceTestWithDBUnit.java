@@ -12,6 +12,7 @@ import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.*;
+import meeting.infrastructure.datasource.ScheduleNumberColumnFilter;
 import meeting.infrastructure.datasource.XlsDataSetLoader;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.*;
@@ -131,21 +132,6 @@ public class MeetingDatasourceTestWithDBUnit {
                     1,
                     scheduleList,
                     LocalDateTime.of(2022, 3, 2, 9, 30, 0));
-//            MeetingDatasourceTestWithDBUnit.this.transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-//                @Override
-//                protected void doInTransactionWithoutResult(TransactionStatus status) {
-//                    final List<Schedule> scheduleList = Arrays.asList(
-//                            schedule(LocalDate.of(2022, 4, 1),10, 0,60)
-//                    );
-//                    createMeeting(
-//                            1,
-//                            "件名テスト１",
-//                            "メモテスト１",
-//                            1,
-//                            scheduleList,
-//                            LocalDateTime.of(2022, 3, 2, 9, 30, 0));
-//                }
-//            });
         }
 
         @Nested

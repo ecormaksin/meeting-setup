@@ -1,4 +1,4 @@
-package meeting.infrastructure.datasource.meeting;
+package meeting.infrastructure.datasource;
 
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.filter.IColumnFilter;
