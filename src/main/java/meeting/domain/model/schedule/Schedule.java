@@ -47,4 +47,12 @@ public class Schedule {
     public ScheduleConstruct scheduleConstruct() {
         return scheduleConstruct;
     }
+
+    public StartDateTime startDateTime() {
+        return scheduleConstruct.startDateTime();
+    }
+
+    public EndDateTime endDateTime() {
+        return scheduleConstruct.endDateTime();
+    }
 }

@@ -5,12 +5,10 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import meeting.domain.model.schedule.*;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.infrastructure.datasource.MeetingDBTestWithoutWeb;
 import meeting.domain.model.meeting.*;
-import meeting.domain.model.schedule.Schedule;
-import meeting.domain.model.schedule.ScheduleNumber;
-import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.*;
 import meeting.infrastructure.datasource.ScheduleNumberColumnFilter;
 import meeting.infrastructure.datasource.XlsDataSetLoader;
@@ -200,6 +198,18 @@ public class MeetingDatasourceTestWithDBUnit {
                 final Schedule schedule = schedule();
                 final ScheduleNumber scheduleNumber = schedule.scheduleNumber();
                 assertTrue(scheduleNumber.value() > 0);
+            }
+
+            @Test
+            void 開始予定時刻を設定内容に基づき取得できること() {
+                final StartDateTime startDateTime = schedule().startDateTime();
+                assertEquals(LocalDateTime.of(2022, 4, 1, 10, 0), startDateTime.value());
+            }
+
+            @Test
+            void 終了予定時刻を設定内容に基づき取得できること() {
+                final EndDateTime endDateTime = schedule().endDateTime();
+                assertEquals(LocalDateTime.of(2022, 4, 1, 11, 0), endDateTime.value());
             }
 
             private ScheduleConstruct scheduleConstruct() {
