@@ -1,23 +1,17 @@
 package meeting.infrastructure.datasource.meeting;
 
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
-import meeting.domain.model.schedule.*;
-import meeting.infrastructure.datasource.MeetingDBTestContainer;
-import meeting.infrastructure.datasource.MeetingDBTestWithoutWeb;
 import meeting.domain.model.meeting.*;
+import meeting.domain.model.schedule.*;
 import meeting.domain.model.schedule.construct.*;
+import meeting.infrastructure.datasource.DBUnitAbstractTest;
+import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.infrastructure.datasource.ScheduleNumberColumnFilter;
-import meeting.infrastructure.datasource.XlsDataSetLoader;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -25,17 +19,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@MeetingDBTestWithoutWeb
-@TestExecutionListeners({
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class })
-@DbUnitConfiguration(dataSetLoader = XlsDataSetLoader.class)
-public class MeetingDatasourceTestWithDBUnit {
+public class MeetingDatasourceTestWithDBUnit extends DBUnitAbstractTest {
 
     @ClassRule
     private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
@@ -110,12 +98,11 @@ public class MeetingDatasourceTestWithDBUnit {
     }
 
     @Nested
-    @DbUnitConfiguration(dataSetLoader = XlsDataSetLoader.class)
     @DisplayName("メモあり・日程1件の場合")
-    class MeetingWithMemoAnd1Schedule {
+    class MeetingWithMemoAnd1Schedule extends DBUnitAbstractTest {
 
         @Test
-        @ExpectedDatabase(value = "testdata/create_meeting_with_memo_one_schedule.xlsx",
+        @ExpectedDatabase(value = "testdata/create_meeting_with_memo_1_schedule.xlsx",
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 columnFilters = { ScheduleNumberColumnFilter.class })
         void 作成リクエストの実行が成功する() {
@@ -133,10 +120,10 @@ public class MeetingDatasourceTestWithDBUnit {
         }
 
         @Nested
-        @DatabaseSetup("testdata/create_meeting_with_memo_one_schedule.xlsx")
-        @DbUnitConfiguration(dataSetLoader = XlsDataSetLoader.class)
+        @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+        @DatabaseSetup("testdata/create_meeting_with_memo_1_schedule.xlsx")
         @DisplayName("作成リクエストと同じ値を取得できる")
-        class MeetingGet {
+        class MeetingGet extends DBUnitAbstractTest {
 
             final MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(1);
 
@@ -243,6 +230,83 @@ public class MeetingDatasourceTestWithDBUnit {
                 final ScheduleConstruct scheduleConstruct = scheduleConstruct();
                 final Duration duration = scheduleConstruct.duration();
                 assertEquals(60, duration.value());
+            }
+        }
+    }
+
+    record MeetingDateTimeSpan(LocalDateTime startDateTime, LocalDateTime endDateTime) {}
+
+    @Nested
+    @DisplayName("メモなし・日程3件(降順)の場合")
+    class MeetingWithoutMemoAnd3Schedules extends DBUnitAbstractTest {
+
+        @Test
+        @ExpectedDatabase(value = "testdata/create_meeting_without_memo_3_schedules_reversed_order.xlsx",
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                columnFilters = { ScheduleNumberColumnFilter.class })
+        void 作成リクエストの実行が成功する() {
+
+            final List<Schedule> scheduleList = Arrays.asList(
+                    schedule(LocalDate.of(2022, 4, 3),13, 30,90),
+                    schedule(LocalDate.of(2022, 4, 2),11, 0,30),
+                    schedule(LocalDate.of(2022, 4, 2),10, 30,60)
+            );
+            createMeeting(
+                    2,
+                    "件名テスト２",
+                    "",
+                    2,
+                    scheduleList,
+                    LocalDateTime.of(2022, 4, 1, 15, 12, 34));
+        }
+
+        @Nested
+        @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+        @DatabaseSetup("testdata/create_meeting_without_memo_3_schedules_reversed_order.xlsx")
+        @DisplayName("作成リクエストと同じ値を取得できる")
+        class MeetingGet extends DBUnitAbstractTest {
+
+            final MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(2);
+
+            Meeting meeting;
+
+            @BeforeEach
+            void init() {
+                meeting = meetingDatasource.get(expectedMeetingNumber);
+            }
+
+            @Test
+            void メモが未設定であること() {
+                final Memo memo = meeting.memo();
+                assertEquals("", memo.value());
+            }
+
+            @Test
+            void 日程候補を開催日時の昇順で取得していること() {
+                final List<MeetingDateTimeSpan> expected = meetingDateTimeSpansExpected();
+                final List<MeetingDateTimeSpan> actual = meetingDateTimeSpansActual();
+                assertEquals(expected, actual);
+            }
+
+            private List<MeetingDateTimeSpan> meetingDateTimeSpansExpected() {
+                return Arrays.asList(
+                        new MeetingDateTimeSpan(LocalDateTime.of(2022, 4, 2, 10, 30),
+                                LocalDateTime.of(2022, 4, 2, 11, 30)),
+                        new MeetingDateTimeSpan(LocalDateTime.of(2022, 4, 2, 11, 0),
+                                LocalDateTime.of(2022, 4, 2, 11, 30)),
+                        new MeetingDateTimeSpan(LocalDateTime.of(2022, 4, 3, 13, 30),
+                                LocalDateTime.of(2022, 4, 3, 15, 0))
+                );
+            }
+
+            private List<MeetingDateTimeSpan> meetingDateTimeSpansActual() {
+                return meeting.schedules().asList().stream()
+                        .map(s -> {
+                            final StartDateTime startDateTime = s.startDateTime();
+                            final EndDateTime endDateTime = s.endDateTime();
+                            return new MeetingDateTimeSpan(startDateTime.value(), endDateTime.value());
+                        })
+                        .collect(Collectors.toList());
             }
         }
     }
