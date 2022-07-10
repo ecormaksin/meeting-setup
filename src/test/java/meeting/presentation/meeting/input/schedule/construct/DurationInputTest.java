@@ -38,7 +38,6 @@ public class DurationInputTest {
     static List<String> validInputs() {
         List<String> inputs = new ArrayList<> ();
 
-        inputs.add(null);
         inputs.add("");
         for (Duration startMinute : Duration.values()) {
             inputs.add(String.valueOf(startMinute.value()));
@@ -60,6 +59,7 @@ public class DurationInputTest {
     static List<String> invalidInputs() {
         List<String> inputs = new ArrayList<> ();
 
+        inputs.add(null);
         inputs.add("31");
         inputs.add("121");
         inputs.add("abc");

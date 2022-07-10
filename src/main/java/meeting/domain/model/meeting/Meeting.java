@@ -80,7 +80,7 @@ public class Meeting {
         List<Attendance> attendanceList = attendances.asList();
         for (Attendance attendance : attendanceList) {
             for (Convenience convenience : attendance.conveniences().asList()) {
-                if (!convenience.scheduleNumber().equals(scheduleNumber)) {
+                if (!convenience.scheduleNumber().isSame(scheduleNumber)) {
                     continue;
                 }
                 if (convenience.convenienceCategory() != convenienceCategory) {

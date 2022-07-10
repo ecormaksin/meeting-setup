@@ -9,9 +9,10 @@ import javax.validation.constraints.Size;
 public class Memo {
 
     static final int MAX_SIZE = 100;
+    static final String VALIDATION_ERROR_MESSAGE = "メモは" + MAX_SIZE + "文字以内で入力してください。";
 
-    @NotNull
-    @Size(max = MAX_SIZE, message = "メモは" + MAX_SIZE + "文字以内で入力してください。")
+    @NotNull(message = VALIDATION_ERROR_MESSAGE)
+    @Size(max = MAX_SIZE, message = VALIDATION_ERROR_MESSAGE)
     String value;
 
     @Deprecated

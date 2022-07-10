@@ -1,20 +1,19 @@
 package meeting.presentation.meeting;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.LoadableComponent;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CreationPage extends LoadableComponent<CreationPage> {
 
     private static final String URL_RELATIVE_PATH = "/meeting/create/";
+
+    private static final String SCHEDULE_CONSTRUCT_PREFIX = "scheduleInputs.list[%d].scheduleConstruct.";
 
     private final WebDriver driver;
 
@@ -29,6 +28,9 @@ public class CreationPage extends LoadableComponent<CreationPage> {
 
     @FindBy(id = "organizerNumber.value")
     private WebElement organizerNumber;
+
+    @FindBy(css = "#schedules > tbody > tr")
+    private List<WebElement> scheduleRows;
 
     public CreationPage(final WebDriver driver) {
         this.driver = driver;
@@ -61,5 +63,9 @@ public class CreationPage extends LoadableComponent<CreationPage> {
 
     String organizerNumberValue() {
         return organizerNumber.getAttribute("value");
+    }
+
+    List<WebElement> scheduleRows() {
+        return scheduleRows;
     }
 }

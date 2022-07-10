@@ -41,7 +41,6 @@ public class StartHourInputTest {
     static List<String> validInputs() {
         List<String> inputs = new ArrayList<> ();
 
-        inputs.add(null);
         inputs.add("");
         for (int i = StartHour.MIN; i <= StartHour.MAX; i++) {
             inputs.add(String.valueOf(i));
@@ -63,6 +62,7 @@ public class StartHourInputTest {
     static List<String> invalidInputs() {
         List<String> inputs = new ArrayList<> ();
 
+        inputs.add(null);
         for (int i = HOUR_MIN; i < StartHour.MIN; i++) {
             inputs.add(String.valueOf(i));
         }

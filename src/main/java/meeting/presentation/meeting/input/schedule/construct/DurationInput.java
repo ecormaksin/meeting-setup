@@ -4,13 +4,13 @@ import meeting.domain.model.schedule.construct.Duration;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * 会議時間（入力用）
  */
 public class DurationInput implements Element {
 
-    @NotNull
     String value;
 
     /**
@@ -40,6 +40,7 @@ public class DurationInput implements Element {
     }
 
     public boolean isEmpty() {
+        if (Objects.isNull(value)) return false;
         return value.isEmpty();
     }
 

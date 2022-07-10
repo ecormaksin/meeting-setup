@@ -11,7 +11,6 @@ import java.util.Objects;
  */
 public class StartHourInput implements Element {
 
-    @NotNull
     String value;
 
     @Deprecated
@@ -38,6 +37,7 @@ public class StartHourInput implements Element {
     }
 
     public boolean isEmpty() {
+        if (Objects.isNull(value)) return false;
         return value.isEmpty();
     }
 

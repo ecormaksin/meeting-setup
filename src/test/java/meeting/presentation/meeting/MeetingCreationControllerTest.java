@@ -1,24 +1,34 @@
 package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
+import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.OrganizerNumber;
+import meeting.presentation.WebDriverConfig;
+import meeting.presentation.WebDriverFactory;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.htmlunit.webdriver.LocalHostWebConnectionHtmlUnitDriver;
-import org.springframework.mock.env.MockEnvironment;
-import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @WebMvcTest(MeetingCreationController.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Import({WebDriverConfig.class})
 public class MeetingCreationControllerTest {
 
     @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    WebDriverFactory webDriverFactory;
+
     WebDriver driver;
 
     @MockBean
@@ -26,42 +36,52 @@ public class MeetingCreationControllerTest {
 
     CreationPage creationPage;
 
+    @BeforeAll
+    void initAll() {
+        driver = webDriverFactory.webDriver();
+    }
+
     @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @DisplayName("初期表示の場合")
     class InitialRequest {
 
-        @BeforeEach
-        void init() {
+        @BeforeAll
+        void initAll() {
             creationPage = new CreationPage(driver).get();
         }
 
         @Test
-        void _状態の確認() throws Exception {
-            _ミーティング番号が設定されている();
-            _件名が未入力である();
-            _メモが未入力である();
-            _主催者番号が設定されている();
+        void ミーティング番号が設定されている() {
+            final String meetingNumberValue = creationPage.meetingNumberValue();
+            assertTrue(meetingNumberValue.matches(MeetingNumber.REGEXP));
         }
 
-        private void _ミーティング番号が設定されている() {
-            assertNotNull(creationPage.meetingNumberValue());
-        }
-
-        private void _件名が未入力である() {
+        @Test
+        void 件名が未入力である() {
             assertEquals("", creationPage.subjectValue());
         }
 
-        private void _メモが未入力である() {
+        @Test
+        void メモが未入力である() {
             assertEquals("", creationPage.memoValue());
         }
 
-        private void _主催者番号が設定されている() {
-            assertNotNull(creationPage.organizerNumberValue());
+        @Test
+        void 主催者番号が設定されている() {
+            final String organizerNumberValue = creationPage.organizerNumberValue();
+            assertTrue(organizerNumberValue.matches(OrganizerNumber.REGEXP));
+        }
+
+        @Test
+        void 日程候補の取得() {
+            List<WebElement> schedules = creationPage.scheduleRows();
+            System.out.println(schedules.toString());
         }
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    void tearDownAll() {
         if (driver == null) return;
         driver.quit();
     }

@@ -6,7 +6,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.schedule.*;
 import meeting.domain.model.schedule.construct.*;
-import meeting.infrastructure.datasource.DBUnitAbstractTest;
+import meeting.infrastructure.datasource.DBUnitWithoutWebTest;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.infrastructure.datasource.ScheduleNumberColumnFilter;
 import org.junit.ClassRule;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MeetingDatasourceTestWithDBUnit extends DBUnitAbstractTest {
+public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
     @ClassRule
     private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
@@ -99,7 +99,7 @@ public class MeetingDatasourceTestWithDBUnit extends DBUnitAbstractTest {
 
     @Nested
     @DisplayName("メモあり・日程1件の場合")
-    class MeetingWithMemoAnd1Schedule extends DBUnitAbstractTest {
+    class MeetingWithMemoAnd1Schedule extends DBUnitWithoutWebTest {
 
         @Test
         @ExpectedDatabase(value = "testdata/create_meeting_with_memo_1_schedule.xlsx",
@@ -123,7 +123,7 @@ public class MeetingDatasourceTestWithDBUnit extends DBUnitAbstractTest {
         @TestInstance(TestInstance.Lifecycle.PER_CLASS)
         @DatabaseSetup("testdata/create_meeting_with_memo_1_schedule.xlsx")
         @DisplayName("作成リクエストと同じ値を取得できる")
-        class MeetingGet extends DBUnitAbstractTest {
+        class MeetingGet extends DBUnitWithoutWebTest {
 
             final MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(1);
 
@@ -238,7 +238,7 @@ public class MeetingDatasourceTestWithDBUnit extends DBUnitAbstractTest {
 
     @Nested
     @DisplayName("メモなし・日程3件(降順)の場合")
-    class MeetingWithoutMemoAnd3Schedules extends DBUnitAbstractTest {
+    class MeetingWithoutMemoAnd3Schedules extends DBUnitWithoutWebTest {
 
         @Test
         @ExpectedDatabase(value = "testdata/create_meeting_without_memo_3_schedules_reversed_order.xlsx",
@@ -264,7 +264,7 @@ public class MeetingDatasourceTestWithDBUnit extends DBUnitAbstractTest {
         @TestInstance(TestInstance.Lifecycle.PER_CLASS)
         @DatabaseSetup("testdata/create_meeting_without_memo_3_schedules_reversed_order.xlsx")
         @DisplayName("作成リクエストと同じ値を取得できる")
-        class MeetingGet extends DBUnitAbstractTest {
+        class MeetingGet extends DBUnitWithoutWebTest {
 
             final MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(2);
 

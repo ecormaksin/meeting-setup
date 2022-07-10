@@ -30,4 +30,8 @@ public class ScheduleNumber {
     public int value() {
         return value;
     }
+
+    public boolean isSame(final ScheduleNumber other) {
+        return this.value == other.value;
+    }
 }
