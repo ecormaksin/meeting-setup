@@ -48,7 +48,7 @@ public class MeetingEditController {
                 meeting.subject(),
                 meeting.memo(),
                 meeting.organizerNumber(),
-                ScheduleInputs.fromDomainObject(schedules)
+                ScheduleInputs.fromSchedules(schedules)
         ));
 
         return "meeting/edit/form";

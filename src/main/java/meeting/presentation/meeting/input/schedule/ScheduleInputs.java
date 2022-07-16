@@ -37,10 +37,10 @@ public class ScheduleInputs {
         return of(initialList);
     }
 
-    public static ScheduleInputs fromDomainObject(final Schedules schedules) {
+    public static ScheduleInputs fromSchedules(final Schedules schedules) {
         List<ScheduleInput> inputs = new ArrayList<>();
         for (Schedule schedule : schedules.asList()) {
-            ScheduleInput input = ScheduleInput.fromDomainObject(schedule);
+            ScheduleInput input = ScheduleInput.fromSchedule(schedule);
             inputs.add(input);
         }
 

@@ -34,7 +34,7 @@ public class MeetingCreationControllerTest {
     @MockBean
     MeetingCreationScenario meetingCreationScenario;
 
-    CreationPage creationPage;
+    CreationFormPage creationFormPage;
 
     @BeforeAll
     void initAll() {
@@ -48,34 +48,34 @@ public class MeetingCreationControllerTest {
 
         @BeforeAll
         void initAll() {
-            creationPage = new CreationPage(driver).get();
+            creationFormPage = new CreationFormPage(driver).get();
         }
 
         @Test
         void ミーティング番号が設定されている() {
-            final String meetingNumberValue = creationPage.meetingNumberValue();
+            final String meetingNumberValue = creationFormPage.meetingNumberValue();
             assertTrue(meetingNumberValue.matches(MeetingNumber.REGEXP));
         }
 
         @Test
         void 件名が未入力である() {
-            assertEquals("", creationPage.subjectValue());
+            assertEquals("", creationFormPage.subjectValue());
         }
 
         @Test
         void メモが未入力である() {
-            assertEquals("", creationPage.memoValue());
+            assertEquals("", creationFormPage.memoValue());
         }
 
         @Test
         void 主催者番号が設定されている() {
-            final String organizerNumberValue = creationPage.organizerNumberValue();
+            final String organizerNumberValue = creationFormPage.organizerNumberValue();
             assertTrue(organizerNumberValue.matches(OrganizerNumber.REGEXP));
         }
 
         @Test
         void 日程候補の取得() {
-            List<WebElement> schedules = creationPage.scheduleRows();
+            List<WebElement> schedules = creationFormPage.scheduleRows();
             System.out.println(schedules.toString());
         }
     }

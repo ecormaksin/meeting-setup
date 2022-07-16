@@ -36,11 +36,11 @@ public class ScheduleInput {
         return new ScheduleInput(ScheduleNumber.initialize(), ScheduleConstructInput.empty());
     }
 
-    public static ScheduleInput fromDomainObject(final Schedule schedule) {
+    public static ScheduleInput fromSchedule(final Schedule schedule) {
         final ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
         return new ScheduleInput(
                 schedule.scheduleNumber(),
-                ScheduleConstructInput.fromDomainObject(scheduleConstruct));
+                ScheduleConstructInput.fromScheduleConstruct(scheduleConstruct));
     }
 
     public boolean isEmpty() {

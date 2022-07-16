@@ -47,6 +47,7 @@ dependencies {
         'net.sourceforge.htmlunit:htmlunit',
         'org.seleniumhq.selenium:htmlunit-driver',
         'org.seleniumhq.selenium:selenium-support',
+        'org.mockito:mockito-inline:4.6.1',
         'org.testcontainers:postgresql:1.17.3',
         'org.dbunit:dbunit:2.7.3',
         'com.github.springtestdbunit:spring-test-dbunit:1.3.0',

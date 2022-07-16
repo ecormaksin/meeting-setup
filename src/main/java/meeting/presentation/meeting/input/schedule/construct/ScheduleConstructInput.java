@@ -62,7 +62,7 @@ public class ScheduleConstructInput {
                 DurationInput.empty());
     }
 
-    public static ScheduleConstructInput fromDomainObject(final ScheduleConstruct scheduleConstruct) {
+    public static ScheduleConstructInput fromScheduleConstruct(final ScheduleConstruct scheduleConstruct) {
         final MeetingDate meetingDate = scheduleConstruct.meetingDate();
         final StartHour startHour = scheduleConstruct.startHour();
         final StartMinute startMinute = scheduleConstruct.startMinute();
