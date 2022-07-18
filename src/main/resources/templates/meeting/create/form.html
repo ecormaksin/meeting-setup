@@ -11,7 +11,7 @@
 <main>
   <article>
     <h1>ミーティングの作成</h1>
-    <form method="post" action="#"
+    <form method="post" action="#" id="meetingCreateForm"
           th:object="${meetingInputForm}" th:action="@{/meeting/create}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
@@ -21,11 +21,27 @@
       <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
 
       <div>
-        <button id="createMeetingButton">作成</button>
+        <button type="button" id="createMeetingButton">作成</button>
       </div>
     </form>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
+<script th:inline="javascript">
+$(function() {
+  var organizerNumber = localStorage.getItem('organizerNumber');
+  if (!organizerNumber) {
+    localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
+  }
+
+  $('#createMeetingButton').on('click', function() {
+    const aFormData = new FormData( $('#meetingCreateForm')[0] );
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/meeting/create');
+    xhr.setRequestHeader('organizerNumber', localStorage.getItem('organizerNumber'));
+    xhr.send(aFormData);
+  });
+});
+</script>
 </body>
 </html>

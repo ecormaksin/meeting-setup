@@ -3,8 +3,6 @@
 <body>
     <th:block th:fragment="form (meetingInputForm)">
 
-        <input type="hidden" th:field="*{meetingNumber.value}">
-
         <label>件名</label>
         <input type="text" th:field="*{subject.value}" placeholder="○○様カンファレンス など" class="meeting__subject">
         <p th:if="${#fields.hasErrors('subject.value')}">
@@ -16,8 +14,6 @@
         <p th:if="${#fields.hasErrors('memo.value')}">
             <mark><span th:errors="*{memo.value}"></span></mark>
         </p>
-
-        <input type="hidden" th:field="*{organizerNumber.value}">
 
         <div class="meeting__scheduleInputs-title-section">
             <label class="meeting__scheduleInputs-title-label">日程候補</label>

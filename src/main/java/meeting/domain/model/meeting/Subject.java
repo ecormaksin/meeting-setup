@@ -20,12 +20,12 @@ public class Subject {
         this.value = value;
     }
 
-    public static Subject empty() {
+    public static Subject blank() {
         return new Subject("");
     }
 
     @AssertTrue(message = MESSAGE)
-    boolean isValid() {
+    boolean isValue() {
         if ( Objects.isNull(value) ) return false;
 
         final String whiteSpaceRemoved = value.replaceAll("(　|\\s)+", "");

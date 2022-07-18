@@ -3,6 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,7 @@ public class MeetingCreationController {
     @GetMapping
     String init(Model model) {
         model.addAttribute("meetingInputForm", MeetingInputForm.empty());
+        model.addAttribute("organizerNumber", OrganizerNumber.newNumber());
         return "meeting/create/form";
     }
 
@@ -53,16 +55,21 @@ public class MeetingCreationController {
 
     @PostMapping
     String create(@Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+                  @RequestHeader("organizerNumber") final String organizerNumberValue,
                   BindingResult bindingResult,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return "meeting/create/form";
 
-        final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest();
+        final MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(
+                meetingNumber,
+                new OrganizerNumber(organizerNumberValue)
+        );
         meetingCreationScenario.create(meetingCreationRequest);
 
-        attributes.addFlashAttribute("meetingNumber", meetingInputForm.meetingNumber());
+        attributes.addFlashAttribute("meetingNumber", meetingNumber);
 
         URI uri = builder.path("/meeting/create/completed").build().toUri();
         return "redirect:" + uri.toString();
@@ -84,7 +91,6 @@ public class MeetingCreationController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
-                "meetingNumber.value",
                 "subject.value",
                 "memo.value",
                 "organizerNumber.value",

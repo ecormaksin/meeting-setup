@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * 会議時間（入力用）
  */
-public class DurationInput implements Element {
+public class DurationInput implements ScheduleConstructElement {
 
     String value;
 

@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * 開始時間（入力用）
  */
-public class StartHourInput implements Element {
+public class StartHourInput implements ScheduleConstructElement {
 
     String value;
 

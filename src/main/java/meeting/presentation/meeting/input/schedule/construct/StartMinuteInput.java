@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * 開始分（入力用）
  */
-public class StartMinuteInput implements Element {
+public class StartMinuteInput implements ScheduleConstructElement {
 
     String value;
 

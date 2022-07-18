@@ -74,9 +74,3 @@ bootRun {
 //tasks.withType(JavaCompile) {
 //    options.compilerArgs << '-Xlint:deprecation'
 //}
-
-jar {
-    manifest{
-        attributes('Main-Class': 'meeting.Application')
-    }
-}

@@ -1,8 +1,6 @@
 package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
-import meeting.domain.model.meeting.MeetingNumber;
-import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.presentation.WebDriverConfig;
 import meeting.presentation.WebDriverFactory;
 import org.junit.jupiter.api.*;
@@ -16,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @WebMvcTest(MeetingCreationController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -48,13 +46,7 @@ public class MeetingCreationControllerTest {
 
         @BeforeAll
         void initAll() {
-            creationFormPage = new CreationFormPage(driver).get();
-        }
-
-        @Test
-        void ミーティング番号が設定されている() {
-            final String meetingNumberValue = creationFormPage.meetingNumberValue();
-            assertTrue(meetingNumberValue.matches(MeetingNumber.REGEXP));
+            creationFormPage = CreationFormPage.to(driver);
         }
 
         @Test
@@ -65,12 +57,6 @@ public class MeetingCreationControllerTest {
         @Test
         void メモが未入力である() {
             assertEquals("", creationFormPage.memoValue());
-        }
-
-        @Test
-        void 主催者番号が設定されている() {
-            final String organizerNumberValue = creationFormPage.organizerNumberValue();
-            assertTrue(organizerNumberValue.matches(OrganizerNumber.REGEXP));
         }
 
         @Test

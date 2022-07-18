@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * 開催日（入力用）
  */
-public class MeetingDateInput implements Element {
+public class MeetingDateInput implements ScheduleConstructElement {
 
     String value;
 

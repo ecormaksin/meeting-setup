@@ -1,36 +1,29 @@
 package meeting.presentation.meeting;
 
+import meeting.presentation.CustomPageObject;
 import meeting.presentation.meeting.input.schedule.construct.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.LoadableComponent;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-public class CreationFormPage extends LoadableComponent<CreationFormPage> {
+public class CreationFormPage extends CustomPageObject {
 
     private static final String URL_RELATIVE_PATH = "/meeting/create";
 
     private static final String SCHEDULE_CONSTRUCT_PREFIX = "scheduleInputs.list%d.scheduleConstruct.";
-
-    private final WebDriver driver;
-
-    @FindBy(id = "meetingNumber.value")
-    private WebElement meetingNumber;
 
     @FindBy(id = "subject.value")
     private WebElement subject;
 
     @FindBy(id = "memo.value")
     private WebElement memo;
-
-    @FindBy(id = "organizerNumber.value")
-    private WebElement organizerNumber;
 
     @FindBy(id = "createMeetingButton")
     private WebElement createButton;
@@ -39,23 +32,18 @@ public class CreationFormPage extends LoadableComponent<CreationFormPage> {
     private List<WebElement> scheduleRows;
 
     public CreationFormPage(final WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
+        super(driver);
 
-    @Override
-    protected void load() {
-        driver.get("http://localhost:9990" + URL_RELATIVE_PATH);
-    }
-
-    @Override
-    protected void isLoaded() throws Error {
         final String url = driver.getCurrentUrl();
-        assertTrue(url.endsWith(URL_RELATIVE_PATH), "ミーティングの作成ページではありません。: "  + url);
+        if (!url.endsWith(URL_RELATIVE_PATH)) {
+            throw new IllegalStateException("ミーティングの作成ページではありません。: "  + url);
+        }
     }
 
-    String meetingNumberValue() {
-        return meetingNumber.getAttribute("value");
+    public static CreationFormPage to(WebDriver driver) {
+        driver.get(URL_BASE + URL_RELATIVE_PATH);
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.urlContains(URL_RELATIVE_PATH));
+        return PageFactory.initElements(driver, CreationFormPage.class);
     }
 
     String subjectValue() {
@@ -64,10 +52,6 @@ public class CreationFormPage extends LoadableComponent<CreationFormPage> {
 
     String memoValue() {
         return memo.getAttribute("value");
-    }
-
-    String organizerNumberValue() {
-        return organizerNumber.getAttribute("value");
     }
 
     List<WebElement> scheduleRows() {

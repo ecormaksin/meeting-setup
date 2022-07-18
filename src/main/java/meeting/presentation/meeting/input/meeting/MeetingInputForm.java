@@ -7,21 +7,19 @@ import meeting.presentation.meeting.input.schedule.construct.DurationOptions;
 import meeting.presentation.meeting.input.schedule.construct.StartMinuteOptions;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class MeetingInputForm {
 
-    @Valid
-    MeetingNumber meetingNumber;
-
+    @NotNull
     @Valid
     Subject subject;
 
+    @NotNull
     @Valid
     Memo memo;
 
-    @Valid
-    OrganizerNumber organizerNumber;
-
+    @NotNull
     @Valid
     ScheduleInputs scheduleInputs;
 
@@ -31,15 +29,11 @@ public class MeetingInputForm {
     @Deprecated
     MeetingInputForm() {}
 
-    public MeetingInputForm(@Valid MeetingNumber meetingNumber,
-                            @Valid Subject subject,
+    public MeetingInputForm(@Valid Subject subject,
                             @Valid Memo memo,
-                            @Valid OrganizerNumber organizerNumber,
                             @Valid ScheduleInputs scheduleInputs) {
-        this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;
-        this.organizerNumber = organizerNumber;
         this.scheduleInputs = scheduleInputs;
 
         this.startMinuteOptions = StartMinuteOptions.initialize();
@@ -48,32 +42,26 @@ public class MeetingInputForm {
 
     public static MeetingInputForm empty() {
         return new MeetingInputForm(
-                MeetingNumber.newNumber(),
-                Subject.empty(),
+                Subject.blank(),
                 Memo.blank(),
-                OrganizerNumber.newNumber(),
                 ScheduleInputs.initialEmptyList());
     }
 
     public MeetingInputForm addEmptySchedule() {
         return new MeetingInputForm(
-                meetingNumber,
                 subject,
                 memo,
-                organizerNumber,
                 scheduleInputs.addNew());
     }
 
     public MeetingInputForm removeSchedule(final int index) {
         return new MeetingInputForm(
-                meetingNumber,
                 subject,
                 memo,
-                organizerNumber,
                 scheduleInputs.remove(index));
     }
 
-    public MeetingCreationRequest toCreationRequest() {
+    public MeetingCreationRequest toCreationRequest(final MeetingNumber meetingNumber, final OrganizerNumber organizerNumber) {
         final Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingCreationRequest(meetingNumber,
                                             subject,
@@ -83,7 +71,7 @@ public class MeetingInputForm {
                                             RegistrationRequestDateTime.now());
     }
 
-    public MeetingEditRequest toEditRequest() {
+    public MeetingEditRequest toEditRequest(final MeetingNumber meetingNumber, final OrganizerNumber organizerNumber) {
         final Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingEditRequest(meetingNumber,
                                         subject,
@@ -93,20 +81,12 @@ public class MeetingInputForm {
                                         RegistrationRequestDateTime.now());
     }
 
-    public MeetingNumber meetingNumber() {
-        return meetingNumber;
-    }
-
     public Subject subject() {
         return subject;
     }
 
     public Memo memo() {
         return memo;
-    }
-
-    public OrganizerNumber organizerNumber() {
-        return organizerNumber;
     }
 
     public ScheduleInputs scheduleInputs() {

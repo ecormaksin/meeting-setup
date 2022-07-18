@@ -44,10 +44,8 @@ public class MeetingEditController {
         final Schedules schedules = meeting.schedules();
 
         model.addAttribute("meetingInputForm", new MeetingInputForm(
-                meetingNumber,
                 meeting.subject(),
                 meeting.memo(),
-                meeting.organizerNumber(),
                 ScheduleInputs.fromSchedules(schedules)
         ));
 
@@ -76,13 +74,13 @@ public class MeetingEditController {
 
     @PostMapping
     String edit(HttpServletRequest request,
+                    @PathVariable("meetingNumber") final MeetingNumber meetingNumber,
                     @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber,
                     @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                     BindingResult bindingResult,
                     RedirectAttributes attributes,
                     UriComponentsBuilder builder) {
 
-        final MeetingNumber meetingNumber = meetingInputForm.meetingNumber();
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
         if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
@@ -91,7 +89,7 @@ public class MeetingEditController {
 
         if (bindingResult.hasErrors()) return "meeting/edit/form";
 
-        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest();
+        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber, organizerNumber);
         meetingEditScenario.edit(meeting, meetingEditRequest);
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber);

@@ -30,8 +30,6 @@ public class ScheduleConstructInput {
     @Valid
     DurationInput duration;
 
-    private List<Element> elements;
-
     /**
      * @deprecated Use AllArgsConstructor or empty()
      */
@@ -46,12 +44,6 @@ public class ScheduleConstructInput {
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
-
-        elements = Arrays.asList(
-                meetingDate,
-                startHour,
-                startMinute,
-                duration);
     }
 
     public static ScheduleConstructInput empty() {
@@ -88,12 +80,20 @@ public class ScheduleConstructInput {
         return false;
     }
 
+    private List<ScheduleConstructElement> elements() {
+        return Arrays.asList(
+                meetingDate,
+                startHour,
+                startMinute,
+                duration);
+    }
+
     public boolean areAllEmpty() {
-        return elements.stream().allMatch(e -> e.isEmpty());
+        return elements().stream().allMatch(e -> e.isEmpty());
     }
 
     public boolean areAllValidAsDomain() {
-        return elements.stream().allMatch(e -> e.isValidAsDomain());
+        return elements().stream().allMatch(e -> e.isValidAsDomain());
     }
 
     private void validateAsDomain() {
