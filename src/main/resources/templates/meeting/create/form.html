@@ -21,7 +21,7 @@
       <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
 
       <div>
-        <button type="button" id="createMeetingButton">作成</button>
+        <button id="createMeetingButton">作成</button>
       </div>
     </form>
   </article>
@@ -31,16 +31,10 @@
 $(function() {
   var organizerNumber = localStorage.getItem('organizerNumber');
   if (!organizerNumber) {
-    localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
+    organizerNumber = [[${organizerNumber.value}]];
+    localStorage.setItem('organizerNumber', organizerNumber);
   }
-
-  $('#createMeetingButton').on('click', function() {
-    const aFormData = new FormData( $('#meetingCreateForm')[0] );
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/meeting/create');
-    xhr.setRequestHeader('organizerNumber', localStorage.getItem('organizerNumber'));
-    xhr.send(aFormData);
-  });
+  document.cookie = "organizerNumber=" + organizerNumber;
 });
 </script>
 </body>

@@ -55,7 +55,7 @@ public class MeetingCreationController {
 
     @PostMapping
     String create(@Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
-                  @RequestHeader("organizerNumber") final String organizerNumberValue,
+                  @CookieValue("organizerNumber") final String organizerNumberValue,
                   BindingResult bindingResult,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
