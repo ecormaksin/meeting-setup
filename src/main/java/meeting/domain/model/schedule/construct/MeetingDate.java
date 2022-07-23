@@ -25,6 +25,11 @@ public class MeetingDate extends ValidationConcern {
         this.validate(this);
     }
 
+    public static MeetingDate of(final int year, final int month, final int dayOfMonth) {
+        final LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        return new MeetingDate(localDate);
+    }
+
     public static MeetingDate fromString(final String value) {
         return new MeetingDate(LocalDate.parse(value));
     }

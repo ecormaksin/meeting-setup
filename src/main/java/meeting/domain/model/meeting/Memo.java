@@ -26,6 +26,10 @@ public class Memo {
         return new Memo("");
     }
 
+    public static Memo of(@NotNull final String value) {
+        return new Memo(value);
+    }
+
     public boolean isBlank() {
         return value.isBlank();
     }

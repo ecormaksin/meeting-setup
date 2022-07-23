@@ -33,7 +33,7 @@ public class ScheduleInput {
     }
 
     public static ScheduleInput newInput() {
-        return new ScheduleInput(ScheduleNumber.initialize(), ScheduleConstructInput.empty());
+        return new ScheduleInput(ScheduleNumber.initialized(), ScheduleConstructInput.empty());
     }
 
     public static ScheduleInput fromSchedule(final Schedule schedule) {

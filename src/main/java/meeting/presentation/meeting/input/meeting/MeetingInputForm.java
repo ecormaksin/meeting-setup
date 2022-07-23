@@ -40,7 +40,7 @@ public class MeetingInputForm {
         this.durationOptions = DurationOptions.initialize();
     }
 
-    public static MeetingInputForm empty() {
+    public static MeetingInputForm newForm() {
         return new MeetingInputForm(
                 Subject.blank(),
                 Memo.blank(),

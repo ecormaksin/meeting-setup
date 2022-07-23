@@ -23,7 +23,7 @@ public class ScheduleNumber {
                 :
                 ScheduleRegistrationStatus.追加;
     }
-    public static ScheduleNumber initialize() {
+    public static ScheduleNumber initialized() {
         return new ScheduleNumber(0);
     }
 

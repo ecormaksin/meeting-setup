@@ -4,11 +4,12 @@ import meeting.domain.ValidationConcern;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 
 /**
  * ミーティング登録依頼
  */
-public class MeetingRegistrationRequest extends ValidationConcern  {
+public abstract class MeetingRegistrationRequest extends ValidationConcern {
 
     @Valid
     MeetingNumber meetingNumber;
@@ -28,6 +29,8 @@ public class MeetingRegistrationRequest extends ValidationConcern  {
     @Valid
     RegistrationRequestDateTime registrationRequestDateTime;
 
+    private boolean isSchedulesSetOfValidStartDateTime;
+
     @Deprecated
     MeetingRegistrationRequest() {}
 
@@ -44,8 +47,14 @@ public class MeetingRegistrationRequest extends ValidationConcern  {
         this.schedules = schedules;
         this.registrationRequestDateTime = registrationRequestDateTime;
 
-        schedules.areAllValidStartDateTime(registrationRequestDateTime);
+        isSchedulesSetOfValidStartDateTime = schedules.isSetOfValidStartDateTime(registrationRequestDateTime);
+
         this.validate(this);
+    }
+
+    @AssertTrue(message = "日程を追加する時は未来の日時を指定してください。")
+    boolean isSchedulesSetOfValidStartDateTime() {
+        return isSchedulesSetOfValidStartDateTime;
     }
 
     public MeetingNumber meetingNumber() {

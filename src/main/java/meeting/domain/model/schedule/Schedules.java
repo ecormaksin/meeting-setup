@@ -30,12 +30,12 @@ public class Schedules extends ValidationConcern {
         return new Schedules(source);
     }
 
-    public boolean areAllValidStartDateTime(@NotNull @Valid final RegistrationRequestDateTime registrationRequestDateTime) {
-        return list.stream().allMatch(schedule -> schedule.isFutureThanWhenAdd(registrationRequestDateTime));
+    public boolean isSetOfValidStartDateTime(@NotNull @Valid final RegistrationRequestDateTime registrationRequestDateTime) {
+        return list.stream().allMatch(schedule -> schedule.isFutureInCaseOfAddition(registrationRequestDateTime));
     }
 
     @AssertTrue(message = "日程は重複のないように指定してください。")
-    boolean areNotDuplicated() {
+    boolean isSetOfUniqueSchedule() {
         for (int i = 0; i < list.size()-1; i++) {
             final Schedule outer = list.get(i);
             for (int j = i + 1; j < list.size(); j++) {

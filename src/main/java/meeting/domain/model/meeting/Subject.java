@@ -24,8 +24,12 @@ public class Subject {
         return new Subject("");
     }
 
+    public static Subject of(final String value) {
+        return new Subject(value);
+    }
+
     @AssertTrue(message = MESSAGE)
-    boolean isValue() {
+    boolean isValid() {
         if ( Objects.isNull(value) ) return false;
 
         final String whiteSpaceRemoved = value.replaceAll("(　|\\s)+", "");

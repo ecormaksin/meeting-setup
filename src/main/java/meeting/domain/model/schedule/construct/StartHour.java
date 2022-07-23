@@ -29,6 +29,10 @@ public class StartHour extends ValidationConcern {
         this.validate(this);
     }
 
+    public static StartHour of(final int value) {
+        return new StartHour(value);
+    }
+
     public static StartHour fromString(final String stringValue) {
         return new StartHour(Integer.valueOf(stringValue));
     }

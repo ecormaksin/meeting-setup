@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,7 +82,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 startMinuteValue,
                 durationValue);
 
-        return new Schedule(ScheduleNumber.initialize(), scheduleConstruct);
+        return new Schedule(ScheduleNumber.initialized(), scheduleConstruct);
     }
     private ScheduleConstruct scheduleConstruct(
             final LocalDate meetingDateValue,
@@ -189,14 +190,14 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
             @Test
             void 開始予定時刻を設定内容に基づき取得できること() {
-                final StartDateTime startDateTime = schedule().startDateTime();
-                assertEquals(LocalDateTime.of(2022, 4, 1, 10, 0), startDateTime.value());
+                final StartTime startTime = schedule().startTime();
+                assertEquals(LocalTime.of(10, 0), startTime.value());
             }
 
             @Test
             void 終了予定時刻を設定内容に基づき取得できること() {
-                final EndDateTime endDateTime = schedule().endDateTime();
-                assertEquals(LocalDateTime.of(2022, 4, 1, 11, 0), endDateTime.value());
+                final EndTime endTime = schedule().endTime();
+                assertEquals(LocalTime.of(11, 0), endTime.value());
             }
 
             private ScheduleConstruct scheduleConstruct() {
@@ -234,7 +235,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         }
     }
 
-    record MeetingDateTimeSpan(LocalDateTime startDateTime, LocalDateTime endDateTime) {}
+    record MeetingDateTimeSpan(LocalDate meetingDateValue, LocalTime startTimeValue, LocalTime endTimeValue) {}
 
     @Nested
     @DisplayName("メモなし・日程3件(降順)の場合")
@@ -290,21 +291,22 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
             private List<MeetingDateTimeSpan> meetingDateTimeSpansExpected() {
                 return Arrays.asList(
-                        new MeetingDateTimeSpan(LocalDateTime.of(2022, 4, 2, 10, 30),
-                                LocalDateTime.of(2022, 4, 2, 11, 30)),
-                        new MeetingDateTimeSpan(LocalDateTime.of(2022, 4, 2, 11, 0),
-                                LocalDateTime.of(2022, 4, 2, 11, 30)),
-                        new MeetingDateTimeSpan(LocalDateTime.of(2022, 4, 3, 13, 30),
-                                LocalDateTime.of(2022, 4, 3, 15, 0))
+                        new MeetingDateTimeSpan(LocalDate.of(2022, 4, 2), LocalTime.of(10, 30),
+                                LocalTime.of(11, 30)),
+                        new MeetingDateTimeSpan(LocalDate.of(2022, 4, 2), LocalTime.of(11, 0),
+                                LocalTime.of(11, 30)),
+                        new MeetingDateTimeSpan(LocalDate.of(2022, 4, 3), LocalTime.of( 13, 30),
+                                LocalTime.of(15, 0))
                 );
             }
 
             private List<MeetingDateTimeSpan> meetingDateTimeSpansActual() {
                 return meeting.schedules().asList().stream()
                         .map(s -> {
-                            final StartDateTime startDateTime = s.startDateTime();
-                            final EndDateTime endDateTime = s.endDateTime();
-                            return new MeetingDateTimeSpan(startDateTime.value(), endDateTime.value());
+                            final MeetingDate meetingDate = s.meetingDate();
+                            final StartTime startTime = s.startTime();
+                            final EndTime endTime = s.endTime();
+                            return new MeetingDateTimeSpan( meetingDate.value(), startTime.value(), endTime.value());
                         })
                         .collect(Collectors.toList());
             }

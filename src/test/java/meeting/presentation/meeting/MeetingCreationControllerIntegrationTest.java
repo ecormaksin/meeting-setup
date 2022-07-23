@@ -49,10 +49,11 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
 
         CreationCompletedPage completedPage;
 
-        try (MockedStatic<RegistrationRequestDateTime> requestDateTimeMockedStatic = Mockito.mockStatic(RegistrationRequestDateTime.class)) {
+        try (MockedStatic<MeetingNumber> meetingNumberMockedStatic = Mockito.mockStatic(MeetingNumber.class);
+                MockedStatic<RegistrationRequestDateTime> requestDateTimeMockedStatic = Mockito.mockStatic(RegistrationRequestDateTime.class)) {
 
             requestDateTimeMockedStatic.when(RegistrationRequestDateTime::now).thenReturn(
-                    new RegistrationRequestDateTime(LocalDateTime.of(2022, 6, 30, 10, 0, 0))
+                    new RegistrationRequestDateTime(LocalDateTime.of(2022, 7, 1, 10, 1, 0))
             );
 
             formPage.inputSubject("件名テスト１");

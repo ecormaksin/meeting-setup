@@ -31,7 +31,7 @@ public class MeetingCreationController {
 
     @GetMapping
     String init(Model model) {
-        model.addAttribute("meetingInputForm", MeetingInputForm.empty());
+        model.addAttribute("meetingInputForm", MeetingInputForm.newForm());
         model.addAttribute("organizerNumber", OrganizerNumber.newNumber());
         return "meeting/create/form";
     }

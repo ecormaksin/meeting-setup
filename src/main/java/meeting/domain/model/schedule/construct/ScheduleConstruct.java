@@ -1,9 +1,8 @@
 package meeting.domain.model.schedule.construct;
 
 import meeting.domain.model.meeting.RegistrationRequestDateTime;
-import meeting.domain.model.schedule.EndDateTime;
-import meeting.domain.model.schedule.StartDateTime;
-import meeting.domain.type.time.TimeFormatter;
+import meeting.domain.model.schedule.EndTime;
+import meeting.domain.model.schedule.StartTime;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -61,15 +60,12 @@ public class ScheduleConstruct {
         return duration;
     }
 
-    public StartDateTime startDateTime() {
-        return new StartDateTime(startLocalDateTime());
+    public StartTime startTime() {
+        return new StartTime(startLocalTime());
     }
 
-    public EndDateTime endDateTime() {
-        final LocalDateTime startLocalDateTime = startLocalDateTime();
-        final LocalDateTime endLocalDateTime = startLocalDateTime.plusMinutes(duration.value());
-
-        return new EndDateTime(endLocalDateTime);
+    public EndTime endTime() {
+        return new EndTime(endLocalTime());
     }
 
     public boolean isFutureThan(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
@@ -78,12 +74,16 @@ public class ScheduleConstruct {
         return localDateTime.isAfter(registrationRequestDateTime.value());
     }
 
-    private LocalDateTime startLocalDateTime() {
-        final String timeString = String.format("%s:%s", startHour.formattedValue(), startMinute.label());
-        final LocalTime localTime = LocalTime.parse(timeString, TimeFormatter.ofPattern());
-        final LocalDateTime localDateTime = LocalDateTime.of(meetingDate.value(), localTime);
+    private LocalTime startLocalTime() {
+        return LocalTime.of(startHour.value(), startMinute.value());
+    }
 
-        return localDateTime;
+    private LocalTime endLocalTime() {
+        return startLocalTime().plusMinutes(duration.value());
+    }
+
+    private LocalDateTime startLocalDateTime() {
+        return LocalDateTime.of(meetingDate.value(), startLocalTime());
     }
 
     public boolean isSame(@NotNull @Valid final ScheduleConstruct other) {

@@ -11,7 +11,7 @@
 <main>
   <article>
     <h1>ミーティングの作成</h1>
-    <form method="post" action="#" id="meetingCreateForm"
+    <form method="post" action="#"
           th:object="${meetingInputForm}" th:action="@{/meeting/create}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
