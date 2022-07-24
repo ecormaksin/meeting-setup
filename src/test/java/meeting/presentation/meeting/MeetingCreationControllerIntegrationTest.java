@@ -3,11 +3,10 @@ package meeting.presentation.meeting;
 import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
+import meeting.presentation.WebDriverFactory;
 import meeting.presentation.meeting.input.schedule.construct.*;
 import org.junit.ClassRule;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,6 +15,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MeetingCreationControllerIntegrationTest extends MeetingIntegrationTest {
 
     @ClassRule
@@ -25,20 +25,22 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
     MockMvc mockMvc;
 
     @Autowired
+    WebDriverFactory webDriverFactory;
+
     WebDriver driver;
 
     @Autowired
     MeetingCreationScenario meetingCreationScenario;
 
-    CreationFormPage formPage;
-
-    @BeforeEach
-    void init() {
-        formPage = CreationFormPage.to(driver);
+    @BeforeAll
+    void initAll() {
+        driver = webDriverFactory.webDriver();
     }
 
     @RepeatedTest(value = 3, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
     void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) throws Exception {
+
+        CreationFormPage formPage = CreationFormPage.to(driver);
 
         final int currentRepetition = repetitionInfo.getCurrentRepetition();
         formPage.inputSubject("件名テスト" + currentRepetition);
@@ -57,5 +59,11 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
         CreationCompletedPage completedPage = formPage.createMeeting(CreationCompletedPage.class);
 
         assertNotNull(completedPage);
+    }
+
+    @AfterAll
+    void tearDownAll() {
+        if (driver == null) return;
+        driver.quit();
     }
 }
