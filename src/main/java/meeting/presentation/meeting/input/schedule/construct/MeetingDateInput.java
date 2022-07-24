@@ -3,6 +3,7 @@ package meeting.presentation.meeting.input.schedule.construct;
 import meeting.domain.model.schedule.construct.MeetingDate;
 
 import javax.validation.constraints.AssertTrue;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
@@ -24,11 +25,20 @@ public class MeetingDateInput implements ScheduleConstructElement {
         return new MeetingDateInput("");
     }
 
-    public static MeetingDateInput fromMeetingDate(final MeetingDate meetingDate) {
+    public static MeetingDateInput of(final String value) {
+        return new MeetingDateInput(value);
+    }
+
+    public static MeetingDateInput of(final LocalDate localDate) {
+        final String formatted = localDate.format(MeetingDate.FORMATTER);
+        return of(formatted);
+    }
+
+    public static MeetingDateInput of(final MeetingDate meetingDate) {
         return new MeetingDateInput(meetingDate.stringValue());
     }
 
-    @AssertTrue(message = "開催日は'yyyy-MM-dd'形式で入力してください。")
+    @AssertTrue(message = MeetingDate.MESSAGE_VALID_FORMAT)
     boolean isValid() {
         if (isEmpty()) return true;
         return isValidAsDomain();
@@ -54,7 +64,7 @@ public class MeetingDateInput implements ScheduleConstructElement {
     }
 
     public MeetingDate toMeetingDate() {
-        return MeetingDate.fromString(value);
+        return MeetingDate.of(value);
     }
 
     public String value() {

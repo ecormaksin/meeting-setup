@@ -11,12 +11,13 @@ import java.util.Objects;
  */
 public class StartHourInput implements ScheduleConstructElement {
 
+    @NotNull
     String value;
 
     @Deprecated
     StartHourInput() {}
 
-    public StartHourInput(@NotNull final String value) {
+    public StartHourInput(final String value) {
         this.value = value;
     }
 
@@ -24,10 +25,16 @@ public class StartHourInput implements ScheduleConstructElement {
         return new StartHourInput("");
     }
 
-    public static StartHourInput fromStartHour(final StartHour startHour) {
-        final int intValue = startHour.value();
-        final String stringValue = String.valueOf(intValue);
-        return new StartHourInput(stringValue);
+    public static StartHourInput of(final String value) {
+        return new StartHourInput(value);
+    }
+
+    public static StartHourInput of(final int intValue) {
+        return of(String.valueOf(intValue));
+    }
+
+    public static StartHourInput of(final StartHour startHour) {
+        return of(startHour.value());
     }
 
     @AssertTrue(message = StartHour.MESSAGE)
@@ -56,7 +63,7 @@ public class StartHourInput implements ScheduleConstructElement {
     }
 
     public StartHour toStartHour() {
-        return StartHour.fromString(value);
+        return StartHour.of(value);
     }
 
     public String value() {

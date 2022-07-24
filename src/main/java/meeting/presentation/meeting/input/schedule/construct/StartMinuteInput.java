@@ -23,10 +23,16 @@ public class StartMinuteInput implements ScheduleConstructElement {
         return new StartMinuteInput("");
     }
 
-    public static StartMinuteInput fromStartMinute(final StartMinute startMinute) {
-        final int intValue = startMinute.value();
-        final String stringValue = String.valueOf(intValue);
-        return new StartMinuteInput(stringValue);
+    public static StartMinuteInput of(final String value) {
+        return new StartMinuteInput(value);
+    }
+
+    public static StartMinuteInput of(final int intValue) {
+        return of(String.valueOf(intValue));
+    }
+
+    public static StartMinuteInput of(final StartMinute startMinute) {
+        return of(startMinute.value());
     }
 
     @AssertTrue(message = "開始分は30分単位で入力してください。")

@@ -2,6 +2,7 @@ package meeting.presentation.meeting.input.schedule.construct;
 
 import meeting.domain.model.schedule.construct.StartMinute;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class StartMinuteOptions {
 
-    List<StartMinuteOption> list;
+    List<@NotNull StartMinuteOption> list;
 
     @Deprecated
     StartMinuteOptions() {}

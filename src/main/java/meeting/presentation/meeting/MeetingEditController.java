@@ -46,7 +46,7 @@ public class MeetingEditController {
         model.addAttribute("meetingInputForm", new MeetingInputForm(
                 meeting.subject(),
                 meeting.memo(),
-                ScheduleInputs.fromSchedules(schedules)
+                ScheduleInputs.of(schedules)
         ));
 
         return "meeting/edit/form";

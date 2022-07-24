@@ -1,13 +1,13 @@
 package meeting.domain.model.schedule;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 
 /**
  * 日程番号
  */
 public class ScheduleNumber {
 
-    @Min(value = 0, message = "日程番号には自然数を指定してください。")
+    @PositiveOrZero(message = "日程番号には自然数を指定してください。")
     int value;
 
     @Deprecated

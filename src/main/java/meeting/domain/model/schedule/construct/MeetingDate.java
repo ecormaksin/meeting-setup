@@ -13,7 +13,11 @@ import java.time.format.DateTimeFormatter;
  */
 public class MeetingDate extends ValidationConcern {
 
-    @NotNull(message = "開催日は'yyyy-MM-dd'形式で必ず入力してください。")
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
+
+    public static final String MESSAGE_VALID_FORMAT = "開催日は'yyyy-MM-dd'形式で入力してください。";
+
+    @NotNull(message = MESSAGE_VALID_FORMAT)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate value;
 
@@ -25,12 +29,16 @@ public class MeetingDate extends ValidationConcern {
         this.validate(this);
     }
 
-    public static MeetingDate of(final int year, final int month, final int dayOfMonth) {
-        final LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+    public static MeetingDate of(final LocalDate localDate) {
         return new MeetingDate(localDate);
     }
 
-    public static MeetingDate fromString(final String value) {
+    public static MeetingDate of(final int year, final int month, final int dayOfMonth) {
+        final LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        return of(localDate);
+    }
+
+    public static MeetingDate of(final String value) {
         return new MeetingDate(LocalDate.parse(value));
     }
 

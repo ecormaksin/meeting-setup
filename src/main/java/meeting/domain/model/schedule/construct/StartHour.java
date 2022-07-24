@@ -1,10 +1,9 @@
 package meeting.domain.model.schedule.construct;
 
 import meeting.domain.ValidationConcern;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,8 +16,7 @@ public class StartHour extends ValidationConcern {
 
     public static final String MESSAGE = "開始時間は" + MIN + "時から" + MAX + "時の間で指定してください。";
 
-    @Min(value = MIN, message = MESSAGE)
-    @Max(value = MAX, message = MESSAGE)
+    @Range(min = MIN, max = MAX, message = MESSAGE)
     int value;
 
     @Deprecated
@@ -33,7 +31,7 @@ public class StartHour extends ValidationConcern {
         return new StartHour(value);
     }
 
-    public static StartHour fromString(final String stringValue) {
+    public static StartHour of(final String stringValue) {
         return new StartHour(Integer.valueOf(stringValue));
     }
 

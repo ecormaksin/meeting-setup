@@ -15,17 +15,17 @@ public class ScheduleInputs {
 
     private static final int INITIAL_EMPTY_SCHEDULES_SIZE = 3;
 
-    @NotNull
+    @NotNull(message = Schedules.MESSAGE_HAS_AT_LEAST_ONE_SCHEDULE)
     List<@NotNull @Valid ScheduleInput> list;
 
     @Deprecated
     ScheduleInputs() {}
 
-    public ScheduleInputs(@NotNull final List<@NotNull @Valid ScheduleInput> list) {
+    public ScheduleInputs(final List<ScheduleInput> list) {
         this.list = list;
     }
 
-    public static ScheduleInputs of(@NotNull final List<@NotNull @Valid ScheduleInput> source) {
+    public static ScheduleInputs of(final List<ScheduleInput> source) {
         return new ScheduleInputs(source);
     }
 
@@ -37,7 +37,7 @@ public class ScheduleInputs {
         return of(initialList);
     }
 
-    public static ScheduleInputs fromSchedules(final Schedules schedules) {
+    public static ScheduleInputs of(final Schedules schedules) {
         List<ScheduleInput> inputs = new ArrayList<>();
         for (Schedule schedule : schedules.asList()) {
             ScheduleInput input = ScheduleInput.fromSchedule(schedule);
@@ -47,8 +47,8 @@ public class ScheduleInputs {
         return of(inputs);
     }
 
-    @AssertTrue(message = "日程を1件以上指定してください。")
-    boolean haveAtLeastOne() {
+    @AssertTrue(message = Schedules.MESSAGE_HAS_AT_LEAST_ONE_SCHEDULE)
+    boolean isSetOfAtLeastOneSchedule() {
         return list.stream().anyMatch(s -> s.isValidAsDomain());
     }
 
@@ -58,8 +58,8 @@ public class ScheduleInputs {
                 .collect(Collectors.toList());
     }
 
-    @AssertTrue(message = "日程は重複のないように指定してください。")
-    boolean areNotDuplicated() {
+    @AssertTrue(message = Schedules.MESSAGE_HAS_UNIQUE_START_DATE_TIMES)
+    boolean isSetOfUniqueStartDateTime() {
         final List<ScheduleInput> validInputs = validInputs();
         if (validInputs.isEmpty()) return true;
 

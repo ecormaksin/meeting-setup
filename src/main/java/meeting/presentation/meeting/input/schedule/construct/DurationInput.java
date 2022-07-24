@@ -11,6 +11,7 @@ import java.util.Objects;
  */
 public class DurationInput implements ScheduleConstructElement {
 
+    @NotNull
     String value;
 
     /**
@@ -19,7 +20,7 @@ public class DurationInput implements ScheduleConstructElement {
     @Deprecated
     DurationInput() {}
 
-    public DurationInput(@NotNull final String value) {
+    public DurationInput(final String value) {
         this.value = value;
     }
 
@@ -27,10 +28,16 @@ public class DurationInput implements ScheduleConstructElement {
         return new DurationInput("");
     }
 
-    public static DurationInput fromDuration(final Duration duration) {
-        final int intValue = duration.value();
-        final String stringValue = String.valueOf(intValue);
-        return new DurationInput(stringValue);
+    public static DurationInput of(final String value) {
+        return new DurationInput(value);
+    }
+
+    public static DurationInput ofMinute(final int intValue) {
+        return of(String.valueOf(intValue));
+    }
+
+    public static DurationInput of(final Duration duration) {
+        return ofMinute(duration.value());
     }
 
     @AssertTrue(message = "会議時間は30分単位・2時間以内で入力してください。")
