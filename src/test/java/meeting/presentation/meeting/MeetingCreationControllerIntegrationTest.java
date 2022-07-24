@@ -5,9 +5,9 @@ import meeting.application.senario.MeetingCreationScenario;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.presentation.meeting.input.schedule.construct.*;
 import org.junit.ClassRule;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,29 +34,14 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
 
     @BeforeEach
     void init() {
-//        driver = webDriverFactory.webDriver();
         formPage = CreationFormPage.to(driver);
     }
 
-    @Test
-    void メモなし_日程1件の場合_1行目に入力() throws Exception {
+    @RepeatedTest(value = 3, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
+    void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) throws Exception {
 
-        CreationCompletedPage completedPage = createMeetingWithoutMemoAndOneSchedule(0);
-
-        assertNotNull(completedPage);
-    }
-
-    @Test
-    void メモなし_日程1件の場合_2行目に入力() throws Exception {
-
-        CreationCompletedPage completedPage = createMeetingWithoutMemoAndOneSchedule(1);
-
-        assertNotNull(completedPage);
-    }
-
-    private CreationCompletedPage createMeetingWithoutMemoAndOneSchedule(final int index) {
-
-        formPage.inputSubject("件名テスト" + (index + 1));
+        final int currentRepetition = repetitionInfo.getCurrentRepetition();
+        formPage.inputSubject("件名テスト" + currentRepetition);
 
         LocalDate meetingDateValue = LocalDate.now().plusDays(1);
 
@@ -65,16 +50,12 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
                 StartHourInput.of(10),
                 StartMinuteInput.of(0),
                 DurationInput.ofMinute(60));
+
+        final int index = currentRepetition - 1;
         formPage.inputScheduleAt(index, constructInput);
 
         CreationCompletedPage completedPage = formPage.createMeeting(CreationCompletedPage.class);
 
-        return completedPage;
-    }
-
-    @AfterEach
-    void tearDown() {
-        if (driver == null) return;
-        driver.quit();
+        assertNotNull(completedPage);
     }
 }
