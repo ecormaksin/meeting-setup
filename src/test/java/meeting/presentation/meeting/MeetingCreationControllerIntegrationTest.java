@@ -37,12 +37,19 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
         driver = webDriverFactory.webDriver();
     }
 
-    @RepeatedTest(value = 3, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
+    @RepeatedTest(value = 5, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
     void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) throws Exception {
 
         CreationFormPage formPage = CreationFormPage.to(driver);
 
         final int currentRepetition = repetitionInfo.getCurrentRepetition();
+        final int index = currentRepetition - 1;
+
+        final int scheduleAddClickTotalCount = currentRepetition - 3;
+        for (int scheduleAddClick = 0; scheduleAddClick < scheduleAddClickTotalCount; scheduleAddClick++) {
+            formPage = formPage.addNewEmptyScheduleInput();
+        }
+
         formPage.inputSubject("件名テスト" + currentRepetition);
 
         LocalDate meetingDateValue = LocalDate.now().plusDays(1);
@@ -53,7 +60,6 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
                 StartMinuteInput.of(0),
                 DurationInput.ofMinute(60));
 
-        final int index = currentRepetition - 1;
         formPage.inputScheduleAt(index, constructInput);
 
         CreationCompletedPage completedPage = formPage.createMeeting(CreationCompletedPage.class);

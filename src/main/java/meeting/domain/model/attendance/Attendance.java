@@ -2,13 +2,24 @@ package meeting.domain.model.attendance;
 
 import meeting.domain.model.attendance.convenience.Conveniences;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * 出欠
  */
 public class Attendance {
+
+    @Valid
     AttendanceNumber attendanceNumber;
+
+    @Valid
     ParticipantName participantName;
+
+    @Valid
     Conveniences conveniences;
+
+    @Valid
     AttendanceComment attendanceComment;
 
     @Deprecated

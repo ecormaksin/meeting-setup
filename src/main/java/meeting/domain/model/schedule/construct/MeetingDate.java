@@ -42,7 +42,7 @@ public class MeetingDate extends ValidationConcern {
         return new MeetingDate(LocalDate.parse(value));
     }
 
-    public boolean isSame(@NotNull @Valid final MeetingDate other) {
+    public boolean isSame(@Valid final MeetingDate other) {
         return this.value.equals(other.value);
     }
 

@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+
 public class CreationFormPage extends CustomPageObject {
 
     private static final String URL_RELATIVE_PATH = "/meeting/create";
@@ -24,6 +25,9 @@ public class CreationFormPage extends CustomPageObject {
 
     @FindBy(id = "memo.value")
     private WebElement memo;
+
+    @FindBy(id = "addSchedule")
+    private WebElement addScheduleButton;
 
     @FindBy(id = "createMeetingButton")
     private WebElement createButton;
@@ -93,6 +97,11 @@ public class CreationFormPage extends CustomPageObject {
         return driver.findElement(By.id(byId));
     }
 
+    public CreationFormPage addNewEmptyScheduleInput() {
+        addScheduleButton.click();
+        return PageFactory.initElements(driver, CreationFormPage.class);
+    }
+
     public CreationFormPage inputMeetingDateAt(final int index, final MeetingDateInput meetingDate) {
         final WebElement webElement = scheduleConstructElement(index, "meetingDate.value");
         webElement.sendKeys(meetingDate.value());
@@ -120,7 +129,7 @@ public class CreationFormPage extends CustomPageObject {
     }
 
     public <T> T createMeeting(Class<T> resultPage) {
-        this.createButton.click();
+        createButton.click();
         return PageFactory.initElements(driver, resultPage);
     }
 }

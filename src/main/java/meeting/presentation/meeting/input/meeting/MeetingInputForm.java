@@ -2,24 +2,21 @@ package meeting.presentation.meeting.input.meeting;
 
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.schedule.Schedules;
+import meeting.presentation.meeting.input.schedule.ScheduleInputAppendable;
 import meeting.presentation.meeting.input.schedule.ScheduleInputs;
 import meeting.presentation.meeting.input.schedule.construct.DurationOptions;
 import meeting.presentation.meeting.input.schedule.construct.StartMinuteOptions;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 public class MeetingInputForm {
 
-    @NotNull
     @Valid
     Subject subject;
 
-    @NotNull
     @Valid
     Memo memo;
 
-    @NotNull
     @Valid
     ScheduleInputs scheduleInputs;
 
@@ -45,6 +42,10 @@ public class MeetingInputForm {
                 Subject.blank(),
                 Memo.blank(),
                 ScheduleInputs.initialEmptyList());
+    }
+
+    public ScheduleInputAppendable scheduleAppendable() {
+        return scheduleInputs.appendable();
     }
 
     public MeetingInputForm addEmptySchedule() {

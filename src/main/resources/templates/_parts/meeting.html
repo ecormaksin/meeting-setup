@@ -17,7 +17,8 @@
 
         <div class="meeting__scheduleInputs-title-section">
             <label class="meeting__scheduleInputs-title-label">日程候補</label>
-            <button name="addSchedule" class="small-button">追加</button>
+            <button id="addSchedule" name="addSchedule" class="small-button"
+                th:disabled="${meetingInputForm.scheduleAppendable() == T(meeting.presentation.meeting.input.schedule.ScheduleInputAppendable).NO}">追加</button>
         </div>
         <table id="schedules">
             <thead>

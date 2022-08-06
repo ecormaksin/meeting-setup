@@ -47,7 +47,7 @@ public abstract class MeetingRegistrationRequest extends ValidationConcern {
         this.schedules = schedules;
         this.registrationRequestDateTime = registrationRequestDateTime;
 
-        isSchedulesSetOfValidStartDateTime = schedules.isSetOfValidStartDateTime(registrationRequestDateTime);
+        isSchedulesSetOfValidStartDateTime = schedules.isSetOfValidMeetingDateTimes(registrationRequestDateTime);
 
         this.validate(this);
     }

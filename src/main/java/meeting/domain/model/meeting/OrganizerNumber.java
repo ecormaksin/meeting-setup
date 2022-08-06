@@ -31,11 +31,11 @@ public class OrganizerNumber {
         return new OrganizerNumber(ulid.nextULID().toLowerCase());
     }
 
-    public boolean isSame(@NotNull @Valid final OrganizerNumber other) {
+    public boolean isSame(@Valid final OrganizerNumber other) {
         return this.value.equals(other.value);
     }
 
-    public boolean isDifferent(@NotNull @Valid final OrganizerNumber other) {
+    public boolean isDifferent(@Valid final OrganizerNumber other) {
         return !isSame(other);
     }
 

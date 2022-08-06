@@ -4,7 +4,6 @@ import meeting.domain.ValidationConcern;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * 開始時刻
@@ -35,19 +34,11 @@ public class StartHour extends ValidationConcern {
         return new StartHour(Integer.valueOf(stringValue));
     }
 
-    public boolean isSame(@NotNull @Valid StartHour other) {
+    public boolean isSame(@Valid StartHour other) {
         return this.value == other.value;
     }
 
     public int value() {
         return value;
-    }
-
-    public String formattedValue() {
-        return String.format("%02d", value);
-    }
-
-    public String stringValue() {
-        return String.valueOf(value);
     }
 }

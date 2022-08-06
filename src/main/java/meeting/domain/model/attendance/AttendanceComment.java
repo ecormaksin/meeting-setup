@@ -1,11 +1,13 @@
 package meeting.domain.model.attendance;
 
-import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 /**
  * 出欠コメント
  */
 public class AttendanceComment {
+
+    @NotNull(message = "出欠コメントを入力してください。")
     String value;
 
     public AttendanceComment(String value) {
@@ -16,18 +18,11 @@ public class AttendanceComment {
         return value;
     }
 
-    @Override
-    public String toString() {
-        return value;
-    }
-
     public AttendanceCommentInputStatus inputStatus() {
-        if (Objects.isNull(value)) return AttendanceCommentInputStatus.なし;
         if (value.isBlank()) return AttendanceCommentInputStatus.なし;
         return AttendanceCommentInputStatus.あり;
     }
 
     @Deprecated
-    AttendanceComment() {
-    }
+    AttendanceComment() {}
 }

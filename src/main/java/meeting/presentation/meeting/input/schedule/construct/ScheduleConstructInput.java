@@ -1,11 +1,9 @@
 package meeting.presentation.meeting.input.schedule.construct;
 
-import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.model.schedule.construct.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,32 +12,25 @@ import java.util.List;
  */
 public class ScheduleConstructInput {
 
-    @NotNull
     @Valid
     MeetingDateInput meetingDate;
 
-    @NotNull
     @Valid
     StartHourInput startHour;
 
-    @NotNull
     @Valid
     StartMinuteInput startMinute;
 
-    @NotNull
     @Valid
     DurationInput duration;
 
-    /**
-     * @deprecated Use AllArgsConstructor or empty()
-     */
     @Deprecated
     ScheduleConstructInput() {}
 
-    public ScheduleConstructInput(@NotNull @Valid final MeetingDateInput meetingDate,
-                                  @NotNull @Valid final StartHourInput startHour,
-                                  @NotNull @Valid final StartMinuteInput startMinute,
-                                  @NotNull @Valid final DurationInput duration) {
+    public ScheduleConstructInput(final MeetingDateInput meetingDate,
+                                  final StartHourInput startHour,
+                                  final StartMinuteInput startMinute,
+                                  final DurationInput duration) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
@@ -65,12 +56,6 @@ public class ScheduleConstructInput {
                 StartHourInput.of(startHour),
                 StartMinuteInput.of(startMinute),
                 DurationInput.of(duration));
-    }
-
-    public boolean isFuture(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
-        validateAsDomain();
-        ScheduleConstruct scheduleConstruct = toScheduleConstruct();
-        return scheduleConstruct.isFutureThan(registrationRequestDateTime);
     }
 
     @AssertTrue(message = "日程のすべての項目を入力してください。")
@@ -101,7 +86,7 @@ public class ScheduleConstructInput {
         throw new IllegalStateException("ミーティングの開催日時として正しくありません。設定内容を確認してください。");
     }
 
-    public boolean isSame(@NotNull @Valid ScheduleConstructInput other) {
+    public boolean isSame(@Valid ScheduleConstructInput other) {
 
         return this.meetingDate.isSame(other.meetingDate)
                 && this.startHour.isSame(other.startHour)

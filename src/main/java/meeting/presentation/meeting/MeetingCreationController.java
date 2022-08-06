@@ -5,9 +5,11 @@ import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
+import meeting.presentation.meeting.input.schedule.ScheduleInputCannotAddException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -37,26 +39,37 @@ public class MeetingCreationController {
     }
 
     @PostMapping(params={"addSchedule"})
-    String addSchedule(Model model, @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm) {
-        final MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
-        model.addAttribute("meetingInputForm", scheduleAdded);
+    String addSchedule(Model model, @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+                       BindingResult bindingResult,
+                       @ModelAttribute("organizerNumber") final OrganizerNumber organizerNumber) {
+        try {
+            final MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
+            model.addAttribute("meetingInputForm", scheduleAdded);
+        } catch (ScheduleInputCannotAddException e) {
+            ObjectError error = new ObjectError("globalError", e.getMessage());
+            bindingResult.addError(error);
+            model.addAttribute("meetingInputForm", meetingInputForm);
+        }
+        model.addAttribute("organizerNumber", organizerNumber);
         return "meeting/create/form";
     }
 
     @PostMapping(params={"removeSchedule"})
     String removeSchedule(Model model,
                           @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+                          @ModelAttribute("organizerNumber") final OrganizerNumber organizerNumber,
                           HttpServletRequest request) {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
         final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
         model.addAttribute("meetingInputForm", scheduleRemoved);
+        model.addAttribute("organizerNumber", organizerNumber);
         return "meeting/create/form";
     }
 
     @PostMapping
     String create(@Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
-                  @CookieValue("organizerNumber") final String organizerNumberValue,
                   BindingResult bindingResult,
+                  @CookieValue("organizerNumber") final String organizerNumberValue,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 

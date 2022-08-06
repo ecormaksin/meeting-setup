@@ -3,15 +3,12 @@ package meeting.presentation.meeting.input.schedule.construct;
 import meeting.domain.model.schedule.construct.StartHour;
 
 import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 /**
  * 開始時間（入力用）
  */
 public class StartHourInput implements ScheduleConstructElement {
 
-    @NotNull
     String value;
 
     @Deprecated
@@ -44,7 +41,6 @@ public class StartHourInput implements ScheduleConstructElement {
     }
 
     public boolean isEmpty() {
-        if (Objects.isNull(value)) return false;
         return value.isEmpty();
     }
 

@@ -5,7 +5,6 @@ import meeting.domain.model.schedule.EndTime;
 import meeting.domain.model.schedule.StartTime;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -15,29 +14,25 @@ import java.util.Objects;
  */
 public class ScheduleConstruct {
 
-    @NotNull
     @Valid
     MeetingDate meetingDate;
 
-    @NotNull
     @Valid
     StartHour startHour;
 
-    @NotNull
     @Valid
     StartMinute startMinute;
 
-    @NotNull
     @Valid
     Duration duration;
 
     @Deprecated
     ScheduleConstruct() {}
 
-    public ScheduleConstruct(@NotNull @Valid final MeetingDate meetingDate,
-                             @NotNull @Valid final StartHour startHour,
-                             @NotNull @Valid final StartMinute startMinute,
-                             @NotNull @Valid final Duration duration) {
+    public ScheduleConstruct(final MeetingDate meetingDate,
+                             final StartHour startHour,
+                             final StartMinute startMinute,
+                             final Duration duration) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
@@ -68,7 +63,7 @@ public class ScheduleConstruct {
         return new EndTime(endLocalTime());
     }
 
-    public boolean isFutureThan(@NotNull final RegistrationRequestDateTime registrationRequestDateTime) {
+    public boolean isFutureThan(final RegistrationRequestDateTime registrationRequestDateTime) {
         final LocalDateTime localDateTime = startLocalDateTime();
 
         return localDateTime.isAfter(registrationRequestDateTime.value());
@@ -86,7 +81,7 @@ public class ScheduleConstruct {
         return LocalDateTime.of(meetingDate.value(), startLocalTime());
     }
 
-    public boolean isSame(@NotNull @Valid final ScheduleConstruct other) {
+    public boolean isSame(@Valid final ScheduleConstruct other) {
         if (!this.meetingDate.isSame(other.meetingDate)) return false;
         if (!this.startHour.isSame(other.startHour)) return false;
         if (this.startMinute != other.startMinute) return false;

@@ -2,25 +2,31 @@ package meeting.domain.model.schedule;
 
 import meeting.domain.ValidationConcern;
 import meeting.domain.model.meeting.RegistrationRequestDateTime;
+import meeting.domain.model.schedule.construct.ScheduleConstruct;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 日程候補
  */
 public class Schedules extends ValidationConcern {
 
-    public static final String MESSAGE_HAS_AT_LEAST_ONE_SCHEDULE = "日程を1件以上指定してください。";
-    public static final String MESSAGE_HAS_UNIQUE_START_DATE_TIMES = "日程は重複のないように指定してください。";
+    public static final int MIN_SIZE = 1;
+    public static final int MAX_SIZE = 5;
 
-    @NotNull(message = MESSAGE_HAS_AT_LEAST_ONE_SCHEDULE)
-    @Size(min = 1, message = MESSAGE_HAS_AT_LEAST_ONE_SCHEDULE)
-    List<@NotNull @Valid Schedule> list;
+    public static final String SIZE_WITHIN_SPECIFIED_RANGE = "日程を"+ MIN_SIZE + "件以上" + MAX_SIZE + "件以下で指定してください。";
+    public static final String SET_OF_UNIQUE_MEETING_DATE_TIMES = "日程は重複のないように指定してください。";
+
+    @NotNull(message = SIZE_WITHIN_SPECIFIED_RANGE)
+    @Size(min = MIN_SIZE, max = MAX_SIZE, message = SIZE_WITHIN_SPECIFIED_RANGE)
+    List<@Valid Schedule> list;
 
     @Deprecated
     Schedules() {}
@@ -34,19 +40,20 @@ public class Schedules extends ValidationConcern {
         return new Schedules(source);
     }
 
-    public boolean isSetOfValidStartDateTime(@NotNull @Valid final RegistrationRequestDateTime registrationRequestDateTime) {
+    public boolean isSetOfValidMeetingDateTimes(@Valid final RegistrationRequestDateTime registrationRequestDateTime) {
         return list.stream().allMatch(schedule -> schedule.isFutureInCaseOfAddition(registrationRequestDateTime));
     }
 
-    @AssertTrue(message = MESSAGE_HAS_UNIQUE_START_DATE_TIMES)
-    boolean isSetOfUniqueStartDateTime() {
-        for (int i = 0; i < list.size()-1; i++) {
-            final Schedule outer = list.get(i);
-            for (int j = i + 1; j < list.size(); j++) {
-                final Schedule inner = list.get(j);
-                if (inner.isDuplicated(outer)) return false;
-            }
+    @AssertTrue(message = SET_OF_UNIQUE_MEETING_DATE_TIMES)
+    boolean isSetOfUniqueMeetingDateTimes() {
+
+        Set<ScheduleConstruct> constructSet = new HashSet<>();
+        for(Schedule schedule : list) {
+            ScheduleConstruct construct = schedule.scheduleConstruct();
+            boolean isAddedElement =  constructSet.add(construct);
+            if (!isAddedElement) return false;
         }
+
         return true;
     }
 

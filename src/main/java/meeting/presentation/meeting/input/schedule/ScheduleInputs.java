@@ -2,21 +2,20 @@ package meeting.presentation.meeting.input.schedule;
 
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
+import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ScheduleInputs {
 
     private static final int INITIAL_EMPTY_SCHEDULES_SIZE = 3;
 
-    @NotNull(message = Schedules.MESSAGE_HAS_AT_LEAST_ONE_SCHEDULE)
-    List<@NotNull @Valid ScheduleInput> list;
+    @NotNull(message = Schedules.SIZE_WITHIN_SPECIFIED_RANGE)
+    List<@Valid ScheduleInput> list;
 
     @Deprecated
     ScheduleInputs() {}
@@ -47,9 +46,14 @@ public class ScheduleInputs {
         return of(inputs);
     }
 
-    @AssertTrue(message = Schedules.MESSAGE_HAS_AT_LEAST_ONE_SCHEDULE)
-    boolean isSetOfAtLeastOneSchedule() {
-        return list.stream().anyMatch(s -> s.isValidAsDomain());
+    @AssertTrue(message = Schedules.SIZE_WITHIN_SPECIFIED_RANGE)
+    boolean isSizeWithinSpecifiedRange() {
+        final long sizeOfValidSchedules = sizeOfValidSchedules();
+        return (Schedules.MIN_SIZE <= sizeOfValidSchedules) && (sizeOfValidSchedules <= Schedules.MAX_SIZE);
+    }
+
+    private long sizeOfValidSchedules() {
+        return list.stream().filter(s -> s.isValidAsDomain()).count();
     }
 
     private List<ScheduleInput> validInputs() {
@@ -58,18 +62,19 @@ public class ScheduleInputs {
                 .collect(Collectors.toList());
     }
 
-    @AssertTrue(message = Schedules.MESSAGE_HAS_UNIQUE_START_DATE_TIMES)
-    boolean isSetOfUniqueStartDateTime() {
+    @AssertTrue(message = Schedules.SET_OF_UNIQUE_MEETING_DATE_TIMES)
+    boolean isSetOfUniqueMeetingDateTimes() {
         final List<ScheduleInput> validInputs = validInputs();
         if (validInputs.isEmpty()) return true;
 
-        for (int i = 0; i < validInputs.size()-1; i++) {
-            final ScheduleInput outer = validInputs.get(i);
-            for (int j = i + 1; j < validInputs.size(); j++) {
-                final ScheduleInput inner = validInputs.get(j);
-                if (inner.isDuplicated(outer)) return false;
-            }
+        Set<ScheduleConstructInput> constructSet = new HashSet<>();
+
+        for (ScheduleInput schedule : validInputs()) {
+            ScheduleConstructInput construct = schedule.scheduleConstructInput();
+            boolean isAddedElement =  constructSet.add(construct);
+            if (!isAddedElement) return false;
         }
+
         return true;
     }
 
@@ -77,7 +82,19 @@ public class ScheduleInputs {
         return Collections.unmodifiableList(list);
     }
 
-    public ScheduleInputs addNew() {
+    public ScheduleInputAppendable appendable() {
+        if (list.size() >= Schedules.MAX_SIZE) {
+            return ScheduleInputAppendable.NO;
+        }
+        return ScheduleInputAppendable.YES;
+    }
+
+    public ScheduleInputs addNew() throws ScheduleInputCannotAddException {
+
+        if (appendable() == ScheduleInputAppendable.NO) {
+            throw new ScheduleInputCannotAddException();
+        }
+
         List<ScheduleInput> newList = new ArrayList<>(list);
         newList.add(ScheduleInput.newInput());
         return of(newList);

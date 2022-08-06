@@ -10,13 +10,12 @@ import java.util.List;
  */
 public class Attendances {
 
-    @NotNull
-    List<@NotNull @Valid Attendance> list;
+    List<@Valid Attendance> list;
 
     @Deprecated
     Attendances() {}
 
-    public Attendances(@NotNull final List<@NotNull @Valid Attendance> list) {
+    public Attendances(final List<Attendance> list) {
         this.list = list;
     }
 

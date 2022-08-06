@@ -1,5 +1,6 @@
 package meeting.domain.model.attendance.convenience;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * 都合リスト
  */
 public class Conveniences {
-    List<Convenience> list;
+    List<@Valid Convenience> list;
 
     @Deprecated
     Conveniences() {}
