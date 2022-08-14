@@ -10,5 +10,14 @@ public abstract class CustomPageObject {
 
     public CustomPageObject(WebDriver driver) {
         this.driver = driver;
+
+        if (isNotTargetPage(driver)) {
+            final String message = String.format("%sページではありません。: %s, %s", pageName(), driver.getCurrentUrl(), driver.getPageSource());
+            throw new IllegalStateException(message);
+        }
     }
+
+    protected abstract boolean isNotTargetPage(WebDriver driver);
+
+    protected abstract String pageName();
 }

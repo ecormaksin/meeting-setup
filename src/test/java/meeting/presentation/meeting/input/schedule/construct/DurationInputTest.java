@@ -59,7 +59,6 @@ public class DurationInputTest {
     static List<String> invalidInputs() {
         List<String> inputs = new ArrayList<> ();
 
-        inputs.add(null);
         inputs.add("31");
         inputs.add("121");
         inputs.add("abc");

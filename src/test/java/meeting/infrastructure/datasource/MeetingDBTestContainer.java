@@ -7,7 +7,7 @@ public class MeetingDBTestContainer extends PostgreSQLContainer<MeetingDBTestCon
     private static final String IMAGE_VERSION = "postgres:14.3";
     private static MeetingDBTestContainer container;
 
-    private MeetingDBTestContainer() {
+    public MeetingDBTestContainer() {
         super(IMAGE_VERSION);
     }
 
@@ -21,12 +21,12 @@ public class MeetingDBTestContainer extends PostgreSQLContainer<MeetingDBTestCon
     @Override
     public void start() {
         super.start();
-        System.setProperty("DB_USERNAME", container.getUsername());
-        System.setProperty("DB_PASSWORD", container.getPassword());
+//        System.setProperty("DB_USERNAME", container.getUsername());
+//        System.setProperty("DB_PASSWORD", container.getPassword());
     }
 
     @Override
     public void stop() {
-        // do nothing, JVM handles shut down
+        super.stop();
     }
 }

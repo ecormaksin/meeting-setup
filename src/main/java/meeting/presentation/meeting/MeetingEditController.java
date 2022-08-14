@@ -89,7 +89,9 @@ public class MeetingEditController {
 
         if (bindingResult.hasErrors()) return "meeting/edit/form";
 
-        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber, organizerNumber);
+        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber,
+                organizerNumber,
+                RegistrationRequestDateTime.now());
         meetingEditScenario.edit(meeting, meetingEditRequest);
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber);

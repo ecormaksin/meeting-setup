@@ -9,10 +9,14 @@ public class CreationCompletedPage extends CustomPageObject {
 
     public CreationCompletedPage(final WebDriver driver) {
         super(driver);
+    }
 
+    protected boolean isNotTargetPage(WebDriver driver) {
         final String url = driver.getCurrentUrl();
-        if (!url.endsWith(URL_RELATIVE_PATH)) {
-            throw new IllegalStateException("ミーティングの作成完了ページではありません。: "  + url);
-        }
+        return !url.endsWith(URL_RELATIVE_PATH);
+    }
+
+    protected String pageName() {
+        return "ミーティングの作成完了";
     }
 }

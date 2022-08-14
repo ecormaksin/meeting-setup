@@ -62,24 +62,28 @@ public class MeetingInputForm {
                 scheduleInputs.remove(index));
     }
 
-    public MeetingCreationRequest toCreationRequest(final MeetingNumber meetingNumber, final OrganizerNumber organizerNumber) {
+    public MeetingCreationRequest toCreationRequest(final MeetingNumber meetingNumber,
+                                                    final OrganizerNumber organizerNumber,
+                                                    final RegistrationRequestDateTime registrationRequestDateTime) {
         final Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingCreationRequest(meetingNumber,
                                             subject,
                                             memo,
                                             organizerNumber,
                                             schedules,
-                                            RegistrationRequestDateTime.now());
+                                            registrationRequestDateTime);
     }
 
-    public MeetingEditRequest toEditRequest(final MeetingNumber meetingNumber, final OrganizerNumber organizerNumber) {
+    public MeetingEditRequest toEditRequest(final MeetingNumber meetingNumber,
+                                            final OrganizerNumber organizerNumber,
+                                            final RegistrationRequestDateTime registrationRequestDateTime) {
         final Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingEditRequest(meetingNumber,
                                         subject,
                                         memo,
                                         organizerNumber,
                                         schedules,
-                                        RegistrationRequestDateTime.now());
+                                        registrationRequestDateTime);
     }
 
     public Subject subject() {

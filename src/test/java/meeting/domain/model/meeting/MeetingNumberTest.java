@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MeetingNumberTest {
 
@@ -59,5 +62,15 @@ public class MeetingNumberTest {
                 sizeShortValue,
                 sizeOverValue,
                 symbolIncluded);
+    }
+
+    @Test
+    void testStaticMethod() {
+        try(MockedStatic<MeetingNumber> meetingNumberMockedStatic = Mockito.mockStatic(MeetingNumber.class)) {
+            meetingNumberMockedStatic.when(MeetingNumber::newNumber).thenReturn(MeetingNumberTestHelper.fromInt(1));
+            MeetingNumber meetingNumber = MeetingNumber.newNumber();
+            System.out.println(meetingNumber.value());
+            assertTrue(meetingNumber.value().endsWith("001"));
+        }
     }
 }

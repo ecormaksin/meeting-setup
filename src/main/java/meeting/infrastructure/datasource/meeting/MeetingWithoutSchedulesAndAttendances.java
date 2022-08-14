@@ -23,6 +23,7 @@ public class MeetingWithoutSchedulesAndAttendances {
             final Subject subject,
             final Memo memo,
             final OrganizerNumber organizerNumber) {
+
         this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;

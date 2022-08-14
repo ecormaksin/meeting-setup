@@ -37,16 +37,20 @@ public class CreationFormPage extends CustomPageObject {
 
     public CreationFormPage(final WebDriver driver) {
         super(driver);
+    }
 
+    protected boolean isNotTargetPage(WebDriver driver) {
         final String url = driver.getCurrentUrl();
-        if (!url.endsWith(URL_RELATIVE_PATH)) {
-            throw new IllegalStateException("ミーティングの作成ページではありません。: "  + url);
-        }
+        return !url.endsWith(URL_RELATIVE_PATH);
+    }
+
+    protected String pageName() {
+        return "ミーティングの作成";
     }
 
     public static CreationFormPage to(WebDriver driver) {
         driver.get(URL_BASE + URL_RELATIVE_PATH);
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.urlContains(URL_RELATIVE_PATH));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.urlMatches(".*" + URL_RELATIVE_PATH + "$"));
         return PageFactory.initElements(driver, CreationFormPage.class);
     }
 

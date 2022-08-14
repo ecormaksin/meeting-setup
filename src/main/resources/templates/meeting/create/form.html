@@ -21,7 +21,7 @@
       <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
 
       <div>
-        <button id="createMeetingButton">作成</button>
+        <button type="button" id="createMeetingButton" disabled="disabled">作成</button>
       </div>
     </form>
   </article>
@@ -29,12 +29,34 @@
 <footer th:replace="_parts/footer :: default"></footer>
 <script th:inline="javascript">
 $(function() {
-  var organizerNumber = localStorage.getItem('organizerNumber');
-  if (!organizerNumber) {
-    organizerNumber = [[${organizerNumber.value}]];
-    localStorage.setItem('organizerNumber', organizerNumber);
-  }
-  document.cookie = "organizerNumber=" + organizerNumber;
+  $(window).on('load', function() {
+    var organizerNumber = localStorage.getItem('organizerNumber');
+
+    /*[# th:if="${organizerNumber != null}"]*/
+    if (!organizerNumber) {
+      localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
+    }
+    /*[/]*/
+
+    $('#createMeetingButton').prop('disabled', false);
+  });
+
+  $('#createMeetingButton').on('click', function() {
+    $('#createMeetingButton').prop('disabled', true);
+
+    var form = document.querySelector("form");
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/meeting/create');
+    xhr.setRequestHeader('organizerNumber', localStorage.getItem('organizerNumber'));
+    xhr.send(new FormData(form));
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState !== 4) return;
+      if (xhr.status !== 200) return;
+      form.action = '/meeting/create/completed';
+      form.method = 'GET';
+      form.submit();
+    }
+  });
 });
 </script>
 </body>

@@ -2,47 +2,51 @@ package meeting.presentation.meeting;
 
 import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingCreationScenario;
+import meeting.domain.model.meeting.MeetingNumberFake_1;
+import meeting.domain.model.meeting.OrganizerNumberFake_1;
+import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
-import meeting.presentation.WebDriverFactory;
 import meeting.presentation.meeting.input.schedule.construct.*;
-import org.junit.ClassRule;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Testcontainers
 public class MeetingCreationControllerIntegrationTest extends MeetingIntegrationTest {
 
-    @ClassRule
+    @Container
     private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
-    WebDriverFactory webDriverFactory;
-
     WebDriver driver;
 
     @Autowired
     MeetingCreationScenario meetingCreationScenario;
 
-    @BeforeAll
-    void initAll() {
-        driver = webDriverFactory.webDriver();
-    }
+    @RepeatedTest(value = 1, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
+    @DirtiesContext
+    void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) {
 
-    @RepeatedTest(value = 5, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
-    void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) throws Exception {
+        new OrganizerNumberFake_1();
+        new MeetingNumberFake_1();
+        new RegistrationRequestDateTimeFake_19841231_1023();
 
         CreationFormPage formPage = CreationFormPage.to(driver);
 
-        final int currentRepetition = repetitionInfo.getCurrentRepetition();
+        final int currentRepetition =  repetitionInfo.getCurrentRepetition();
         final int index = currentRepetition - 1;
 
         final int scheduleAddClickTotalCount = currentRepetition - 3;
@@ -52,7 +56,7 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
 
         formPage.inputSubject("件名テスト" + currentRepetition);
 
-        LocalDate meetingDateValue = LocalDate.now().plusDays(1);
+        LocalDate meetingDateValue = LocalDate.of(1985,1, 1);
 
         final ScheduleConstructInput constructInput = new ScheduleConstructInput(
                 MeetingDateInput.of(meetingDateValue),
@@ -67,8 +71,8 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
         assertNotNull(completedPage);
     }
 
-    @AfterAll
-    void tearDownAll() {
+    @AfterEach
+    void tearDown() {
         if (driver == null) return;
         driver.quit();
     }

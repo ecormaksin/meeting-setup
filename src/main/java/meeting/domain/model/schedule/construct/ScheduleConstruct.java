@@ -93,6 +93,7 @@ public class ScheduleConstruct {
     @Deprecated
     @Override
     public final boolean equals(final Object anObject) {
+        if (Objects.isNull(anObject)) return false;
         if (anObject == this) return true;
         if (!(anObject instanceof ScheduleConstruct other)) return false;
         return isSame(other);
