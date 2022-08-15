@@ -20,18 +20,23 @@ public class MeetingInputForm {
     @Valid
     ScheduleInputs scheduleInputs;
 
+    @Valid
+    OrganizerNumber organizerNumber;
+
     StartMinuteOptions startMinuteOptions;
     DurationOptions durationOptions;
 
     @Deprecated
     MeetingInputForm() {}
 
-    public MeetingInputForm(@Valid Subject subject,
-                            @Valid Memo memo,
-                            @Valid ScheduleInputs scheduleInputs) {
+    public MeetingInputForm(Subject subject,
+                            Memo memo,
+                            ScheduleInputs scheduleInputs,
+                            OrganizerNumber organizerNumber) {
         this.subject = subject;
         this.memo = memo;
         this.scheduleInputs = scheduleInputs;
+        this.organizerNumber = organizerNumber;
 
         this.startMinuteOptions = StartMinuteOptions.initialize();
         this.durationOptions = DurationOptions.initialize();
@@ -41,7 +46,8 @@ public class MeetingInputForm {
         return new MeetingInputForm(
                 Subject.blank(),
                 Memo.blank(),
-                ScheduleInputs.initialEmptyList());
+                ScheduleInputs.initialEmptyList(),
+                OrganizerNumber.newNumber());
     }
 
     public ScheduleInputAppendable scheduleAppendable() {
@@ -52,38 +58,36 @@ public class MeetingInputForm {
         return new MeetingInputForm(
                 subject,
                 memo,
-                scheduleInputs.addNew());
+                scheduleInputs.addNew(),
+                organizerNumber);
     }
 
     public MeetingInputForm removeSchedule(final int index) {
         return new MeetingInputForm(
                 subject,
                 memo,
-                scheduleInputs.remove(index));
+                scheduleInputs.remove(index),
+                organizerNumber);
     }
 
-    public MeetingCreationRequest toCreationRequest(final MeetingNumber meetingNumber,
-                                                    final OrganizerNumber organizerNumber,
-                                                    final RegistrationRequestDateTime registrationRequestDateTime) {
+    public MeetingCreationRequest toCreationRequest(final MeetingNumber meetingNumber) {
         final Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingCreationRequest(meetingNumber,
-                                            subject,
-                                            memo,
-                                            organizerNumber,
-                                            schedules,
-                                            registrationRequestDateTime);
+                subject,
+                memo,
+                schedules,
+                organizerNumber,
+                RegistrationRequestDateTime.now());
     }
 
-    public MeetingEditRequest toEditRequest(final MeetingNumber meetingNumber,
-                                            final OrganizerNumber organizerNumber,
-                                            final RegistrationRequestDateTime registrationRequestDateTime) {
+    public MeetingEditRequest toEditRequest(final MeetingNumber meetingNumber) {
         final Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingEditRequest(meetingNumber,
-                                        subject,
-                                        memo,
-                                        organizerNumber,
-                                        schedules,
-                                        registrationRequestDateTime);
+                subject,
+                memo,
+                schedules,
+                organizerNumber,
+                RegistrationRequestDateTime.now());
     }
 
     public Subject subject() {
@@ -96,6 +100,10 @@ public class MeetingInputForm {
 
     public ScheduleInputs scheduleInputs() {
         return scheduleInputs;
+    }
+
+    public OrganizerNumber organizerNumber() {
+        return organizerNumber;
     }
 
     public StartMinuteOptions startMinuteOptions() {

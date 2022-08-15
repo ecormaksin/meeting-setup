@@ -37,14 +37,14 @@ public abstract class MeetingRegistrationRequest extends ValidationConcern {
     public MeetingRegistrationRequest(@Valid final MeetingNumber meetingNumber,
                                       @Valid final Subject subject,
                                       @Valid final Memo memo,
-                                      @Valid final OrganizerNumber organizerNumber,
                                       @Valid final Schedules schedules,
+                                      @Valid final OrganizerNumber organizerNumber,
                                       @Valid final RegistrationRequestDateTime registrationRequestDateTime) {
         this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;
-        this.organizerNumber = organizerNumber;
         this.schedules = schedules;
+        this.organizerNumber = organizerNumber;
         this.registrationRequestDateTime = registrationRequestDateTime;
 
         isSchedulesSetOfValidStartDateTime = schedules.isSetOfValidMeetingDateTimes(registrationRequestDateTime);

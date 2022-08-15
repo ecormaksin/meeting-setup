@@ -41,8 +41,8 @@ public class MeetingCreationRequestTest {
                         MeetingNumber.newNumber(),
                         Subject.of("件名テスト"),
                         Memo.blank(),
-                        OrganizerNumber.newNumber(),
                         schedules,
+                        OrganizerNumber.newNumber(),
                         RegistrationRequestDateTime.of(2022, 7, 1, 11, 0)
                 );
             });

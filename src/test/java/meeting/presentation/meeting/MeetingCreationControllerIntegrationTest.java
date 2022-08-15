@@ -36,7 +36,7 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
     @Autowired
     MeetingCreationScenario meetingCreationScenario;
 
-    @RepeatedTest(value = 1, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
+    @RepeatedTest(value = 5, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
     @DirtiesContext
     void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) {
 

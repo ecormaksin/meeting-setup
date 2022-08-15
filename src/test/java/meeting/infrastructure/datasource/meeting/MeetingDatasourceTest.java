@@ -63,8 +63,8 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 meetingNumber,
                 subject,
                 memo,
-                organizerNumber,
                 schedules,
+                organizerNumber,
                 registrationRequestDateTime);
 
         meetingDatasource.create(meetingCreationRequest);

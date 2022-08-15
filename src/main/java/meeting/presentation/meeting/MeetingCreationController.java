@@ -3,8 +3,6 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
-import meeting.domain.model.meeting.OrganizerNumber;
-import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputCannotAddException;
 import org.springframework.stereotype.Controller;
@@ -14,10 +12,10 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.net.URI;
 
 /**
@@ -35,7 +33,6 @@ public class MeetingCreationController {
     @GetMapping
     String init(Model model) {
         model.addAttribute("meetingInputForm", MeetingInputForm.newForm());
-        model.addAttribute("organizerNumber", OrganizerNumber.newNumber());
         return "meeting/create/form";
     }
 
@@ -65,34 +62,28 @@ public class MeetingCreationController {
     }
 
     @PostMapping
-    String create(HttpSession session,
-                  @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+    String create(@Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                   BindingResult bindingResult,
-                  @RequestHeader("organizerNumber") final String organizerNumberValue) {
+                  RedirectAttributes attributes,
+                  UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return "meeting/create/form";
 
         final MeetingNumber meetingNumber = MeetingNumber.newNumber();
-        final OrganizerNumber organizerNumber = new OrganizerNumber(organizerNumberValue);
-        final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(
-                meetingNumber,
-                organizerNumber,
-                RegistrationRequestDateTime.now()
-        );
+        final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber);
         meetingCreationScenario.create(meetingCreationRequest);
 
-        session.setAttribute("meetingNumber", meetingNumber.value());
+        attributes.addFlashAttribute("meetingNumber", meetingNumber);
 
-        return "meeting/create/form";
+        URI uri = builder.path("/meeting/create/completed").build().toUri();
+        return "redirect:" + uri.toString();
     }
 
     @GetMapping("completed")
-    String completed(HttpSession session,
-                     Model model,
+    String completed(Model model,
+                     @ModelAttribute("meetingNumber") MeetingNumber meetingNumber,
                      UriComponentsBuilder builder) {
 
-        final String meetingNumberValue = (String) session.getAttribute("meetingNumber");
-        final MeetingNumber meetingNumber = new MeetingNumber(meetingNumberValue);
         model.addAttribute("meetingNumber", meetingNumber);
 
         URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber.value())).build().toUri();
@@ -106,7 +97,8 @@ public class MeetingCreationController {
         binder.setAllowedFields(
                 "subject.value",
                 "memo.value",
-                "organizerNumber.value",
-                "scheduleInputs.list[*");
+                "scheduleInputs.list[*",
+                "organizerNumber.value"
+        );
     }
 }

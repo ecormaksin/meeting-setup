@@ -133,6 +133,8 @@ public class CreationFormPage extends CustomPageObject {
     }
 
     public <T> T createMeeting(Class<T> resultPage) {
+//        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+//        javascriptExecutor.executeScript("document.getElementById('createMeetingButton').disabled = false;");
         createButton.click();
         return PageFactory.initElements(driver, resultPage);
     }
