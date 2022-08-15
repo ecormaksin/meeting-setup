@@ -28,32 +28,26 @@
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 <script th:inline="javascript">
-(function() {
-  'use strict';
+$(function() {
 
-  const createButton = document.getElementById('createMeetingButton');
+  let organizerNumber = localStorage.getItem('organizerNumber');
 
-  window.addEventListener('load', () => {
-    let organizerNumber = localStorage.getItem('organizerNumber');
+  /*[# th:if="${organizerNumber != null}"]*/
+  if (!organizerNumber) {
+    localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
+  }
+  /*[/]*/
 
-    /*[# th:if="${meetingInputForm.organizerNumber != null}"]*/
-    if (!organizerNumber) {
-      localStorage.setItem('organizerNumber', [[${meetingInputForm.organizerNumber.value}]]);
-    }
-    /*[/]*/
+  const createButton = $('#createMeetingButton');
+  createButton.prop('disabled', false);
 
-    createButton.disabled = false;
+  createButton.on('click', function() {
+    $(this).prop('disabled', true);
+
+    $("form").submit();
   });
 
-  createButton.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    createButton.disabled = true;
-
-    document.querySelector("form").submit();
-  });
-
-})();
+});
 </script>
 </body>
 </html>
