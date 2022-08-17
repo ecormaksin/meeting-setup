@@ -46,16 +46,16 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
             final int meetingNumberBaseInt,
             final String subjectValue,
             final String memoValue,
-            final int organizerNumberBaseInt,
             final List<Schedule> scheduleList,
+            final int organizerNumberBaseInt,
             final LocalDateTime registrationRequestDateTimeValue
     ) {
 
         final MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(meetingNumberBaseInt);
         final Subject subject = new Subject(subjectValue);
         final Memo memo = new Memo(memoValue);
-        final OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(organizerNumberBaseInt);
         final Schedules schedules = new Schedules(scheduleList);
+        final OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(organizerNumberBaseInt);
         final RegistrationRequestDateTime registrationRequestDateTime
                 = new RegistrationRequestDateTime(registrationRequestDateTimeValue);
 
@@ -90,8 +90,8 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
             final int startMinuteValue,
             final int durationValue) {
 
-        final MeetingDate meetingDate = new MeetingDate(meetingDateValue);
-        final StartHour startHour = new StartHour(startHourValue);
+        final MeetingDate meetingDate = MeetingDate.of(meetingDateValue);
+        final StartHour startHour = StartHour.of(startHourValue);
         final StartMinute startMinute = StartMinute.of(startMinuteValue);
         final Duration duration = Duration.of(durationValue);
 
@@ -115,8 +115,8 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                     1,
                     "件名テスト１",
                     "メモテスト１",
-                    1,
                     scheduleList,
+                    1,
                     LocalDateTime.of(2022, 3, 2, 9, 30, 0));
         }
 
@@ -238,8 +238,8 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
     record MeetingDateTimeSpan(LocalDate meetingDateValue, LocalTime startTimeValue, LocalTime endTimeValue) {}
 
     @Nested
-    @DisplayName("メモなし・日程3件(降順)の場合")
-    class MeetingWithoutMemoAnd3Schedules extends DBUnitWithoutWebTest {
+    @DisplayName("メモなし・日程複数件(降順)の場合")
+    class MeetingWithoutMemoAndMultipleSchedules extends DBUnitWithoutWebTest {
 
         @Test
         @ExpectedDatabase(value = "testdata/create_meeting_without_memo_3_schedules_reversed_order.xlsx",
@@ -256,8 +256,8 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                     2,
                     "件名テスト２",
                     "",
-                    2,
                     scheduleList,
+                    2,
                     LocalDateTime.of(2022, 4, 1, 15, 12, 34));
         }
 

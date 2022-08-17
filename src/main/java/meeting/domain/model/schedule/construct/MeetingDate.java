@@ -3,7 +3,6 @@ package meeting.domain.model.schedule.construct;
 import meeting.domain.ValidationConcern;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +41,7 @@ public class MeetingDate extends ValidationConcern {
         return new MeetingDate(LocalDate.parse(value));
     }
 
-    public boolean isSame(@Valid final MeetingDate other) {
+    public boolean isSame(final MeetingDate other) {
         return this.value.equals(other.value);
     }
 

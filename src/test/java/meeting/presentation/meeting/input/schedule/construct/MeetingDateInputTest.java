@@ -37,7 +37,6 @@ public class MeetingDateInputTest {
     static List<String> validInputs() {
         List<String> inputs = new ArrayList<> ();
 
-        inputs.add(null);
         inputs.add("");
         inputs.add("2022-01-01");
         return inputs;

@@ -66,10 +66,10 @@ public class MeetingTest {
 
         final ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
         final LocalDate meetingDateValue = LocalDate.of(2021, 12, patternNumber);
-        final MeetingDate meetingDate = new MeetingDate(meetingDateValue);
+        final MeetingDate meetingDate = MeetingDate.of(meetingDateValue);
         final ScheduleConstruct scheduleConstruct = new ScheduleConstruct(
                 meetingDate,
-                new StartHour(10),
+                StartHour.of(10),
                 StartMinute.JUST,
                 Duration.ONE_HOUR);
 

@@ -5,7 +5,6 @@ import meeting.domain.model.schedule.construct.MeetingDate;
 import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Objects;
 
 /**
  * 開催日（入力用）
@@ -45,7 +44,6 @@ public class MeetingDateInput implements ScheduleConstructElement {
     }
 
     public boolean isEmpty() {
-        if (Objects.isNull(value)) return true;
         return value.isEmpty();
     }
 

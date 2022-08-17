@@ -3,6 +3,7 @@ package meeting.presentation.meeting;
 import meeting.presentation.CustomPageObject;
 import meeting.presentation.meeting.input.schedule.construct.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -32,9 +33,6 @@ public class CreationFormPage extends CustomPageObject {
     @FindBy(id = "createMeetingButton")
     private WebElement createButton;
 
-    @FindBy(css = "#schedules > tbody > tr")
-    private List<WebElement> scheduleRows;
-
     public CreationFormPage(final WebDriver driver) {
         super(driver);
     }
@@ -60,10 +58,6 @@ public class CreationFormPage extends CustomPageObject {
 
     String memoValue() {
         return memo.getAttribute("value");
-    }
-
-    List<WebElement> scheduleRows() {
-        return scheduleRows;
     }
 
     public CreationFormPage inputSubject(final String subject) {
@@ -101,13 +95,50 @@ public class CreationFormPage extends CustomPageObject {
         return driver.findElement(By.id(byId));
     }
 
+    public int countOfScheduleInputs() {
+        int count = 0;
+
+        while (true) {
+            try {
+                meetingDate(count);
+                count++;
+            } catch (NoSuchElementException e) {
+                break;
+            }
+        }
+
+        return count;
+    }
+
+    private List<WebElement> removeScheduleButtons() {
+        return driver.findElements(By.name("removeSchedule"));
+    }
+
+    public int countOfRemoveScheduleButtons() {
+        return removeScheduleButtons().size();
+    }
+
+    public CreationFormPage removeScheduleAt(final int index) {
+        final WebElement removeScheduleButton = removeScheduleButtons().get(index);
+        removeScheduleButton.click();
+        return PageFactory.initElements(driver, CreationFormPage.class);
+    }
+
+    public boolean isAddScheduleButtonEnabled() {
+        return addScheduleButton.isEnabled();
+    }
+
     public CreationFormPage addNewEmptyScheduleInput() {
         addScheduleButton.click();
         return PageFactory.initElements(driver, CreationFormPage.class);
     }
 
+    private WebElement meetingDate(final int index) {
+        return scheduleConstructElement(index, "meetingDate.value");
+    }
+
     public CreationFormPage inputMeetingDateAt(final int index, final MeetingDateInput meetingDate) {
-        final WebElement webElement = scheduleConstructElement(index, "meetingDate.value");
+        final WebElement webElement = meetingDate(index);
         webElement.sendKeys(meetingDate.value());
         return this;
     }
@@ -134,6 +165,7 @@ public class CreationFormPage extends CustomPageObject {
 
     public <T> T createMeeting(Class<T> resultPage) {
         createButton.click();
+        waitUntilPageReady();
         return PageFactory.initElements(driver, resultPage);
     }
 }

@@ -1,6 +1,11 @@
 package meeting.presentation;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public abstract class CustomPageObject {
 
@@ -20,4 +25,16 @@ public abstract class CustomPageObject {
     protected abstract boolean isNotTargetPage(WebDriver driver);
 
     protected abstract String pageName();
+
+    protected void waitUntilPageReady() {
+        waitUntilPageReady(Duration.ofSeconds(30));
+    }
+
+    protected void waitUntilPageReady(Duration duration) {
+
+        new WebDriverWait(driver, duration).until(
+                (ExpectedCondition<Boolean>) driver ->
+                        ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
+        );
+    }
 }

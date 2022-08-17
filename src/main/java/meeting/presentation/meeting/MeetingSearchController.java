@@ -43,7 +43,7 @@ public class MeetingSearchController {
                   BindingResult bindingResult) {
 
         if (organizerNumber.isDifferent(meetingSearchRequest.organizerNumber())) {
-            throw new ClientBrowserFalsifiedException();
+            throw new OrganizerNumberFalsifiedException();
         }
 
         model.addAttribute("meetingSearchRequest", meetingSearchRequest);

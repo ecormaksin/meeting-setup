@@ -2,7 +2,6 @@ package meeting.domain.model.meeting;
 
 import de.huxhorn.sulky.ulid.ULID;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -31,11 +30,11 @@ public class OrganizerNumber {
         return new OrganizerNumber(ulid.nextULID().toLowerCase());
     }
 
-    public boolean isSame(@Valid final OrganizerNumber other) {
+    public boolean isSame(final OrganizerNumber other) {
         return this.value.equals(other.value);
     }
 
-    public boolean isDifferent(@Valid final OrganizerNumber other) {
+    public boolean isDifferent(final OrganizerNumber other) {
         return !isSame(other);
     }
 

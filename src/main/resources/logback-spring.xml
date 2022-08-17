@@ -5,7 +5,9 @@
     <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
     <root level="INFO">
 	    <appender-ref ref="CONSOLE" />
-        <!-- <appender-ref ref="FILE" /> -->
+        <springProfile name="test-group">
+            <appender-ref ref="FILE" />
+        </springProfile>
 	</root>
     <logger name="jdbc" level="OFF"/>
     <logger name="jdbc.sqltiming" level="DEBUG"/>
