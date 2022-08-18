@@ -1,7 +1,6 @@
 package meeting.domain.model.meeting;
 
 import javax.validation.constraints.AssertTrue;
-import java.util.Objects;
 
 /**
  * 件名
@@ -13,11 +12,16 @@ public class Subject {
 
     String value;
 
+    @AssertTrue(message = MESSAGE)
+    boolean valid;
+
     @Deprecated
     Subject() {}
 
     public Subject(final String value) {
         this.value = value;
+
+        validate();
     }
 
     public static Subject blank() {
@@ -28,16 +32,19 @@ public class Subject {
         return new Subject(value);
     }
 
-    @AssertTrue(message = MESSAGE)
-    boolean isValid() {
-        if ( Objects.isNull(value) ) return false;
-
+    void validate() {
         final String whiteSpaceRemoved = value.replaceAll("(　|\\s)+", "");
-        if ( whiteSpaceRemoved.isEmpty() ) return false;
+        if ( whiteSpaceRemoved.isEmpty() ) {
+            valid = false;
+            return;
+        }
 
-        if ( value.length() > MAX_SIZE ) return false;
+        if ( value.length() > MAX_SIZE ) {
+            valid = false;
+            return;
+        }
 
-        return true;
+        valid = true;
     }
 
     public String value() {

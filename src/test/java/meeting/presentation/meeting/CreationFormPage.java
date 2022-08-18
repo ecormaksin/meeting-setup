@@ -33,6 +33,8 @@ public class CreationFormPage extends CustomPageObject {
     @FindBy(id = "createMeetingButton")
     private WebElement createButton;
 
+    private WebElement subjectError;
+
     public CreationFormPage(final WebDriver driver) {
         super(driver);
     }
@@ -167,5 +169,13 @@ public class CreationFormPage extends CustomPageObject {
         createButton.click();
         waitUntilPageReady();
         return PageFactory.initElements(driver, resultPage);
+    }
+
+    public String subjectErrorMessage() {
+        try {
+            return subjectError.getText();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
     }
 }

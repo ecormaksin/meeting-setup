@@ -5,20 +5,25 @@
 
         <label>件名</label>
         <input type="text" th:field="*{subject.value}" placeholder="○○様カンファレンス など" class="meeting__subject">
-        <p th:if="${#fields.hasErrors('subject.value')}">
-            <mark><span th:errors="*{subject.value}"></span></mark>
+        <p th:if="${#fields.hasErrors('subject.valid')}">
+            <mark><span id="subjectError" th:errors="*{subject.valid}"></span></mark>
         </p>
 
         <label>メモ（任意）</label>
         <textarea th:field="*{memo.value}" placeholder="リハビリ実施計画書について など" class="meeting__memo"></textarea>
         <p th:if="${#fields.hasErrors('memo.value')}">
-            <mark><span th:errors="*{memo.value}"></span></mark>
+            <mark><span id="memoError" th:errors="*{memo.value}"></span></mark>
         </p>
 
         <div class="meeting__scheduleInputs-title-section">
             <label class="meeting__scheduleInputs-title-label">日程候補</label>
             <button id="addSchedule" name="addSchedule" class="small-button"
                 th:disabled="${meetingInputForm.scheduleAppendable() == T(meeting.presentation.meeting.input.schedule.ScheduleInputAppendable).NO}">追加</button>
+        </div>
+        <div>
+            <p th:if="${#fields.hasErrors('scheduleInputs')}">
+                <mark><span id="scheduleInputsError" th:errors="*{scheduleInputs}"></span></mark>
+            </p>
         </div>
         <table id="schedules">
             <thead>
@@ -90,11 +95,6 @@
             </th:block>
             </tbody>
         </table>
-        <div>
-            <p th:if="${#fields.hasErrors('scheduleInputs')}">
-                <mark><span th:errors="*{scheduleInputs}"></span></mark>
-            </p>
-        </div>
 
         <input type="hidden" th:field="*{organizerNumber.value}">
 

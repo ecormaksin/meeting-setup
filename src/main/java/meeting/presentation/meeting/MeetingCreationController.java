@@ -96,6 +96,7 @@ public class MeetingCreationController {
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
                 "subject.value",
+                "subject.valid",
                 "memo.value",
                 "scheduleInputs.list[*",
                 "organizerNumber.value"
