@@ -61,12 +61,11 @@ public class SubjectTest {
     }
 
     static List<String> invalidInputs() {
-        final String sizeOverValue = "あ".repeat(Subject.MAX_SIZE + 1);
+        final String lengthOverValue = "あ".repeat(Subject.MAX_SIZE + 1);
         return Arrays.asList(
-                null,
                 "",
                 " ",
                 "　",
-                sizeOverValue);
+                lengthOverValue);
     }
 }

@@ -26,12 +26,12 @@ public class DurationInput implements ScheduleConstructElement {
         return new DurationInput(value);
     }
 
-    public static DurationInput ofMinute(final int intValue) {
+    public static DurationInput of(final int intValue) {
         return of(String.valueOf(intValue));
     }
 
     public static DurationInput of(final Duration duration) {
-        return ofMinute(duration.value());
+        return of(duration.value());
     }
 
     @AssertTrue(message = "会議時間は30分単位・2時間以内で入力してください。")
@@ -58,7 +58,7 @@ public class DurationInput implements ScheduleConstructElement {
     }
 
     public Duration toDuration() {
-        return Duration.fromString(value);
+        return Duration.of(value);
     }
 
     public String value() {

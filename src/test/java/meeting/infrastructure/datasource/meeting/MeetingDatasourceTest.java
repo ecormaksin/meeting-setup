@@ -9,11 +9,12 @@ import meeting.domain.model.schedule.construct.*;
 import meeting.infrastructure.datasource.DBUnitWithoutWebTest;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.infrastructure.datasource.ScheduleNumberColumnFilter;
-import org.junit.ClassRule;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,9 +25,10 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Testcontainers
 public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
-    @ClassRule
+    @Container
     private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
@@ -52,12 +54,12 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
     ) {
 
         final MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(meetingNumberBaseInt);
-        final Subject subject = new Subject(subjectValue);
-        final Memo memo = new Memo(memoValue);
-        final Schedules schedules = new Schedules(scheduleList);
+        final Subject subject = Subject.of(subjectValue);
+        final Memo memo = Memo.of(memoValue);
+        final Schedules schedules = Schedules.of(scheduleList);
         final OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(organizerNumberBaseInt);
         final RegistrationRequestDateTime registrationRequestDateTime
-                = new RegistrationRequestDateTime(registrationRequestDateTimeValue);
+                = RegistrationRequestDateTime.of(registrationRequestDateTimeValue);
 
         final MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest(
                 meetingNumber,
@@ -70,32 +72,17 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         meetingDatasource.create(meetingCreationRequest);
     }
 
-    private Schedule schedule(
-            final LocalDate meetingDateValue,
-            final int startHourValue,
-            final int startMinuteValue,
-            final int durationValue) {
+    private Schedule schedule(final int year,
+                                final int month,
+                                final int dayOfMonth,
+                                final int hour,
+                                final int minute,
+                                final int duration) {
 
-        final ScheduleConstruct scheduleConstruct = scheduleConstruct(
-                meetingDateValue,
-                startHourValue,
-                startMinuteValue,
-                durationValue);
+        final ScheduleConstruct scheduleConstruct =
+                ScheduleConstruct.of(year, month, dayOfMonth, hour, minute, duration);
 
         return new Schedule(ScheduleNumber.initialized(), scheduleConstruct);
-    }
-    private ScheduleConstruct scheduleConstruct(
-            final LocalDate meetingDateValue,
-            final int startHourValue,
-            final int startMinuteValue,
-            final int durationValue) {
-
-        final MeetingDate meetingDate = MeetingDate.of(meetingDateValue);
-        final StartHour startHour = StartHour.of(startHourValue);
-        final StartMinute startMinute = StartMinute.of(startMinuteValue);
-        final Duration duration = Duration.of(durationValue);
-
-        return new ScheduleConstruct(meetingDate, startHour, startMinute, duration);
     }
 
     @Nested
@@ -109,7 +96,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         void 作成リクエストの実行が成功する() {
 
             final List<Schedule> scheduleList = Arrays.asList(
-                    schedule(LocalDate.of(2022, 4, 1),10, 0,60)
+                    schedule(2022, 4, 1,10, 0,60)
             );
             createMeeting(
                     1,
@@ -248,9 +235,9 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         void 作成リクエストの実行が成功する() {
 
             final List<Schedule> scheduleList = Arrays.asList(
-                    schedule(LocalDate.of(2022, 4, 3),13, 30,90),
-                    schedule(LocalDate.of(2022, 4, 2),11, 0,30),
-                    schedule(LocalDate.of(2022, 4, 2),10, 30,60)
+                    schedule(2022, 4, 3,13, 30,90),
+                    schedule(2022, 4, 2,11, 0,30),
+                    schedule(2022, 4, 2,10, 30,60)
             );
             createMeeting(
                     2,

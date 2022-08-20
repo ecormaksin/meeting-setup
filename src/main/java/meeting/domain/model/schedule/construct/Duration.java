@@ -35,7 +35,7 @@ public enum Duration {
         );
     }
 
-    public static Duration fromString(final String strigValue) {
+    public static Duration of(final String strigValue) {
         return of(Integer.valueOf(strigValue));
     }
 

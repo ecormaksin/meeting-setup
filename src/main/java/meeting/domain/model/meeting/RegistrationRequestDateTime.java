@@ -20,6 +20,10 @@ public class RegistrationRequestDateTime {
         return new RegistrationRequestDateTime(LocalDateTime.now());
     }
 
+    public static RegistrationRequestDateTime of(final LocalDateTime value) {
+        return new RegistrationRequestDateTime(value);
+    }
+
     public static RegistrationRequestDateTime of(int year, int month, int dayOfMonth, int hour, int minute) {
         final LocalDateTime value = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
         return new RegistrationRequestDateTime(value);

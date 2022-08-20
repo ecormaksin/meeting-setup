@@ -3,7 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.presentation.WebDriverConfig;
 import meeting.presentation.WebDriverFactory;
-import meeting.presentation.meeting.input.schedule.construct.*;
+import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -129,13 +127,8 @@ public class MeetingCreationControllerTest {
         void 件名未入力時はエラーになる() {
             CreationFormPage formPage = CreationFormPage.to(driver);
 
-            LocalDate meetingDateValue = LocalDate.of(1985,1, 1);
-
-            final ScheduleConstructInput constructInput = new ScheduleConstructInput(
-                    MeetingDateInput.of(meetingDateValue),
-                    StartHourInput.of(10),
-                    StartMinuteInput.of(0),
-                    DurationInput.ofMinute(60));
+            final ScheduleConstructInput constructInput =
+                    ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
 
             formPage.inputScheduleAt(0, constructInput);
 

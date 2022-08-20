@@ -33,7 +33,7 @@ public enum StartMinute {
         );
     }
 
-    public static StartMinute fromString(final String stringValue) {
+    public static StartMinute of(final String stringValue) {
         return of(Integer.valueOf(stringValue));
     }
 

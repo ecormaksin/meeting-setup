@@ -7,11 +7,10 @@ import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
-import meeting.domain.model.schedule.construct.*;
+import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,13 +64,8 @@ public class MeetingTest {
                     int numberOfParticipantsBatsu) {
 
         final ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
-        final LocalDate meetingDateValue = LocalDate.of(2021, 12, patternNumber);
-        final MeetingDate meetingDate = MeetingDate.of(meetingDateValue);
-        final ScheduleConstruct scheduleConstruct = new ScheduleConstruct(
-                meetingDate,
-                StartHour.of(10),
-                StartMinute.JUST,
-                Duration.ONE_HOUR);
+        final ScheduleConstruct scheduleConstruct =
+                    ScheduleConstruct.of(2021, 12, patternNumber, 10, 0, 60);
 
         final List<Schedule> scheduleList = Arrays.asList(
                 new Schedule(scheduleNumber, scheduleConstruct)

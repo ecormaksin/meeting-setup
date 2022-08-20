@@ -5,6 +5,7 @@ import meeting.domain.model.schedule.EndTime;
 import meeting.domain.model.schedule.StartTime;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -37,6 +38,22 @@ public class ScheduleConstruct {
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
+    }
+
+    public static ScheduleConstruct of(final int year,
+                                        final int month,
+                                        final int dayOfMonth,
+                                        final int hour,
+                                        final int minute,
+                                        final int duration) {
+
+        final LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
+
+        return new ScheduleConstruct(
+                MeetingDate.of(meetingDateValue),
+                StartHour.of(hour),
+                StartMinute.of(minute),
+                Duration.of(duration));
     }
 
     public MeetingDate meetingDate() {
@@ -81,7 +98,7 @@ public class ScheduleConstruct {
         return LocalDateTime.of(meetingDate.value(), startLocalTime());
     }
 
-    public boolean isSame(@Valid final ScheduleConstruct other) {
+    public boolean isSame(final ScheduleConstruct other) {
         if (!this.meetingDate.isSame(other.meetingDate)) return false;
         if (!this.startHour.isSame(other.startHour)) return false;
         if (this.startMinute != other.startMinute) return false;

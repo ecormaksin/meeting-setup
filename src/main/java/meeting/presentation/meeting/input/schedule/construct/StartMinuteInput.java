@@ -61,7 +61,7 @@ public class StartMinuteInput implements ScheduleConstructElement {
     }
 
     public StartMinute toStartMinute() {
-        return StartMinute.fromString(value);
+        return StartMinute.of(value);
     }
 
     public String value() {

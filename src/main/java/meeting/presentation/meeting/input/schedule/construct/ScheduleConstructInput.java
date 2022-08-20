@@ -4,6 +4,7 @@ import meeting.domain.model.schedule.construct.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +44,22 @@ public class ScheduleConstructInput {
                 StartHourInput.empty(),
                 StartMinuteInput.empty(),
                 DurationInput.empty());
+    }
+
+    public static ScheduleConstructInput of(final int year,
+                                            final int month,
+                                            final int dayOfMonth,
+                                            final int hour,
+                                            final int minute,
+                                            final int duration) {
+
+        final LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
+
+        return new ScheduleConstructInput(
+                MeetingDateInput.of(meetingDateValue),
+                StartHourInput.of(hour),
+                StartMinuteInput.of(minute),
+                DurationInput.of(duration));
     }
 
     public static ScheduleConstructInput fromScheduleConstruct(final ScheduleConstruct scheduleConstruct) {

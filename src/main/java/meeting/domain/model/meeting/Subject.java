@@ -12,7 +12,6 @@ public class Subject {
 
     String value;
 
-    @AssertTrue(message = MESSAGE)
     boolean valid;
 
     @Deprecated
@@ -21,7 +20,7 @@ public class Subject {
     public Subject(final String value) {
         this.value = value;
 
-        validate();
+        valid = isValid();
     }
 
     public static Subject blank() {
@@ -32,19 +31,20 @@ public class Subject {
         return new Subject(value);
     }
 
-    void validate() {
+    @AssertTrue(message = MESSAGE)
+    boolean isValid() {
+        if ( isBlank() ) return false;
+        if ( isLengthOverMaxSize() ) return false;
+        return true;
+    }
+
+    private boolean isBlank() {
         final String whiteSpaceRemoved = value.replaceAll("(　|\\s)+", "");
-        if ( whiteSpaceRemoved.isEmpty() ) {
-            valid = false;
-            return;
-        }
+        return whiteSpaceRemoved.isBlank();
+    }
 
-        if ( value.length() > MAX_SIZE ) {
-            valid = false;
-            return;
-        }
-
-        valid = true;
+    private boolean isLengthOverMaxSize() {
+        return value.length() > MAX_SIZE;
     }
 
     public String value() {

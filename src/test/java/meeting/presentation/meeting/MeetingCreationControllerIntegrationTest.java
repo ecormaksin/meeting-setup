@@ -6,7 +6,7 @@ import meeting.domain.model.meeting.MeetingNumberFake_1;
 import meeting.domain.model.meeting.OrganizerNumberFake_1;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
-import meeting.presentation.meeting.input.schedule.construct.*;
+import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -17,15 +17,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Testcontainers
 public class MeetingCreationControllerIntegrationTest extends MeetingIntegrationTest {
 
     @Container
-    private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
+    private final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
     MockMvc mockMvc;
@@ -56,13 +54,8 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
 
         formPage.inputSubject("件名テスト" + currentRepetition);
 
-        LocalDate meetingDateValue = LocalDate.of(1985,1, 1);
-
-        final ScheduleConstructInput constructInput = new ScheduleConstructInput(
-                MeetingDateInput.of(meetingDateValue),
-                StartHourInput.of(10),
-                StartMinuteInput.of(0),
-                DurationInput.ofMinute(60));
+        final ScheduleConstructInput constructInput =
+                ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
 
         formPage.inputScheduleAt(index, constructInput);
 

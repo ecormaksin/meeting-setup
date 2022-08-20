@@ -27,12 +27,8 @@ public class MeetingCreationRequestTest {
     @Test
     void 追加する日程が過去の場合はエラー() {
 
-        final ScheduleConstruct scheduleConstruct = new ScheduleConstruct(
-                MeetingDate.of(2022, 7, 1),
-                StartHour.of(10),
-                StartMinute.JUST,
-                Duration.ONE_HOUR
-        );
+        final ScheduleConstruct scheduleConstruct =
+                ScheduleConstruct.of(2022, 7, 1, 10, 0, 60);
         final Schedule schedule = Schedule.initializedBy(scheduleConstruct);
         final Schedules schedules = Schedules.of(Arrays.asList(schedule));
 
