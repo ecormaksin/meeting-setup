@@ -30,6 +30,11 @@ public class Schedules extends ValidationConcern {
 
     boolean isSetOfUniqueMeetingDateTimes;
 
+    @Override
+    protected void throwException(final String messageString) {
+        throw new SchedulesInvalidException(messageString);
+    }
+
     @Deprecated
     Schedules() {}
 

@@ -26,6 +26,10 @@ public abstract class ValidationConcern {
         }
         final String messageString = String.join(System.lineSeparator(), messages);
 
+        throwException(messageString);
+    }
+
+    protected void throwException(final String messageString) {
         throw new IllegalArgumentException(messageString);
     }
 }

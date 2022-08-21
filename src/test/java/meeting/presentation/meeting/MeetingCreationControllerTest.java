@@ -1,6 +1,7 @@
 package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
+import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
@@ -147,6 +148,25 @@ public class MeetingCreationControllerTest {
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
             assertEquals("日程を1件以上5件以下で指定してください。", errorFormPage.scheduleInputsErrorMessage());
+        }
+
+        @Test
+        void 日程候補が重複している場合はエラー() {
+
+            new RegistrationRequestDateTimeFake_19841231_1023();
+
+            MeetingCreationControllerTest.this.inputValidSampleSubject();
+
+            final ScheduleConstructInput constructInput =
+                    ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
+
+            for (int index = 0; index <= 1; index++) {
+                formPage.inputScheduleAt(index, constructInput);
+            }
+
+            CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
+
+            assertEquals("日程は重複のないように指定してください。", errorFormPage.scheduleInputsErrorMessage());
         }
     }
 

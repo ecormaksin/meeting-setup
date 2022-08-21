@@ -20,14 +20,21 @@
             <button id="addSchedule" name="addSchedule" class="small-button"
                 th:disabled="${meetingInputForm.scheduleAppendable() == T(meeting.presentation.meeting.input.schedule.ScheduleInputAppendable).NO}">追加</button>
         </div>
-        <div>
-            <p th:if="${#fields.hasErrors('scheduleInputs') or #fields.hasErrors('scheduleInputs.sizeWithinSpecifiedRange')}">
-                <mark>
-                    <span name="scheduleInputsError" th:errors="*{scheduleInputs}"></span>
-                    <span name="scheduleInputsError" th:errors="*{scheduleInputs.sizeWithinSpecifiedRange}"></span>
-                </mark>
-            </p>
-        </div>
+        <p th:if="${#fields.hasErrors('scheduleInputs')}">
+            <mark>
+                <span name="scheduleInputsError" th:errors="*{scheduleInputs}"></span>
+            </mark>
+        </p>
+        <p th:if="${#fields.hasErrors('scheduleInputs.sizeWithinSpecifiedRange')}">
+            <mark>
+                <span name="scheduleInputsError" th:errors="*{scheduleInputs.sizeWithinSpecifiedRange}"></span>
+            </mark>
+        </p>
+        <p th:if="${#fields.hasErrors('scheduleInputs.setOfUniqueMeetingDateTimes')}">
+            <mark>
+                <span name="scheduleInputsError" th:errors="*{scheduleInputs.setOfUniqueMeetingDateTimes}"></span>
+            </mark>
+        </p>
         <table id="schedules">
             <thead>
             <tr>

@@ -3,11 +3,13 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.schedule.SchedulesInvalidException;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputCannotAddException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,6 +26,9 @@ import java.net.URI;
 @Controller
 @RequestMapping("meeting/create")
 public class MeetingCreationController {
+
+    private static final String VIEW_PATH_FORM = "meeting/create/form";
+
     MeetingCreationScenario meetingCreationScenario;
 
     public MeetingCreationController(MeetingCreationScenario meetingCreationScenario) {
@@ -33,7 +38,7 @@ public class MeetingCreationController {
     @GetMapping
     String init(Model model) {
         model.addAttribute("meetingInputForm", MeetingInputForm.newForm());
-        return "meeting/create/form";
+        return VIEW_PATH_FORM;
     }
 
     @PostMapping(params={"addSchedule"})
@@ -48,7 +53,7 @@ public class MeetingCreationController {
             bindingResult.addError(error);
             model.addAttribute("meetingInputForm", meetingInputForm);
         }
-        return "meeting/create/form";
+        return VIEW_PATH_FORM;
     }
 
     @PostMapping(params={"removeSchedule"})
@@ -58,7 +63,7 @@ public class MeetingCreationController {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
         final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
         model.addAttribute("meetingInputForm", scheduleRemoved);
-        return "meeting/create/form";
+        return VIEW_PATH_FORM;
     }
 
     @PostMapping
@@ -67,11 +72,21 @@ public class MeetingCreationController {
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
-        if (bindingResult.hasErrors()) return "meeting/create/form";
+        if (bindingResult.hasErrors()) return VIEW_PATH_FORM;
 
         final MeetingNumber meetingNumber = MeetingNumber.newNumber();
-        final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber);
-        meetingCreationScenario.create(meetingCreationRequest);
+
+        try {
+            final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber);
+            meetingCreationScenario.create(meetingCreationRequest);
+        } catch (SchedulesInvalidException e) {
+            FieldError error = new FieldError(bindingResult.getObjectName(),
+                    "scheduleInputs",
+                    meetingInputForm.scheduleInputs(),
+                    true, null, null, e.getMessage());
+            bindingResult.addError(error);
+            return VIEW_PATH_FORM;
+        }
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber);
 

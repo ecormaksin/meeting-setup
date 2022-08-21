@@ -18,6 +18,7 @@ public class ScheduleInputs {
     List<@Valid ScheduleInput> list;
 
     boolean sizeWithinSpecifiedRange;
+    boolean setOfUniqueMeetingDateTimes;
 
     @Deprecated
     ScheduleInputs() {}
@@ -26,6 +27,7 @@ public class ScheduleInputs {
         this.list = list;
 
         sizeWithinSpecifiedRange = isSizeWithinSpecifiedRange();
+        setOfUniqueMeetingDateTimes = isSetOfUniqueMeetingDateTimes();
     }
 
     public static ScheduleInputs of(final List<ScheduleInput> source) {
