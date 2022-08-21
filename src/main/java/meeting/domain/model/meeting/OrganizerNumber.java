@@ -12,10 +12,10 @@ public class OrganizerNumber {
 
     static final int SIZE = 26;
     public static final String REGEXP = "[\\da-z]{" + SIZE + "}";
-    private static final String MESSAGE = "主催者番号は" + SIZE + "桁の半角英数字で指定してください。";
+    private static final String SPECIFIED_VALUE = "主催者番号は" + SIZE + "桁の半角英数字で指定してください。";
 
-    @NotNull(message = MESSAGE)
-    @Pattern(regexp="[\\da-z]{" + SIZE + "}", message = MESSAGE)
+    @NotNull(message = SPECIFIED_VALUE)
+    @Pattern(regexp="[\\da-z]{" + SIZE + "}", message = SPECIFIED_VALUE)
     String value;
 
     @Deprecated

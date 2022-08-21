@@ -8,11 +8,11 @@ import javax.validation.constraints.Size;
  */
 public class Memo {
 
-    static final int MAX_SIZE = 100;
-    static final String VALIDATION_ERROR_MESSAGE = "メモは" + MAX_SIZE + "文字以内で入力してください。";
+    static final int MAX_LENGTH = 100;
+    static final String WITHIN_MAX_LENGTH = "メモは" + MAX_LENGTH + "文字以内で入力してください。";
 
-    @NotNull(message = VALIDATION_ERROR_MESSAGE)
-    @Size(max = MAX_SIZE, message = VALIDATION_ERROR_MESSAGE)
+    @NotNull(message = WITHIN_MAX_LENGTH)
+    @Size(max = MAX_LENGTH, message = WITHIN_MAX_LENGTH)
     String value;
 
     @Deprecated

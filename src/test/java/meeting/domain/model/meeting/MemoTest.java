@@ -37,7 +37,7 @@ public class MemoTest {
     static List<String> validInputs() {
         return Arrays.asList(
                 "",
-                "あ".repeat(Memo.MAX_SIZE)
+                "あ".repeat(Memo.MAX_LENGTH)
         );
     }
 
@@ -55,7 +55,7 @@ public class MemoTest {
     static List<String> invalidInputs() {
         return Arrays.asList(
                 null,
-                "あ".repeat(Memo.MAX_SIZE + 1)
+                "あ".repeat(Memo.MAX_LENGTH + 1)
         );
     }
 }

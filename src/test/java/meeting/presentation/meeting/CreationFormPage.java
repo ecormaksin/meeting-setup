@@ -35,6 +35,10 @@ public class CreationFormPage extends CustomPageObject {
 
     private WebElement subjectError;
 
+    private WebElement memoError;
+
+    private WebElement scheduleInputsError;
+
     public CreationFormPage(final WebDriver driver) {
         super(driver);
     }
@@ -174,6 +178,22 @@ public class CreationFormPage extends CustomPageObject {
     public String subjectErrorMessage() {
         try {
             return subjectError.getText();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
+    }
+
+    public String memoErrorMessage() {
+        try {
+            return memoError.getText();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
+    }
+
+    public String scheduleInputsErrorMessage() {
+        try {
+            return scheduleInputsError.getText();
         } catch (NoSuchElementException e) {
             return "";
         }

@@ -17,11 +17,15 @@ public class ScheduleInputs {
     @NotNull(message = Schedules.SIZE_WITHIN_SPECIFIED_RANGE)
     List<@Valid ScheduleInput> list;
 
+    boolean sizeWithinSpecifiedRange;
+
     @Deprecated
     ScheduleInputs() {}
 
     public ScheduleInputs(final List<ScheduleInput> list) {
         this.list = list;
+
+        sizeWithinSpecifiedRange = isSizeWithinSpecifiedRange();
     }
 
     public static ScheduleInputs of(final List<ScheduleInput> source) {

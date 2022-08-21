@@ -12,11 +12,15 @@ public class StartMinuteInput implements ScheduleConstructElement {
 
     String value;
 
+    boolean valid;
+
     @Deprecated
     StartMinuteInput() {}
 
     public StartMinuteInput(String value) {
         this.value = value;
+
+        valid = isValid();
     }
 
     static StartMinuteInput empty() {

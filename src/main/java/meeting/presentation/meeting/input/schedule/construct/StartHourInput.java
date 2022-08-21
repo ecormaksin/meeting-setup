@@ -11,11 +11,15 @@ public class StartHourInput implements ScheduleConstructElement {
 
     String value;
 
+    boolean valid;
+
     @Deprecated
     StartHourInput() {}
 
     public StartHourInput(final String value) {
         this.value = value;
+
+        valid = isValid();
     }
 
     static StartHourInput empty() {
@@ -34,7 +38,7 @@ public class StartHourInput implements ScheduleConstructElement {
         return of(startHour.value());
     }
 
-    @AssertTrue(message = StartHour.MESSAGE)
+    @AssertTrue(message = StartHour.BETWEEN_SPECIFIED_RANGE)
     boolean isValid() {
         if (isEmpty()) return true;
         return isValidAsDomain();

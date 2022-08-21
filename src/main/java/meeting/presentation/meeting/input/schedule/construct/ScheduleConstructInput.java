@@ -25,6 +25,8 @@ public class ScheduleConstructInput {
     @Valid
     DurationInput duration;
 
+    boolean valid;
+
     @Deprecated
     ScheduleConstructInput() {}
 
@@ -36,6 +38,8 @@ public class ScheduleConstructInput {
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
+
+        valid = isValid();
     }
 
     public static ScheduleConstructInput empty() {
@@ -103,7 +107,7 @@ public class ScheduleConstructInput {
         throw new IllegalStateException("ミーティングの開催日時として正しくありません。設定内容を確認してください。");
     }
 
-    public boolean isSame(@Valid ScheduleConstructInput other) {
+    public boolean isSame(ScheduleConstructInput other) {
 
         return this.meetingDate.isSame(other.meetingDate)
                 && this.startHour.isSame(other.startHour)

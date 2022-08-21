@@ -11,11 +11,15 @@ public class DurationInput implements ScheduleConstructElement {
 
     String value;
 
+    boolean valid;
+
     @Deprecated
     DurationInput() {}
 
     public DurationInput(final String value) {
         this.value = value;
+
+        valid = isValid();
     }
 
     static DurationInput empty() {

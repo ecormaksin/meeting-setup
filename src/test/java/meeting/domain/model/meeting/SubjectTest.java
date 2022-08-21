@@ -45,7 +45,7 @@ public class SubjectTest {
                 "あ　",
                 "　あ　",
                 "あ　い",
-                "あ".repeat(Subject.MAX_SIZE)
+                "あ".repeat(Subject.MAX_LENGTH)
         );
     }
 
@@ -61,7 +61,7 @@ public class SubjectTest {
     }
 
     static List<String> invalidInputs() {
-        final String lengthOverValue = "あ".repeat(Subject.MAX_SIZE + 1);
+        final String lengthOverValue = "あ".repeat(Subject.MAX_LENGTH + 1);
         return Arrays.asList(
                 "",
                 " ",

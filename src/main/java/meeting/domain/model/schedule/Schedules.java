@@ -26,13 +26,17 @@ public class Schedules extends ValidationConcern {
 
     @NotNull(message = SIZE_WITHIN_SPECIFIED_RANGE)
     @Size(min = MIN_SIZE, max = MAX_SIZE, message = SIZE_WITHIN_SPECIFIED_RANGE)
-    List<@Valid Schedule> list;
+    List<Schedule> list;
+
+    boolean isSetOfUniqueMeetingDateTimes;
 
     @Deprecated
     Schedules() {}
 
     public Schedules(final List<Schedule> list) {
         this.list = list;
+        isSetOfUniqueMeetingDateTimes = isSetOfUniqueMeetingDateTimes();
+
         this.validate(this);
     }
 

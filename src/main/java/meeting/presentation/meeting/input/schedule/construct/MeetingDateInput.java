@@ -13,11 +13,15 @@ public class MeetingDateInput implements ScheduleConstructElement {
 
     String value;
 
+    boolean valid;
+
     @Deprecated
     MeetingDateInput() {}
 
     public MeetingDateInput(String value) {
         this.value = value;
+
+        valid = isValid();
     }
 
     static MeetingDateInput empty() {

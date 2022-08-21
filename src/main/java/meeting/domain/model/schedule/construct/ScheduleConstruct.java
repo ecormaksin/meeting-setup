@@ -119,6 +119,9 @@ public class ScheduleConstruct {
     @Deprecated
     @Override
     public final int hashCode() {
-        return Objects.hash(meetingDate, startHour, startMinute, duration);
+        return Objects.hash(meetingDate.value(),
+                startHour.value(),
+                startMinute.value(),
+                duration.value());
     }
 }

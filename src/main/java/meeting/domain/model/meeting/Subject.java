@@ -7,8 +7,8 @@ import javax.validation.constraints.AssertTrue;
  */
 public class Subject {
 
-    static final int MAX_SIZE = 30;
-    private static final String MESSAGE = "件名は" + MAX_SIZE + "文字以内で必ず入力してください。";
+    static final int MAX_LENGTH = 30;
+    private static final String WITHIN_MAX_LENGTH = "件名は" + MAX_LENGTH + "文字以内で必ず入力してください。";
 
     String value;
 
@@ -31,7 +31,7 @@ public class Subject {
         return new Subject(value);
     }
 
-    @AssertTrue(message = MESSAGE)
+    @AssertTrue(message = WITHIN_MAX_LENGTH)
     boolean isValid() {
         if ( isBlank() ) return false;
         if ( isLengthOverMaxSize() ) return false;
@@ -44,7 +44,7 @@ public class Subject {
     }
 
     private boolean isLengthOverMaxSize() {
-        return value.length() > MAX_SIZE;
+        return value.length() > MAX_LENGTH;
     }
 
     public String value() {
