@@ -54,8 +54,17 @@ public class ScheduleInputs {
 
     @AssertTrue(message = Schedules.SIZE_WITHIN_SPECIFIED_RANGE)
     boolean isSizeWithinSpecifiedRange() {
+        if (doInvalidSchedulesExist()) return true;
         final long sizeOfValidSchedules = sizeOfValidSchedules();
         return (Schedules.MIN_SIZE <= sizeOfValidSchedules) && (sizeOfValidSchedules <= Schedules.MAX_SIZE);
+    }
+
+    private boolean doInvalidSchedulesExist() {
+        return sizeOfInvalidSchedules() > 0;
+    }
+
+    private long sizeOfInvalidSchedules() {
+        return list.stream().filter(s -> !s.isValidAsDomain()).count();
     }
 
     private long sizeOfValidSchedules() {

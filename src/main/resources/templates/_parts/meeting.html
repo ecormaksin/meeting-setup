@@ -92,13 +92,18 @@
                                 class="small-button">削除</button>
                     </td>
                 </tr>
-                <tr th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__]') or #fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct')}">
+                <tr th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__]')}">
                     <td colspan="6" class="meeting__scheduleInputs-error">
-                        <p th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct')}">
-                            <mark><span th:errors="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct}"></span></mark>
-                        </p>
                         <p th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__]')}">
                             <mark><span th:errors="*{scheduleInputs.list[__${scheduleStat.index}__]}"></span></mark>
+                        </p>
+                    </td>
+                </tr>
+                <tr th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.valid')}">
+                    <td colspan="6" class="meeting__scheduleInputs-error">
+                        <p th:if="${#fields.hasErrors('scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.valid')}">
+                            <mark><span th:id="scheduleInputs.list__${scheduleStat.index}__.scheduleConstructError"
+                                    th:errors="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.valid}"></span></mark>
                         </p>
                     </td>
                 </tr>

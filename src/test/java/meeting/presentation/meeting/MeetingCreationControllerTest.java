@@ -2,7 +2,10 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
+import meeting.presentation.meeting.input.schedule.construct.DurationInput;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
+import meeting.presentation.meeting.input.schedule.construct.StartHourInput;
+import meeting.presentation.meeting.input.schedule.construct.StartMinuteInput;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,6 +170,22 @@ public class MeetingCreationControllerTest {
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
             assertEquals("日程は重複のないように指定してください。", errorFormPage.scheduleInputsErrorMessage());
+        }
+
+        @Test
+        void 開催日が未入力の場合はエラー() {
+
+            MeetingCreationControllerTest.this.inputValidSampleSubject();
+
+            final int index = 0;
+            formPage.inputStartHourAt(index, StartHourInput.of(10));
+            formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
+            formPage.inputDurationAt(index, DurationInput.of(60));
+
+            CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
+
+            assertEquals("", errorFormPage.scheduleInputsErrorMessage());
+            assertEquals("日程のすべての項目を入力してください。", errorFormPage.scheduleConstructErrorMessage(index));
         }
     }
 

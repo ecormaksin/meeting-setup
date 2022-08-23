@@ -21,6 +21,7 @@ public class CreationFormPage extends CustomPageObject {
 
     private static final String SCHEDULE_CONSTRUCT_PREFIX = "scheduleInputs.list%d.scheduleConstruct.";
 
+    private static final String SCHEDULE_CONSTRUCT_ERROR_ID_TEMPLATE = "scheduleInputs.list%d.scheduleConstructError";
     @FindBy(id = "subject.value")
     private WebElement subject;
 
@@ -92,12 +93,8 @@ public class CreationFormPage extends CustomPageObject {
         return this;
     }
 
-    private String byId(final int index, final String itemName) {
-        return String.format(SCHEDULE_CONSTRUCT_PREFIX, index) + itemName;
-    }
-
     private WebElement scheduleConstructElement(final int index, final String itemName) {
-        final String byId = byId(index, itemName);
+        final String byId = String.format(SCHEDULE_CONSTRUCT_PREFIX, index) + itemName;
         return driver.findElement(By.id(byId));
     }
 
@@ -194,6 +191,16 @@ public class CreationFormPage extends CustomPageObject {
     public String scheduleInputsErrorMessage() {
         try {
             return scheduleInputsError.getText();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
+    }
+
+    public String scheduleConstructErrorMessage(final int index) {
+        try {
+            final String byId = String.format(SCHEDULE_CONSTRUCT_ERROR_ID_TEMPLATE, index);
+            final WebElement webElement =  driver.findElement(By.id(byId));
+            return webElement.getText();
         } catch (NoSuchElementException e) {
             return "";
         }
