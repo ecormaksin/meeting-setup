@@ -2,10 +2,7 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
-import meeting.presentation.meeting.input.schedule.construct.DurationInput;
-import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
-import meeting.presentation.meeting.input.schedule.construct.StartHourInput;
-import meeting.presentation.meeting.input.schedule.construct.StartMinuteInput;
+import meeting.presentation.meeting.input.schedule.construct.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,6 +178,54 @@ public class MeetingCreationControllerTest {
             formPage.inputStartHourAt(index, StartHourInput.of(10));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
             formPage.inputDurationAt(index, DurationInput.of(60));
+
+            CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
+
+            assertEquals("", errorFormPage.scheduleInputsErrorMessage());
+            assertEquals("日程のすべての項目を入力してください。", errorFormPage.scheduleConstructErrorMessage(index));
+        }
+
+        @Test
+        void 開始時が未入力の場合はエラー() {
+
+            MeetingCreationControllerTest.this.inputValidSampleSubject();
+
+            final int index = 1;
+            formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 4, 5));
+            formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
+            formPage.inputDurationAt(index, DurationInput.of(60));
+
+            CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
+
+            assertEquals("", errorFormPage.scheduleInputsErrorMessage());
+            assertEquals("日程のすべての項目を入力してください。", errorFormPage.scheduleConstructErrorMessage(index));
+        }
+
+        @Test
+        void 開始分が未入力の場合はエラー() {
+
+            MeetingCreationControllerTest.this.inputValidSampleSubject();
+
+            final int index = 2;
+            formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 5, 6));
+            formPage.inputStartHourAt(index, StartHourInput.of(11));
+            formPage.inputDurationAt(index, DurationInput.of(90));
+
+            CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
+
+            assertEquals("", errorFormPage.scheduleInputsErrorMessage());
+            assertEquals("日程のすべての項目を入力してください。", errorFormPage.scheduleConstructErrorMessage(index));
+        }
+
+        @Test
+        void 会議時間が未入力の場合はエラー() {
+
+            MeetingCreationControllerTest.this.inputValidSampleSubject();
+
+            final int index = 0;
+            formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 6, 7));
+            formPage.inputStartHourAt(index, StartHourInput.of(13));
+            formPage.inputStartMinuteAt(index, StartMinuteInput.of(30));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 

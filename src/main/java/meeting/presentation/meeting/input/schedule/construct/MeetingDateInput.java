@@ -37,6 +37,11 @@ public class MeetingDateInput implements ScheduleConstructElement {
         return of(formatted);
     }
 
+    public static MeetingDateInput of(final int year, final int month, final int dayOfMonth) {
+        final LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        return of(localDate);
+    }
+
     public static MeetingDateInput of(final MeetingDate meetingDate) {
         return new MeetingDateInput(meetingDate.stringValue());
     }
