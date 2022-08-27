@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 /**
  * 開催日（入力用）
  */
-public class MeetingDateInput implements ScheduleConstructElement {
+public class MeetingDateInput {
 
     String value;
 
@@ -52,11 +52,11 @@ public class MeetingDateInput implements ScheduleConstructElement {
         return isValidAsDomain();
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return value.isEmpty();
     }
 
-    public boolean isValidAsDomain() {
+    boolean isValidAsDomain() {
         if (isEmpty()) return false;
         try {
             toMeetingDate();
@@ -66,11 +66,7 @@ public class MeetingDateInput implements ScheduleConstructElement {
         }
     }
 
-    public boolean isSame(MeetingDateInput other) {
-        return this.value.equals(other.value);
-    }
-
-    public MeetingDate toMeetingDate() {
+    MeetingDate toMeetingDate() {
         return MeetingDate.of(value);
     }
 

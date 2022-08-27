@@ -5,8 +5,6 @@ import meeting.domain.model.schedule.construct.*;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 日程の構成要素（入力用）
@@ -25,7 +23,10 @@ public class ScheduleConstructInput {
     @Valid
     DurationInput duration;
 
-    boolean valid;
+    boolean meetingDateNotEmpty;
+    boolean startHourNotEmpty;
+    boolean startMinuteNotEmpty;
+    boolean durationNotEmpty;
 
     @Deprecated
     ScheduleConstructInput() {}
@@ -39,7 +40,10 @@ public class ScheduleConstructInput {
         this.startMinute = startMinute;
         this.duration = duration;
 
-        valid = isValid();
+        meetingDateNotEmpty = isMeetingDateNotEmpty();
+        startHourNotEmpty = isStartHourNotEmpty();
+        startMinuteNotEmpty = isStartMinuteNotEmpty();
+        durationNotEmpty = isDurationNotEmpty();
     }
 
     public static ScheduleConstructInput empty() {
@@ -79,40 +83,47 @@ public class ScheduleConstructInput {
                 DurationInput.of(duration));
     }
 
-    @AssertTrue(message = "日程のすべての項目を入力してください。")
-    boolean isValid() {
-        if (areAllEmpty()) return true;
-        if (areAllValidAsDomain()) return true;
-        return false;
+    @AssertTrue(message = "開催日を入力してください。")
+    boolean isMeetingDateNotEmpty() {
+        if (areAllItemsEmpty()) return true;
+        return !meetingDate.isEmpty();
     }
 
-    private List<ScheduleConstructElement> elements() {
-        return Arrays.asList(
-                meetingDate,
-                startHour,
-                startMinute,
-                duration);
+    @AssertTrue(message = "開始時間を入力してください。")
+    boolean isStartHourNotEmpty() {
+        if (areAllItemsEmpty()) return true;
+        return !startHour.isEmpty();
     }
 
-    public boolean areAllEmpty() {
-        return elements().stream().allMatch(e -> e.isEmpty());
+    @AssertTrue(message = "開始分を入力してください。")
+    boolean isStartMinuteNotEmpty() {
+        if (areAllItemsEmpty()) return true;
+        return !startMinute.isEmpty();
     }
 
-    public boolean areAllValidAsDomain() {
-        return elements().stream().allMatch(e -> e.isValidAsDomain());
+    @AssertTrue(message = "会議時間を入力してください。")
+    boolean isDurationNotEmpty() {
+        if (areAllItemsEmpty()) return true;
+        return !duration.isEmpty();
+    }
+
+    public boolean areAllItemsEmpty() {
+        return meetingDate.isEmpty()
+                && startHour.isEmpty()
+                && startMinute.isEmpty()
+                && duration.isEmpty();
+    }
+
+    public boolean areAllItemsValidAsDomain() {
+        return meetingDate.isValidAsDomain()
+                && startHour.isValidAsDomain()
+                && startMinute.isValidAsDomain()
+                && duration.isValidAsDomain();
     }
 
     private void validateAsDomain() {
-        if (areAllValidAsDomain()) return;
+        if (areAllItemsValidAsDomain()) return;
         throw new IllegalStateException("ミーティングの開催日時として正しくありません。設定内容を確認してください。");
-    }
-
-    public boolean isSame(ScheduleConstructInput other) {
-
-        return this.meetingDate.isSame(other.meetingDate)
-                && this.startHour.isSame(other.startHour)
-                && this.startMinute.isSame(other.startMinute)
-                && this.duration.isSame(other.duration);
     }
 
     public ScheduleConstruct toScheduleConstruct() {

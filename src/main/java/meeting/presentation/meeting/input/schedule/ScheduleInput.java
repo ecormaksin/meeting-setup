@@ -38,15 +38,11 @@ public class ScheduleInput {
                 ScheduleConstructInput.fromScheduleConstruct(scheduleConstruct));
     }
 
-    public boolean isEmpty() {
-        return scheduleConstruct.areAllEmpty();
+    boolean isValidAsDomain() {
+        return scheduleConstruct.areAllItemsValidAsDomain();
     }
 
-    public boolean isValidAsDomain() {
-        return scheduleConstruct.areAllValidAsDomain();
-    }
-
-    public Schedule toSchedule() {
+    Schedule toSchedule() {
         return new Schedule(scheduleNumber, scheduleConstruct.toScheduleConstruct());
     }
 

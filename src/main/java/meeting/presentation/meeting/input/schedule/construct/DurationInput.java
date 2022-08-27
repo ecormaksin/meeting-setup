@@ -7,7 +7,7 @@ import javax.validation.constraints.AssertTrue;
 /**
  * 会議時間（入力用）
  */
-public class DurationInput implements ScheduleConstructElement {
+public class DurationInput {
 
     String value;
 
@@ -44,11 +44,11 @@ public class DurationInput implements ScheduleConstructElement {
         return isValidAsDomain();
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return value.isEmpty();
     }
 
-    public boolean isValidAsDomain() {
+    boolean isValidAsDomain() {
         try {
             toDuration();
             return true;
@@ -57,11 +57,7 @@ public class DurationInput implements ScheduleConstructElement {
         }
     }
 
-    public boolean isSame(DurationInput other) {
-        return this.value.equals(other.value);
-    }
-
-    public Duration toDuration() {
+    Duration toDuration() {
         return Duration.of(value);
     }
 

@@ -7,7 +7,7 @@ import javax.validation.constraints.AssertTrue;
 /**
  * 開始時間（入力用）
  */
-public class StartHourInput implements ScheduleConstructElement {
+public class StartHourInput {
 
     String value;
 
@@ -44,11 +44,11 @@ public class StartHourInput implements ScheduleConstructElement {
         return isValidAsDomain();
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return value.isEmpty();
     }
 
-    public boolean isValidAsDomain() {
+    boolean isValidAsDomain() {
         if (isEmpty()) return false;
         try {
             toStartHour();
@@ -58,11 +58,7 @@ public class StartHourInput implements ScheduleConstructElement {
         }
     }
 
-    public boolean isSame(StartHourInput other) {
-        return this.value.equals(other.value);
-    }
-
-    public StartHour toStartHour() {
+    StartHour toStartHour() {
         return StartHour.of(value);
     }
 

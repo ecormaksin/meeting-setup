@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * 開始分（入力用）
  */
-public class StartMinuteInput implements ScheduleConstructElement {
+public class StartMinuteInput {
 
     String value;
 
@@ -45,12 +45,12 @@ public class StartMinuteInput implements ScheduleConstructElement {
         return isValidAsDomain();
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         if (Objects.isNull(value)) return true;
         return value.isEmpty();
     }
 
-    public boolean isValidAsDomain() {
+    boolean isValidAsDomain() {
         if (isEmpty()) return false;
         try {
             toStartMinute();
@@ -60,11 +60,7 @@ public class StartMinuteInput implements ScheduleConstructElement {
         }
     }
 
-    public boolean isSame(StartMinuteInput other) {
-        return this.value.equals(other.value);
-    }
-
-    public StartMinute toStartMinute() {
+    StartMinute toStartMinute() {
         return StartMinute.of(value);
     }
 

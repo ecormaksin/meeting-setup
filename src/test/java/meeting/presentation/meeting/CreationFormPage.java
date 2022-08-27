@@ -77,14 +77,6 @@ public class CreationFormPage extends CustomPageObject {
         return this;
     }
 
-    public CreationFormPage inputSchedules(final List<ScheduleConstructInput> inputs) {
-        for (int index = 0; index < inputs.size(); index++) {
-            final ScheduleConstructInput schedule = inputs.get(index);
-            inputScheduleAt(index, schedule);
-        }
-        return this;
-    }
-
     public CreationFormPage inputScheduleAt(final int index, final ScheduleConstructInput input) {
         inputMeetingDateAt(index, input.meetingDate());
         inputStartHourAt(index, input.startHour());
@@ -196,10 +188,29 @@ public class CreationFormPage extends CustomPageObject {
         }
     }
 
-    public String scheduleConstructErrorMessage(final int index) {
+    public String meetingDateEmptyErrorMessageAt(final int index) {
+        return scheduleConstructItemErrorMessageAt(index, "meetingDateNotEmpty");
+    }
+
+    public String startHourEmptyErrorMessageAt(final int index) {
+        return scheduleConstructItemErrorMessageAt(index, "startHourNotEmpty");
+    }
+
+    public String startHourInvalidErrorMessageAt(final int index) {
+        return scheduleConstructItemErrorMessageAt(index, "startHour.valid");
+    }
+
+    public String startMinuteEmptyErrorMessageAt(final int index) {
+        return scheduleConstructItemErrorMessageAt(index, "startMinuteNotEmpty");
+    }
+
+    public String durationEmptyErrorMessageAt(final int index) {
+        return scheduleConstructItemErrorMessageAt(index, "durationNotEmpty");
+    }
+
+    private String scheduleConstructItemErrorMessageAt(final int index, final String itemName) {
         try {
-            final String byId = String.format(SCHEDULE_CONSTRUCT_ERROR_ID_TEMPLATE, index);
-            final WebElement webElement =  driver.findElement(By.id(byId));
+            final WebElement webElement =  scheduleConstructElement(index, itemName);
             return webElement.getText();
         } catch (NoSuchElementException e) {
             return "";

@@ -26,7 +26,7 @@ public class SchedulesTest {
     @Test
     void 件数が0件の場合はエラー() {
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        SchedulesInvalidException exception = assertThrows(SchedulesInvalidException.class, () -> {
             Schedules.of(new ArrayList<>());
         });
         assertEquals("日程を1件以上5件以下で指定してください。", exception.getMessage());
@@ -44,7 +44,7 @@ public class SchedulesTest {
             scheduleList.add(schedule);
         }
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        SchedulesInvalidException exception = assertThrows(SchedulesInvalidException.class, () -> {
             Schedules.of(scheduleList);
         });
         assertEquals("日程を1件以上5件以下で指定してください。", exception.getMessage());
@@ -62,7 +62,7 @@ public class SchedulesTest {
             scheduleList.add(schedule);
         }
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        SchedulesInvalidException exception = assertThrows(SchedulesInvalidException.class, () -> {
             Schedules.of(scheduleList);
         });
         assertEquals("日程は重複のないように指定してください。", exception.getMessage());
