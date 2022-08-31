@@ -2,15 +2,14 @@ package meeting.presentation.meeting;
 
 import meeting.presentation.CustomPageObject;
 import meeting.presentation.meeting.input.schedule.construct.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.List;
@@ -21,7 +20,8 @@ public class CreationFormPage extends CustomPageObject {
 
     private static final String SCHEDULE_CONSTRUCT_PREFIX = "scheduleInputs.list%d.scheduleConstruct.";
 
-    private static final String SCHEDULE_CONSTRUCT_ERROR_ID_TEMPLATE = "scheduleInputs.list%d.scheduleConstructError";
+    Logger logger = LoggerFactory.getLogger(CreationFormPage.class);
+
     @FindBy(id = "subject.value")
     private WebElement subject;
 

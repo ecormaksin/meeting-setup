@@ -3,6 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.OrganizerNumber;
 import meeting.domain.model.schedule.SchedulesInvalidException;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputCannotAddException;
@@ -38,6 +39,7 @@ public class MeetingCreationController {
     @GetMapping
     String init(Model model) {
         model.addAttribute("meetingInputForm", MeetingInputForm.newForm());
+        model.addAttribute("organizerNumber", OrganizerNumber.newNumber());
         return VIEW_PATH_FORM;
     }
 
@@ -69,15 +71,17 @@ public class MeetingCreationController {
     @PostMapping
     String create(@Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
                   BindingResult bindingResult,
+                  @CookieValue("organizerNumber") final String organizerNumberValue,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return VIEW_PATH_FORM;
 
         final MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         try {
-            final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber);
+            final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber, organizerNumber);
             meetingCreationScenario.create(meetingCreationRequest);
         } catch (SchedulesInvalidException e) {
             FieldError error = new FieldError(bindingResult.getObjectName(),

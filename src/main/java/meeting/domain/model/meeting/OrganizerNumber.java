@@ -21,13 +21,17 @@ public class OrganizerNumber {
     @Deprecated
     OrganizerNumber() {}
 
-    public OrganizerNumber(String value) {
+    public OrganizerNumber(final String value) {
         this.value = value;
     }
 
     public static OrganizerNumber newNumber() {
         ULID ulid = new ULID();
         return new OrganizerNumber(ulid.nextULID().toLowerCase());
+    }
+
+    public static OrganizerNumber of(final String value) {
+        return new OrganizerNumber(value);
     }
 
     public boolean isSame(final OrganizerNumber other) {

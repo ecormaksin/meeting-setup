@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 
 public class CreationCompletedPage extends CustomPageObject {
 
-    private static final String URL_RELATIVE_PATH = "/meeting/create/completed";
+    static final String URL_RELATIVE_PATH = "/meeting/create/completed";
 
     public CreationCompletedPage(final WebDriver driver) {
         super(driver);

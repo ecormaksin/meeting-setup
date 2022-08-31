@@ -23,7 +23,10 @@ import java.net.URI;
 @Controller
 @RequestMapping("meeting/{meetingNumber}/edit")
 public class MeetingEditController {
-    MeetingEditScenario meetingEditScenario;
+
+    private static final String VIEW_PATH_FORM = "meeting/edit/form";
+
+    private MeetingEditScenario meetingEditScenario;
 
     public MeetingEditController(MeetingEditScenario meetingEditScenario) {
         this.meetingEditScenario = meetingEditScenario;
@@ -46,11 +49,10 @@ public class MeetingEditController {
         model.addAttribute("meetingInputForm", new MeetingInputForm(
                 meeting.subject(),
                 meeting.memo(),
-                ScheduleInputs.of(schedules),
-                meeting.organizerNumber()
+                ScheduleInputs.of(schedules)
         ));
 
-        return "meeting/edit/form";
+        return VIEW_PATH_FORM;
     }
 
     @PostMapping(params={"addSchedule"})
@@ -59,7 +61,7 @@ public class MeetingEditController {
 
         final MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
         model.addAttribute("meetingInputForm", scheduleAdded);
-        return "meeting/edit/form";
+        return VIEW_PATH_FORM;
     }
 
     @PostMapping(params={"removeSchedule"})
@@ -70,26 +72,27 @@ public class MeetingEditController {
         final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
         final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
         model.addAttribute("meetingInputForm", scheduleRemoved);
-        return "meeting/edit/form";
+        return VIEW_PATH_FORM;
     }
 
     @PostMapping
-    String edit(HttpServletRequest request,
-                    @PathVariable("meetingNumber") final MeetingNumber meetingNumber,
-                    @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
-                    BindingResult bindingResult,
-                    RedirectAttributes attributes,
-                    UriComponentsBuilder builder) {
+    String edit(@PathVariable("meetingNumber") final MeetingNumber meetingNumber,
+                @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+                BindingResult bindingResult,
+                @CookieValue("organizerNumber") final String organizerNumberValue,
+                RedirectAttributes attributes,
+                UriComponentsBuilder builder) {
 
-        Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
+        final Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
+        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editability(meetingInputForm.organizerNumber()) != MeetingEditability.編集可) {
+        if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
             throw new MeetingCannotEditException();
         }
 
         if (bindingResult.hasErrors()) return "meeting/edit/form";
 
-        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber);
+        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber, organizerNumber);
         meetingEditScenario.edit(meeting, meetingEditRequest);
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber);
