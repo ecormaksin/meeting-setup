@@ -6,6 +6,7 @@ import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.attendance.TotalNumberOfParticipant;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 

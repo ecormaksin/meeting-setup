@@ -1,4 +1,6 @@
-package meeting.domain.model.meeting;
+package meeting.domain.model.organizer;
+
+import meeting.domain.model.organizer.OrganizerNumber;
 
 import java.util.Objects;
 

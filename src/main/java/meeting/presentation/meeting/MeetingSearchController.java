@@ -2,7 +2,7 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingSearchScenario;
 import meeting.domain.model.meeting.MeetingSearchRequest;
-import meeting.domain.model.meeting.OrganizerNumber;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.meeting.meeting_list.MeetingList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

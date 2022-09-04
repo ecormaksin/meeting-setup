@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="meeting.infrastructure.datasource.organizer.OrganizerMapper">
+
+    <select id="notExists" resultType="boolean">
+        SELECT NOT EXISTS(SELECT 主催者番号 FROM 主催者.主催者 WHERE 主催者番号 = #{organizerNumber.value})
+    </select>
+
+    <insert id="insertOrganizer">
+        INSERT INTO 主催者.主催者(主催者番号) VALUES (#{organizerNumber.value})
+    </insert>
+
+    <insert id="insertOrganizerAndMeetingRelation">
+        INSERT INTO 主催者._ミーティングと主催者(ミーティング番号, 主催者番号)
+        VALUES (#{meetingNumber.value}, #{organizerNumber.value})
+    </insert>
+
+    <delete id="deleteOrganizerAndMeetingRelation">
+        DELETE FROM 主催者._ミーティングと主催者
+        WHERE
+        ミーティング番号 = #{meetingNumber.value}
+    </delete>
+
+</mapper>

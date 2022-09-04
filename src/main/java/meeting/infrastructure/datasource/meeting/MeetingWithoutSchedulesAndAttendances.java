@@ -2,7 +2,7 @@ package meeting.infrastructure.datasource.meeting;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.Memo;
-import meeting.domain.model.meeting.OrganizerNumber;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.meeting.Subject;
 
 public class MeetingWithoutSchedulesAndAttendances {

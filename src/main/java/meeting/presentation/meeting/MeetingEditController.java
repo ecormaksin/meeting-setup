@@ -2,6 +2,7 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingEditScenario;
 import meeting.domain.model.meeting.*;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputs;

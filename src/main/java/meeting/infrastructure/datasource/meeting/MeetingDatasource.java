@@ -8,15 +8,16 @@ import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.meeting_list.MeetingList;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
 import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.ScheduleRegistrationStatus;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.infrastructure.datasource.attendance.AttendanceMapper;
+import meeting.infrastructure.datasource.organizer.OrganizerMapper;
 import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -28,11 +29,17 @@ import java.util.Set;
 
 @Repository
 public class MeetingDatasource implements MeetingRepository {
+
+    OrganizerMapper organizerMapper;
     MeetingMapper meetingMapper;
     ScheduleMapper scheduleMapper;
     AttendanceMapper attendanceMapper;
 
-    public MeetingDatasource(MeetingMapper meetingMapper, ScheduleMapper scheduleMapper, AttendanceMapper attendanceMapper) {
+    public MeetingDatasource(OrganizerMapper organizerMapper,
+                             MeetingMapper meetingMapper,
+                             ScheduleMapper scheduleMapper,
+                             AttendanceMapper attendanceMapper) {
+        this.organizerMapper = organizerMapper;
         this.meetingMapper = meetingMapper;
         this.scheduleMapper = scheduleMapper;
         this.attendanceMapper = attendanceMapper;
@@ -42,11 +49,14 @@ public class MeetingDatasource implements MeetingRepository {
     @Transactional(rollbackFor = Exception.class)
     public void create(MeetingCreationRequest meetingCreationRequest) {
 
+        final OrganizerNumber organizerNumber = meetingCreationRequest.organizerNumber();
         final MeetingNumber meetingNumber = meetingCreationRequest.meetingNumber();
 
+        if (organizerMapper.notExists(organizerNumber)) organizerMapper.insertOrganizer(organizerNumber);
+
         insertMeeting(meetingNumber,
-                meetingCreationRequest.subject(),
-                meetingCreationRequest.organizerNumber());
+                meetingCreationRequest.subject());
+        insertOrganizerAndMeetingRelation(meetingNumber, organizerNumber);
         insertMeetingMemo(meetingNumber, meetingCreationRequest.memo());
         insertSchedules(meetingNumber, meetingCreationRequest.schedules());
     }
@@ -91,9 +101,9 @@ public class MeetingDatasource implements MeetingRepository {
 
         // 再追加
         insertMeeting(meetingNumber,
-                meetingEditRequest.subject(),
-                meetingEditRequest.organizerNumber());
+                meetingEditRequest.subject());
         insertMeetingMemo(meetingNumber, meetingEditRequest.memo());
+        insertOrganizerAndMeetingRelation(meetingNumber, meetingEditRequest.organizerNumber());
         Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, meetingEditRequest.schedules());
         insertAttendances(meetingNumber, meeting.attendances(), scheduleNumbers);
     }
@@ -121,8 +131,8 @@ public class MeetingDatasource implements MeetingRepository {
         return MeetingList.of(list);
     }
 
-    private void insertMeeting(MeetingNumber meetingNumber, Subject subject, OrganizerNumber organizerNumber) {
-        meetingMapper.insertMeeting(meetingNumber, subject, organizerNumber);
+    private void insertMeeting(MeetingNumber meetingNumber, Subject subject) {
+        meetingMapper.insertMeeting(meetingNumber, subject);
     }
 
     private void insertMeetingMemo(MeetingNumber meetingNumber, Memo memo) {
@@ -153,6 +163,11 @@ public class MeetingDatasource implements MeetingRepository {
         return scheduleNumbers;
     }
 
+    private void insertOrganizerAndMeetingRelation(MeetingNumber meetingNumber,
+                                                   OrganizerNumber organizerNumber) {
+        organizerMapper.insertOrganizerAndMeetingRelation(meetingNumber, organizerNumber);
+    }
+
     private void deleteMeetingWithWholeAggregate(MeetingNumber meetingNumber) {
 
         attendanceMapper.deleteAttendanceCommentsByMeetingNumber(meetingNumber);
@@ -160,6 +175,8 @@ public class MeetingDatasource implements MeetingRepository {
         attendanceMapper.deleteAttendancesByMeetingNumber(meetingNumber);
 
         scheduleMapper.deleteSchedulesByMeetingNumber(meetingNumber);
+
+        organizerMapper.deleteOrganizerAndMeetingRelation(meetingNumber);
 
         meetingMapper.deleteMeetingMemo(meetingNumber);
         meetingMapper.deleteMeeting(meetingNumber);

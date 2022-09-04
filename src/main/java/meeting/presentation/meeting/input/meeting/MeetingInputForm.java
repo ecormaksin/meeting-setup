@@ -1,6 +1,7 @@
 package meeting.presentation.meeting.input.meeting;
 
 import meeting.domain.model.meeting.*;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.presentation.meeting.input.schedule.ScheduleInputAppendable;
 import meeting.presentation.meeting.input.schedule.ScheduleInputs;

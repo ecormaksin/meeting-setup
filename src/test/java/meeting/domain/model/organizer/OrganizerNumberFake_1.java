@@ -1,4 +1,4 @@
-package meeting.domain.model.meeting;
+package meeting.domain.model.organizer;
 
 import mockit.Mock;
 import mockit.MockUp;

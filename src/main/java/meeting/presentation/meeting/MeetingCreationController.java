@@ -3,7 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
-import meeting.domain.model.meeting.OrganizerNumber;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.SchedulesInvalidException;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputCannotAddException;

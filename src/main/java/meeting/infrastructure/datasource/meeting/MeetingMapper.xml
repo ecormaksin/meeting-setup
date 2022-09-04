@@ -5,8 +5,8 @@
 <mapper namespace="meeting.infrastructure.datasource.meeting.MeetingMapper">
 
     <insert id="insertMeeting">
-        INSERT INTO ミーティング._ミーティング(ミーティング番号, 件名, 主催者番号)
-        VALUES (#{meetingNumber.value}, #{subject.value}, #{organizerNumber.value})
+        INSERT INTO ミーティング._ミーティング(ミーティング番号, 件名)
+        VALUES (#{meetingNumber.value}, #{subject.value})
     </insert>
 
     <insert id="insertMeetingMemo">
@@ -25,13 +25,16 @@
         SELECT
             ミーティング.ミーティング番号,
             ミーティング.件名,
-            ミーティング.主催者番号,
+            ミーティングと主催者.主催者番号,
             CASE
                 WHEN ミーティングメモ.メモ IS NULL THEN ''
                 ELSE ミーティングメモ.メモ
             END AS メモ
         FROM
             ミーティング._ミーティング AS ミーティング
+            INNER JOIN 主催者._ミーティングと主催者 AS ミーティングと主催者
+                ON
+                ミーティングと主催者.ミーティング番号 = ミーティング.ミーティング番号
             LEFT OUTER JOIN ミーティング._ミーティングメモ AS ミーティングメモ
                 ON
                 ミーティングメモ.ミーティング番号 = ミーティング.ミーティング番号
@@ -55,8 +58,11 @@
             ミーティング.件名 as "subject.value"
         FROM
             ミーティング._ミーティング AS ミーティング
+            INNER JOIN 主催者._ミーティングと主催者 AS ミーティングと主催者
+                ON
+                ミーティングと主催者.ミーティング番号 = ミーティング.ミーティング番号
         WHERE
-            ミーティング.主催者番号 = #{organizerNumber.value}
+            ミーティングと主催者.主催者番号 = #{organizerNumber.value}
         ORDER BY
             ミーティング.登録日時
     </select>

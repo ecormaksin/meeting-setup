@@ -1,6 +1,7 @@
 package meeting.domain.model.meeting;
 
 import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
+import meeting.domain.model.organizer.OrganizerNumber;
 
 import javax.validation.Valid;
 

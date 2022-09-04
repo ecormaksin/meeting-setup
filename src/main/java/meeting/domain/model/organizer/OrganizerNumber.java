@@ -1,4 +1,4 @@
-package meeting.domain.model.meeting;
+package meeting.domain.model.organizer;
 
 import de.huxhorn.sulky.ulid.ULID;
 

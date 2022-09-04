@@ -4,6 +4,8 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import meeting.domain.model.meeting.*;
+import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.organizer.OrganizerNumberTestHelper;
 import meeting.domain.model.schedule.*;
 import meeting.domain.model.schedule.construct.*;
 import meeting.infrastructure.datasource.DBUnitWithoutWebTest;

@@ -3,6 +3,7 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
 import meeting.domain.model.meeting.search_condition.Keyword;
+import meeting.domain.model.organizer.OrganizerNumber;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,8 +14,7 @@ import java.util.Optional;
 @Mapper
 public interface MeetingMapper {
     void insertMeeting(@Param("meetingNumber") MeetingNumber meetingNumber,
-                       @Param("subject") Subject subject,
-                       @Param("organizerNumber") OrganizerNumber organizerNumber);
+                       @Param("subject") Subject subject);
     void insertMeetingMemo(@Param("meetingNumber") MeetingNumber meetingNumber, @Param("memo") Memo memo);
 
     Optional<MeetingWithoutSchedulesAndAttendances> selectMeeting(@Param("meetingNumber") MeetingNumber meetingNumber);

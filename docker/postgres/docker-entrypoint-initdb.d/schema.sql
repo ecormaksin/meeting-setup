@@ -1,4 +1,7 @@
 -- スキーマとオブジェクトをリセット
+DROP SCHEMA IF EXISTS 主催者 CASCADE;
+CREATE SCHEMA 主催者;
+
 DROP SCHEMA IF EXISTS ミーティング CASCADE;
 CREATE SCHEMA ミーティング;
 
@@ -11,12 +14,18 @@ CREATE SCHEMA 出欠;
 DROP TYPE IF EXISTS 出欠.都合種別 CASCADE;
 CREATE TYPE 出欠.都合種別 AS ENUM ('○', '△', '✕', '－');
 
+-- 主催者 スキーマ
+CREATE TABLE 主催者.主催者
+(
+  主催者番号 CHAR(26) NOT NULL PRIMARY KEY,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ミーティング スキーマ
 CREATE TABLE ミーティング._ミーティング
 (
   ミーティング番号 CHAR(26) PRIMARY KEY,
   件名 VARCHAR(30) NOT NULL,
-  主催者番号 CHAR(26) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -68,5 +77,13 @@ CREATE TABLE 出欠._出欠コメント
 (
   出欠番号 CHAR(26) PRIMARY KEY REFERENCES 出欠._出欠,
   出欠コメント VARCHAR(100) NOT NULL,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ミーティングと主催者の関連テーブル
+CREATE TABLE 主催者._ミーティングと主催者
+(
+  ミーティング番号 CHAR(26) PRIMARY KEY REFERENCES ミーティング._ミーティング,
+  主催者番号 CHAR(26) NOT NULL REFERENCES 主催者.主催者,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

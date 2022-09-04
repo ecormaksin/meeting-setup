@@ -3,7 +3,7 @@ package meeting.presentation.meeting;
 import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingNumberFake_1;
-import meeting.domain.model.meeting.OrganizerNumberFake_1;
+import meeting.domain.model.organizer.OrganizerNumberFake_1;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;

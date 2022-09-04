@@ -1,6 +1,7 @@
 package meeting.domain.model.meeting;
 
 import meeting.domain.ValidationConcern;
+import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
