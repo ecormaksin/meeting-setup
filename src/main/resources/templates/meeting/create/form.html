@@ -30,25 +30,21 @@
 <script th:inline="javascript">
 $(function() {
 
-  let organizerNumber = localStorage.getItem('organizerNumber');
+  const organizerNumber = localStorage.getItem('organizerNumber');
   /*[# th:if="${organizerNumber != null}"]*/
   if (!organizerNumber) {
     localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
   }
   /*[/]*/
 
-  const createButton = $('#createMeetingButton');
-  createButton.prop('disabled', false);
+  $('#createMeetingButton').prop('disabled', false);
 
-  const form = $('form').get(0);
-
-  createButton.on('click', function() {
+  $('#createMeetingButton').on('click', function() {
     $(this).prop('disabled', true);
 
     document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
-    form.submit();
+    $('form').get(0).submit();
   });
-
 });
 </script>
 </body>

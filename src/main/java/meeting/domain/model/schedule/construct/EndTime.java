@@ -1,4 +1,4 @@
-package meeting.domain.model.schedule;
+package meeting.domain.model.schedule.construct;
 
 import java.time.LocalTime;
 

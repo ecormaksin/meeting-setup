@@ -1,11 +1,12 @@
 package meeting.domain.model.schedule;
 
-import meeting.domain.model.meeting.RegistrationRequestDateTime;
+import meeting.domain.model.schedule.construct.EndTime;
 import meeting.domain.model.schedule.construct.MeetingDate;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
+import meeting.domain.model.schedule.construct.StartTime;
 
 import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
+import java.time.LocalDateTime;
 
 /**
  * 日程
@@ -38,12 +39,6 @@ public class Schedule {
         return this.scheduleConstruct.isSame(other.scheduleConstruct);
     }
 
-    @AssertTrue(message = "日程を追加する時は未来の日時を指定してください。")
-    public boolean isFutureInCaseOfAddition(final RegistrationRequestDateTime registrationRequestDateTime) {
-        if (registrationStatus() == ScheduleRegistrationStatus.編集) return true;
-        return scheduleConstruct.isFutureThan(registrationRequestDateTime);
-    }
-
     public ScheduleNumber scheduleNumber() {
         return scheduleNumber;
     }
@@ -62,5 +57,9 @@ public class Schedule {
 
     public EndTime endTime() {
         return scheduleConstruct.endTime();
+    }
+
+    public LocalDateTime startLocalDateTime() {
+        return scheduleConstruct.startLocalDateTime();
     }
 }

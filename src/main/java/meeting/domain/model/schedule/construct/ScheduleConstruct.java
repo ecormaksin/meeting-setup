@@ -1,9 +1,5 @@
 package meeting.domain.model.schedule.construct;
 
-import meeting.domain.model.meeting.RegistrationRequestDateTime;
-import meeting.domain.model.schedule.EndTime;
-import meeting.domain.model.schedule.StartTime;
-
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -80,12 +76,6 @@ public class ScheduleConstruct {
         return new EndTime(endLocalTime());
     }
 
-    public boolean isFutureThan(final RegistrationRequestDateTime registrationRequestDateTime) {
-        final LocalDateTime localDateTime = startLocalDateTime();
-
-        return localDateTime.isAfter(registrationRequestDateTime.value());
-    }
-
     private LocalTime startLocalTime() {
         return LocalTime.of(startHour.value(), startMinute.value());
     }
@@ -94,7 +84,7 @@ public class ScheduleConstruct {
         return startLocalTime().plusMinutes(duration.value());
     }
 
-    private LocalDateTime startLocalDateTime() {
+    public LocalDateTime startLocalDateTime() {
         return LocalDateTime.of(meetingDate.value(), startLocalTime());
     }
 

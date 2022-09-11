@@ -5,7 +5,6 @@ import meeting.presentation.meeting.input.schedule.construct.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 public class CreationFormPage extends CustomPageObject {
 
@@ -55,7 +55,22 @@ public class CreationFormPage extends CustomPageObject {
 
     public static CreationFormPage to(WebDriver driver) {
         driver.get(URL_BASE + URL_RELATIVE_PATH);
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.urlMatches(".*" + URL_RELATIVE_PATH + "$"));
+        Duration duration = Duration.ofSeconds(60);
+        new WebDriverWait(driver, duration).until(innerDriver -> {
+            String url = innerDriver.getCurrentUrl();
+            boolean isUrlMatched = url.matches(String.format(".*%s$", URL_RELATIVE_PATH));
+
+            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) innerDriver;
+
+            String organizerNumberValue = (String) javascriptExecutor.executeScript("return localStorage.getItem('organizerNumber')");
+            boolean isOrganizerNumberSet = Objects.nonNull(organizerNumberValue) && !organizerNumberValue.isBlank();
+
+            boolean isCreateButtonEnabled = (boolean) javascriptExecutor.executeScript("return !document.getElementById('createMeetingButton').disabled");
+
+            return isUrlMatched
+                    && isOrganizerNumberSet
+                    && isCreateButtonEnabled;
+        });
         return PageFactory.initElements(driver, CreationFormPage.class);
     }
 

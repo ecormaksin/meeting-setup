@@ -1,10 +1,8 @@
 package meeting.domain.model.schedule;
 
 import meeting.domain.ValidationConcern;
-import meeting.domain.model.meeting.RegistrationRequestDateTime;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 
-import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -47,10 +45,6 @@ public class Schedules extends ValidationConcern {
 
     public static Schedules of(final List<Schedule> source) {
         return new Schedules(source);
-    }
-
-    public boolean isSetOfValidMeetingDateTimes(@Valid final RegistrationRequestDateTime registrationRequestDateTime) {
-        return list.stream().allMatch(schedule -> schedule.isFutureInCaseOfAddition(registrationRequestDateTime));
     }
 
     @AssertTrue(message = SET_OF_UNIQUE_MEETING_DATE_TIMES)

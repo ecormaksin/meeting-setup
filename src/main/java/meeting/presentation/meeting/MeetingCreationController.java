@@ -30,7 +30,7 @@ public class MeetingCreationController {
 
     private static final String VIEW_PATH_FORM = "meeting/create/form";
 
-    MeetingCreationScenario meetingCreationScenario;
+    private final MeetingCreationScenario meetingCreationScenario;
 
     public MeetingCreationController(MeetingCreationScenario meetingCreationScenario) {
         this.meetingCreationScenario = meetingCreationScenario;

@@ -2,10 +2,12 @@ package meeting.domain.model.meeting;
 
 import meeting.domain.ValidationConcern;
 import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.schedule.ScheduleRegistrationStatus;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
+import java.time.LocalDateTime;
 
 /**
  * ミーティング登録依頼
@@ -48,9 +50,18 @@ public abstract class MeetingRegistrationRequest extends ValidationConcern {
         this.organizerNumber = organizerNumber;
         this.registrationRequestDateTime = registrationRequestDateTime;
 
-        isSchedulesSetOfValidStartDateTime = schedules.isSetOfValidMeetingDateTimes(registrationRequestDateTime);
+        isSchedulesSetOfValidStartDateTime = isSetOfValidMeetingDateTimes();
 
         this.validate(this);
+    }
+
+    private boolean isSetOfValidMeetingDateTimes() {
+        return schedules.asList().stream().allMatch(schedule -> {
+            if (schedule.registrationStatus() == ScheduleRegistrationStatus.編集) return true;
+
+            LocalDateTime startLocalDateTime = schedule.startLocalDateTime();
+            return startLocalDateTime.isAfter(registrationRequestDateTime.value());
+        });
     }
 
     @AssertTrue(message = "日程を追加する時は未来の日時を指定してください。")
