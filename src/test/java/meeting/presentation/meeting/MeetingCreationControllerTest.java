@@ -2,6 +2,8 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
+import meeting.presentation.TestWebConfig;
+import meeting.presentation.WebConfig;
 import meeting.presentation.meeting.input.schedule.construct.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,12 +12,14 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @WebMvcTest(MeetingCreationController.class)
+@Import({WebConfig.class, TestWebConfig.class})
 public class MeetingCreationControllerTest {
 
     @Autowired

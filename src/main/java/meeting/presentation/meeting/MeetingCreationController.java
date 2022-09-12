@@ -5,8 +5,11 @@ import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.SchedulesInvalidException;
+import meeting.presentation.WebConfig;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputCannotAddException;
+import meeting.presentation.organizer.OrganizerNumberProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,20 +29,24 @@ import java.net.URI;
  */
 @Controller
 @RequestMapping("meeting/create")
+@Import({WebConfig.class})
 public class MeetingCreationController {
 
     private static final String VIEW_PATH_FORM = "meeting/create/form";
 
     private final MeetingCreationScenario meetingCreationScenario;
+    private final OrganizerNumberProxy organizerNumberProxy;
 
-    public MeetingCreationController(MeetingCreationScenario meetingCreationScenario) {
+    public MeetingCreationController(MeetingCreationScenario meetingCreationScenario,
+                                     OrganizerNumberProxy organizerNumberProxy) {
         this.meetingCreationScenario = meetingCreationScenario;
+        this.organizerNumberProxy = organizerNumberProxy;
     }
 
     @GetMapping
     String init(Model model) {
         model.addAttribute("meetingInputForm", MeetingInputForm.newForm());
-        model.addAttribute("organizerNumber", OrganizerNumber.newNumber());
+        model.addAttribute("organizerNumber", organizerNumberProxy.organizerNumber());
         return VIEW_PATH_FORM;
     }
 

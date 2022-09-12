@@ -55,11 +55,11 @@ public class CreationFormPage extends CustomPageObject {
 
     public static CreationFormPage to(WebDriver driver) {
         driver.get(URL_BASE + URL_RELATIVE_PATH);
-        waitUntilPageOperatable(driver);
+        waitUntilPageOperable(driver);
         return PageFactory.initElements(driver, CreationFormPage.class);
     }
 
-    private static void waitUntilPageOperatable(WebDriver driver) {
+    private static void waitUntilPageOperable(WebDriver driver) {
 
         new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
             String url = innerDriver.getCurrentUrl();
