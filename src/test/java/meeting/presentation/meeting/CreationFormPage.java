@@ -55,8 +55,13 @@ public class CreationFormPage extends CustomPageObject {
 
     public static CreationFormPage to(WebDriver driver) {
         driver.get(URL_BASE + URL_RELATIVE_PATH);
-        Duration duration = Duration.ofSeconds(60);
-        new WebDriverWait(driver, duration).until(innerDriver -> {
+        waitUntilPageOperatable(driver);
+        return PageFactory.initElements(driver, CreationFormPage.class);
+    }
+
+    private static void waitUntilPageOperatable(WebDriver driver) {
+
+        new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
             String url = innerDriver.getCurrentUrl();
             boolean isUrlMatched = url.matches(String.format(".*%s$", URL_RELATIVE_PATH));
 
@@ -71,7 +76,6 @@ public class CreationFormPage extends CustomPageObject {
                     && isOrganizerNumberSet
                     && isCreateButtonEnabled;
         });
-        return PageFactory.initElements(driver, CreationFormPage.class);
     }
 
     String subjectValue() {
