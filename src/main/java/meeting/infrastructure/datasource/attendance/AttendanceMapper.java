@@ -3,7 +3,7 @@ package meeting.infrastructure.datasource.attendance;
 import meeting.domain.model.attendance.Attendance;
 import meeting.domain.model.attendance.AttendanceComment;
 import meeting.domain.model.attendance.AttendanceNumber;
-import meeting.domain.model.attendance.ParticipantName;
+import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.meeting.MeetingNumber;

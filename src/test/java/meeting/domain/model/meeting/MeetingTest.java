@@ -5,6 +5,8 @@ import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
@@ -64,7 +66,7 @@ public class MeetingTest {
                     int numberOfParticipantSankaku,
                     int numberOfParticipantsBatsu) {
 
-        final ScheduleNumber scheduleNumber = new ScheduleNumber(patternNumber);
+        final ScheduleNumber scheduleNumber = ScheduleNumber.of(patternNumber);
         final ScheduleConstruct scheduleConstruct =
                     ScheduleConstruct.of(2021, 12, patternNumber, 10, 0, 60);
 
@@ -78,8 +80,8 @@ public class MeetingTest {
                                                         participant3Convenience));
 
         Meeting meeting = new Meeting(MeetingNumber.newNumber(),
-                new Subject("件名テスト"),
-                new Memo("メモテスト"),
+                Subject.of("件名テスト"),
+                Memo.of("メモテスト"),
                 OrganizerNumber.newNumber(),
                 Schedules.of(scheduleList),
                 attendances);
@@ -111,14 +113,15 @@ public class MeetingTest {
             String participantNameText = "参加者テスト" + (i + 1);
             Attendance attendance = new Attendance(
                     AttendanceNumber.newNumber(),
-                    new ParticipantName(participantNameText),
+                    ParticipantNumber.newNumber(),
+                    ParticipantName.of(participantNameText),
                     conveniences,
-                    new AttendanceComment(participantNameText + "_出欠コメント")
+                    AttendanceComment.of(participantNameText + "_出欠コメント")
             );
 
             attendanceList.add(attendance);
         }
 
-        return new Attendances(attendanceList);
+        return Attendances.of(attendanceList);
     }
 }

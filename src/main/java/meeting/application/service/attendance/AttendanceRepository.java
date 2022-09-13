@@ -2,6 +2,8 @@ package meeting.application.service.attendance;
 
 import meeting.domain.model.attendance.*;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 
 /**
  * 出欠 リポジトリ

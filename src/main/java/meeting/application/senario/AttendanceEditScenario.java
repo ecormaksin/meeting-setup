@@ -5,6 +5,8 @@ import meeting.application.service.attendance.AttendanceRecordService;
 import meeting.application.service.schedule.ScheduleQueryService;
 import meeting.domain.model.attendance.*;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Service;
 

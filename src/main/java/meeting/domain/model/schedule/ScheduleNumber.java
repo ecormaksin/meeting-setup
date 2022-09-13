@@ -17,6 +17,10 @@ public class ScheduleNumber {
         this.value = value;
     }
 
+    public static ScheduleNumber of(final int value) {
+        return new ScheduleNumber(value);
+    }
+
     public ScheduleRegistrationStatus registrationStatus() {
         return value > 0 ?
                 ScheduleRegistrationStatus.編集

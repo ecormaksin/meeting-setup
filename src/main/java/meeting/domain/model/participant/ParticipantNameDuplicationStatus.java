@@ -1,4 +1,4 @@
-package meeting.domain.model.attendance;
+package meeting.domain.model.participant;
 
 /**
  * 参加者名の重複状態

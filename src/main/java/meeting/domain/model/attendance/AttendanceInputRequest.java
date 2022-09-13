@@ -3,6 +3,7 @@ package meeting.domain.model.attendance;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.attendance.convenience.Conveniences;
+import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.Schedules;
 

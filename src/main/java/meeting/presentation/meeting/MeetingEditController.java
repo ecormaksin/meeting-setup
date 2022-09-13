@@ -35,13 +35,14 @@ public class MeetingEditController {
 
     @GetMapping
     String init(Model model,
-                @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber,
+                @CookieValue("organizerNumber") final String organizerNumberValue,
                 @PathVariable("meetingNumber") final MeetingNumber meetingNumber,
                 HttpServletRequest request) {
 
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
+        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
+        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可) {
             throw new MeetingCannotEditException();
         }
 
@@ -87,7 +88,7 @@ public class MeetingEditController {
         final Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
         final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
+        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可) {
             throw new MeetingCannotEditException();
         }
 
@@ -122,7 +123,7 @@ public class MeetingEditController {
 
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
 
-        if (meeting.editability(organizerNumber) != MeetingEditability.編集可) {
+        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可) {
             throw new MeetingCannotDeleteException();
         }
 

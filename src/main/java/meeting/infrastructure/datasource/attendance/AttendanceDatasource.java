@@ -5,13 +5,15 @@ import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.あり;
-import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.なし;
+import static meeting.domain.model.participant.ParticipantNameDuplicationStatus.あり;
+import static meeting.domain.model.participant.ParticipantNameDuplicationStatus.なし;
 
 @Repository
 public class AttendanceDatasource implements AttendanceRepository {

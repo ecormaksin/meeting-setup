@@ -1,9 +1,6 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.attendance.Attendance;
-import meeting.domain.model.attendance.AttendanceNumber;
-import meeting.domain.model.attendance.Attendances;
-import meeting.domain.model.attendance.TotalNumberOfParticipant;
+import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.organizer.OrganizerNumber;
@@ -110,10 +107,17 @@ public class Meeting {
         return ConvenienceCategory.未回答;
     }
 
-    public MeetingEditability editability(final OrganizerNumber organizerNumber) {
-        if (this.organizerNumber.isSame(organizerNumber)) {
-            return MeetingEditability.編集可;
-        }
-        return MeetingEditability.編集不可;
+    public MeetingEditability editabilityFor(final OrganizerNumber organizerNumber) {
+        if (isNotOrganizedBy(organizerNumber)) return MeetingEditability.編集不可;
+        if (isAlreadyResponded()) return MeetingEditability.編集不可;
+        return MeetingEditability.編集可;
+    }
+
+    private boolean isNotOrganizedBy(final OrganizerNumber organizerNumber) {
+        return !this.organizerNumber.isSame(organizerNumber);
+    }
+
+    private boolean isAlreadyResponded() {
+        return attendances.responseStatus() == AttendancesResponseStatus.回答発生済;
     }
 }

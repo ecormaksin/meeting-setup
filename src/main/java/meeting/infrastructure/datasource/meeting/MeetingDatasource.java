@@ -87,8 +87,8 @@ public class MeetingDatasource implements MeetingRepository {
                 meetingResource.subject(),
                 meetingResource.memo(),
                 meetingResource.organizerNumber(),
-                new Schedules(scheduleList),
-                new Attendances(attendanceList));
+                Schedules.of(scheduleList),
+                Attendances.of(attendanceList));
     }
 
     @Override

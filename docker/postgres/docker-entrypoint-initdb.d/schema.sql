@@ -8,6 +8,9 @@ CREATE SCHEMA ミーティング;
 DROP SCHEMA IF EXISTS 日程候補 CASCADE;
 CREATE SCHEMA 日程候補;
 
+DROP SCHEMA IF EXISTS 参加者 CASCADE;
+CREATE SCHEMA 参加者;
+
 DROP SCHEMA IF EXISTS 出欠 CASCADE;
 CREATE SCHEMA 出欠;
 
@@ -51,13 +54,30 @@ CREATE TABLE 日程候補._日程
   UNIQUE (ミーティング番号, 開催日, 開始時間, 開始分, 会議時間)
 );
 
+-- 参加者 スキーマ
+CREATE TABLE 参加者.参加者
+(
+  参加者番号 CHAR(26) NOT NULL PRIMARY KEY,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE 参加者._最新の参加者名
+(
+  参加者番号 CHAR(26) NOT NULL PRIMARY KEY,
+  参加者名 VARCHAR(10) NOT NULL,
+  登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- 出欠 スキーマ
 CREATE TABLE 出欠._出欠
 (
   出欠番号 CHAR(26) PRIMARY KEY,
   ミーティング番号 CHAR(26) NOT NULL REFERENCES ミーティング._ミーティング,
-  参加者名 VARCHAR(40) NOT NULL,
+  参加者番号 CHAR(26) NOT NULL REFERENCES 参加者.参加者,
+  参加者名 VARCHAR(10) NOT NULL,
   登録日時 TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (ミーティング番号, 参加者番号),
   UNIQUE (ミーティング番号, 参加者名)
 );
 

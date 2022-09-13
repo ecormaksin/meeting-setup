@@ -6,6 +6,7 @@ import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.あり;
+import static meeting.domain.model.participant.ParticipantNameDuplicationStatus.あり;
 
 /**
  * 出欠編集画面

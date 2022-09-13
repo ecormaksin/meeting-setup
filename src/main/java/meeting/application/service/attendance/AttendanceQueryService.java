@@ -2,8 +2,8 @@ package meeting.application.service.attendance;
 
 import meeting.domain.model.attendance.Attendance;
 import meeting.domain.model.attendance.AttendanceNumber;
-import meeting.domain.model.attendance.ParticipantName;
-import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.meeting.MeetingNumber;
 import org.springframework.stereotype.Service;
 

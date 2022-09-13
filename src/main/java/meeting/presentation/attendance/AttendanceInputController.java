@@ -3,7 +3,7 @@ package meeting.presentation.attendance;
 import meeting.application.senario.AttendanceInputScenario;
 import meeting.domain.model.attendance.AttendanceNumber;
 import meeting.domain.model.attendance.AttendanceInputRequest;
-import meeting.domain.model.attendance.ParticipantNameDuplicationStatus;
+import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.schedule.Schedules;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import static meeting.domain.model.attendance.ParticipantNameDuplicationStatus.あり;
+import static meeting.domain.model.participant.ParticipantNameDuplicationStatus.あり;
 
 /**
  * 出欠入力画面

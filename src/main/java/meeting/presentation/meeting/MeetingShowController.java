@@ -32,7 +32,7 @@ public class MeetingShowController {
         Meeting meeting = meetingShowScenario.meetingOf(meetingNumber);
 
         final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
-        boolean isEditable = (meeting.editability(organizerNumber) == MeetingEditability.編集可);
+        boolean isEditable = (meeting.editabilityFor(organizerNumber) == MeetingEditability.編集可);
 
         model.addAttribute("meeting", meeting);
         model.addAttribute("isEditable", isEditable);

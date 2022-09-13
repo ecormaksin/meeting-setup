@@ -1,7 +1,6 @@
 package meeting.domain.model.attendance;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,6 +16,15 @@ public class Attendances {
 
     public Attendances(final List<Attendance> list) {
         this.list = list;
+    }
+
+    public static Attendances of(final List<Attendance> list) {
+        return new Attendances(list);
+    }
+
+    public AttendancesResponseStatus responseStatus() {
+        if (list.isEmpty()) return AttendancesResponseStatus.回答未発生;
+        return AttendancesResponseStatus.回答発生済;
     }
 
     public List<Attendance> asList() {

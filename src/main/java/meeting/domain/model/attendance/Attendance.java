@@ -1,9 +1,10 @@
 package meeting.domain.model.attendance;
 
 import meeting.domain.model.attendance.convenience.Conveniences;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNumber;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * 出欠
@@ -12,6 +13,9 @@ public class Attendance {
 
     @Valid
     AttendanceNumber attendanceNumber;
+
+    @Valid
+    ParticipantNumber participantNumber;
 
     @Valid
     ParticipantName participantName;
@@ -26,10 +30,12 @@ public class Attendance {
     Attendance() {}
 
     public Attendance(AttendanceNumber attendanceNumber,
+                      ParticipantNumber participantNumber,
                       ParticipantName participantName,
                       Conveniences conveniences,
                       AttendanceComment attendanceComment) {
         this.attendanceNumber = attendanceNumber;
+        this.participantNumber = participantNumber;
         this.participantName = participantName;
         this.conveniences = conveniences;
         this.attendanceComment = attendanceComment;
@@ -37,6 +43,10 @@ public class Attendance {
 
     public AttendanceNumber attendanceNumber() {
         return attendanceNumber;
+    }
+
+    public ParticipantNumber participantNumber() {
+        return participantNumber;
     }
 
     public ParticipantName participantName() {

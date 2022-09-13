@@ -1,6 +1,7 @@
 package meeting.domain.model.attendance;
 
 import meeting.domain.model.attendance.convenience.Conveniences;
+import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
