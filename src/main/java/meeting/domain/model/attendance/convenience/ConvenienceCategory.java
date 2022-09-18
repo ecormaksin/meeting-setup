@@ -14,7 +14,7 @@ public enum ConvenienceCategory {
 
     String symbol;
 
-    public static ConvenienceCategory fromSymbol(String symbol) {
+    public static ConvenienceCategory of(String symbol) {
         for (ConvenienceCategory convenienceCategory : ConvenienceCategory.values()) {
             if (convenienceCategory.symbol().equals(symbol)) {
                 return convenienceCategory;

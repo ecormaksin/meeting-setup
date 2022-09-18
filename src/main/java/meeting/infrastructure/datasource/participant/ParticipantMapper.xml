@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="meeting.infrastructure.datasource.participant.ParticipantMapper">
+
+    <select id="notExists" resultType="boolean">
+        SELECT NOT EXISTS(SELECT 参加者番号 FROM 参加者.参加者 WHERE 参加者番号 = #{participantNumber.value})
+    </select>
+
+    <insert id="insertParticipant">
+        INSERT INTO 参加者.参加者(参加者番号) VALUES (#{participantNumber.value})
+    </insert>
+
+    <select id="selectLatestParticipantName" resultType="meeting.domain.model.participant.ParticipantName">
+        SELECT COALESCE(
+            (SELECT
+            参加者名
+            FROM
+            参加者._最新の参加者名
+            WHERE
+            参加者番号 = #{participantNumber.value})
+        , '') AS "value"
+    </select>
+
+    <insert id="insertLatestParticipantName">
+        INSERT INTO 参加者._最新の参加者名(参加者番号, 参加者名)
+        VALUES (#{participantNumber.value}, #{participantName.value})
+    </insert>
+
+    <delete id="deleteLatestParticipantName">
+        DELETE FROM 参加者._最新の参加者名
+        WHERE
+        参加者番号 = #{participantNumber.value}
+    </delete>
+
+</mapper>

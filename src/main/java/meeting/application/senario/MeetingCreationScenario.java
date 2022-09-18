@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MeetingCreationScenario {
-    MeetingRecordService meetingRecordService;
+    private static MeetingRecordService meetingRecordService;
 
     public MeetingCreationScenario(MeetingRecordService meetingRecordService) {
         this.meetingRecordService = meetingRecordService;

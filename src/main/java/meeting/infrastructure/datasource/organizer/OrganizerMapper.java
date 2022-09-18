@@ -12,10 +12,10 @@ public interface OrganizerMapper {
 
     void insertOrganizer(@Param("organizerNumber") OrganizerNumber organizerNumber);
 
-    void insertOrganizerAndMeetingRelation(
+    void insertMeetingAndOrganizerRelation(
             @Param("meetingNumber") MeetingNumber meetingNumber,
             @Param("organizerNumber") OrganizerNumber organizerNumber);
 
-    void deleteOrganizerAndMeetingRelation(
+    void deleteMeetingAndOrganizerRelation(
             @Param("meetingNumber") MeetingNumber meetingNumber);
 }

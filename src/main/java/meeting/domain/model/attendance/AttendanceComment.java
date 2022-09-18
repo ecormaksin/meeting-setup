@@ -29,4 +29,9 @@ public class AttendanceComment {
         if (value.isBlank()) return AttendanceCommentInputStatus.なし;
         return AttendanceCommentInputStatus.あり;
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }

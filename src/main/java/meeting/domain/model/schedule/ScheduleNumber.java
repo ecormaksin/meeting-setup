@@ -31,11 +31,16 @@ public class ScheduleNumber {
         return new ScheduleNumber(0);
     }
 
+    public boolean isSame(final ScheduleNumber other) {
+        return this.value == other.value;
+    }
+
     public int value() {
         return value;
     }
 
-    public boolean isSame(final ScheduleNumber other) {
-        return this.value == other.value;
+    @Override
+    public String toString() {
+        return String.valueOf(value);
     }
 }

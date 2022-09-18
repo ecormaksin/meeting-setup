@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * 出欠削除画面
  */
 @Controller
-@RequestMapping("meeting/{meetingNumber}/attendance/{attendanceId}/delete")
+@RequestMapping("meeting/{meetingNumber}/attendance/{attendanceNumber}/delete")
 public class AttendanceDeleteController {
     @GetMapping("completed")
     String completed(@PathVariable("meetingNumber") MeetingNumber meetingNumber) {

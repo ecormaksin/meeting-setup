@@ -5,15 +5,12 @@ import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.SchedulesInvalidException;
-import meeting.presentation.WebConfig;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputCannotAddException;
 import meeting.presentation.organizer.OrganizerNumberProxy;
-import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,7 +26,6 @@ import java.net.URI;
  */
 @Controller
 @RequestMapping("meeting/create")
-@Import({WebConfig.class})
 public class MeetingCreationController {
 
     private static final String VIEW_PATH_FORM = "meeting/create/form";
@@ -91,11 +87,7 @@ public class MeetingCreationController {
             final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber, organizerNumber);
             meetingCreationScenario.create(meetingCreationRequest);
         } catch (SchedulesInvalidException e) {
-            FieldError error = new FieldError(bindingResult.getObjectName(),
-                    "scheduleInputs",
-                    meetingInputForm.scheduleInputs(),
-                    true, null, null, e.getMessage());
-            bindingResult.addError(error);
+            bindingResult.rejectValue("scheduleInputs", null, e.getMessage());
             return VIEW_PATH_FORM;
         }
 

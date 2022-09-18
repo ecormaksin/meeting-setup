@@ -3,10 +3,11 @@ package meeting.infrastructure.datasource.attendance;
 import meeting.domain.model.attendance.Attendance;
 import meeting.domain.model.attendance.AttendanceComment;
 import meeting.domain.model.attendance.AttendanceNumber;
-import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.schedule.ScheduleNumber;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,12 +16,17 @@ import java.util.List;
 
 @Mapper
 public interface AttendanceMapper {
+    boolean participantNumberDuplicated(@Param("meetingNumber") MeetingNumber meetingNumber,
+                                        @Param("attendanceNumber") AttendanceNumber attendanceNumber,
+                                        @Param("participantNumber") ParticipantNumber participantNumber);
+
     boolean participantNameDuplicated(@Param("meetingNumber") MeetingNumber meetingNumber,
                                       @Param("attendanceNumber") AttendanceNumber attendanceNumber,
                                       @Param("participantName") ParticipantName participantName);
 
     void insertAttendance(@Param("meetingNumber") MeetingNumber meetingNumber,
                           @Param("attendanceNumber") AttendanceNumber attendanceNumber,
+                          @Param("participantNumber") ParticipantNumber participantNumber,
                           @Param("participantName") ParticipantName participantName);
 
     int newConvenienceNumber();
@@ -34,7 +40,7 @@ public interface AttendanceMapper {
 
     Attendance selectAttendance(@Param("attendanceNumber") AttendanceNumber attendanceNumber);
     List<Attendance> selectAttendancesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
-    List<Convenience> selectConveniencesByAttendanceId(@Param("attendanceNumber") AttendanceNumber attendanceNumber);
+    List<Convenience> selectConveniencesByAttendanceNumber(@Param("attendanceNumber") AttendanceNumber attendanceNumber);
 
     void deleteAttendanceCommentsByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
     void deleteConveniencesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);

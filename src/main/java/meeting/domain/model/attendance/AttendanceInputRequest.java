@@ -1,73 +1,28 @@
 package meeting.domain.model.attendance;
 
-import meeting.domain.model.attendance.convenience.Convenience;
-import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.participant.ParticipantName;
-import meeting.domain.model.schedule.Schedule;
-import meeting.domain.model.schedule.Schedules;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import meeting.domain.model.participant.ParticipantNumber;
 
 /**
  * 出欠入力依頼
  */
-public class AttendanceInputRequest {
+public class AttendanceInputRequest extends AttendanceRegistrationRequest {
 
-    @Valid
-    ParticipantName participantName;
+    public AttendanceInputRequest(
+            AttendanceNumber attendanceNumber,
+            ParticipantNumber participantNumber,
+            ParticipantName participantName,
+            Conveniences conveniences,
+            AttendanceComment attendanceComment) {
 
-    @Valid
-    Conveniences conveniences;
-
-    @Valid
-    AttendanceComment attendanceComment;
-
-    Schedules schedules;
-
-    public AttendanceInputRequest(@Valid ParticipantName participantName,
-                                  @Valid Conveniences conveniences,
-                                  @Valid AttendanceComment attendanceComment,
-                                  Schedules schedules) {
-        this.participantName = participantName;
-        this.conveniences = conveniences;
-        this.attendanceComment = attendanceComment;
-        this.schedules = schedules;
+        super(attendanceNumber,
+            participantNumber,
+            participantName,
+            conveniences,
+            attendanceComment);
     }
 
     @Deprecated
     AttendanceInputRequest() {}
-
-    public ParticipantName participantName() {
-        return participantName;
-    }
-
-    public Conveniences conveniences() {
-        return conveniences;
-    }
-
-    public AttendanceComment attendanceComment() {
-        return attendanceComment;
-    }
-
-    public Schedules schedules() {
-        return schedules;
-    }
-
-    public static AttendanceInputRequest empty(Schedules schedules) {
-
-        List<Convenience> convenienceList = new ArrayList<>();
-
-        for (Schedule schedule : schedules.asList()) {
-            Convenience convenience = new Convenience(schedule.scheduleNumber(), ConvenienceCategory.バツ);
-            convenienceList.add(convenience);
-        }
-
-        AttendanceInputRequest attendanceInputRequest = new AttendanceInputRequest();
-        attendanceInputRequest.conveniences = new Conveniences(convenienceList);
-        attendanceInputRequest.schedules = schedules;
-        return attendanceInputRequest;
-    }
 }

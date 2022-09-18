@@ -49,4 +49,9 @@ public class ParticipantName {
     public String value() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }

@@ -13,12 +13,13 @@ public class MeetingCreationRequest extends MeetingRegistrationRequest {
     @Deprecated
     MeetingCreationRequest() {}
 
-    public MeetingCreationRequest(@Valid MeetingNumber meetingNumber,
-                                  @Valid Subject subject,
-                                  @Valid Memo memo,
-                                  @Valid Schedules schedules,
-                                  @Valid OrganizerNumber organizerNumber,
-                                  @Valid RegistrationRequestDateTime registrationRequestDateTime) {
+    public MeetingCreationRequest(
+            @Valid MeetingNumber meetingNumber,
+            @Valid Subject subject,
+            @Valid Memo memo,
+            @Valid Schedules schedules,
+            @Valid OrganizerNumber organizerNumber,
+            @Valid RegistrationRequestDateTime registrationRequestDateTime) {
         super(meetingNumber, subject, memo, schedules, organizerNumber, registrationRequestDateTime);
     }
 }

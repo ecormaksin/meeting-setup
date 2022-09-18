@@ -12,12 +12,12 @@
         INSERT INTO 主催者.主催者(主催者番号) VALUES (#{organizerNumber.value})
     </insert>
 
-    <insert id="insertOrganizerAndMeetingRelation">
+    <insert id="insertMeetingAndOrganizerRelation">
         INSERT INTO 主催者._ミーティングと主催者(ミーティング番号, 主催者番号)
         VALUES (#{meetingNumber.value}, #{organizerNumber.value})
     </insert>
 
-    <delete id="deleteOrganizerAndMeetingRelation">
+    <delete id="deleteMeetingAndOrganizerRelation">
         DELETE FROM 主催者._ミーティングと主催者
         WHERE
         ミーティング番号 = #{meetingNumber.value}

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ScheduleQueryService {
-    ScheduleRepository scheduleRepository;
+    private final ScheduleRepository scheduleRepository;
 
     ScheduleQueryService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;

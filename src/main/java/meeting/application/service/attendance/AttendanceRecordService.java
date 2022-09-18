@@ -17,8 +17,8 @@ public class AttendanceRecordService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public AttendanceNumber input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
-        return attendanceRepository.input(meetingNumber, attendanceInputRequest);
+    public void input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
+        attendanceRepository.input(meetingNumber, attendanceInputRequest);
     }
 
     public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest) {

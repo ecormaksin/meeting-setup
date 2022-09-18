@@ -4,6 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meeting.infrastructure.datasource.attendance.AttendanceMapper">
 
+    <select id="participantNumberDuplicated" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 参加者番号 FROM 出欠._出欠
+            WHERE
+            ミーティング番号 = #{meetingNumber.value}
+            <if test="attendanceNumber != null and attendanceNumber.value != null">
+                AND 出欠番号 != #{attendanceNumber.value}
+            </if>
+            AND 参加者番号 = #{participantNumber.value}
+        )
+    </select>
+
     <select id="participantNameDuplicated" resultType="boolean">
         SELECT EXISTS (
             SELECT 参加者名 FROM 出欠._出欠
@@ -17,8 +29,8 @@
     </select>
 
     <insert id="insertAttendance">
-        INSERT INTO 出欠._出欠(出欠番号, ミーティング番号, 参加者名)
-        VALUES (#{attendanceNumber.value}, #{meetingNumber.value}, #{participantName.value})
+        INSERT INTO 出欠._出欠(出欠番号, ミーティング番号, 参加者番号, 参加者名)
+        VALUES (#{attendanceNumber.value}, #{meetingNumber.value}, #{participantNumber.value}, #{participantName.value})
     </insert>
 
     <insert id="insertAttendanceComment">
@@ -33,23 +45,30 @@
 
     <insert id="insertConvenience">
         INSERT INTO 出欠._都合(都合番号, 出欠番号, 日程番号, 都合種別)
-        VALUES (#{convenienceNumber}, #{attendanceNumber.value}, #{scheduleNumber.value}, #{convenienceCategory})
+        VALUES (
+            #{convenienceNumber},
+            #{attendanceNumber.value},
+            #{scheduleNumber.value},
+            #{convenienceCategory, typeHandler=meeting.infrastructure.datasource.attendance.convenience.ConvenienceCategoryTypeHandler}::出欠.都合種別
+        )
     </insert>
 
     <resultMap id="attendance" type="meeting.domain.model.attendance.Attendance">
         <id property="attendanceNumber.value" column="attendanceNumber.value" />
+        <result property="participantNumber.value" column="participantNumber.value" />
         <result property="participantName.value" column="participantName.value" />
         <result property="attendanceComment.value" column="attendanceComment.value" />
         <collection property="conveniences.list"
             column="attendanceNumber.value"
             ofType="meeting.domain.model.attendance.convenience.Convenience"
-            select="meeting.infrastructure.datasource.attendance.AttendanceMapper.selectConveniencesByAttendanceId">
+            select="meeting.infrastructure.datasource.attendance.AttendanceMapper.selectConveniencesByAttendanceNumber">
         </collection>
     </resultMap>
 
     <select id="selectAttendance" resultMap="attendance">
         SELECT
             出欠.出欠番号 AS "attendanceNumber.value",
+            出欠.参加者番号 AS "participantNumber.value",
             出欠.参加者名 AS "participantName.value",
             COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
         FROM
@@ -77,10 +96,15 @@
             出欠.参加者名 ASC
     </select>
 
-    <select id="selectConveniencesByAttendanceId" resultType="meeting.domain.model.attendance.convenience.Convenience">
+    <resultMap id="convenienceByAttendanceNumber" type="meeting.domain.model.attendance.convenience.Convenience">
+        <id property="scheduleNumber.value" column="日程番号"/>
+        <result property="convenienceCategory" column="都合種別" typeHandler="meeting.infrastructure.datasource.attendance.convenience.ConvenienceCategoryTypeHandler"/>
+    </resultMap>
+
+    <select id="selectConveniencesByAttendanceNumber" resultMap="convenienceByAttendanceNumber">
         SELECT
-            日程.日程番号 AS "scheduleNumber.value",
-            COALESCE(都合.都合種別, '未回答') AS "convenienceCategory"
+            日程.日程番号 AS 日程番号,
+            COALESCE(都合.都合種別, '－') AS 都合種別
         FROM
             日程候補._日程 AS 日程
             LEFT OUTER JOIN 出欠._都合 AS 都合

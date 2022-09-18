@@ -12,7 +12,7 @@
   <article>
     <div class="meeting-show__h1-section">
       <h1>ミーティングの詳細</h1>
-      <div th:if="${isEditable}">
+      <div th:class="${meetingEditability.editOperableItemDisplayStatus()}">
         <a th:href="@{/meeting/__${meetingNumber}__/edit}">ミーティングの編集・削除</a>
       </div>
     </div>
@@ -66,7 +66,7 @@
       </table>
 
       <div>
-        <button>出欠を入力する</button>
+        <button type="button" id="inputAttendanceButton">出欠を入力する</button>
       </div>
       <p>
         出欠を編集・削除する場合は、参加者名をクリックしてください。
@@ -75,5 +75,21 @@
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
+<script th:inline="javascript">
+$(function() {
+
+  const participantNumber = localStorage.getItem('participantNumber');
+  /*[# th:if="${participantNumber != null}"]*/
+  if (!participantNumber) {
+    localStorage.setItem('participantNumber', [[${participantNumber.value}]]);
+  }
+  /*[/]*/
+
+  $('#inputAttendanceButton').on('click', function() {
+    document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
+    $('form').get(0).submit();
+  });
+});
+</script>
 </body>
 </html>

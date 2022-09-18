@@ -23,6 +23,9 @@ public class ScheduleConstruct {
     @Valid
     Duration duration;
 
+    StartTime startTime;
+    EndTime endTime;
+
     @Deprecated
     ScheduleConstruct() {}
 
@@ -34,6 +37,9 @@ public class ScheduleConstruct {
         this.startHour = startHour;
         this.startMinute = startMinute;
         this.duration = duration;
+
+        setStartTime();
+        endTime = new EndTime(endLocalTime());
     }
 
     public static ScheduleConstruct of(final int year,
@@ -69,11 +75,23 @@ public class ScheduleConstruct {
     }
 
     public StartTime startTime() {
-        return new StartTime(startLocalTime());
+        setStartTime();
+        return startTime;
+    }
+
+    private void setStartTime() {
+        if (Objects.nonNull(startTime)) return;
+        startTime = new StartTime(startLocalTime());
     }
 
     public EndTime endTime() {
-        return new EndTime(endLocalTime());
+        setEndTime();
+        return endTime;
+    }
+
+    private void setEndTime() {
+        if (Objects.nonNull(endTime)) return;
+        endTime = new EndTime(endLocalTime());
     }
 
     private LocalTime startLocalTime() {

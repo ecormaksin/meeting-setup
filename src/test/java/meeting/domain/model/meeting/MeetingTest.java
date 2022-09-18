@@ -106,7 +106,7 @@ public class MeetingTest {
 
             List<Convenience> convenienceList = Arrays.asList(
                     new Convenience(new ScheduleNumber(primitiveScheduleNumber),
-                            ConvenienceCategory.fromSymbol(convenienceSymbol))
+                            ConvenienceCategory.of(convenienceSymbol))
             );
             Conveniences conveniences = new Conveniences(convenienceList);
 

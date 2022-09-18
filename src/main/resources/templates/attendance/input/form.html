@@ -12,7 +12,7 @@
   <article>
     <h1>出欠の入力</h1>
     <form method="post" action="#"
-          th:object="${attendanceInputRequest}" th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
+          th:object="${attendanceInputForm}" th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>

@@ -25,11 +25,20 @@ public class AttendanceNumber {
         return new AttendanceNumber(ulid.nextULID().toLowerCase());
     }
 
-    public AttendanceNumber(String value) {
+    public AttendanceNumber(final String value) {
         this.value = value;
+    }
+
+    public static AttendanceNumber of(final String value) {
+        return new AttendanceNumber(value);
     }
 
     public String value() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return value.toString();
     }
 }

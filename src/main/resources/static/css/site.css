@@ -119,6 +119,14 @@ th *, td * {
     margin-bottom: 0rem;
 }
 
+.meeting-show__edit-button__display-block {
+    display: block;
+}
+
+.meeting-show__edit-button__display-none {
+    display: none;
+}
+
 .meeting-edit__button-parent {
     display: flex;
     justify-content: space-between;

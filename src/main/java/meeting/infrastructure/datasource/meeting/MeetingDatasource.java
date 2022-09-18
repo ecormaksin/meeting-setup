@@ -30,15 +30,16 @@ import java.util.Set;
 @Repository
 public class MeetingDatasource implements MeetingRepository {
 
-    OrganizerMapper organizerMapper;
-    MeetingMapper meetingMapper;
-    ScheduleMapper scheduleMapper;
-    AttendanceMapper attendanceMapper;
+    private final OrganizerMapper organizerMapper;
+    private final MeetingMapper meetingMapper;
+    private final ScheduleMapper scheduleMapper;
+    private final AttendanceMapper attendanceMapper;
 
-    public MeetingDatasource(OrganizerMapper organizerMapper,
-                             MeetingMapper meetingMapper,
-                             ScheduleMapper scheduleMapper,
-                             AttendanceMapper attendanceMapper) {
+    public MeetingDatasource(
+            OrganizerMapper organizerMapper,
+            MeetingMapper meetingMapper,
+            ScheduleMapper scheduleMapper,
+            AttendanceMapper attendanceMapper) {
         this.organizerMapper = organizerMapper;
         this.meetingMapper = meetingMapper;
         this.scheduleMapper = scheduleMapper;
@@ -54,9 +55,8 @@ public class MeetingDatasource implements MeetingRepository {
 
         if (organizerMapper.notExists(organizerNumber)) organizerMapper.insertOrganizer(organizerNumber);
 
-        insertMeeting(meetingNumber,
-                meetingCreationRequest.subject());
-        insertOrganizerAndMeetingRelation(meetingNumber, organizerNumber);
+        insertMeeting(meetingNumber, meetingCreationRequest.subject());
+        insertMeetingAndOrganizerRelation(meetingNumber, organizerNumber);
         insertMeetingMemo(meetingNumber, meetingCreationRequest.memo());
         insertSchedules(meetingNumber, meetingCreationRequest.schedules());
     }
@@ -103,7 +103,7 @@ public class MeetingDatasource implements MeetingRepository {
         insertMeeting(meetingNumber,
                 meetingEditRequest.subject());
         insertMeetingMemo(meetingNumber, meetingEditRequest.memo());
-        insertOrganizerAndMeetingRelation(meetingNumber, meetingEditRequest.organizerNumber());
+        insertMeetingAndOrganizerRelation(meetingNumber, meetingEditRequest.organizerNumber());
         Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, meetingEditRequest.schedules());
         insertAttendances(meetingNumber, meeting.attendances(), scheduleNumbers);
     }
@@ -163,9 +163,9 @@ public class MeetingDatasource implements MeetingRepository {
         return scheduleNumbers;
     }
 
-    private void insertOrganizerAndMeetingRelation(MeetingNumber meetingNumber,
+    private void insertMeetingAndOrganizerRelation(MeetingNumber meetingNumber,
                                                    OrganizerNumber organizerNumber) {
-        organizerMapper.insertOrganizerAndMeetingRelation(meetingNumber, organizerNumber);
+        organizerMapper.insertMeetingAndOrganizerRelation(meetingNumber, organizerNumber);
     }
 
     private void deleteMeetingWithWholeAggregate(MeetingNumber meetingNumber) {
@@ -176,7 +176,7 @@ public class MeetingDatasource implements MeetingRepository {
 
         scheduleMapper.deleteSchedulesByMeetingNumber(meetingNumber);
 
-        organizerMapper.deleteOrganizerAndMeetingRelation(meetingNumber);
+        organizerMapper.deleteMeetingAndOrganizerRelation(meetingNumber);
 
         meetingMapper.deleteMeetingMemo(meetingNumber);
         meetingMapper.deleteMeeting(meetingNumber);
@@ -186,7 +186,11 @@ public class MeetingDatasource implements MeetingRepository {
 
         for (Attendance attendance : attendances.asList()) {
             AttendanceNumber attendanceNumber = attendance.attendanceNumber();
-            attendanceMapper.insertAttendance(meetingNumber, attendanceNumber, attendance.participantName());
+            attendanceMapper.insertAttendance(
+                    meetingNumber,
+                    attendanceNumber,
+                    attendance.participantNumber(),
+                    attendance.participantName());
             insertConveniences(attendanceNumber, attendance.conveniences(), scheduleNumbers);
 
             AttendanceComment attendanceComment = attendance.attendanceComment();

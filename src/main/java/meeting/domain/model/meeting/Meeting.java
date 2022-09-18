@@ -108,9 +108,9 @@ public class Meeting {
     }
 
     public MeetingEditability editabilityFor(final OrganizerNumber organizerNumber) {
-        if (isNotOrganizedBy(organizerNumber)) return MeetingEditability.編集不可;
-        if (isAlreadyResponded()) return MeetingEditability.編集不可;
-        return MeetingEditability.編集可;
+        if (isNotOrganizedBy(organizerNumber)) return MeetingEditability.FALSE;
+        if (isAlreadyResponded()) return MeetingEditability.FALSE;
+        return MeetingEditability.TRUE;
     }
 
     private boolean isNotOrganizedBy(final OrganizerNumber organizerNumber) {

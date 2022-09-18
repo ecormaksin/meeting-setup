@@ -9,7 +9,7 @@ public enum ParticipantNameDuplicationStatus {
 
     String errorMessage;
 
-    ParticipantNameDuplicationStatus(final String errorMessage) {
+    ParticipantNameDuplicationStatus(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

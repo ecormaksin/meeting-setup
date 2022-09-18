@@ -22,7 +22,7 @@ public class ConvenienceCategoryTypeHandler extends BaseTypeHandler<ConvenienceC
         return Objects.isNull(columnValue) ?
                 ConvenienceCategory.未回答
                 :
-                ConvenienceCategory.fromSymbol(columnValue);
+                ConvenienceCategory.of(columnValue);
     }
 
     @Override
