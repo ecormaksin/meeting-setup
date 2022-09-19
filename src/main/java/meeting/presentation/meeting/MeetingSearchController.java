@@ -2,8 +2,9 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingSearchScenario;
 import meeting.domain.model.meeting.MeetingSearchRequest;
-import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.meeting.meeting_list.MeetingList;
+import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.presentation.organizer.OrganizerNumberProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,15 +18,23 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("meeting/search")
 public class MeetingSearchController {
-    MeetingSearchScenario meetingSearchScenario;
 
-    public MeetingSearchController(MeetingSearchScenario meetingSearchScenario) {
+    private static final String VIEW_SEARCH = "meeting/search";
+
+    private final MeetingSearchScenario meetingSearchScenario;
+    private final OrganizerNumberProxy organizerNumberProxy;
+
+    public MeetingSearchController(MeetingSearchScenario meetingSearchScenario,
+                                   OrganizerNumberProxy organizerNumberProxy) {
         this.meetingSearchScenario = meetingSearchScenario;
+        this.organizerNumberProxy = organizerNumberProxy;
     }
 
     @GetMapping
     String init(Model model,
-                @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber) {
+                @CookieValue(value = "organizerNumber", required = false) final String organizerNumberValue
+    ) {
+        final OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
 
         MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.initialize(organizerNumber);
         MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
@@ -33,14 +42,16 @@ public class MeetingSearchController {
         model.addAttribute("meetingSearchRequest", meetingSearchRequest);
         model.addAttribute("meetingList", meetingList);
 
-        return "meeting/search";
+        return VIEW_SEARCH;
     }
 
     @GetMapping(params = {"exec"})
     String search(Model model,
-                  @RequestHeader("organizerNumber") final OrganizerNumber organizerNumber,
+                  @CookieValue("organizerNumber") final String organizerNumberValue,
                   @Validated @ModelAttribute("meetingSearchRequest") MeetingSearchRequest meetingSearchRequest,
                   BindingResult bindingResult) {
+
+        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         if (organizerNumber.isDifferent(meetingSearchRequest.organizerNumber())) {
             throw new OrganizerNumberFalsifiedException();
@@ -50,13 +61,13 @@ public class MeetingSearchController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("meetingList", MeetingList.empty());
-            return "meeting/search";
+            return VIEW_SEARCH;
         }
 
         MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
         model.addAttribute("meetingList", meetingList);
 
-        return "meeting/search";
+        return VIEW_SEARCH;
     }
 
     @InitBinder
@@ -65,7 +76,8 @@ public class MeetingSearchController {
                 "searchCondition.keyword.value",
                 "searchCondition.startDate.value",
                 "searchCondition.endDate.value",
-                "organizerNumber.value"
+                "organizerNumber.value",
+                "meetingList.list[*"
         );
     }
 }

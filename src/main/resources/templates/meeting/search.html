@@ -39,16 +39,12 @@
         <mark><span th:errors="*{searchCondition}"></span></mark>
       </p>
 
-      <input type="hidden" th:field="*{organizerTerminal.ipAddress.value}">
-      <input type="hidden" th:field="*{organizerTerminal.osFamily.value}">
-      <input type="hidden" th:field="*{organizerTerminal.userAgentFamily.value}">
-
       <button class="small-button" name="exec">検索する</button>
     </form>
 
     <h2>検索結果</h2>
 
-    <p>検索結果が20件を超える場合は、次の順序で条件に該当する先頭20件が表示されます。: 最も早い開始日時 → 最も遅い終了日時 → 件名 → 登録・編集した日時</p>
+    <p>検索結果が20件を超える場合は、次の順序で条件に該当する先頭20件が表示されます。: ミーティング番号 → 開催日 → 開始時刻 → 会議時間</p>
     <p>該当するミーティングが見つからない場合は、条件を変更してください。</p>
 
     <table th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.meeting_list.MeetingListItemAvailability).HAVE_ITEMS}">
@@ -56,8 +52,7 @@
         <tr>
           <th></th>
           <th>件名</th>
-          <th>最も早い開始日時</th>
-          <th>最も遅い終了日時</th>
+          <th>日程</th>
         </tr>
       </thead>
       <tbody>
@@ -66,8 +61,11 @@
           <td>
             <a th:href="@{/meeting/__${meetingListItem.meetingNumber()}__/show}" th:text="${meetingListItem.subject().value()}"></a>
           </td>
-          <td th:text="${meetingListItem.earliestStartDateTime().show()}"></td>
-          <td th:text="${meetingListItem.latestEndDateTime().show()}"></td>
+          <td>
+            <div th:each="schedule, scheduleStat : ${meetingListItem.searchedSchedules().asList()}">
+              <span th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}"></span>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

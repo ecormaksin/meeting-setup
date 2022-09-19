@@ -9,7 +9,6 @@ import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.participant.ParticipantNumberDuplicationStatus;
 import meeting.domain.model.schedule.Schedules;
 import meeting.presentation.attendance.input.AttendanceInputForm;
-import meeting.presentation.participant.ParticipantNumberProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,12 +29,9 @@ public class AttendanceInputController {
     private static final String VIEW_PATH_FORM = "attendance/input/form";
 
     private final AttendanceInputScenario attendanceInputScenario;
-    private final ParticipantNumberProxy participantNumberProxy;
 
-    public AttendanceInputController(AttendanceInputScenario attendanceInputScenario,
-                                     ParticipantNumberProxy participantNumberProxy) {
+    public AttendanceInputController(AttendanceInputScenario attendanceInputScenario) {
         this.attendanceInputScenario = attendanceInputScenario;
-        this.participantNumberProxy = participantNumberProxy;
     }
 
     @GetMapping

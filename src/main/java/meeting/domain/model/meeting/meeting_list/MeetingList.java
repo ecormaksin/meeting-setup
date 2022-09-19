@@ -16,8 +16,7 @@ public class MeetingList {
     }
 
     @Deprecated
-    public MeetingList() {
-    }
+    MeetingList() {}
 
     public static MeetingList of(List<MeetingListItem> source) {
         return new MeetingList(source);

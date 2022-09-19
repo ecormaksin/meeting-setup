@@ -15,6 +15,8 @@ public class MeetingSearchCondition {
     @Valid
     EndDate endDate;
 
+    LimitCount limitCount = LimitCount.defaultValue();
+
     @Deprecated
     MeetingSearchCondition() {}
 
@@ -56,5 +58,9 @@ public class MeetingSearchCondition {
 
     public EndDate endDate() {
         return endDate;
+    }
+
+    public LimitCount limitCount() {
+        return limitCount;
     }
 }

@@ -40,20 +40,6 @@ public class StartDate {
     }
 
     @Override
-    public boolean equals(Object anObject) {
-        if (Objects.isNull(anObject)) return false;
-        if (!(anObject instanceof StartDate other)) return false;
-        if (this.isEmpty()) return false;
-        if (other.isEmpty()) return false;
-        return this.value.equals(other.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(value);
-    }
-
-    @Override
     public String toString() {
         return value.toString();
     }

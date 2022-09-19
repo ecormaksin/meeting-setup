@@ -40,9 +40,13 @@ public class MeetingCreationController {
     }
 
     @GetMapping
-    String init(Model model) {
+    String init(Model model,
+                @CookieValue(value = "organizerNumber", required = false) final String organizerNumberValue
+    ) {
+        final OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
+
         model.addAttribute("meetingInputForm", MeetingInputForm.newForm());
-        model.addAttribute("organizerNumber", organizerNumberProxy.organizerNumber());
+        model.addAttribute("organizerNumber", organizerNumber);
         return VIEW_PATH_FORM;
     }
 

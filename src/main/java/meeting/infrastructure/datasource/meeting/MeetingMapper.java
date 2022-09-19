@@ -1,13 +1,17 @@
 package meeting.infrastructure.datasource.meeting;
 
-import meeting.domain.model.meeting.*;
+import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.Memo;
+import meeting.domain.model.meeting.Subject;
 import meeting.domain.model.meeting.meeting_list.MeetingListItem;
+import meeting.domain.model.meeting.search_condition.EndDate;
 import meeting.domain.model.meeting.search_condition.Keyword;
+import meeting.domain.model.meeting.search_condition.LimitCount;
+import meeting.domain.model.meeting.search_condition.StartDate;
 import meeting.domain.model.organizer.OrganizerNumber;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +32,7 @@ public interface MeetingMapper {
     List<MeetingListItem> search(
             @Param("organizerNumber") OrganizerNumber organizerNumber,
             @Param("keyword") Keyword keyword,
-            @Param("startDateTime") LocalDateTime startDateTime,
-            @Param("endDateTime") LocalDateTime endDateTime);
+            @Param("startDate") StartDate startDate,
+            @Param("endDate") EndDate endDate,
+            @Param("limitCount") LimitCount limitCount);
 }

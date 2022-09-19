@@ -67,53 +67,64 @@
             ミーティング.登録日時
     </select>
 
-    <select id="search" resultType="meeting.domain.model.meeting.meeting_list.MeetingListItem">
+    <resultMap id="searchedMeetings" type="meeting.domain.model.meeting.meeting_list.MeetingListItem">
+        <id property="meetingNumber.value" column="meetingNumber.value" />
+        <result property="subject.value" column="subject.value" />
+        <collection property="searchedSchedules.list"
+                    ofType="meeting.domain.model.schedule.SearchedSchedule">
+            <result property="meetingDate.value" column="meetingDate.value" />
+            <result property="startTime.value" column="startTime.value" />
+            <result property="endTime.value" column="endTime.value" />
+        </collection>
+    </resultMap>
+
+    <select id="search" resultMap="searchedMeetings">
         <if test="keyword != null and keyword.value != null">
             <bind name="keywordCondition" value="'%' + keyword.value + '%'" />
         </if>
         SELECT
-            ミーティング._ミーティング番号 as "meetingNumber.value",
-            ミーティング.件名 as "subject.value",
-            SQ_日程候補.最小開始日時 as "earliestStartDateTime.value",
-            SQ_日程候補.最大終了日時 as "latestEndDateTime.value"
+            ミーティング番号 AS "meetingNumber.value",
+            件名 AS "subject.value",
+            開催日 AS "meetingDate.value",
+            TO_TIMESTAMP(
+                CONCAT(TO_CHAR(開催日, 'YYYY-MM-DD'), ' ', 開始時刻),
+                'YYYY-MM-DD HH24:MI') AS "startTime.value",
+            TO_TIMESTAMP(
+                CONCAT(TO_CHAR(開催日, 'YYYY-MM-DD'), ' ', 開始時刻),
+                'YYYY-MM-DD HH24:MI')
+                + TO_CHAR(会議時間, '99" minutes"')::INTERVAL
+                AS "endTime.value"
         FROM
-            ミーティング._ミーティング AS ミーティング
-            LEFT OUTER JOIN
-            ミーティング._ミーティングメモ AS ミーティングメモ
-                ON
-                ミーティングメモ.ミーティング番号 = ミーティング._ミーティング番号
-            INNER JOIN
-                ミーティング.主催者端末 AS 主催者端末
-                ON
-                主催者端末.ミーティング番号 = ミーティング._ミーティング番号
-            INNER JOIN (
-                SELECT
-                    ミーティング番号,
-                    MIN(開始日時) AS 最小開始日時,
-                    MAX(終了日時) AS 最大終了日時
-                FROM
-                    日程候補._日程
-                WHERE
-                    開始日時 &lt;= #{endDateTime}
-                    AND 終了日時 &gt;= #{startDateTime}
-                GROUP BY
-                    ミーティング番号
-            ) AS SQ_日程候補
-                ON
-                SQ_日程候補.ミーティング番号 = ミーティング._ミーティング番号
-        WHERE
-            主催者端末.IPアドレス = #{ipAddress.value}
-            AND 主催者端末.OSファミリー = #{osFamily.value}
-            AND 主催者端末.ユーザーエージェントファミリー = #{userAgentFamily.value}
-            <if test="keyword != null and keyword.value != null">
-                AND (ミーティング.件名 LIKE #{keywordCondition}
-                        OR ミーティングメモ.メモ LIKE #{keywordCondition})
-            </if>
+            (SELECT
+                ミーティング.ミーティング番号,
+                ミーティング.件名,
+                日程.開催日,
+                CONCAT(TO_CHAR(日程.開始時間,'00'), ':', TRIM(TO_CHAR(日程.開始分,'00'))) AS 開始時刻,
+                日程.会議時間
+            FROM
+                ミーティング._ミーティング AS ミーティング
+                INNER JOIN 主催者._ミーティングと主催者 AS ミーティングと主催者
+                    ON
+                    ミーティングと主催者.ミーティング番号 = ミーティング.ミーティング番号
+                INNER JOIN 日程候補._日程 AS 日程
+                    ON
+                    日程.ミーティング番号 = ミーティング.ミーティング番号
+                LEFT JOIN ミーティング._ミーティングメモ AS ミーティングメモ
+                    ON
+                    ミーティングメモ.ミーティング番号 = ミーティング.ミーティング番号
+            WHERE
+                ミーティングと主催者.主催者番号 = #{organizerNumber.value}
+                AND 日程.開催日 BETWEEN #{startDate.value} AND #{endDate.value}
+                <if test="keyword != null and keyword.value != null">
+                    AND (ミーティング.件名 LIKE #{keywordCondition}
+                    OR ミーティングメモ.メモ LIKE #{keywordCondition})
+                </if>
+            ) AS ミーティング一覧
         ORDER BY
-            SQ_日程候補.最小開始日時,
-            SQ_日程候補.最大終了日時,
-            ミーティング.件名,
-            ミーティング.登録日時
-        LIMIT 20
+            ミーティング番号,
+            開催日,
+            開始時刻,
+            会議時間
+        LIMIT #{limitCount.value}
     </select>
 </mapper>

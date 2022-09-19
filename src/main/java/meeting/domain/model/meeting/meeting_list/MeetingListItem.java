@@ -2,6 +2,7 @@ package meeting.domain.model.meeting.meeting_list;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.Subject;
+import meeting.domain.model.schedule.SearchedSchedules;
 
 /**
  * ミーティング一覧の項目
@@ -10,21 +11,17 @@ public class MeetingListItem {
 
     MeetingNumber meetingNumber;
     Subject subject;
-    EarliestStartDateTime earliestStartDateTime;
-    LatestEndDateTime latestEndDateTime;
+    SearchedSchedules searchedSchedules;
+
+    @Deprecated
+    MeetingListItem() {}
 
     public MeetingListItem(MeetingNumber meetingNumber,
                            Subject subject,
-                           EarliestStartDateTime earliestStartDateTime,
-                           LatestEndDateTime latestEndDateTime) {
+                           SearchedSchedules searchedSchedules) {
         this.meetingNumber = meetingNumber;
         this.subject = subject;
-        this.earliestStartDateTime = earliestStartDateTime;
-        this.latestEndDateTime = latestEndDateTime;
-    }
-
-    @Deprecated
-    MeetingListItem() {
+        this.searchedSchedules = searchedSchedules;
     }
 
     public MeetingNumber meetingNumber() {
@@ -35,11 +32,7 @@ public class MeetingListItem {
         return subject;
     }
 
-    public EarliestStartDateTime earliestStartDateTime() {
-        return earliestStartDateTime;
-    }
-
-    public LatestEndDateTime latestEndDateTime() {
-        return latestEndDateTime;
+    public SearchedSchedules searchedSchedules() {
+        return searchedSchedules;
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 /**
  * ミーティング表示画面
@@ -44,13 +43,8 @@ public class MeetingShowController {
                 @CookieValue(value = "participantNumber", required = false) final String participantNumberValue,
                 HttpServletRequest request) {
 
-        final OrganizerNumber organizerNumber = (Objects.isNull(organizerNumberValue) || organizerNumberValue.isBlank())
-                        ? organizerNumberProxy.organizerNumber()
-                        : OrganizerNumber.of(organizerNumberValue);
-
-        final ParticipantNumber participantNumber = (Objects.isNull(participantNumberValue) || participantNumberValue.isBlank())
-                ? participantNumberProxy.participantNumber()
-                : ParticipantNumber.of(participantNumberValue);
+        final OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
+        final ParticipantNumber participantNumber = participantNumberProxy.participantNumber(participantNumberValue);
 
         Meeting meeting = meetingShowScenario.meetingOf(meetingNumber);
         final MeetingEditability meetingEditability = meeting.editabilityFor(organizerNumber);

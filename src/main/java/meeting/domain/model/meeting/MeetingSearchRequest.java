@@ -19,8 +19,8 @@ public class MeetingSearchRequest {
     @Deprecated
     MeetingSearchRequest() {}
 
-    public MeetingSearchRequest(@Valid OrganizerNumber organizerNumber,
-                                @Valid MeetingSearchCondition searchCondition) {
+    public MeetingSearchRequest(OrganizerNumber organizerNumber,
+                                MeetingSearchCondition searchCondition) {
         this.organizerNumber = organizerNumber;
         this.searchCondition = searchCondition;
     }

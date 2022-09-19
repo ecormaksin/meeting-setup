@@ -20,8 +20,6 @@ import meeting.infrastructure.datasource.schedule.ScheduleMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -120,14 +118,13 @@ public class MeetingDatasource implements MeetingRepository {
         OrganizerNumber organizerNumber = meetingSearchRequest.organizerNumber();
         MeetingSearchCondition searchCondition = meetingSearchRequest.searchCondition();
 
-        LocalDateTime startDateTime = LocalDateTime.of(searchCondition.startDate().value(), LocalTime.of(0,0,0));
-        LocalDateTime endDateTime = LocalDateTime.of(searchCondition.endDate().value(), LocalTime.of(23, 59, 59));
-
         List<MeetingListItem> list = meetingMapper.search(
                 organizerNumber,
                 searchCondition.keyword(),
-                startDateTime,
-                endDateTime);
+                searchCondition.startDate(),
+                searchCondition.endDate(),
+                searchCondition.limitCount()
+        );
 
         return MeetingList.of(list);
     }
