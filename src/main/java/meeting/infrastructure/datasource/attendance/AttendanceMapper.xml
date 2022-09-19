@@ -105,10 +105,10 @@
     <select id="selectConveniencesByAttendanceNumber" resultMap="convenienceByAttendanceNumber">
         SELECT
             日程.日程番号 AS 日程番号,
-            COALESCE(都合.都合種別, '－') AS 都合種別
+            都合.都合種別 AS 都合種別
         FROM
             日程候補._日程 AS 日程
-            LEFT OUTER JOIN 出欠._都合 AS 都合
+            INNER JOIN 出欠._都合 AS 都合
                 ON
                 都合.日程番号 = 日程.日程番号
                 AND 都合.出欠番号 = #{value}

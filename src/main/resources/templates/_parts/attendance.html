@@ -27,7 +27,7 @@
                     <input type="hidden" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value}">
                     <input type="hidden" th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value}">
                     <input type="hidden" th:field="*{conveniences.list[__${scheduleStat.index}__].scheduleNumber.value}">
-                    <div class="convenience-radio" th:each="convenienceCategory,convenienceCategoryStat : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).valuesExcludeUnreplied()}">
+                    <div class="convenience-radio" th:each="convenienceCategory,convenienceCategoryStat : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}">
                         <input type="radio" th:field="*{conveniences.list[__${scheduleStat.index}__].convenienceCategory}"
                                th:value="${convenienceCategory}">
                         <label th:for="${#ids.prev('conveniences.list__${scheduleStat.index}__.convenienceCategory')}"

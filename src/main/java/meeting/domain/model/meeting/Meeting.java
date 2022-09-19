@@ -105,7 +105,7 @@ public class Meeting {
                 return convenience.convenienceCategory();
             }
         }
-        return ConvenienceCategory.未回答;
+        throw new IllegalStateException("出欠に対する都合が存在しません。");
     }
 
     public ScheduleMatchStatus scheduleMatchStatusAt(ScheduleNumber scheduleNumber) {

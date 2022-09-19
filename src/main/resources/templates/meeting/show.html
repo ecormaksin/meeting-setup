@@ -32,7 +32,7 @@
             <th></th>
             <th>日程</th>
             <!-- 都合の記号 -->
-            <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).valuesExcludeUnreplied()}"
+            <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
                 th:text="${convenienceCategory.symbol()}"></th>
             <!-- 参加者名 -->
             <th th:each="attendance, attendanceStat: *{attendances.asList()}">
@@ -51,7 +51,7 @@
                 th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
             </td>
             <!-- 日程別・都合別の回答者数 -->
-            <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).valuesExcludeUnreplied()}"
+            <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
                 th:text="${meeting.totalNumberOfParticipantAt(schedule.scheduleNumber(), convenienceCategory).show()}">
             </td>
             <!-- 日程別・参加者別の都合 -->
