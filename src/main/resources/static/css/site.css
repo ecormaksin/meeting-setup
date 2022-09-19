@@ -65,6 +65,10 @@ th *, td * {
     border-color: red;
 }
 
+.delete-button-hidden {
+    visibility: hidden;
+}
+
 .url-copy-button {
     word-break: keep-all;
     margin-left: 1rem;
@@ -146,7 +150,12 @@ th *, td * {
 }
 
 .participant-name__link {
+    color: yellow;
+}
+
+.participant-name__link-disabled {
     color: white;
+    pointer-events: none;
 }
 
 .attendance-comment__textarea {
@@ -206,4 +215,9 @@ th *, td * {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.schedule-best-matched {
+    background-color: #ffff66;
+    font-weight: bold;
 }

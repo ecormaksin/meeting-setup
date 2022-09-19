@@ -40,6 +40,7 @@ public class MeetingDatasource implements MeetingRepository {
             MeetingMapper meetingMapper,
             ScheduleMapper scheduleMapper,
             AttendanceMapper attendanceMapper) {
+
         this.organizerMapper = organizerMapper;
         this.meetingMapper = meetingMapper;
         this.scheduleMapper = scheduleMapper;

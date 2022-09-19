@@ -83,6 +83,7 @@
     <select id="selectAttendancesByMeetingNumber" resultMap="attendance">
         SELECT
             出欠.出欠番号 AS "attendanceNumber.value",
+            出欠.参加者番号 AS "participantNumber.value",
             出欠.参加者名 AS "participantName.value",
             COALESCE(出欠コメント.出欠コメント, '') AS "attendanceComment.value"
         FROM

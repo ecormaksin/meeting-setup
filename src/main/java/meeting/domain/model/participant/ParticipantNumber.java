@@ -38,10 +38,6 @@ public class ParticipantNumber {
         return this.value.equals(other.value);
     }
 
-    public boolean isDifferent(final ParticipantNumber other) {
-        return !isSame(other);
-    }
-
     public String value() {
         return value;
     }

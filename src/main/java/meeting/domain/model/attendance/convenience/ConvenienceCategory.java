@@ -9,7 +9,7 @@ import java.util.List;
 public enum ConvenienceCategory {
     マル("○"),
     サンカク("△"),
-    バツ("×"),
+    バツ("✕"),
     未回答("－");
 
     String symbol;

@@ -12,8 +12,10 @@
   <article>
     <div class="meeting-show__h1-section">
       <h1>ミーティングの詳細</h1>
-      <div th:class="${meetingEditability.editOperableItemDisplayStatus()}">
-        <a th:href="@{/meeting/__${meetingNumber}__/edit}">ミーティングの編集・削除</a>
+      <div>
+        <a th:class="${meetingEditability.operableItemStatus()}"
+           th:href="@{/meeting/__${meetingNumber}__/edit}">ミーティングの編集・削除</a>
+        <span th:text="${meetingEditability.statusMessage()}"></span>
       </div>
     </div>
     <form method="get" action="#" th:object="${meeting}" th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
@@ -34,7 +36,7 @@
                 th:text="${convenienceCategory.symbol()}"></th>
             <!-- 参加者名 -->
             <th th:each="attendance, attendanceStat: *{attendances.asList()}">
-              <a class="participant-name__link"
+              <a th:class="${meeting.attendanceEditabilityFor(participantNumber, attendance).operableItemStatus()}"
                  th:href="@{/meeting/__${meetingNumber}__/attendance/__${attendance.attendanceNumber.value}__/edit}">
                 <span th:text="${attendance.participantName.value}"></span>
               </a>
@@ -45,7 +47,8 @@
           <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
             <td th:text="${scheduleStat.count}">1</td>
             <!-- 日程 -->
-            <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
+            <td th:class="${meeting.scheduleMatchStatusAt(schedule.scheduleNumber()).status()}"
+                th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
             </td>
             <!-- 日程別・都合別の回答者数 -->
             <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).valuesExcludeUnreplied()}"

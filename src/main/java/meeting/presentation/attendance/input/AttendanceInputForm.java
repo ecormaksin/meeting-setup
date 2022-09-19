@@ -1,4 +1,4 @@
-package meeting.presentation.attendance;
+package meeting.presentation.attendance.input;
 
 import meeting.domain.model.attendance.AttendanceComment;
 import meeting.domain.model.attendance.AttendanceEditRequest;

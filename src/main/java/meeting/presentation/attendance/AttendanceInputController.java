@@ -8,6 +8,7 @@ import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.participant.ParticipantNumberDuplicationStatus;
 import meeting.domain.model.schedule.Schedules;
+import meeting.presentation.attendance.input.AttendanceInputForm;
 import meeting.presentation.participant.ParticipantNumberProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

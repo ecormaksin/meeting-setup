@@ -4,11 +4,13 @@ import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.participant.ParticipantNumber;
+import meeting.domain.model.schedule.Schedule;
+import meeting.domain.model.schedule.ScheduleMatchStatus;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * ミーティング
@@ -75,8 +77,7 @@ public class Meeting {
 
     public TotalNumberOfParticipant totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
         int number = 0;
-        List<Attendance> attendanceList = attendances.asList();
-        for (Attendance attendance : attendanceList) {
+        for (Attendance attendance : attendances.asList()) {
             for (Convenience convenience : attendance.conveniences().asList()) {
                 if (!convenience.scheduleNumber().isSame(scheduleNumber)) {
                     continue;
@@ -88,17 +89,17 @@ public class Meeting {
             }
         }
 
-        return new TotalNumberOfParticipant(number);
+        return TotalNumberOfParticipant.of(number);
     }
 
     public ConvenienceCategory convenienceCategoryOf(AttendanceNumber attendanceNumber, ScheduleNumber scheduleNumber) {
 
         for (Attendance attendance : attendances.asList()) {
-            if (!attendance.attendanceNumber().equals(attendanceNumber)) {
+            if (!attendance.attendanceNumber().isSame(attendanceNumber)) {
                 continue;
             }
             for (Convenience convenience : attendance.conveniences().asList()) {
-                if (!convenience.scheduleNumber().equals(scheduleNumber)) {
+                if (!convenience.scheduleNumber().isSame(scheduleNumber)) {
                     continue;
                 }
                 return convenience.convenienceCategory();
@@ -107,10 +108,36 @@ public class Meeting {
         return ConvenienceCategory.未回答;
     }
 
+    public ScheduleMatchStatus scheduleMatchStatusAt(ScheduleNumber scheduleNumber) {
+        final TotalNumberOfParticipant targetTotalNumber = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
+
+        TotalNumberOfParticipant maxTotalNumber = TotalNumberOfParticipant.of(0);
+
+        for (Schedule schedule : schedules.asList()) {
+            TotalNumberOfParticipant currentTotalNumber  = totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.マル);
+            if (currentTotalNumber.isGreaterThan(maxTotalNumber)) {
+                maxTotalNumber = currentTotalNumber;
+            }
+        }
+
+        if (targetTotalNumber.isGreaterThanOne() && targetTotalNumber.isSame(maxTotalNumber)) {
+            return ScheduleMatchStatus.BEST_MATCHED;
+        }
+        return ScheduleMatchStatus.NOT_MATCHED;
+    }
+
+    public AttendanceEditability attendanceEditabilityFor(final ParticipantNumber participantNumber, final Attendance attendance) {
+
+        if (attendance.participantNumber().isSame(participantNumber)) {
+            return AttendanceEditability.編集可能;
+        }
+        return AttendanceEditability.編集不可;
+    }
+
     public MeetingEditability editabilityFor(final OrganizerNumber organizerNumber) {
-        if (isNotOrganizedBy(organizerNumber)) return MeetingEditability.FALSE;
-        if (isAlreadyResponded()) return MeetingEditability.FALSE;
-        return MeetingEditability.TRUE;
+        if (isNotOrganizedBy(organizerNumber)) return MeetingEditability.編集不可_非主催者;
+        if (isAlreadyResponded()) return MeetingEditability.編集不可_回答済;
+        return MeetingEditability.編集可能;
     }
 
     private boolean isNotOrganizedBy(final OrganizerNumber organizerNumber) {

@@ -5,11 +5,15 @@ import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingEditability;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.participant.ParticipantNumber;
 import meeting.presentation.organizer.OrganizerNumberProxy;
 import meeting.presentation.participant.ParticipantNumberProxy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -37,18 +41,23 @@ public class MeetingShowController {
     String show(Model model,
                 @PathVariable("meetingNumber") final MeetingNumber meetingNumber,
                 @CookieValue(value = "organizerNumber", required = false) final String organizerNumberValue,
+                @CookieValue(value = "participantNumber", required = false) final String participantNumberValue,
                 HttpServletRequest request) {
-
-        Meeting meeting = meetingShowScenario.meetingOf(meetingNumber);
 
         final OrganizerNumber organizerNumber = (Objects.isNull(organizerNumberValue) || organizerNumberValue.isBlank())
                         ? organizerNumberProxy.organizerNumber()
                         : OrganizerNumber.of(organizerNumberValue);
+
+        final ParticipantNumber participantNumber = (Objects.isNull(participantNumberValue) || participantNumberValue.isBlank())
+                ? participantNumberProxy.participantNumber()
+                : ParticipantNumber.of(participantNumberValue);
+
+        Meeting meeting = meetingShowScenario.meetingOf(meetingNumber);
         final MeetingEditability meetingEditability = meeting.editabilityFor(organizerNumber);
 
         model.addAttribute("meeting", meeting);
         model.addAttribute("meetingEditability", meetingEditability);
-        model.addAttribute("participantNumber", participantNumberProxy.participantNumber());
+        model.addAttribute("participantNumber", participantNumber);
 
         return "meeting/show";
     }

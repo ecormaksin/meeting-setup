@@ -42,7 +42,7 @@ public class MeetingEditController {
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
         final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editabilityFor(organizerNumber) == MeetingEditability.FALSE) {
+        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
             throw new MeetingCannotEditException();
         }
 
@@ -88,7 +88,7 @@ public class MeetingEditController {
         final Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
         final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editabilityFor(organizerNumber) == MeetingEditability.FALSE) {
+        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
             throw new MeetingCannotEditException();
         }
 
@@ -117,14 +117,13 @@ public class MeetingEditController {
 
     @PostMapping(params={"delete"})
     String delete(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                  @ModelAttribute("meetingEditRequest") MeetingEditRequest meetingEditRequest,
                   @CookieValue("organizerNumber") final String organizerNumberValue,
                   UriComponentsBuilder builder) {
 
         final Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
         final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editabilityFor(organizerNumber) == MeetingEditability.FALSE) {
+        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
             throw new MeetingCannotDeleteException();
         }
 

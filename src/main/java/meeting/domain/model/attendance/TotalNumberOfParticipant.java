@@ -10,6 +10,22 @@ public class TotalNumberOfParticipant {
         this.value = value;
     }
 
+    public static TotalNumberOfParticipant of(int value) {
+        return new TotalNumberOfParticipant(value);
+    }
+
+    public boolean isGreaterThanOne() {
+        return value > 1;
+    }
+
+    public boolean isGreaterThan(final TotalNumberOfParticipant other) {
+        return this.value > other.value;
+    }
+
+    public boolean isSame(final TotalNumberOfParticipant other) {
+        return this.value == other.value;
+    }
+
     public int value() {
         return value;
     }

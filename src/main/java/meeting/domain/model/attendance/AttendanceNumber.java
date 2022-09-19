@@ -33,6 +33,10 @@ public class AttendanceNumber {
         return new AttendanceNumber(value);
     }
 
+    public boolean isSame(AttendanceNumber other) {
+        return this.value.equals(other.value);
+    }
+
     public String value() {
         return value;
     }

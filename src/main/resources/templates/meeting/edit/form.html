@@ -25,10 +25,11 @@
       </p>
       <div class="meeting-edit__button-parent">
         <div>
-          <button>編集</button>
+          <button type="button" id="editMeetingButton" disabled="disabled">編集</button>
         </div>
         <div>
-          <button name="delete" class="delete-button">削除</button>
+          <button type="button" id="deleteMeetingButton" class="delete-button" disabled="disabled">削除</button>
+          <button name="delete" id="submitFormButtonWithDelete" class="delete-button-hidden">隠し削除ボタン</button>
         </div>
       </div>
     </form>
@@ -36,5 +37,35 @@
 
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
+<script th:inline="javascript">
+$(function() {
+
+  function disableTransactionButtons(disabled) {
+    $('#editMeetingButton').prop('disabled', disabled);
+    $('#deleteMeetingButton').prop('disabled', disabled);
+  }
+
+  function setOrganizerNumber() {
+    document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
+  }
+
+  function prepareSubmit() {
+    disableTransactionButtons(true);
+    setOrganizerNumber();
+  }
+
+  disableTransactionButtons(false);
+
+  $('#editMeetingButton').on('click', function() {
+    prepareSubmit();
+    $('form').get(0).submit();
+  });
+
+  $('#deleteMeetingButton').on('click', function() {
+    prepareSubmit();
+    $('#submitFormButtonWithDelete').click();
+  });
+});
+</script>
 </body>
 </html>

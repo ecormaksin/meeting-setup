@@ -4,16 +4,26 @@ package meeting.domain.model.meeting;
  * ミーティングの編集可否
  */
 public enum MeetingEditability {
-    TRUE("meeting-show__edit-button__display-block"),
-    FALSE("meeting-show__edit-button__display-none");
 
-    String editOperableItemDisplayStatus;
+    編集可能("meeting-show__edit-button__display-block", ""),
+    編集不可_非主催者(MeetingEditability.DISPLAY_NONE_CLASS, ""),
+    編集不可_回答済(MeetingEditability.DISPLAY_NONE_CLASS, "回答されているので削除・編集できません。");
 
-    MeetingEditability(String editOperableItemDisplayStatus) {
-        this.editOperableItemDisplayStatus = editOperableItemDisplayStatus;
+    private static final String DISPLAY_NONE_CLASS = "meeting-show__edit-button__display-none";
+
+    String operableItemStatus;
+    String statusMessage;
+
+    MeetingEditability(String operableItemStatus, String statusMessage) {
+        this.operableItemStatus = operableItemStatus;
+        this.statusMessage = statusMessage;
     }
 
-    public String editOperableItemDisplayStatus() {
-        return editOperableItemDisplayStatus;
+    public String operableItemStatus() {
+        return operableItemStatus;
+    }
+
+    public String statusMessage() {
+        return statusMessage;
     }
 }
