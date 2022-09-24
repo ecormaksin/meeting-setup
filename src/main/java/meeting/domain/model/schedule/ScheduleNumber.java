@@ -13,11 +13,11 @@ public class ScheduleNumber {
     @Deprecated
     ScheduleNumber() {}
 
-    public ScheduleNumber(final int value) {
+    public ScheduleNumber(int value) {
         this.value = value;
     }
 
-    public static ScheduleNumber of(final int value) {
+    public static ScheduleNumber of(int value) {
         return new ScheduleNumber(value);
     }
 
@@ -31,7 +31,7 @@ public class ScheduleNumber {
         return new ScheduleNumber(0);
     }
 
-    public boolean isSame(final ScheduleNumber other) {
+    public boolean isSame(ScheduleNumber other) {
         return this.value == other.value;
     }
 

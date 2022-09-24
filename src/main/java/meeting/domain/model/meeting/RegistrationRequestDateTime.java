@@ -12,7 +12,7 @@ public class RegistrationRequestDateTime {
     @Deprecated
     RegistrationRequestDateTime() {}
 
-    public RegistrationRequestDateTime(final LocalDateTime value) {
+    public RegistrationRequestDateTime(LocalDateTime value) {
         this.value = value;
     }
 
@@ -20,12 +20,12 @@ public class RegistrationRequestDateTime {
         return new RegistrationRequestDateTime(LocalDateTime.now());
     }
 
-    public static RegistrationRequestDateTime of(final LocalDateTime value) {
+    public static RegistrationRequestDateTime of(LocalDateTime value) {
         return new RegistrationRequestDateTime(value);
     }
 
     public static RegistrationRequestDateTime of(int year, int month, int dayOfMonth, int hour, int minute) {
-        final LocalDateTime value = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
+        LocalDateTime value = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
         return new RegistrationRequestDateTime(value);
     }
 

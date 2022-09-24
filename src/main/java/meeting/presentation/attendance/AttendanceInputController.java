@@ -26,9 +26,9 @@ import java.net.URI;
 @Controller
 @RequestMapping("meeting/{meetingNumber}/attendance/input")
 public class AttendanceInputController {
-    private static final String VIEW_PATH_FORM = "attendance/input/form";
+    static final String VIEW_PATH_FORM = "attendance/input/form";
 
-    private final AttendanceInputScenario attendanceInputScenario;
+    AttendanceInputScenario attendanceInputScenario;
 
     public AttendanceInputController(AttendanceInputScenario attendanceInputScenario) {
         this.attendanceInputScenario = attendanceInputScenario;
@@ -37,9 +37,9 @@ public class AttendanceInputController {
     @GetMapping
     String init(Model model,
                 @PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                @CookieValue("participantNumber") final String participantNumberValue) {
+                @CookieValue("participantNumber") String participantNumberValue) {
 
-        final ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
+        ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
 
         ParticipantName participantName = attendanceInputScenario.latestParticipantName(participantNumber);
         Schedules schedules = attendanceInputScenario.schedules(meetingNumber);
@@ -54,12 +54,12 @@ public class AttendanceInputController {
     String input(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
                  @Validated @ModelAttribute("attendanceInputForm") AttendanceInputForm attendanceInputForm,
                  BindingResult bindingResult, RedirectAttributes attributes,
-                 @CookieValue("participantNumber") final String participantNumberValue,
+                 @CookieValue("participantNumber") String participantNumberValue,
                  UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return VIEW_PATH_FORM;
 
-        final ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
+        ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
 
         if (participantNumberDuplicated(
                 meetingNumber,

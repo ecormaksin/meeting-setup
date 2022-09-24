@@ -7,12 +7,12 @@ public class CreationCompletedPage extends CustomPageObject {
 
     static final String URL_RELATIVE_PATH = "/meeting/create/completed";
 
-    public CreationCompletedPage(final WebDriver driver) {
+    public CreationCompletedPage(WebDriver driver) {
         super(driver);
     }
 
     protected boolean isNotTargetPage(WebDriver driver) {
-        final String url = driver.getCurrentUrl();
+        String url = driver.getCurrentUrl();
         return !url.endsWith(URL_RELATIVE_PATH);
     }
 

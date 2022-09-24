@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class OrganizerNumberProxy {
 
-    private final OrganizerNumber organizerNumber;
+    OrganizerNumber organizerNumber;
 
     public OrganizerNumberProxy() {
         this.organizerNumber = OrganizerNumber.newNumber();
@@ -16,7 +16,7 @@ public class OrganizerNumberProxy {
         return organizerNumber;
     }
 
-    public OrganizerNumber organizerNumber(final String value) {
+    public OrganizerNumber organizerNumber(String value) {
         return (Objects.isNull(value) || value.isBlank())
                 ? organizerNumber()
                 : OrganizerNumber.of(value);

@@ -18,8 +18,8 @@ import java.util.List;
 @Repository
 public class AttendanceDatasource implements AttendanceRepository {
 
-    private final ParticipantMapper participantMapper;
-    private final AttendanceMapper attendanceMapper;
+    ParticipantMapper participantMapper;
+    AttendanceMapper attendanceMapper;
 
     public AttendanceDatasource(
             ParticipantMapper participantMapper,
@@ -67,9 +67,9 @@ public class AttendanceDatasource implements AttendanceRepository {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
-        final AttendanceNumber attendanceNumber = attendanceInputRequest.attendanceNumber();
-        final ParticipantNumber participantNumber = attendanceInputRequest.participantNumber();
-        final ParticipantName participantName = attendanceInputRequest.participantName();
+        AttendanceNumber attendanceNumber = attendanceInputRequest.attendanceNumber();
+        ParticipantNumber participantNumber = attendanceInputRequest.participantNumber();
+        ParticipantName participantName = attendanceInputRequest.participantName();
 
         if (participantMapper.notExists(participantNumber)) participantMapper.insertParticipant(participantNumber);
 
@@ -94,9 +94,9 @@ public class AttendanceDatasource implements AttendanceRepository {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest) {
-        final AttendanceNumber attendanceNumber = attendanceEditRequest.attendanceNumber();
-        final ParticipantNumber participantNumber = attendanceEditRequest.participantNumber();
-        final ParticipantName participantName = attendanceEditRequest.participantName();
+        AttendanceNumber attendanceNumber = attendanceEditRequest.attendanceNumber();
+        ParticipantNumber participantNumber = attendanceEditRequest.participantNumber();
+        ParticipantName participantName = attendanceEditRequest.participantName();
 
         updateLatestParticipantName(participantNumber, participantName);
 

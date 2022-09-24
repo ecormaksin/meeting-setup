@@ -68,13 +68,19 @@
     </select>
 
     <resultMap id="searchedMeetings" type="meeting.domain.model.meeting.meeting_list.MeetingListItem">
-        <id property="meetingNumber.value" column="meetingNumber.value" />
-        <result property="subject.value" column="subject.value" />
-        <collection property="searchedSchedules.list"
-                    ofType="meeting.domain.model.schedule.SearchedSchedule">
-            <result property="meetingDate.value" column="meetingDate.value" />
-            <result property="startTime.value" column="startTime.value" />
-            <result property="endTime.value" column="endTime.value" />
+        <id property="meetingNumber.value" column="ミーティング番号" />
+        <result property="subject.value" column="件名" />
+        <collection property="schedules.list"
+                    ofType="meeting.domain.model.schedule.Schedule">
+            <id property="scheduleNumber.value" column="日程番号"/>
+            <association property="scheduleConstruct" javaType="meeting.domain.model.schedule.construct.ScheduleConstruct">
+                <result property="meetingDate.value" column="開催日"/>
+                <result property="startHour.value" column="開始時間"/>
+                <result property="startMinute" column="開始分"
+                        typeHandler="meeting.infrastructure.datasource.schedule.construct.StartMinuteTypeHandler"/>
+                <result property="duration" column="会議時間"
+                        typeHandler="meeting.infrastructure.datasource.schedule.construct.DurationTypeHandler"/>
+            </association>
         </collection>
     </resultMap>
 
@@ -83,24 +89,18 @@
             <bind name="keywordCondition" value="'%' + keyword.value + '%'" />
         </if>
         SELECT
-            ミーティング番号 AS "meetingNumber.value",
-            件名 AS "subject.value",
-            開催日 AS "meetingDate.value",
-            TO_TIMESTAMP(
-                CONCAT(TO_CHAR(開催日, 'YYYY-MM-DD'), ' ', 開始時刻),
-                'YYYY-MM-DD HH24:MI') AS "startTime.value",
-            TO_TIMESTAMP(
-                CONCAT(TO_CHAR(開催日, 'YYYY-MM-DD'), ' ', 開始時刻),
-                'YYYY-MM-DD HH24:MI')
-                + TO_CHAR(会議時間, '99" minutes"')::INTERVAL
-                AS "endTime.value"
+            ミーティング一覧の見出し.ミーティング番号,
+            ミーティング一覧の見出し.件名,
+            日程.日程番号,
+            日程.開催日,
+            日程.開始時間,
+            日程.開始分,
+            日程.会議時間
         FROM
             (SELECT
+                DISTINCT
                 ミーティング.ミーティング番号,
-                ミーティング.件名,
-                日程.開催日,
-                CONCAT(TO_CHAR(日程.開始時間,'00'), ':', TRIM(TO_CHAR(日程.開始分,'00'))) AS 開始時刻,
-                日程.会議時間
+                ミーティング.件名
             FROM
                 ミーティング._ミーティング AS ミーティング
                 INNER JOIN 主催者._ミーティングと主催者 AS ミーティングと主催者
@@ -116,15 +116,19 @@
                 ミーティングと主催者.主催者番号 = #{organizerNumber.value}
                 AND 日程.開催日 BETWEEN #{startDate.value} AND #{endDate.value}
                 <if test="keyword != null and keyword.value != null">
-                    AND (ミーティング.件名 LIKE #{keywordCondition}
-                    OR ミーティングメモ.メモ LIKE #{keywordCondition})
+                    AND (ミーティング.件名 LIKE #{keywordCondition} OR ミーティングメモ.メモ LIKE #{keywordCondition})
                 </if>
-            ) AS ミーティング一覧
+            LIMIT #{limitCount.value}) AS ミーティング一覧の見出し
+            INNER JOIN 日程候補._日程 AS 日程
+                ON
+                日程.ミーティング番号 = ミーティング一覧の見出し.ミーティング番号
+        WHERE
+            日程.開催日 BETWEEN #{startDate.value} AND #{endDate.value}
         ORDER BY
             ミーティング番号,
             開催日,
-            開始時刻,
+            開始時間,
+            開始分,
             会議時間
-        LIMIT #{limitCount.value}
     </select>
 </mapper>

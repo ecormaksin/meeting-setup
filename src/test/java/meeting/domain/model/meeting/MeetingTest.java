@@ -66,11 +66,11 @@ public class MeetingTest {
                     int numberOfParticipantSankaku,
                     int numberOfParticipantsBatsu) {
 
-        final ScheduleNumber scheduleNumber = ScheduleNumber.of(patternNumber);
-        final ScheduleConstruct scheduleConstruct =
+        ScheduleNumber scheduleNumber = ScheduleNumber.of(patternNumber);
+        ScheduleConstruct scheduleConstruct =
                     ScheduleConstruct.of(2021, 12, patternNumber, 10, 0, 60);
 
-        final List<Schedule> scheduleList = Arrays.asList(
+        List<Schedule> scheduleList = Arrays.asList(
                 new Schedule(scheduleNumber, scheduleConstruct)
         );
 

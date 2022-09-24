@@ -21,8 +21,8 @@ public class ScheduleInput {
     @Deprecated
     ScheduleInput(){}
 
-    public ScheduleInput(final ScheduleNumber scheduleNumber,
-                         final ScheduleConstructInput scheduleConstruct) {
+    public ScheduleInput(ScheduleNumber scheduleNumber,
+                         ScheduleConstructInput scheduleConstruct) {
         this.scheduleNumber = scheduleNumber;
         this.scheduleConstruct = scheduleConstruct;
     }
@@ -31,8 +31,8 @@ public class ScheduleInput {
         return new ScheduleInput(ScheduleNumber.initialized(), ScheduleConstructInput.empty());
     }
 
-    public static ScheduleInput fromSchedule(final Schedule schedule) {
-        final ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
+    public static ScheduleInput fromSchedule(Schedule schedule) {
+        ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
         return new ScheduleInput(
                 schedule.scheduleNumber(),
                 ScheduleConstructInput.fromScheduleConstruct(scheduleConstruct));

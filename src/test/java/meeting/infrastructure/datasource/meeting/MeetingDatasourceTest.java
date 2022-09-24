@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
     @Container
-    private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
+    static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -47,23 +47,23 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
     }
 
     void createMeeting(
-            final int meetingNumberBaseInt,
-            final String subjectValue,
-            final String memoValue,
-            final List<Schedule> scheduleList,
-            final int organizerNumberBaseInt,
-            final LocalDateTime registrationRequestDateTimeValue
+            int meetingNumberBaseInt,
+            String subjectValue,
+            String memoValue,
+            List<Schedule> scheduleList,
+            int organizerNumberBaseInt,
+            LocalDateTime registrationRequestDateTimeValue
     ) {
 
-        final MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(meetingNumberBaseInt);
-        final Subject subject = Subject.of(subjectValue);
-        final Memo memo = Memo.of(memoValue);
-        final Schedules schedules = Schedules.of(scheduleList);
-        final OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(organizerNumberBaseInt);
-        final RegistrationRequestDateTime registrationRequestDateTime
+        MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(meetingNumberBaseInt);
+        Subject subject = Subject.of(subjectValue);
+        Memo memo = Memo.of(memoValue);
+        Schedules schedules = Schedules.of(scheduleList);
+        OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(organizerNumberBaseInt);
+        RegistrationRequestDateTime registrationRequestDateTime
                 = RegistrationRequestDateTime.of(registrationRequestDateTimeValue);
 
-        final MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest(
+        MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest(
                 meetingNumber,
                 subject,
                 memo,
@@ -74,14 +74,14 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         meetingDatasource.create(meetingCreationRequest);
     }
 
-    private Schedule schedule(final int year,
-                                final int month,
-                                final int dayOfMonth,
-                                final int hour,
-                                final int minute,
-                                final int duration) {
+    private Schedule schedule(int year,
+                                int month,
+                                int dayOfMonth,
+                                int hour,
+                                int minute,
+                                int duration) {
 
-        final ScheduleConstruct scheduleConstruct =
+        ScheduleConstruct scheduleConstruct =
                 ScheduleConstruct.of(year, month, dayOfMonth, hour, minute, duration);
 
         return new Schedule(ScheduleNumber.initialized(), scheduleConstruct);
@@ -97,7 +97,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 columnFilters = { ScheduleNumberColumnFilter.class })
         void 作成リクエストの実行が成功する() {
 
-            final List<Schedule> scheduleList = Arrays.asList(
+            List<Schedule> scheduleList = Arrays.asList(
                     schedule(2022, 4, 1,10, 0,60)
             );
             createMeeting(
@@ -115,7 +115,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         @DisplayName("作成リクエストと同じ値を取得できる")
         class MeetingGet extends DBUnitWithoutWebTest {
 
-            final MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(1);
+            MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(1);
 
             Meeting meeting;
 
@@ -131,94 +131,94 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
             @Test
             void ミーティング番号が設定した通りであること() {
-                final MeetingNumber actual = meeting.meetingNumber();
+                MeetingNumber actual = meeting.meetingNumber();
                 assertEquals(expectedMeetingNumber.value(), actual.value());
             }
 
             @Test
             void 件名が設定した通りであること() {
-                final Subject subject = meeting.subject();
+                Subject subject = meeting.subject();
                 assertEquals("件名テスト１", subject.value());
             }
 
             @Test
             void メモが設定した通りであること() {
-                final Memo memo = meeting.memo();
+                Memo memo = meeting.memo();
                 assertEquals("メモテスト１", memo.value());
             }
 
             @Test
             void 主催者番号が設定した通りであること() {
-                final OrganizerNumber expected = OrganizerNumberTestHelper.fromInt(1);
-                final OrganizerNumber actual = meeting.organizerNumber();
+                OrganizerNumber expected = OrganizerNumberTestHelper.fromInt(1);
+                OrganizerNumber actual = meeting.organizerNumber();
                 assertEquals(expected.value(), actual.value());
             }
 
             private List<Schedule> scheduleList() {
-                final Schedules schedules = meeting.schedules();
+                Schedules schedules = meeting.schedules();
                 return  schedules.asList();
             }
 
             @Test
             void 日程候補が1件であること() {
-                final List<Schedule> scheduleList =  scheduleList();
+                List<Schedule> scheduleList =  scheduleList();
                 assertEquals(1, scheduleList.size());
             }
 
             private Schedule schedule() {
-                final List<Schedule> scheduleList =  scheduleList();
+                List<Schedule> scheduleList =  scheduleList();
                 return scheduleList.get(0);
             }
 
             @Test
             void 日程番号が発番されていること() {
-                final Schedule schedule = schedule();
-                final ScheduleNumber scheduleNumber = schedule.scheduleNumber();
+                Schedule schedule = schedule();
+                ScheduleNumber scheduleNumber = schedule.scheduleNumber();
                 assertTrue(scheduleNumber.value() > 0);
             }
 
             @Test
             void 開始予定時刻を設定内容に基づき取得できること() {
-                final StartTime startTime = schedule().startTime();
+                StartTime startTime = schedule().startTime();
                 assertEquals(LocalTime.of(10, 0), startTime.value());
             }
 
             @Test
             void 終了予定時刻を設定内容に基づき取得できること() {
-                final EndTime endTime = schedule().endTime();
+                EndTime endTime = schedule().endTime();
                 assertEquals(LocalTime.of(11, 0), endTime.value());
             }
 
             private ScheduleConstruct scheduleConstruct() {
-                final Schedule schedule = schedule();
+                Schedule schedule = schedule();
                 return schedule.scheduleConstruct();
             }
 
             @Test
             void 開催日が設定した通りであること() {
-                final ScheduleConstruct scheduleConstruct = scheduleConstruct();
-                final MeetingDate meetingDate = scheduleConstruct.meetingDate();
+                ScheduleConstruct scheduleConstruct = scheduleConstruct();
+                MeetingDate meetingDate = scheduleConstruct.meetingDate();
                 assertEquals(LocalDate.of(2022, 4, 1), meetingDate.value());
             }
 
             @Test
             void 開始時刻が設定した通りであること() {
-                final ScheduleConstruct scheduleConstruct = scheduleConstruct();
-                final StartHour startHour = scheduleConstruct.startHour();
+                ScheduleConstruct scheduleConstruct = scheduleConstruct();
+                StartHour startHour = scheduleConstruct.startHour();
                 assertEquals(10, startHour.value());
             }
 
             @Test
             void 開始分が設定した通りであること() {
-                final ScheduleConstruct scheduleConstruct = scheduleConstruct();
-                final StartMinute startMinute = scheduleConstruct.startMinute();
+                ScheduleConstruct scheduleConstruct = scheduleConstruct();
+                StartMinute startMinute = scheduleConstruct.startMinute();
                 assertEquals(0, startMinute.value());
             }
 
             @Test
             void 会議時間が設定した通りであること() {
-                final ScheduleConstruct scheduleConstruct = scheduleConstruct();
-                final Duration duration = scheduleConstruct.duration();
+                ScheduleConstruct scheduleConstruct = scheduleConstruct();
+                Duration duration = scheduleConstruct.duration();
                 assertEquals(60, duration.value());
             }
         }
@@ -236,7 +236,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 columnFilters = { ScheduleNumberColumnFilter.class })
         void 作成リクエストの実行が成功する() {
 
-            final List<Schedule> scheduleList = Arrays.asList(
+            List<Schedule> scheduleList = Arrays.asList(
                     schedule(2022, 4, 3,13, 30,90),
                     schedule(2022, 4, 2,11, 0,30),
                     schedule(2022, 4, 2,10, 30,60)
@@ -256,7 +256,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         @DisplayName("作成リクエストと同じ値を取得できる")
         class MeetingGet extends DBUnitWithoutWebTest {
 
-            final MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(2);
+            MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(2);
 
             Meeting meeting;
 
@@ -267,14 +267,14 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
             @Test
             void メモが未設定であること() {
-                final Memo memo = meeting.memo();
+                Memo memo = meeting.memo();
                 assertEquals("", memo.value());
             }
 
             @Test
             void 日程候補を開催日時の昇順で取得していること() {
-                final List<MeetingDateTimeSpan> expected = meetingDateTimeSpansExpected();
-                final List<MeetingDateTimeSpan> actual = meetingDateTimeSpansActual();
+                List<MeetingDateTimeSpan> expected = meetingDateTimeSpansExpected();
+                List<MeetingDateTimeSpan> actual = meetingDateTimeSpansActual();
                 assertEquals(expected, actual);
             }
 
@@ -292,9 +292,9 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
             private List<MeetingDateTimeSpan> meetingDateTimeSpansActual() {
                 return meeting.schedules().asList().stream()
                         .map(s -> {
-                            final MeetingDate meetingDate = s.meetingDate();
-                            final StartTime startTime = s.startTime();
-                            final EndTime endTime = s.endTime();
+                            MeetingDate meetingDate = s.meetingDate();
+                            StartTime startTime = s.startTime();
+                            EndTime endTime = s.endTime();
                             return new MeetingDateTimeSpan( meetingDate.value(), startTime.value(), endTime.value());
                         })
                         .collect(Collectors.toList());

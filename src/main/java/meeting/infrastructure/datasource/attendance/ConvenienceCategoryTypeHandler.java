@@ -18,7 +18,7 @@ public class ConvenienceCategoryTypeHandler extends BaseTypeHandler<ConvenienceC
         ps.setString(i, parameter.symbol());
     }
 
-    private ConvenienceCategory convenienceCategory(final String columnValue) {
+    private ConvenienceCategory convenienceCategory(String columnValue) {
         return Objects.isNull(columnValue) ?
                 ConvenienceCategory.バツ
                 :

@@ -16,7 +16,7 @@ public class StartHourInput {
     @Deprecated
     StartHourInput() {}
 
-    public StartHourInput(final String value) {
+    public StartHourInput(String value) {
         this.value = value;
 
         valid = isValid();
@@ -26,15 +26,15 @@ public class StartHourInput {
         return new StartHourInput("");
     }
 
-    public static StartHourInput of(final String value) {
+    public static StartHourInput of(String value) {
         return new StartHourInput(value);
     }
 
-    public static StartHourInput of(final int intValue) {
+    public static StartHourInput of(int intValue) {
         return of(String.valueOf(intValue));
     }
 
-    public static StartHourInput of(final StartHour startHour) {
+    public static StartHourInput of(StartHour startHour) {
         return of(startHour.value());
     }
 

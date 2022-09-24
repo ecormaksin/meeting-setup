@@ -7,7 +7,7 @@ import javax.validation.constraints.AssertTrue;
  */
 public class ParticipantName {
     static final int MAX_LENGTH = 10;
-    private static final String WITHIN_MAX_LENGTH = "参加者名は" + MAX_LENGTH + "文字以内で必ず入力してください。";
+    static final String WITHIN_MAX_LENGTH = "参加者名は" + MAX_LENGTH + "文字以内で必ず入力してください。";
 
     String value;
 
@@ -16,7 +16,7 @@ public class ParticipantName {
     @Deprecated
     ParticipantName() {}
 
-    public ParticipantName(final String value) {
+    public ParticipantName(String value) {
         this.value = value;
 
         valid = isValid();
@@ -26,7 +26,7 @@ public class ParticipantName {
         return new ParticipantName("");
     }
 
-    public static ParticipantName of(final String value) {
+    public static ParticipantName of(String value) {
         return new ParticipantName(value);
     }
 
@@ -38,7 +38,7 @@ public class ParticipantName {
     }
 
     private boolean isBlank() {
-        final String whiteSpaceRemoved = value.replaceAll("(　|\\s)+", "");
+        String whiteSpaceRemoved = value.replaceAll("(　|\\s)+", "");
         return whiteSpaceRemoved.isBlank();
     }
 

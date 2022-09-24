@@ -19,10 +19,10 @@ public class MeetingWithoutSchedulesAndAttendances {
     MeetingWithoutSchedulesAndAttendances() {}
 
     public MeetingWithoutSchedulesAndAttendances(
-            final MeetingNumber meetingNumber,
-            final Subject subject,
-            final Memo memo,
-            final OrganizerNumber organizerNumber) {
+            MeetingNumber meetingNumber,
+            Subject subject,
+            Memo memo,
+            OrganizerNumber organizerNumber) {
 
         this.meetingNumber = meetingNumber;
         this.subject = subject;

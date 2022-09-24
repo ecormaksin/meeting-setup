@@ -12,7 +12,7 @@ public class ParticipantNumber {
 
     static final int SIZE = 26;
     public static final String REGEXP = "[\\da-z]{" + SIZE + "}";
-    private static final String SPECIFIED_VALUE = "参加者番号は" + SIZE + "桁の半角英数字で指定してください。";
+    static final String SPECIFIED_VALUE = "参加者番号は" + SIZE + "桁の半角英数字で指定してください。";
 
     @NotNull(message = SPECIFIED_VALUE)
     @Pattern(regexp="[\\da-z]{" + SIZE + "}", message = SPECIFIED_VALUE)
@@ -21,7 +21,7 @@ public class ParticipantNumber {
     @Deprecated
     ParticipantNumber() {}
 
-    public ParticipantNumber(final String value) {
+    public ParticipantNumber(String value) {
         this.value = value;
     }
 
@@ -30,11 +30,11 @@ public class ParticipantNumber {
         return new ParticipantNumber(ulid.nextULID().toLowerCase());
     }
 
-    public static ParticipantNumber of(final String value) {
+    public static ParticipantNumber of(String value) {
         return new ParticipantNumber(value);
     }
 
-    public boolean isSame(final ParticipantNumber other) {
+    public boolean isSame(ParticipantNumber other) {
         return this.value.equals(other.value);
     }
 

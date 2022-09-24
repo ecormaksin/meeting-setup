@@ -19,7 +19,7 @@ public enum StartMinute {
         this.label = label;
     }
 
-    public static StartMinute of(final int value) {
+    public static StartMinute of(int value) {
         List<String> candidates = new ArrayList<>();
         for (StartMinute startMinute : StartMinute.values()) {
             if (startMinute.value == value) {
@@ -27,13 +27,13 @@ public enum StartMinute {
             }
             candidates.add(String.valueOf(startMinute.value));
         }
-        final String candidatesString = String.join(",", candidates);
+        String candidatesString = String.join(",", candidates);
         throw new IllegalArgumentException(
                 String.format("開始分は次の中から指定してください。: %s", candidatesString)
         );
     }
 
-    public static StartMinute of(final String stringValue) {
+    public static StartMinute of(String stringValue) {
         return of(Integer.valueOf(stringValue));
     }
 

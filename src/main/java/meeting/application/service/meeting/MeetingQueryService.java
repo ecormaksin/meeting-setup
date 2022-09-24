@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MeetingQueryService {
-    private final MeetingRepository meetingRepository;
+    MeetingRepository meetingRepository;
 
     MeetingQueryService(MeetingRepository meetingRepository) {
         this.meetingRepository = meetingRepository;

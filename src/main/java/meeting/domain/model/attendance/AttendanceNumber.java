@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
 public class AttendanceNumber {
 
     static final int SIZE = 26;
-    private static final String SPECIFIED_VALUE = "出欠番号は" + SIZE + "桁の半角英数字で指定してください。";
+    static final String SPECIFIED_VALUE = "出欠番号は" + SIZE + "桁の半角英数字で指定してください。";
 
     @NotNull(message = SPECIFIED_VALUE)
     @Pattern(regexp="[\\da-z]{" + SIZE + "}", message = SPECIFIED_VALUE)
@@ -25,11 +25,11 @@ public class AttendanceNumber {
         return new AttendanceNumber(ulid.nextULID().toLowerCase());
     }
 
-    public AttendanceNumber(final String value) {
+    public AttendanceNumber(String value) {
         this.value = value;
     }
 
-    public static AttendanceNumber of(final String value) {
+    public static AttendanceNumber of(String value) {
         return new AttendanceNumber(value);
     }
 

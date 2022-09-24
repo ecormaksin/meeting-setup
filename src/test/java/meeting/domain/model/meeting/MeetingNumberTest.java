@@ -30,9 +30,9 @@ public class MeetingNumberTest {
 
     @Test
     void _ミーティング番号が既定内の値の場合はエラーにならない() {
-        final MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        MeetingNumber meetingNumber = MeetingNumber.newNumber();
 
-        final Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
+        Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -40,9 +40,9 @@ public class MeetingNumberTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _ミーティング番号が規定外の値の場合はエラーになる(String inputValue) {
-        final MeetingNumber meetingNumber = new MeetingNumber(inputValue);
+        MeetingNumber meetingNumber = new MeetingNumber(inputValue);
 
-        final Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
+        Set<ConstraintViolation<MeetingNumber>> constraintViolations = validator.validate(meetingNumber);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("ミーティング番号は26桁の半角英数字で指定してください。", constraintViolations.iterator().next().getMessage());
@@ -50,11 +50,11 @@ public class MeetingNumberTest {
 
     static List<String> invalidInputs() {
 
-        final MeetingNumber meetingNumber = MeetingNumber.newNumber();
-        final String validValue = meetingNumber.value();
-        final String sizeShortValue = validValue.substring(0, MeetingNumber.SIZE - 1);
-        final String sizeOverValue = validValue + "a";
-        final String symbolIncluded = sizeShortValue + "$";
+        MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        String validValue = meetingNumber.value();
+        String sizeShortValue = validValue.substring(0, MeetingNumber.SIZE - 1);
+        String sizeOverValue = validValue + "a";
+        String symbolIncluded = sizeShortValue + "$";
 
         return Arrays.asList(
                 null,

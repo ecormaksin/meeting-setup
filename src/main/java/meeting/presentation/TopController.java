@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class TopController {
 
-    private final OrganizerNumberProxy organizerNumberProxy;
-    private final ParticipantNumberProxy participantNumberProxy;
+    OrganizerNumberProxy organizerNumberProxy;
+    ParticipantNumberProxy participantNumberProxy;
 
     public TopController(OrganizerNumberProxy organizerNumberProxy,
                          ParticipantNumberProxy participantNumberProxy) {

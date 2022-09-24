@@ -103,7 +103,7 @@ public class MeetingCreationControllerTest {
         @Test
         void 件名未入力時はエラー() {
 
-            final ScheduleConstructInput constructInput =
+            ScheduleConstructInput constructInput =
                     ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
 
             formPage.inputScheduleAt(0, constructInput);
@@ -163,7 +163,7 @@ public class MeetingCreationControllerTest {
 
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
-            final ScheduleConstructInput constructInput =
+            ScheduleConstructInput constructInput =
                     ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
 
             for (int index = 0; index <= 1; index++) {
@@ -180,7 +180,7 @@ public class MeetingCreationControllerTest {
 
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
-            final int index = 0;
+            int index = 0;
             formPage.inputStartHourAt(index, StartHourInput.of(10));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
             formPage.inputDurationAt(index, DurationInput.of(60));
@@ -196,7 +196,7 @@ public class MeetingCreationControllerTest {
 
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
-            final int index = 1;
+            int index = 1;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 4, 5));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
             formPage.inputDurationAt(index, DurationInput.of(60));
@@ -209,11 +209,11 @@ public class MeetingCreationControllerTest {
 
         @ParameterizedTest(name = "{0}時の場合")
         @ValueSource(ints = {8, 18})
-        void 開始時間が指定範囲外の場合はエラー(final int hour) {
+        void 開始時間が指定範囲外の場合はエラー(int hour) {
 
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
-            final int index = 1;
+            int index = 1;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 4, 5));
             formPage.inputStartHourAt(index, StartHourInput.of(hour));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
@@ -230,7 +230,7 @@ public class MeetingCreationControllerTest {
 
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
-            final int index = 2;
+            int index = 2;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 5, 6));
             formPage.inputStartHourAt(index, StartHourInput.of(11));
             formPage.inputDurationAt(index, DurationInput.of(90));
@@ -246,7 +246,7 @@ public class MeetingCreationControllerTest {
 
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
-            final int index = 0;
+            int index = 0;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 6, 7));
             formPage.inputStartHourAt(index, StartHourInput.of(13));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(30));
@@ -264,7 +264,7 @@ public class MeetingCreationControllerTest {
 
     void inputValidSampleSchedule() {
 
-        final ScheduleConstructInput constructInput =
+        ScheduleConstructInput constructInput =
                 ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
 
         formPage.inputScheduleAt(0, constructInput);

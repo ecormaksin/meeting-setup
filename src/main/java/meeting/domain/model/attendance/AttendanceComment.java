@@ -13,11 +13,11 @@ public class AttendanceComment {
     @Deprecated
     AttendanceComment() {}
 
-    public AttendanceComment(final String value) {
+    public AttendanceComment(String value) {
         this.value = value;
     }
 
-    public static AttendanceComment of(final String value) {
+    public static AttendanceComment of(String value) {
         return new AttendanceComment(value);
     }
 

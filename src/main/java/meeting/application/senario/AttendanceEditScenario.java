@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AttendanceEditScenario {
 
-    private final ParticipantQueryService participantQueryService;
+    ParticipantQueryService participantQueryService;
     AttendanceRecordService attendanceRecordService;
     AttendanceQueryService attendanceQueryService;
     ScheduleQueryService scheduleQueryService;

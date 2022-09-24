@@ -27,9 +27,9 @@ public class MeetingDateInputTest {
     @ParameterizedTest
     @MethodSource("validInputs")
     void _開催日が既定内の値の場合はエラーにならない(String inputValue) {
-        final MeetingDateInput meetingDateInput = new MeetingDateInput(inputValue);
+        MeetingDateInput meetingDateInput = new MeetingDateInput(inputValue);
 
-        final Set<ConstraintViolation<MeetingDateInput>> constraintViolations = validator.validate(meetingDateInput);
+        Set<ConstraintViolation<MeetingDateInput>> constraintViolations = validator.validate(meetingDateInput);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -45,9 +45,9 @@ public class MeetingDateInputTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _開催日が規定外の値の場合はエラーになる(String inputValue) {
-        final MeetingDateInput meetingDateInput = new MeetingDateInput(inputValue);
+        MeetingDateInput meetingDateInput = new MeetingDateInput(inputValue);
 
-        final Set<ConstraintViolation<MeetingDateInput>> constraintViolations = validator.validate(meetingDateInput);
+        Set<ConstraintViolation<MeetingDateInput>> constraintViolations = validator.validate(meetingDateInput);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("開催日は'yyyy-MM-dd'形式で入力してください。", constraintViolations.iterator().next().getMessage());

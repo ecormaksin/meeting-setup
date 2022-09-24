@@ -28,21 +28,21 @@ public class MeetingDateInput {
         return new MeetingDateInput("");
     }
 
-    public static MeetingDateInput of(final String value) {
+    public static MeetingDateInput of(String value) {
         return new MeetingDateInput(value);
     }
 
-    public static MeetingDateInput of(final LocalDate localDate) {
-        final String formatted = localDate.format(MeetingDate.FORMATTER);
+    public static MeetingDateInput of(LocalDate localDate) {
+        String formatted = localDate.format(MeetingDate.FORMATTER);
         return of(formatted);
     }
 
-    public static MeetingDateInput of(final int year, final int month, final int dayOfMonth) {
-        final LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+    public static MeetingDateInput of(int year, int month, int dayOfMonth) {
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
         return of(localDate);
     }
 
-    public static MeetingDateInput of(final MeetingDate meetingDate) {
+    public static MeetingDateInput of(MeetingDate meetingDate) {
         return new MeetingDateInput(meetingDate.stringValue());
     }
 

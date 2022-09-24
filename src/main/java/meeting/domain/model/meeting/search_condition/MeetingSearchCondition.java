@@ -17,18 +17,22 @@ public class MeetingSearchCondition {
 
     LimitCount limitCount = LimitCount.defaultValue();
 
+    boolean durationValid;
+
     @Deprecated
     MeetingSearchCondition() {}
 
     public MeetingSearchCondition(Keyword keyword,
-                                  @Valid StartDate startDate,
-                                  @Valid EndDate endDate) {
+                                  StartDate startDate,
+                                  EndDate endDate) {
         this.keyword = keyword;
         this.startDate = startDate;
         this.endDate = endDate;
+
+        durationValid = isDurationValid();
     }
 
-    public static MeetingSearchCondition initialize() {
+    public static MeetingSearchCondition initialized() {
         LocalDate currentDate = LocalDate.now();
 
         return new MeetingSearchCondition(Keyword.empty(),

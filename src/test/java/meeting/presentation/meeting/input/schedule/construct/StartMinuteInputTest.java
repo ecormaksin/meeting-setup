@@ -28,9 +28,9 @@ public class StartMinuteInputTest {
     @ParameterizedTest
     @MethodSource("validInputs")
     void _開始分が既定内の値の場合はエラーにならない(String inputValue) {
-        final StartMinuteInput startMinuteInput = new StartMinuteInput(inputValue);
+        StartMinuteInput startMinuteInput = new StartMinuteInput(inputValue);
 
-        final Set<ConstraintViolation<StartMinuteInput>> constraintViolations = validator.validate(startMinuteInput);
+        Set<ConstraintViolation<StartMinuteInput>> constraintViolations = validator.validate(startMinuteInput);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -49,9 +49,9 @@ public class StartMinuteInputTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _開始分が規定外の値の場合はエラーになる(String inputValue) {
-        final StartMinuteInput startMinuteInput = new StartMinuteInput(inputValue);
+        StartMinuteInput startMinuteInput = new StartMinuteInput(inputValue);
 
-        final Set<ConstraintViolation<StartMinuteInput>> constraintViolations = validator.validate(startMinuteInput);
+        Set<ConstraintViolation<StartMinuteInput>> constraintViolations = validator.validate(startMinuteInput);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("開始分は30分単位で入力してください。", constraintViolations.iterator().next().getMessage());

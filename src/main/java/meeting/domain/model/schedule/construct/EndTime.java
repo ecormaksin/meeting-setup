@@ -14,7 +14,7 @@ public class EndTime {
     @Deprecated
     EndTime() {}
 
-    public EndTime(final LocalTime value) {
+    public EndTime(LocalTime value) {
         this.value = value;
     }
 

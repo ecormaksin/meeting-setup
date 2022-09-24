@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ParticipantDatasource implements ParticipantRepository {
 
-    private final ParticipantMapper participantMapper;
+    ParticipantMapper participantMapper;
 
     ParticipantDatasource(ParticipantMapper participantMapper) {
         this.participantMapper = participantMapper;

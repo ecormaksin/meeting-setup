@@ -12,7 +12,7 @@ public class MeetingNumber {
 
     static final int SIZE = 26;
     public static final String REGEXP = "[\\da-z]{" + SIZE + "}";
-    private static final String SPECIFIED_VALUE = "ミーティング番号は" + SIZE + "桁の半角英数字で指定してください。";
+    static final String SPECIFIED_VALUE = "ミーティング番号は" + SIZE + "桁の半角英数字で指定してください。";
 
     @NotNull(message = SPECIFIED_VALUE)
     @Pattern(regexp=REGEXP, message = SPECIFIED_VALUE)

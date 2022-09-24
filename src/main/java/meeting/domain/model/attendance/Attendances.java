@@ -14,11 +14,11 @@ public class Attendances {
     @Deprecated
     Attendances() {}
 
-    public Attendances(final List<Attendance> list) {
+    public Attendances(List<Attendance> list) {
         this.list = list;
     }
 
-    public static Attendances of(final List<Attendance> list) {
+    public static Attendances of(List<Attendance> list) {
         return new Attendances(list);
     }
 

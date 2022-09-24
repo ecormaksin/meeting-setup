@@ -12,7 +12,7 @@ public class OrganizerNumber {
 
     static final int SIZE = 26;
     public static final String REGEXP = "[\\da-z]{" + SIZE + "}";
-    private static final String SPECIFIED_VALUE = "主催者番号は" + SIZE + "桁の半角英数字で指定してください。";
+    static final String SPECIFIED_VALUE = "主催者番号は" + SIZE + "桁の半角英数字で指定してください。";
 
     @NotNull(message = SPECIFIED_VALUE)
     @Pattern(regexp="[\\da-z]{" + SIZE + "}", message = SPECIFIED_VALUE)
@@ -21,7 +21,7 @@ public class OrganizerNumber {
     @Deprecated
     OrganizerNumber() {}
 
-    public OrganizerNumber(final String value) {
+    public OrganizerNumber(String value) {
         this.value = value;
     }
 
@@ -30,15 +30,15 @@ public class OrganizerNumber {
         return new OrganizerNumber(ulid.nextULID().toLowerCase());
     }
 
-    public static OrganizerNumber of(final String value) {
+    public static OrganizerNumber of(String value) {
         return new OrganizerNumber(value);
     }
 
-    public boolean isSame(final OrganizerNumber other) {
+    public boolean isSame(OrganizerNumber other) {
         return this.value.equals(other.value);
     }
 
-    public boolean isDifferent(final OrganizerNumber other) {
+    public boolean isDifferent(OrganizerNumber other) {
         return !isSame(other);
     }
 

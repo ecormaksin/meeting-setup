@@ -65,7 +65,7 @@ th *, td * {
     border-color: red;
 }
 
-.delete-button-hidden {
+.button-hidden {
     visibility: hidden;
 }
 

@@ -14,7 +14,7 @@ public class StartTime {
     @Deprecated
     StartTime() {}
 
-    public StartTime(final LocalTime value) {
+    public StartTime(LocalTime value) {
         this.value = value;
     }
 

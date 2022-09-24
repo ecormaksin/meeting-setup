@@ -64,8 +64,8 @@ public class AttendanceInputForm {
     }
 
     public static AttendanceInputForm empty(
-            final ParticipantName participantName,
-            final Schedules schedules) {
+            ParticipantName participantName,
+            Schedules schedules) {
 
         List<Convenience> convenienceList = new ArrayList<>();
 

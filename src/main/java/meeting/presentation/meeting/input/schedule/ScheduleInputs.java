@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class ScheduleInputs {
 
-    private static final int INITIAL_EMPTY_SCHEDULES_SIZE = 3;
+    static final int INITIAL_EMPTY_SCHEDULES_SIZE = 3;
 
     @NotNull(message = Schedules.SIZE_WITHIN_SPECIFIED_RANGE)
     List<@Valid ScheduleInput> list;
@@ -23,14 +23,14 @@ public class ScheduleInputs {
     @Deprecated
     ScheduleInputs() {}
 
-    public ScheduleInputs(final List<ScheduleInput> list) {
+    public ScheduleInputs(List<ScheduleInput> list) {
         this.list = list;
 
         sizeWithinSpecifiedRange = isSizeWithinSpecifiedRange();
         setOfUniqueMeetingDateTimes = isSetOfUniqueMeetingDateTimes();
     }
 
-    public static ScheduleInputs of(final List<ScheduleInput> source) {
+    public static ScheduleInputs of(List<ScheduleInput> source) {
         return new ScheduleInputs(source);
     }
 
@@ -42,7 +42,7 @@ public class ScheduleInputs {
         return of(initialList);
     }
 
-    public static ScheduleInputs of(final Schedules schedules) {
+    public static ScheduleInputs of(Schedules schedules) {
         List<ScheduleInput> inputs = new ArrayList<>();
         for (Schedule schedule : schedules.asList()) {
             ScheduleInput input = ScheduleInput.fromSchedule(schedule);
@@ -55,7 +55,7 @@ public class ScheduleInputs {
     @AssertTrue(message = Schedules.SIZE_WITHIN_SPECIFIED_RANGE)
     boolean isSizeWithinSpecifiedRange() {
         if (doInvalidSchedulesExist()) return true;
-        final long sizeOfValidSchedules = sizeOfValidSchedules();
+        long sizeOfValidSchedules = sizeOfValidSchedules();
         return (Schedules.MIN_SIZE <= sizeOfValidSchedules) && (sizeOfValidSchedules <= Schedules.MAX_SIZE);
     }
 
@@ -79,7 +79,7 @@ public class ScheduleInputs {
 
     @AssertTrue(message = Schedules.SET_OF_UNIQUE_MEETING_DATE_TIMES)
     boolean isSetOfUniqueMeetingDateTimes() {
-        final List<ScheduleInput> validInputs = validInputs();
+        List<ScheduleInput> validInputs = validInputs();
         if (validInputs.isEmpty()) return true;
 
         Set<ScheduleConstructInput> constructSet = new HashSet<>();
@@ -115,14 +115,14 @@ public class ScheduleInputs {
         return of(newList);
     }
 
-    public ScheduleInputs remove(final int index) {
+    public ScheduleInputs remove(int index) {
         List<ScheduleInput> newList = new ArrayList<>(list);
         newList.remove(index);
         return of(newList);
     }
 
     public Schedules toSchedules() {
-        final List<ScheduleInput> validInputs = validInputs();
+        List<ScheduleInput> validInputs = validInputs();
 
         List<Schedule> source = new ArrayList<>();
         for (ScheduleInput scheduleInput : validInputs) {

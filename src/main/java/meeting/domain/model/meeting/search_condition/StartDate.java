@@ -23,7 +23,7 @@ public class StartDate {
     }
 
     public boolean isSameOrAfter(EndDate endDate) {
-        final LocalDate endDateValue = endDate.value();
+        LocalDate endDateValue = endDate.value();
         return value.equals(endDateValue) || value.isAfter(endDateValue);
     }
 

@@ -28,9 +28,9 @@ import java.net.URI;
 @RequestMapping("meeting/{meetingNumber}/attendance/{attendanceNumber}/edit")
 public class AttendanceEditController {
 
-    private static final String VIEW_PATH_FORM = "attendance/edit/form";
+    static final String VIEW_PATH_FORM = "attendance/edit/form";
 
-    private final AttendanceEditScenario attendanceEditScenario;
+    AttendanceEditScenario attendanceEditScenario;
 
     public AttendanceEditController(AttendanceEditScenario attendanceEditScenario) {
         this.attendanceEditScenario = attendanceEditScenario;
@@ -60,12 +60,12 @@ public class AttendanceEditController {
                 @PathVariable("attendanceNumber") AttendanceNumber attendanceNumber,
                 @Validated @ModelAttribute("attendanceInputForm") AttendanceInputForm attendanceInputForm,
                 BindingResult bindingResult, RedirectAttributes attributes,
-                @CookieValue("participantNumber") final String participantNumberValue,
+                @CookieValue("participantNumber") String participantNumberValue,
                 UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return VIEW_PATH_FORM;
 
-        final ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
+        ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
 
         if (participantNumberDuplicated(
                 meetingNumber,

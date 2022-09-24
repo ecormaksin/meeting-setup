@@ -24,8 +24,13 @@ public class MeetingSearchRequest {
         this.organizerNumber = organizerNumber;
         this.searchCondition = searchCondition;
     }
-    public static MeetingSearchRequest initialize(OrganizerNumber organizerNumber) {
-        return new MeetingSearchRequest(organizerNumber, MeetingSearchCondition.initialize());
+    public static MeetingSearchRequest initialized(OrganizerNumber organizerNumber) {
+        return new MeetingSearchRequest(organizerNumber, MeetingSearchCondition.initialized());
+    }
+
+    public static MeetingSearchRequest of(OrganizerNumber organizerNumber,
+                                          MeetingSearchCondition searchCondition) {
+        return new MeetingSearchRequest(organizerNumber, searchCondition);
     }
 
     public OrganizerNumber organizerNumber() {

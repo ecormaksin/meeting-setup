@@ -19,8 +19,8 @@ public class StartHourInputTest {
 
     private static Validator validator;
 
-    private static final int HOUR_MIN = 0;
-    private static final int HOUR_MAX = 23;
+    static final int HOUR_MIN = 0;
+    static final int HOUR_MAX = 23;
 
     @BeforeAll
     static void setUpValidator() {
@@ -31,9 +31,9 @@ public class StartHourInputTest {
     @ParameterizedTest
     @MethodSource("validInputs")
     void _開始時間が既定内の値の場合はエラーにならない(String inputValue) {
-        final StartHourInput startHourInput = new StartHourInput(inputValue);
+        StartHourInput startHourInput = new StartHourInput(inputValue);
 
-        final Set<ConstraintViolation<StartHourInput>> constraintViolations = validator.validate(startHourInput);
+        Set<ConstraintViolation<StartHourInput>> constraintViolations = validator.validate(startHourInput);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -51,9 +51,9 @@ public class StartHourInputTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _開始時間が規定外の値の場合はエラーになる(String inputValue) {
-        final StartHourInput startHourInput = new StartHourInput(inputValue);
+        StartHourInput startHourInput = new StartHourInput(inputValue);
 
-        final Set<ConstraintViolation<StartHourInput>> constraintViolations = validator.validate(startHourInput);
+        Set<ConstraintViolation<StartHourInput>> constraintViolations = validator.validate(startHourInput);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("開始時間は9時から17時の間で指定してください。", constraintViolations.iterator().next().getMessage());

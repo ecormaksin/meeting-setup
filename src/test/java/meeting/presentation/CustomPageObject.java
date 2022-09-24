@@ -17,7 +17,7 @@ public abstract class CustomPageObject {
         this.driver = driver;
 
         if (isNotTargetPage(driver)) {
-            final String message = String.format("%sページではありません。: %s, %s", pageName(), driver.getCurrentUrl(), driver.getPageSource());
+            String message = String.format("%sページではありません。: %s, %s", pageName(), driver.getCurrentUrl(), driver.getPageSource());
             throw new IllegalStateException(message);
         }
     }

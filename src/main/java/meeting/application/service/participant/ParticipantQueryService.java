@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParticipantQueryService {
 
-    private final ParticipantRepository participantRepository;
+    ParticipantRepository participantRepository;
 
     ParticipantQueryService(ParticipantRepository participantRepository) {
         this.participantRepository = participantRepository;

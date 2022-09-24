@@ -4,7 +4,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 public class MeetingDBTestContainer extends PostgreSQLContainer<MeetingDBTestContainer> {
 
-    private static final String IMAGE_VERSION = "postgres:14.3";
+    static final String IMAGE_VERSION = "postgres:14.3";
     private static MeetingDBTestContainer container;
 
     public MeetingDBTestContainer() {

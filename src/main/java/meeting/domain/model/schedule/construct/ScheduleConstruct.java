@@ -29,10 +29,10 @@ public class ScheduleConstruct {
     @Deprecated
     ScheduleConstruct() {}
 
-    public ScheduleConstruct(final MeetingDate meetingDate,
-                             final StartHour startHour,
-                             final StartMinute startMinute,
-                             final Duration duration) {
+    public ScheduleConstruct(MeetingDate meetingDate,
+                             StartHour startHour,
+                             StartMinute startMinute,
+                             Duration duration) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
@@ -42,14 +42,9 @@ public class ScheduleConstruct {
         endTime = new EndTime(endLocalTime());
     }
 
-    public static ScheduleConstruct of(final int year,
-                                        final int month,
-                                        final int dayOfMonth,
-                                        final int hour,
-                                        final int minute,
-                                        final int duration) {
+    public static ScheduleConstruct of(int year, int month, int dayOfMonth, int hour, int minute, int duration) {
 
-        final LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
+        LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
 
         return new ScheduleConstruct(
                 MeetingDate.of(meetingDateValue),
@@ -106,7 +101,7 @@ public class ScheduleConstruct {
         return LocalDateTime.of(meetingDate.value(), startLocalTime());
     }
 
-    public boolean isSame(final ScheduleConstruct other) {
+    public boolean isSame(ScheduleConstruct other) {
         if (!this.meetingDate.isSame(other.meetingDate)) return false;
         if (!this.startHour.isSame(other.startHour)) return false;
         if (this.startMinute != other.startMinute) return false;
@@ -117,16 +112,14 @@ public class ScheduleConstruct {
 
     @Deprecated
     @Override
-    public final boolean equals(final Object anObject) {
-        if (Objects.isNull(anObject)) return false;
+    public boolean equals(Object anObject) {
         if (anObject == this) return true;
-        if (!(anObject instanceof ScheduleConstruct other)) return false;
-        return isSame(other);
+        return isSame((ScheduleConstruct) anObject);
     }
 
     @Deprecated
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(meetingDate.value(),
                 startHour.value(),
                 startMinute.value(),

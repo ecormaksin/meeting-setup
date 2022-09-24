@@ -28,10 +28,10 @@ import java.util.Set;
 @Repository
 public class MeetingDatasource implements MeetingRepository {
 
-    private final OrganizerMapper organizerMapper;
-    private final MeetingMapper meetingMapper;
-    private final ScheduleMapper scheduleMapper;
-    private final AttendanceMapper attendanceMapper;
+    OrganizerMapper organizerMapper;
+    MeetingMapper meetingMapper;
+    ScheduleMapper scheduleMapper;
+    AttendanceMapper attendanceMapper;
 
     public MeetingDatasource(
             OrganizerMapper organizerMapper,
@@ -49,8 +49,8 @@ public class MeetingDatasource implements MeetingRepository {
     @Transactional(rollbackFor = Exception.class)
     public void create(MeetingCreationRequest meetingCreationRequest) {
 
-        final OrganizerNumber organizerNumber = meetingCreationRequest.organizerNumber();
-        final MeetingNumber meetingNumber = meetingCreationRequest.meetingNumber();
+        OrganizerNumber organizerNumber = meetingCreationRequest.organizerNumber();
+        MeetingNumber meetingNumber = meetingCreationRequest.meetingNumber();
 
         if (organizerMapper.notExists(organizerNumber)) organizerMapper.insertOrganizer(organizerNumber);
 
@@ -64,12 +64,12 @@ public class MeetingDatasource implements MeetingRepository {
     public Meeting get(MeetingNumber meetingNumber) {
         boolean meetingNotFound = false;
 
-        final Optional<MeetingWithoutSchedulesAndAttendances> optionalMeetingWithoutSchedulesAndAttendances = meetingMapper.selectMeeting(meetingNumber);
+        Optional<MeetingWithoutSchedulesAndAttendances> optionalMeetingWithoutSchedulesAndAttendances = meetingMapper.selectMeeting(meetingNumber);
         if (optionalMeetingWithoutSchedulesAndAttendances.isEmpty()) {
             meetingNotFound = true;
         }
 
-        final List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingNumber(meetingNumber);
+        List<Schedule> scheduleList = scheduleMapper.selectSchedulesByMeetingNumber(meetingNumber);
         if (scheduleList.isEmpty()) {
             meetingNotFound = true;
         }
@@ -78,9 +78,9 @@ public class MeetingDatasource implements MeetingRepository {
             throw new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティング番号を確認してください。: %s", meetingNumber.value()));
         }
 
-        final List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);
+        List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);
 
-        final MeetingWithoutSchedulesAndAttendances meetingResource = optionalMeetingWithoutSchedulesAndAttendances.get();
+        MeetingWithoutSchedulesAndAttendances meetingResource = optionalMeetingWithoutSchedulesAndAttendances.get();
 
         return new Meeting(meetingNumber,
                 meetingResource.subject(),
@@ -147,7 +147,7 @@ public class MeetingDatasource implements MeetingRepository {
                     new ScheduleNumber(scheduleMapper.newScheduleNumber())
                     :
                     schedule.scheduleNumber();
-            final ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
+            ScheduleConstruct scheduleConstruct = schedule.scheduleConstruct();
             scheduleMapper.insertSchedule(
                     scheduleNumber,
                     meetingNumber,

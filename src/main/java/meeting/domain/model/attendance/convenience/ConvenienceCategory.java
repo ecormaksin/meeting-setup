@@ -6,7 +6,7 @@ package meeting.domain.model.attendance.convenience;
 public enum ConvenienceCategory {
     マル("○"),
     サンカク("△"),
-    バツ("✕");
+    バツ("×");
 
     String symbol;
 

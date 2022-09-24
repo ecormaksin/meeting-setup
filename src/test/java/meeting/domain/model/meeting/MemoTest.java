@@ -27,9 +27,9 @@ public class MemoTest {
     @ParameterizedTest
     @MethodSource("validInputs")
     void _メモが既定内の値の場合はエラーにならない(String inputValue) {
-        final Memo memo = new Memo(inputValue);
+        Memo memo = new Memo(inputValue);
 
-        final Set<ConstraintViolation<Memo>> constraintViolations = validator.validate(memo);
+        Set<ConstraintViolation<Memo>> constraintViolations = validator.validate(memo);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -44,9 +44,9 @@ public class MemoTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _メモが規定外の値の場合はエラーになる(String inputValue) {
-        final Memo memo = new Memo(inputValue);
+        Memo memo = new Memo(inputValue);
 
-        final Set<ConstraintViolation<Memo>> constraintViolations = validator.validate(memo);
+        Set<ConstraintViolation<Memo>> constraintViolations = validator.validate(memo);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("メモは100文字以内で入力してください。", constraintViolations.iterator().next().getMessage());

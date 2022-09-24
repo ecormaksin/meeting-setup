@@ -19,16 +19,16 @@ public class StartHour extends ValidationConcern {
     @Deprecated
     StartHour() {}
 
-    public StartHour(final int value) {
+    public StartHour(int value) {
         this.value = value;
         this.validate(this);
     }
 
-    public static StartHour of(final int value) {
+    public static StartHour of(int value) {
         return new StartHour(value);
     }
 
-    public static StartHour of(final String stringValue) {
+    public static StartHour of(String stringValue) {
         return new StartHour(Integer.valueOf(stringValue));
     }
 

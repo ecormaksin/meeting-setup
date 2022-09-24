@@ -18,7 +18,7 @@ public class Memo {
     @Deprecated
     Memo() {}
 
-    public Memo(final String value) {
+    public Memo(String value) {
         this.value = value;
     }
 
@@ -26,7 +26,7 @@ public class Memo {
         return new Memo("");
     }
 
-    public static Memo of(final String value) {
+    public static Memo of(String value) {
         return new Memo(value);
     }
 

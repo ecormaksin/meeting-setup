@@ -3,6 +3,7 @@ package meeting.presentation.meeting;
 import meeting.application.senario.MeetingSearchScenario;
 import meeting.domain.model.meeting.MeetingSearchRequest;
 import meeting.domain.model.meeting.meeting_list.MeetingList;
+import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.presentation.organizer.OrganizerNumberProxy;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("meeting/search")
 public class MeetingSearchController {
 
-    private static final String VIEW_SEARCH = "meeting/search";
+    static final String VIEW_SEARCH = "meeting/search";
 
-    private final MeetingSearchScenario meetingSearchScenario;
-    private final OrganizerNumberProxy organizerNumberProxy;
+    MeetingSearchScenario meetingSearchScenario;
+    OrganizerNumberProxy organizerNumberProxy;
 
     public MeetingSearchController(MeetingSearchScenario meetingSearchScenario,
                                    OrganizerNumberProxy organizerNumberProxy) {
@@ -32,38 +33,35 @@ public class MeetingSearchController {
 
     @GetMapping
     String init(Model model,
-                @CookieValue(value = "organizerNumber", required = false) final String organizerNumberValue
+                @CookieValue(value = "organizerNumber", required = false) String organizerNumberValue
     ) {
-        final OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
+        OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
 
-        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.initialize(organizerNumber);
+        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.initialized(organizerNumber);
         MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
 
-        model.addAttribute("meetingSearchRequest", meetingSearchRequest);
+        model.addAttribute("meetingSearchCondition", meetingSearchRequest.searchCondition());
         model.addAttribute("meetingList", meetingList);
+        model.addAttribute("organizerNumber", organizerNumber);
 
         return VIEW_SEARCH;
     }
 
     @GetMapping(params = {"exec"})
     String search(Model model,
-                  @CookieValue("organizerNumber") final String organizerNumberValue,
-                  @Validated @ModelAttribute("meetingSearchRequest") MeetingSearchRequest meetingSearchRequest,
+                  @CookieValue("organizerNumber") String organizerNumberValue,
+                  @Validated @ModelAttribute("meetingSearchCondition") MeetingSearchCondition meetingSearchCondition,
                   BindingResult bindingResult) {
 
-        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
-
-        if (organizerNumber.isDifferent(meetingSearchRequest.organizerNumber())) {
-            throw new OrganizerNumberFalsifiedException();
-        }
-
-        model.addAttribute("meetingSearchRequest", meetingSearchRequest);
+        model.addAttribute("meetingSearchCondition", meetingSearchCondition);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("meetingList", MeetingList.empty());
             return VIEW_SEARCH;
         }
 
+        OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
+        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.of(organizerNumber, meetingSearchCondition);
         MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
         model.addAttribute("meetingList", meetingList);
 
@@ -73,9 +71,10 @@ public class MeetingSearchController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(
-                "searchCondition.keyword.value",
-                "searchCondition.startDate.value",
-                "searchCondition.endDate.value",
+                "keyword.value",
+                "startDate.value",
+                "endDate.value",
+                "durationValid",
                 "organizerNumber.value",
                 "meetingList.list[*"
         );

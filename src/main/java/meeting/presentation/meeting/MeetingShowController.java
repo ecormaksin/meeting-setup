@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("meeting/{meetingNumber}/show")
 public class MeetingShowController {
-    private final MeetingShowScenario meetingShowScenario;
-    private final OrganizerNumberProxy organizerNumberProxy;
-    private final ParticipantNumberProxy participantNumberProxy;
+    MeetingShowScenario meetingShowScenario;
+    OrganizerNumberProxy organizerNumberProxy;
+    ParticipantNumberProxy participantNumberProxy;
 
 
     public MeetingShowController(MeetingShowScenario meetingShowScenario,
@@ -38,16 +38,16 @@ public class MeetingShowController {
 
     @GetMapping
     String show(Model model,
-                @PathVariable("meetingNumber") final MeetingNumber meetingNumber,
-                @CookieValue(value = "organizerNumber", required = false) final String organizerNumberValue,
-                @CookieValue(value = "participantNumber", required = false) final String participantNumberValue,
+                @PathVariable("meetingNumber") MeetingNumber meetingNumber,
+                @CookieValue(value = "organizerNumber", required = false) String organizerNumberValue,
+                @CookieValue(value = "participantNumber", required = false) String participantNumberValue,
                 HttpServletRequest request) {
 
-        final OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
-        final ParticipantNumber participantNumber = participantNumberProxy.participantNumber(participantNumberValue);
+        OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
+        ParticipantNumber participantNumber = participantNumberProxy.participantNumber(participantNumberValue);
 
         Meeting meeting = meetingShowScenario.meetingOf(meetingNumber);
-        final MeetingEditability meetingEditability = meeting.editabilityFor(organizerNumber);
+        MeetingEditability meetingEditability = meeting.editabilityFor(organizerNumber);
 
         model.addAttribute("meeting", meeting);
         model.addAttribute("meetingEditability", meetingEditability);

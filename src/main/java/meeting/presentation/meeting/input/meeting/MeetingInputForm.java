@@ -56,16 +56,16 @@ public class MeetingInputForm {
                 scheduleInputs.addNew());
     }
 
-    public MeetingInputForm removeSchedule(final int index) {
+    public MeetingInputForm removeSchedule(int index) {
         return new MeetingInputForm(
                 subject,
                 memo,
                 scheduleInputs.remove(index));
     }
 
-    public MeetingCreationRequest toCreationRequest(final MeetingNumber meetingNumber,
-                                                    final OrganizerNumber organizerNumber) {
-        final Schedules schedules = scheduleInputs.toSchedules();
+    public MeetingCreationRequest toCreationRequest(MeetingNumber meetingNumber,
+                                                    OrganizerNumber organizerNumber) {
+        Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingCreationRequest(meetingNumber,
                 subject,
                 memo,
@@ -74,9 +74,9 @@ public class MeetingInputForm {
                 RegistrationRequestDateTime.now());
     }
 
-    public MeetingEditRequest toEditRequest(final MeetingNumber meetingNumber,
-                                            final OrganizerNumber organizerNumber) {
-        final Schedules schedules = scheduleInputs.toSchedules();
+    public MeetingEditRequest toEditRequest(MeetingNumber meetingNumber,
+                                            OrganizerNumber organizerNumber) {
+        Schedules schedules = scheduleInputs.toSchedules();
         return new MeetingEditRequest(meetingNumber,
                 subject,
                 memo,

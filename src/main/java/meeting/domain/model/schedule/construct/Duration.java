@@ -21,7 +21,7 @@ public enum Duration {
         this.label = label;
     }
 
-    public static Duration of(final int value) {
+    public static Duration of(int value) {
         List<String> candidates = new ArrayList<>();
         for (Duration duration : Duration.values()) {
             if (duration.value == value) {
@@ -29,13 +29,13 @@ public enum Duration {
             }
             candidates.add(duration.label);
         }
-        final String candidatesString = String.join(",", candidates);
+        String candidatesString = String.join(",", candidates);
         throw new IllegalArgumentException(
                 String.format("会議時間は次の中から指定してください。: %s", candidatesString)
         );
     }
 
-    public static Duration of(final String strigValue) {
+    public static Duration of(String strigValue) {
         return of(Integer.valueOf(strigValue));
     }
 

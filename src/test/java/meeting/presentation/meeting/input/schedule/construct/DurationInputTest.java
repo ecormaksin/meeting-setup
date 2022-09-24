@@ -28,9 +28,9 @@ public class DurationInputTest {
     @ParameterizedTest
     @MethodSource("validInputs")
     void _会議時間が既定内の値の場合はエラーにならない(String inputValue) {
-        final DurationInput durationInput = new DurationInput(inputValue);
+        DurationInput durationInput = new DurationInput(inputValue);
 
-        final Set<ConstraintViolation<DurationInput>> constraintViolations = validator.validate(durationInput);
+        Set<ConstraintViolation<DurationInput>> constraintViolations = validator.validate(durationInput);
 
         assertEquals(0, constraintViolations.size());
     }
@@ -48,9 +48,9 @@ public class DurationInputTest {
     @ParameterizedTest
     @MethodSource("invalidInputs")
     void _会議時間が規定外の値の場合はエラーになる(String inputValue) {
-        final DurationInput durationInput = new DurationInput(inputValue);
+        DurationInput durationInput = new DurationInput(inputValue);
 
-        final Set<ConstraintViolation<DurationInput>> constraintViolations = validator.validate(durationInput);
+        Set<ConstraintViolation<DurationInput>> constraintViolations = validator.validate(durationInput);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("会議時間は30分単位・2時間以内で入力してください。", constraintViolations.iterator().next().getMessage());

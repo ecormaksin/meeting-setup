@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 public class Erd {
 
     @Container
-    private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
+    static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Test
     void run(@Autowired DataSource dataSource) {

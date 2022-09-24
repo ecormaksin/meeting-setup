@@ -7,7 +7,7 @@ public class ScheduleNumberColumnFilter implements IColumnFilter {
 
     @Override
     public boolean accept(String tableName, Column column) {
-        final String columnName = column.getColumnName();
+        String columnName = column.getColumnName();
         return !columnName.equals("日程番号");
     }
 }

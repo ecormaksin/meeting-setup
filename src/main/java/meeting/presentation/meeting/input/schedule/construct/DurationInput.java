@@ -16,7 +16,7 @@ public class DurationInput {
     @Deprecated
     DurationInput() {}
 
-    public DurationInput(final String value) {
+    public DurationInput(String value) {
         this.value = value;
 
         valid = isValid();
@@ -26,15 +26,15 @@ public class DurationInput {
         return new DurationInput("");
     }
 
-    public static DurationInput of(final String value) {
+    public static DurationInput of(String value) {
         return new DurationInput(value);
     }
 
-    public static DurationInput of(final int intValue) {
+    public static DurationInput of(int intValue) {
         return of(String.valueOf(intValue));
     }
 
-    public static DurationInput of(final Duration duration) {
+    public static DurationInput of(Duration duration) {
         return of(duration.value());
     }
 

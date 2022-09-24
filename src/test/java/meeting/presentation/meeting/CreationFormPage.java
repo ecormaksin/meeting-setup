@@ -16,9 +16,9 @@ import java.util.Objects;
 
 public class CreationFormPage extends CustomPageObject {
 
-    private static final String URL_RELATIVE_PATH = "/meeting/create";
+    static final String URL_RELATIVE_PATH = "/meeting/create";
 
-    private static final String SCHEDULE_CONSTRUCT_PREFIX = "scheduleInputs.list%d.scheduleConstruct.";
+    static final String SCHEDULE_CONSTRUCT_PREFIX = "scheduleInputs.list%d.scheduleConstruct.";
 
     Logger logger = LoggerFactory.getLogger(CreationFormPage.class);
 
@@ -40,12 +40,12 @@ public class CreationFormPage extends CustomPageObject {
 
     private WebElement scheduleInputsError;
 
-    public CreationFormPage(final WebDriver driver) {
+    public CreationFormPage(WebDriver driver) {
         super(driver);
     }
 
     protected boolean isNotTargetPage(WebDriver driver) {
-        final String url = driver.getCurrentUrl();
+        String url = driver.getCurrentUrl();
         return !url.endsWith(URL_RELATIVE_PATH);
     }
 
@@ -86,17 +86,17 @@ public class CreationFormPage extends CustomPageObject {
         return memo.getAttribute("value");
     }
 
-    public CreationFormPage inputSubject(final String subject) {
+    public CreationFormPage inputSubject(String subject) {
         this.subject.sendKeys(subject);
         return this;
     }
 
-    public CreationFormPage inputMemo(final String memo) {
+    public CreationFormPage inputMemo(String memo) {
         this.memo.sendKeys(memo);
         return this;
     }
 
-    public CreationFormPage inputScheduleAt(final int index, final ScheduleConstructInput input) {
+    public CreationFormPage inputScheduleAt(int index, ScheduleConstructInput input) {
         inputMeetingDateAt(index, input.meetingDate());
         inputStartHourAt(index, input.startHour());
         inputStartMinuteAt(index, input.startMinute());
@@ -104,8 +104,8 @@ public class CreationFormPage extends CustomPageObject {
         return this;
     }
 
-    private WebElement scheduleConstructElement(final int index, final String itemName) {
-        final String byId = String.format(SCHEDULE_CONSTRUCT_PREFIX, index) + itemName;
+    private WebElement scheduleConstructElement(int index, String itemName) {
+        String byId = String.format(SCHEDULE_CONSTRUCT_PREFIX, index) + itemName;
         return driver.findElement(By.id(byId));
     }
 
@@ -132,8 +132,8 @@ public class CreationFormPage extends CustomPageObject {
         return removeScheduleButtons().size();
     }
 
-    public CreationFormPage removeScheduleAt(final int index) {
-        final WebElement removeScheduleButton = removeScheduleButtons().get(index);
+    public CreationFormPage removeScheduleAt(int index) {
+        WebElement removeScheduleButton = removeScheduleButtons().get(index);
         removeScheduleButton.click();
         return PageFactory.initElements(driver, CreationFormPage.class);
     }
@@ -147,31 +147,31 @@ public class CreationFormPage extends CustomPageObject {
         return PageFactory.initElements(driver, CreationFormPage.class);
     }
 
-    private WebElement meetingDate(final int index) {
+    private WebElement meetingDate(int index) {
         return scheduleConstructElement(index, "meetingDate.value");
     }
 
-    public CreationFormPage inputMeetingDateAt(final int index, final MeetingDateInput meetingDate) {
-        final WebElement webElement = meetingDate(index);
+    public CreationFormPage inputMeetingDateAt(int index, MeetingDateInput meetingDate) {
+        WebElement webElement = meetingDate(index);
         webElement.sendKeys(meetingDate.value());
         return this;
     }
 
-    public CreationFormPage inputStartHourAt(final int index, final StartHourInput startHour) {
-        final WebElement webElement = scheduleConstructElement(index, "startHour.value");
+    public CreationFormPage inputStartHourAt(int index, StartHourInput startHour) {
+        WebElement webElement = scheduleConstructElement(index, "startHour.value");
         webElement.sendKeys(startHour.value());
         return this;
     }
 
-    public CreationFormPage inputStartMinuteAt(final int index, final StartMinuteInput startMinute) {
-        final WebElement webElement = scheduleConstructElement(index, "startMinute.value");
+    public CreationFormPage inputStartMinuteAt(int index, StartMinuteInput startMinute) {
+        WebElement webElement = scheduleConstructElement(index, "startMinute.value");
         Select selectObject = new Select(webElement);
         selectObject.selectByValue(startMinute.value());
         return this;
     }
 
-    public CreationFormPage inputDurationAt(final int index, final DurationInput duration) {
-        final WebElement webElement = scheduleConstructElement(index, "duration.value");
+    public CreationFormPage inputDurationAt(int index, DurationInput duration) {
+        WebElement webElement = scheduleConstructElement(index, "duration.value");
         Select selectObject = new Select(webElement);
         selectObject.selectByValue(duration.value());
         return this;
@@ -207,29 +207,29 @@ public class CreationFormPage extends CustomPageObject {
         }
     }
 
-    public String meetingDateEmptyErrorMessageAt(final int index) {
+    public String meetingDateEmptyErrorMessageAt(int index) {
         return scheduleConstructItemErrorMessageAt(index, "meetingDateNotEmpty");
     }
 
-    public String startHourEmptyErrorMessageAt(final int index) {
+    public String startHourEmptyErrorMessageAt(int index) {
         return scheduleConstructItemErrorMessageAt(index, "startHourNotEmpty");
     }
 
-    public String startHourInvalidErrorMessageAt(final int index) {
+    public String startHourInvalidErrorMessageAt(int index) {
         return scheduleConstructItemErrorMessageAt(index, "startHour.valid");
     }
 
-    public String startMinuteEmptyErrorMessageAt(final int index) {
+    public String startMinuteEmptyErrorMessageAt(int index) {
         return scheduleConstructItemErrorMessageAt(index, "startMinuteNotEmpty");
     }
 
-    public String durationEmptyErrorMessageAt(final int index) {
+    public String durationEmptyErrorMessageAt(int index) {
         return scheduleConstructItemErrorMessageAt(index, "durationNotEmpty");
     }
 
-    private String scheduleConstructItemErrorMessageAt(final int index, final String itemName) {
+    private String scheduleConstructItemErrorMessageAt(int index, String itemName) {
         try {
-            final WebElement webElement =  scheduleConstructElement(index, itemName);
+            WebElement webElement =  scheduleConstructElement(index, itemName);
             return webElement.getText();
         } catch (NoSuchElementException e) {
             return "";

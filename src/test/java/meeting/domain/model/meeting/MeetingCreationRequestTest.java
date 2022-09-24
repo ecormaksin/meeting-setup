@@ -28,10 +28,10 @@ public class MeetingCreationRequestTest {
     @Test
     void 追加する日程が過去の場合はエラー() {
 
-        final ScheduleConstruct scheduleConstruct =
+        ScheduleConstruct scheduleConstruct =
                 ScheduleConstruct.of(2022, 7, 1, 10, 0, 60);
-        final Schedule schedule = Schedule.initializedBy(scheduleConstruct);
-        final Schedules schedules = Schedules.of(Arrays.asList(schedule));
+        Schedule schedule = Schedule.initializedBy(scheduleConstruct);
+        Schedules schedules = Schedules.of(Arrays.asList(schedule));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 new MeetingCreationRequest(

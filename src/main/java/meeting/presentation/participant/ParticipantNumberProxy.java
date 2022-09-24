@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class ParticipantNumberProxy {
 
-    private final ParticipantNumber participantNumber;
+    ParticipantNumber participantNumber;
 
     public ParticipantNumberProxy() {
         this.participantNumber = ParticipantNumber.newNumber();
@@ -16,7 +16,7 @@ public class ParticipantNumberProxy {
         return participantNumber;
     }
 
-    public ParticipantNumber participantNumber(final String value) {
+    public ParticipantNumber participantNumber(String value) {
         return (Objects.isNull(value) || value.isBlank())
                 ? participantNumber()
                 : ParticipantNumber.of(value);

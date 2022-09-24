@@ -27,15 +27,15 @@ public class StartMinuteInput {
         return new StartMinuteInput("");
     }
 
-    public static StartMinuteInput of(final String value) {
+    public static StartMinuteInput of(String value) {
         return new StartMinuteInput(value);
     }
 
-    public static StartMinuteInput of(final int intValue) {
+    public static StartMinuteInput of(int intValue) {
         return of(String.valueOf(intValue));
     }
 
-    public static StartMinuteInput of(final StartMinute startMinute) {
+    public static StartMinuteInput of(StartMinute startMinute) {
         return of(startMinute.value());
     }
 

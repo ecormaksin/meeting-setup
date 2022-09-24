@@ -9,7 +9,7 @@ public enum MeetingEditability {
     編集不可_非主催者(MeetingEditability.DISPLAY_NONE_CLASS, ""),
     編集不可_回答済(MeetingEditability.DISPLAY_NONE_CLASS, "回答されているので編集・削除できません。");
 
-    private static final String DISPLAY_NONE_CLASS = "meeting-show__edit-button__display-none";
+    static final String DISPLAY_NONE_CLASS = "meeting-show__edit-button__display-none";
 
     String operableItemStatus;
     String statusMessage;

@@ -109,7 +109,7 @@ public class Meeting {
     }
 
     public ScheduleMatchStatus scheduleMatchStatusAt(ScheduleNumber scheduleNumber) {
-        final TotalNumberOfParticipant targetTotalNumber = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
+        TotalNumberOfParticipant targetTotalNumber = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
 
         TotalNumberOfParticipant maxTotalNumber = TotalNumberOfParticipant.of(0);
 
@@ -126,7 +126,7 @@ public class Meeting {
         return ScheduleMatchStatus.NOT_MATCHED;
     }
 
-    public AttendanceEditability attendanceEditabilityFor(final ParticipantNumber participantNumber, final Attendance attendance) {
+    public AttendanceEditability attendanceEditabilityFor(ParticipantNumber participantNumber, Attendance attendance) {
 
         if (attendance.participantNumber().isSame(participantNumber)) {
             return AttendanceEditability.編集可能;
@@ -134,13 +134,13 @@ public class Meeting {
         return AttendanceEditability.編集不可;
     }
 
-    public MeetingEditability editabilityFor(final OrganizerNumber organizerNumber) {
+    public MeetingEditability editabilityFor(OrganizerNumber organizerNumber) {
         if (isNotOrganizedBy(organizerNumber)) return MeetingEditability.編集不可_非主催者;
         if (isAlreadyResponded()) return MeetingEditability.編集不可_回答済;
         return MeetingEditability.編集可能;
     }
 
-    private boolean isNotOrganizedBy(final OrganizerNumber organizerNumber) {
+    private boolean isNotOrganizedBy(OrganizerNumber organizerNumber) {
         return !this.organizerNumber.isSame(organizerNumber);
     }
 

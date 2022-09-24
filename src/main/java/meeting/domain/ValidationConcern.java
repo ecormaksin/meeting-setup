@@ -11,9 +11,9 @@ import java.util.Set;
 public abstract class ValidationConcern {
 
     protected <T> void validate(T object) {
-        final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        final Validator validator = factory.getValidator();
-        final Set<ConstraintViolation<T>> violations = validator.validate(object);
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> violations = validator.validate(object);
 
         if (violations.size() == 0) {
             return;
@@ -24,12 +24,12 @@ public abstract class ValidationConcern {
         for (ConstraintViolation<T> violation : violations) {
             messages.add(violation.getMessage());
         }
-        final String messageString = String.join(System.lineSeparator(), messages);
+        String messageString = String.join(System.lineSeparator(), messages);
 
         throwException(messageString);
     }
 
-    protected void throwException(final String messageString) {
+    protected void throwException(String messageString) {
         throw new IllegalArgumentException(messageString);
     }
 }

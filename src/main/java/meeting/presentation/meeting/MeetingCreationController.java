@@ -28,10 +28,10 @@ import java.net.URI;
 @RequestMapping("meeting/create")
 public class MeetingCreationController {
 
-    private static final String VIEW_PATH_FORM = "meeting/create/form";
+    static final String VIEW_PATH_FORM = "meeting/create/form";
 
-    private final MeetingCreationScenario meetingCreationScenario;
-    private final OrganizerNumberProxy organizerNumberProxy;
+    MeetingCreationScenario meetingCreationScenario;
+    OrganizerNumberProxy organizerNumberProxy;
 
     public MeetingCreationController(MeetingCreationScenario meetingCreationScenario,
                                      OrganizerNumberProxy organizerNumberProxy) {
@@ -41,9 +41,9 @@ public class MeetingCreationController {
 
     @GetMapping
     String init(Model model,
-                @CookieValue(value = "organizerNumber", required = false) final String organizerNumberValue
+                @CookieValue(value = "organizerNumber", required = false) String organizerNumberValue
     ) {
-        final OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
+        OrganizerNumber organizerNumber = organizerNumberProxy.organizerNumber(organizerNumberValue);
 
         model.addAttribute("meetingInputForm", MeetingInputForm.newForm());
         model.addAttribute("organizerNumber", organizerNumber);
@@ -52,10 +52,10 @@ public class MeetingCreationController {
 
     @PostMapping(params={"addSchedule"})
     String addSchedule(Model model,
-                       @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+                       @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm,
                        BindingResult bindingResult) {
         try {
-            final MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
+            MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
             model.addAttribute("meetingInputForm", scheduleAdded);
         } catch (ScheduleInputCannotAddException e) {
             ObjectError error = new ObjectError("globalError", e.getMessage());
@@ -67,28 +67,28 @@ public class MeetingCreationController {
 
     @PostMapping(params={"removeSchedule"})
     String removeSchedule(Model model,
-                          @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+                          @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm,
                           HttpServletRequest request) {
-        final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
-        final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
+        Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
+        MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
         model.addAttribute("meetingInputForm", scheduleRemoved);
         return VIEW_PATH_FORM;
     }
 
     @PostMapping
-    String create(@Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+    String create(@Validated @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm,
                   BindingResult bindingResult,
-                  @CookieValue("organizerNumber") final String organizerNumberValue,
+                  @CookieValue("organizerNumber") String organizerNumberValue,
                   RedirectAttributes attributes,
                   UriComponentsBuilder builder) {
 
         if (bindingResult.hasErrors()) return VIEW_PATH_FORM;
 
-        final MeetingNumber meetingNumber = MeetingNumber.newNumber();
-        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
+        MeetingNumber meetingNumber = MeetingNumber.newNumber();
+        OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         try {
-            final MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber, organizerNumber);
+            MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber, organizerNumber);
             meetingCreationScenario.create(meetingCreationRequest);
         } catch (SchedulesInvalidException e) {
             bindingResult.rejectValue("scheduleInputs", null, e.getMessage());

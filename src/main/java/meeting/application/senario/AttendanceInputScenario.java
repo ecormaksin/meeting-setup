@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AttendanceInputScenario {
 
-    private final ParticipantQueryService participantQueryService;
-    private final AttendanceRecordService attendanceRecordService;
-    private final AttendanceQueryService attendanceQueryService;
-    private final ScheduleQueryService scheduleQueryService;
+    ParticipantQueryService participantQueryService;
+    AttendanceRecordService attendanceRecordService;
+    AttendanceQueryService attendanceQueryService;
+    ScheduleQueryService scheduleQueryService;
 
     public AttendanceInputScenario(
             ParticipantQueryService participantQueryService,

@@ -21,13 +21,13 @@ public class Schedule {
     @Deprecated
     Schedule() {}
 
-    public Schedule(final ScheduleNumber scheduleNumber,
-                    final ScheduleConstruct scheduleConstruct) {
+    public Schedule(ScheduleNumber scheduleNumber,
+                    ScheduleConstruct scheduleConstruct) {
         this.scheduleNumber = scheduleNumber;
         this.scheduleConstruct = scheduleConstruct;
     }
 
-    public static Schedule initializedBy(final ScheduleConstruct scheduleConstruct) {
+    public static Schedule initializedBy(ScheduleConstruct scheduleConstruct) {
         return new Schedule(ScheduleNumber.initialized(),  scheduleConstruct);
     }
 

@@ -38,8 +38,8 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
     @DirtiesContext
     void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) {
 
-        final int currentRepetition =  repetitionInfo.getCurrentRepetition();
-        final int index = currentRepetition - 1;
+        int currentRepetition =  repetitionInfo.getCurrentRepetition();
+        int index = currentRepetition - 1;
 
         new OrganizerNumberFake_1();
         new MeetingNumberFake_1();
@@ -47,14 +47,14 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
 
         CreationFormPage formPage = CreationFormPage.to(driver);
 
-        final int scheduleAddClickTotalCount = currentRepetition - 3;
+        int scheduleAddClickTotalCount = currentRepetition - 3;
         for (int scheduleAddClick = 0; scheduleAddClick < scheduleAddClickTotalCount; scheduleAddClick++) {
             formPage = formPage.addNewEmptyScheduleInput();
         }
 
         formPage.inputSubject("件名テスト" + currentRepetition);
 
-        final ScheduleConstructInput constructInput =
+        ScheduleConstructInput constructInput =
                 ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
 
         formPage.inputScheduleAt(index, constructInput);

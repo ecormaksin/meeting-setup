@@ -18,11 +18,11 @@ public class TotalNumberOfParticipant {
         return value > 1;
     }
 
-    public boolean isGreaterThan(final TotalNumberOfParticipant other) {
+    public boolean isGreaterThan(TotalNumberOfParticipant other) {
         return this.value > other.value;
     }
 
-    public boolean isSame(final TotalNumberOfParticipant other) {
+    public boolean isSame(TotalNumberOfParticipant other) {
         return this.value == other.value;
     }
 

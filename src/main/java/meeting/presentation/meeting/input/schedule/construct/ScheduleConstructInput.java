@@ -31,10 +31,10 @@ public class ScheduleConstructInput {
     @Deprecated
     ScheduleConstructInput() {}
 
-    public ScheduleConstructInput(final MeetingDateInput meetingDate,
-                                  final StartHourInput startHour,
-                                  final StartMinuteInput startMinute,
-                                  final DurationInput duration) {
+    public ScheduleConstructInput(MeetingDateInput meetingDate,
+                                  StartHourInput startHour,
+                                  StartMinuteInput startMinute,
+                                  DurationInput duration) {
         this.meetingDate = meetingDate;
         this.startHour = startHour;
         this.startMinute = startMinute;
@@ -54,14 +54,9 @@ public class ScheduleConstructInput {
                 DurationInput.empty());
     }
 
-    public static ScheduleConstructInput of(final int year,
-                                            final int month,
-                                            final int dayOfMonth,
-                                            final int hour,
-                                            final int minute,
-                                            final int duration) {
+    public static ScheduleConstructInput of(int year, int month, int dayOfMonth, int hour, int minute, int duration) {
 
-        final LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
+        LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
 
         return new ScheduleConstructInput(
                 MeetingDateInput.of(meetingDateValue),
@@ -70,11 +65,11 @@ public class ScheduleConstructInput {
                 DurationInput.of(duration));
     }
 
-    public static ScheduleConstructInput fromScheduleConstruct(final ScheduleConstruct scheduleConstruct) {
-        final MeetingDate meetingDate = scheduleConstruct.meetingDate();
-        final StartHour startHour = scheduleConstruct.startHour();
-        final StartMinute startMinute = scheduleConstruct.startMinute();
-        final Duration duration = scheduleConstruct.duration();
+    public static ScheduleConstructInput fromScheduleConstruct(ScheduleConstruct scheduleConstruct) {
+        MeetingDate meetingDate = scheduleConstruct.meetingDate();
+        StartHour startHour = scheduleConstruct.startHour();
+        StartMinute startMinute = scheduleConstruct.startMinute();
+        Duration duration = scheduleConstruct.duration();
 
         return new ScheduleConstructInput(
                 MeetingDateInput.of(meetingDate),

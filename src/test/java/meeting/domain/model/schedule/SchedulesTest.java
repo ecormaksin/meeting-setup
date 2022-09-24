@@ -38,7 +38,7 @@ public class SchedulesTest {
         List<Schedule> scheduleList = new ArrayList<>();
 
         for (int count = 1; count <= 6; count++) {
-            final Schedule schedule = Schedule.initializedBy(
+            Schedule schedule = Schedule.initializedBy(
                 ScheduleConstruct.of(2022, 1, count, 10, 0 , 60)
             );
             scheduleList.add(schedule);
@@ -56,7 +56,7 @@ public class SchedulesTest {
         List<Schedule> scheduleList = new ArrayList<>();
 
         for (int count = 1; count <= 2; count++) {
-            final Schedule schedule = Schedule.initializedBy(
+            Schedule schedule = Schedule.initializedBy(
                     ScheduleConstruct.of(2022, 1, 1, 10, 0 , 60)
             );
             scheduleList.add(schedule);

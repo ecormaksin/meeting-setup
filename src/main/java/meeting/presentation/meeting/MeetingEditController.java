@@ -25,7 +25,7 @@ import java.net.URI;
 @RequestMapping("meeting/{meetingNumber}/edit")
 public class MeetingEditController {
 
-    private static final String VIEW_PATH_FORM = "meeting/edit/form";
+    static final String VIEW_PATH_FORM = "meeting/edit/form";
 
     private MeetingEditScenario meetingEditScenario;
 
@@ -35,18 +35,18 @@ public class MeetingEditController {
 
     @GetMapping
     String init(Model model,
-                @CookieValue("organizerNumber") final String organizerNumberValue,
-                @PathVariable("meetingNumber") final MeetingNumber meetingNumber,
+                @CookieValue("organizerNumber") String organizerNumberValue,
+                @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                 HttpServletRequest request) {
 
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
-        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
+        OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
             throw new MeetingCannotEditException();
         }
 
-        final Schedules schedules = meeting.schedules();
+        Schedules schedules = meeting.schedules();
 
         model.addAttribute("meetingInputForm", new MeetingInputForm(
                 meeting.subject(),
@@ -59,34 +59,34 @@ public class MeetingEditController {
 
     @PostMapping(params={"addSchedule"})
     String addSchedule(Model model,
-                       @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm) {
+                       @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm) {
 
-        final MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
+        MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
         model.addAttribute("meetingInputForm", scheduleAdded);
         return VIEW_PATH_FORM;
     }
 
     @PostMapping(params={"removeSchedule"})
     String removeSchedule(Model model,
-                          @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+                          @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm,
                           HttpServletRequest request) {
 
-        final Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
-        final MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
+        Integer index = Integer.valueOf(request.getParameter("removeSchedule"));
+        MeetingInputForm scheduleRemoved = meetingInputForm.removeSchedule(index.intValue());
         model.addAttribute("meetingInputForm", scheduleRemoved);
         return VIEW_PATH_FORM;
     }
 
     @PostMapping
-    String edit(@PathVariable("meetingNumber") final MeetingNumber meetingNumber,
-                @Validated @ModelAttribute("meetingInputForm") final MeetingInputForm meetingInputForm,
+    String edit(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
+                @Validated @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm,
                 BindingResult bindingResult,
-                @CookieValue("organizerNumber") final String organizerNumberValue,
+                @CookieValue("organizerNumber") String organizerNumberValue,
                 RedirectAttributes attributes,
                 UriComponentsBuilder builder) {
 
-        final Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
-        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
+        Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
+        OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
             throw new MeetingCannotEditException();
@@ -94,7 +94,7 @@ public class MeetingEditController {
 
         if (bindingResult.hasErrors()) return "meeting/edit/form";
 
-        final MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber, organizerNumber);
+        MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber, organizerNumber);
         meetingEditScenario.edit(meeting, meetingEditRequest);
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber);
@@ -117,11 +117,11 @@ public class MeetingEditController {
 
     @PostMapping(params={"delete"})
     String delete(@PathVariable("meetingNumber") MeetingNumber meetingNumber,
-                  @CookieValue("organizerNumber") final String organizerNumberValue,
+                  @CookieValue("organizerNumber") String organizerNumberValue,
                   UriComponentsBuilder builder) {
 
-        final Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
-        final OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
+        Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
+        OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
             throw new MeetingCannotDeleteException();

@@ -23,25 +23,25 @@ public class MeetingDate extends ValidationConcern {
     @Deprecated
     MeetingDate() {}
 
-    public MeetingDate(final LocalDate value) {
+    public MeetingDate(LocalDate value) {
         this.value = value;
         this.validate(this);
     }
 
-    public static MeetingDate of(final LocalDate localDate) {
+    public static MeetingDate of(LocalDate localDate) {
         return new MeetingDate(localDate);
     }
 
-    public static MeetingDate of(final int year, final int month, final int dayOfMonth) {
-        final LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+    public static MeetingDate of(int year, int month, int dayOfMonth) {
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
         return of(localDate);
     }
 
-    public static MeetingDate of(final String value) {
+    public static MeetingDate of(String value) {
         return new MeetingDate(LocalDate.parse(value));
     }
 
-    public boolean isSame(final MeetingDate other) {
+    public boolean isSame(MeetingDate other) {
         return this.value.equals(other.value);
     }
 
