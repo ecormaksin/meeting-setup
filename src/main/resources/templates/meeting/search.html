@@ -14,7 +14,7 @@
 
     <h2>検索条件</h2>
     <form method="get" action="#"
-        th:object="${meetingSearchCondition}"  th:action="@{/meeting/search}">
+        th:object="${searchCondition}"  th:action="@{/meeting/search}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
@@ -39,14 +39,14 @@
         <mark><span th:errors="*{durationValid}"></span></mark>
       </p>
 
-      <button type="button" id="searchMeetingButton" class="small-button">検索する</button>
-      <button name="exec" id="submitFormButtonWithSearch" class="button-hidden">隠し検索実行ボタン</button>
+      <button type="button" id="searchMeetingButton" class="small-button" disabled="disabled">検索する</button>
+      <button name="search" id="submitFormButtonWithSearch" class="button-hidden">隠し削除実行ボタン</button>
     </form>
 
     <h2>検索結果</h2>
 
     <p>
-      検索結果が <span th:text="${meetingSearchCondition.limitCount.value}"></span> 件を超える場合は、
+      検索結果が <span th:text="${searchCondition.limitCount.value}"></span> 件を超える場合は、
       条件に該当するミーティングのうち、登録順で先頭の結果が表示されます。
     </p>
     <p>該当するミーティングが見つからない場合は、条件を変更してください。</p>
@@ -91,8 +91,14 @@ $(function() {
   }
   /*[/]*/
 
-  $('#searchMeetingButton').on('click', function() {
+  $('#searchMeetingButton').prop('disabled', false);
+
+  $('#searchMeetingButton').on('click', function(event) {
+    $(this).prop('disabled', true);
+
+    document.cookie = "organizerNumber=; max-age=0";
     document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
+
     $('#submitFormButtonWithSearch').click();
   });
 });

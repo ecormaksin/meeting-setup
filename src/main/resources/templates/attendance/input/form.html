@@ -21,11 +21,26 @@
       <th:block th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></th:block>
 
       <div>
-        <button>入力</button>
+        <button id="inputAttendanceButton" disabled="disabled">入力</button>
       </div>
     </form>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
+<script th:inline="javascript">
+$(function() {
+
+  $('#inputAttendanceButton').prop('disabled', false);
+
+  $('#inputAttendanceButton').on('click', function() {
+    $(this).prop('disabled', true);
+
+    document.cookie = "participantNumber=; max-age=0";
+    document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
+
+    $('form').get(0).submit();
+  });
+});
+</script>
 </body>
 </html>

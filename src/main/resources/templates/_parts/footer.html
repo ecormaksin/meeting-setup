@@ -13,7 +13,10 @@
     <script th:inline="javascript">
     $(function() {
         $('a').on('click', function() {
+            document.cookie = "organizerNumber=; max-age=0";
             document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
+
+            document.cookie = "participantNumber=; max-age=0";
             document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
         });
     });

@@ -40,20 +40,19 @@ public class MeetingSearchController {
         MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.initialized(organizerNumber);
         MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
 
-        model.addAttribute("meetingSearchCondition", meetingSearchRequest.searchCondition());
+        model.addAttribute("searchCondition", meetingSearchRequest.searchCondition());
         model.addAttribute("meetingList", meetingList);
         model.addAttribute("organizerNumber", organizerNumber);
 
         return VIEW_SEARCH;
     }
 
-    @GetMapping(params = {"exec"})
+    @GetMapping(params = {"search"})
     String search(Model model,
-                  @CookieValue("organizerNumber") String organizerNumberValue,
-                  @Validated @ModelAttribute("meetingSearchCondition") MeetingSearchCondition meetingSearchCondition,
-                  BindingResult bindingResult) {
-
-        model.addAttribute("meetingSearchCondition", meetingSearchCondition);
+                  @Validated @ModelAttribute("searchCondition") MeetingSearchCondition searchCondition,
+                  BindingResult bindingResult,
+                  @CookieValue("organizerNumber") String organizerNumberValue
+    ) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("meetingList", MeetingList.empty());
@@ -61,7 +60,7 @@ public class MeetingSearchController {
         }
 
         OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
-        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.of(organizerNumber, meetingSearchCondition);
+        MeetingSearchRequest meetingSearchRequest = MeetingSearchRequest.of(organizerNumber, searchCondition);
         MeetingList meetingList = meetingSearchScenario.search(meetingSearchRequest);
         model.addAttribute("meetingList", meetingList);
 

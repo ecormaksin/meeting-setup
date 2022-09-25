@@ -40,6 +40,14 @@ public class MeetingSearchCondition {
                 new EndDate(currentDate.plusDays(7)));
     }
 
+    public static MeetingSearchCondition of(Keyword keyword,
+                                            StartDate startDate,
+                                            EndDate endDate) {
+        return new MeetingSearchCondition(keyword,
+                startDate,
+                endDate);
+    }
+
     @AssertTrue(message = "「検索開始日 ≦ 検索終了日」となるように入力してください。")
     boolean isDurationValid() {
         return startDate.isSameOrAfter(endDate);

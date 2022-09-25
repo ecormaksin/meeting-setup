@@ -25,15 +25,46 @@
       </p>
       <div class="attendance-edit__button-parent">
         <div>
-          <button>編集</button>
+          <button id="editAttendanceButton" disabled="disabled">編集</button>
         </div>
         <div>
-          <button name="delete" class="delete-button">削除</button>
+          <button type="button" id="deleteAttendanceButton" class="delete-button" disabled="disabled">削除</button>
+          <button name="delete" id="submitFormButtonWithDelete" class="button-hidden">隠し削除実行ボタン</button>
         </div>
       </div>
     </form>
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
+<script th:inline="javascript">
+$(function() {
+  function disableTransactionButtons(disabled) {
+    $('#editAttendanceButton').prop('disabled', disabled);
+    $('#deleteAttendanceButton').prop('disabled', disabled);
+  }
+
+  function setParticipantNumber() {
+    document.cookie = "participantNumber=; max-age=0";
+    document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
+  }
+
+  function prepareSubmit() {
+    disableTransactionButtons(true);
+    setParticipantNumber();
+  }
+
+  disableTransactionButtons(false);
+
+  $('#editAttendanceButton').on('click', function() {
+    prepareSubmit();
+    $('form').get(0).submit();
+  });
+
+  $('#deleteAttendanceButton').on('click', function() {
+    prepareSubmit();
+    $('#submitFormButtonWithDelete').click();
+  });
+});
+</script>
 </body>
 </html>

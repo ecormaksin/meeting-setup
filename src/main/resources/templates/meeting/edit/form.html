@@ -46,6 +46,7 @@ $(function() {
   }
 
   function setOrganizerNumber() {
+    document.cookie = "organizerNumber=; max-age=0";
     document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
   }
 

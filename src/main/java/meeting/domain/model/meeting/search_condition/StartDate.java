@@ -22,6 +22,14 @@ public class StartDate {
         this.value = value;
     }
 
+    public static StartDate empty() {
+        return new StartDate(null);
+    }
+
+    public boolean isEmpty() {
+        return Objects.isNull(value);
+    }
+
     public boolean isSameOrAfter(EndDate endDate) {
         LocalDate endDateValue = endDate.value();
         return value.equals(endDateValue) || value.isAfter(endDateValue);
@@ -29,14 +37,6 @@ public class StartDate {
 
     public LocalDate value() {
         return this.value;
-    }
-
-    public static StartDate empty() {
-        return new StartDate(null);
-    }
-
-    public boolean isEmpty() {
-        return Objects.isNull(value);
     }
 
     @Override

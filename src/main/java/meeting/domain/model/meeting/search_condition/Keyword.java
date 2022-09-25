@@ -6,24 +6,23 @@ package meeting.domain.model.meeting.search_condition;
 public class Keyword {
     String value;
 
+    @Deprecated
+    Keyword() {}
+
     public Keyword(String value) {
         this.value = value;
-    }
-
-    public String value() {
-        return value;
     }
 
     public static Keyword empty() {
         return new Keyword("");
     }
 
-    @Override
-    public String toString() {
+    public String value() {
         return value;
     }
 
-    @Deprecated
-    Keyword() {
+    @Override
+    public String toString() {
+        return value;
     }
 }

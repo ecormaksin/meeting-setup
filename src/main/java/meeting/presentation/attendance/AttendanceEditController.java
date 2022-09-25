@@ -130,7 +130,7 @@ public class AttendanceEditController {
                         participantName);
 
         if (participantNameDuplicationStatus == ParticipantNameDuplicationStatus.あり) {
-            bindingResult.rejectValue("participantName.value", null,
+            bindingResult.rejectValue("participantName.valid", null,
                     participantNameDuplicationStatus.errorMessage());
             return true;
         }

@@ -4,8 +4,8 @@
     <th:block th:fragment="form (participantName, schedules, conveniences, attendanceComment)">
         <label>参加者名</label>
         <input type="text" th:field="*{participantName.value}" class="participant-name">
-        <p th:if="${#fields.hasErrors('participantName.value')}">
-            <mark><span th:errors="*{participantName.value}"></span></mark>
+        <p th:if="${#fields.hasErrors('participantName.valid')}">
+            <mark><span th:errors="*{participantName.valid}"></span></mark>
         </p>
 
         <label>日程候補</label>
@@ -46,14 +46,6 @@
         <p th:if="${#fields.hasErrors('attendanceComment.value')}">
             <mark><span th:errors="*{attendanceComment.value}"></span></mark>
         </p>
-    </th:block>
-
-    <th:block th:fragment="show-location (attendanceEditLocation)">
-        <p>出欠を編集するには、ミーティングの詳細へ移動するか、次のURLへアクセスしてください。: </p>
-        <div class="attendance-edit__location-parent">
-            <input type="text" id="url" class="attendance-edit__location" th:readonly="readonly" th:value="${attendanceEditLocation}">
-            <button id="copyUrlButton" class="small-button url-copy-button">URLをコピーする</button>
-        </div>
     </th:block>
 </body>
 </html>

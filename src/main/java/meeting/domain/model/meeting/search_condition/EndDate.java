@@ -22,16 +22,16 @@ public class EndDate {
         this.value = value;
     }
 
-    public LocalDate value() {
-        return this.value;
-    }
-
     public static EndDate empty() {
         return new EndDate(null);
     }
 
     public boolean isEmpty() {
         return Objects.isNull(value);
+    }
+
+    public LocalDate value() {
+        return this.value;
     }
 
     @Override

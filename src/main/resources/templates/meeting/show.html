@@ -89,6 +89,7 @@ $(function() {
   /*[/]*/
 
   $('#inputAttendanceButton').on('click', function() {
+    document.cookie = "participantNumber=; max-age=0";
     document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
     $('form').get(0).submit();
   });

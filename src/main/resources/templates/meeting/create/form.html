@@ -42,7 +42,9 @@ $(function() {
   $('#createMeetingButton').on('click', function() {
     $(this).prop('disabled', true);
 
+    document.cookie = "organizerNumber=; max-age=0";
     document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
+
     $('form').get(0).submit();
   });
 });
