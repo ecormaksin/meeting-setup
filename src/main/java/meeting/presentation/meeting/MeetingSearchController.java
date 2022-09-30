@@ -73,7 +73,7 @@ public class MeetingSearchController {
                 "keyword.value",
                 "startDate.value",
                 "endDate.value",
-                "durationValid",
+                "limitCount.value",
                 "organizerNumber.value",
                 "meetingList.list[*"
         );

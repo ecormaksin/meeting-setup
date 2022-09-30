@@ -30,9 +30,9 @@ public class StartDate {
         return Objects.isNull(value);
     }
 
-    public boolean isSameOrAfter(EndDate endDate) {
+    public boolean isBeforeOrSame(EndDate endDate) {
         LocalDate endDateValue = endDate.value();
-        return value.equals(endDateValue) || value.isAfter(endDateValue);
+        return  value.isBefore(endDateValue) || value.equals(endDateValue);
     }
 
     public LocalDate value() {

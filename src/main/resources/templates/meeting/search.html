@@ -14,29 +14,29 @@
 
     <h2>検索条件</h2>
     <form method="get" action="#"
-        th:object="${searchCondition}"  th:action="@{/meeting/search}">
+        th:object="${searchCondition}" th:action="@{/meeting/search}">
 
       <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 
       <label>キーワード（件名とメモに含まれるものを検索します。空白で全件を検索します。）</label>
-      <input type="text" placeholder="キーワード" th:field="*{keyword.value}" class="meeting-search__keyword">
+      <input type="text" placeholder="キーワード" th:field="${searchCondition.keyword.value}" class="meeting-search__keyword">
 
       <label>検索期間（日程候補の中で期間が含まれるものを検索します。）</label>
       <div class="meeting-search__search-period-parent">
-        <input type="date" th:field="*{startDate.value}">
+        <input type="date" th:field="${searchCondition.startDate.value}">
         <div>～</div>
-        <input type="date" th:field="*{endDate.value}">
+        <input type="date" th:field="${searchCondition.endDate.value}">
       </div>
       <p th:if="${#fields.hasErrors('startDate.value')}">
-        <mark><span th:errors="*{startDate.value}"></span></mark>
+        <mark><span th:errors="${searchCondition.startDate.value}"></span></mark>
       </p>
       <p th:if="${#fields.hasErrors('endDate.value')}">
-        <mark><span th:errors="*{endDate.value}"></span></mark>
+        <mark><span th:errors="${searchCondition.endDate.value}"></span></mark>
       </p>
       <p th:if="${#fields.hasErrors('durationValid')}">
-        <mark><span th:errors="*{durationValid}"></span></mark>
+        <mark><span th:errors="${searchCondition.durationValid}"></span></mark>
       </p>
 
       <button type="button" id="searchMeetingButton" class="small-button" disabled="disabled">検索する</button>
