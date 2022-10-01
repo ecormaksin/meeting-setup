@@ -3,7 +3,7 @@ package meeting.infrastructure.datasource.meeting;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.Memo;
 import meeting.domain.model.meeting.Subject;
-import meeting.domain.model.meeting.meeting_list.MeetingListItem;
+import meeting.domain.model.meeting.list.MeetingListItem;
 import meeting.domain.model.meeting.search_condition.EndDate;
 import meeting.domain.model.meeting.search_condition.Keyword;
 import meeting.domain.model.meeting.search_condition.LimitCount;

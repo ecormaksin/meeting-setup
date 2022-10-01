@@ -1,4 +1,4 @@
-package meeting.domain.model.meeting.meeting_list;
+package meeting.domain.model.meeting.list;
 
 /**
  * ミーティング一覧の項目利用可能性

@@ -51,7 +51,7 @@
     </p>
     <p>該当するミーティングが見つからない場合は、条件を変更してください。</p>
 
-    <table th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.meeting_list.MeetingListItemAvailability).HAVE_ITEMS}">
+    <table th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.list.MeetingListItemAvailability).HAVE_ITEMS}">
       <thead>
         <tr>
           <th></th>
@@ -74,7 +74,7 @@
       </tbody>
     </table>
 
-    <p th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.meeting_list.MeetingListItemAvailability).HAVE_NO_ITEMS}">
+    <p th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.list.MeetingListItemAvailability).HAVE_NO_ITEMS}">
       条件に該当するミーティングが見つかりませんでした。
     </p>
 

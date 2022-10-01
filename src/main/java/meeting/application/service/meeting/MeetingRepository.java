@@ -1,7 +1,7 @@
 package meeting.application.service.meeting;
 
 import meeting.domain.model.meeting.*;
-import meeting.domain.model.meeting.meeting_list.MeetingList;
+import meeting.domain.model.meeting.list.MeetingList;
 
 /**
  * ミーティング リポジトリ

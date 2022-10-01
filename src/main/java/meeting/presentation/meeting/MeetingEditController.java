@@ -27,10 +27,16 @@ public class MeetingEditController {
 
     static final String VIEW_PATH_FORM = "meeting/edit/form";
 
-    private MeetingEditScenario meetingEditScenario;
+    MeetingEditScenario meetingEditScenario;
 
     public MeetingEditController(MeetingEditScenario meetingEditScenario) {
         this.meetingEditScenario = meetingEditScenario;
+    }
+
+    private void validateEditability(Meeting meeting, OrganizerNumber organizerNumber) {
+        MeetingEditability meetingEditability = meeting.editabilityFor(organizerNumber);
+        if (meetingEditability == MeetingEditability.編集可能) return;
+        throw new RuntimeException(meetingEditability.statusMessage());
     }
 
     @GetMapping
@@ -42,12 +48,9 @@ public class MeetingEditController {
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
         OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
-            throw new MeetingCannotEditException();
-        }
+        validateEditability(meeting, organizerNumber);
 
         Schedules schedules = meeting.schedules();
-
         model.addAttribute("meetingInputForm", new MeetingInputForm(
                 meeting.subject(),
                 meeting.memo(),
@@ -88,9 +91,7 @@ public class MeetingEditController {
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
         OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
-            throw new MeetingCannotEditException();
-        }
+        validateEditability(meeting, organizerNumber);
 
         if (bindingResult.hasErrors()) return "meeting/edit/form";
 
@@ -123,9 +124,7 @@ public class MeetingEditController {
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
         OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
-        if (meeting.editabilityFor(organizerNumber) != MeetingEditability.編集可能) {
-            throw new MeetingCannotDeleteException();
-        }
+        validateEditability(meeting, organizerNumber);
 
         meetingEditScenario.delete(meetingNumber);
 

@@ -27,7 +27,6 @@ public class MeetingShowController {
     OrganizerNumberProxy organizerNumberProxy;
     ParticipantNumberProxy participantNumberProxy;
 
-
     public MeetingShowController(MeetingShowScenario meetingShowScenario,
                                  OrganizerNumberProxy organizerNumberProxy,
                                  ParticipantNumberProxy participantNumberProxy) {

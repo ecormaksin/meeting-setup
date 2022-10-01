@@ -1,4 +1,4 @@
-package meeting.domain.model.meeting.meeting_list;
+package meeting.domain.model.meeting.list;
 
 import java.util.ArrayList;
 import java.util.Collections;

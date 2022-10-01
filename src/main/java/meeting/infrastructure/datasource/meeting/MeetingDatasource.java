@@ -5,8 +5,8 @@ import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.Conveniences;
 import meeting.domain.model.meeting.*;
-import meeting.domain.model.meeting.meeting_list.MeetingList;
-import meeting.domain.model.meeting.meeting_list.MeetingListItem;
+import meeting.domain.model.meeting.list.MeetingList;
+import meeting.domain.model.meeting.list.MeetingListItem;
 import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.Schedule;
@@ -75,7 +75,7 @@ public class MeetingDatasource implements MeetingRepository {
         }
 
         if (meetingNotFound) {
-            throw new MeetingNotFoundException(String.format("存在しないミーティングです。ミーティング番号を確認してください。: %s", meetingNumber.value()));
+            throw new MeetingNotFoundException(String.format("指定されたミーティングは、存在しないか主催者に削除されています。主催者へミーティング番号を確認してください。: %s", meetingNumber.value()));
         }
 
         List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);

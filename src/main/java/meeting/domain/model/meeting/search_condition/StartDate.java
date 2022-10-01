@@ -31,16 +31,19 @@ public class StartDate {
     }
 
     public boolean isBeforeOrSame(EndDate endDate) {
-        LocalDate endDateValue = endDate.value();
+        LocalDate endDateValue = endDate.value;
         return  value.isBefore(endDateValue) || value.equals(endDateValue);
     }
 
-    public LocalDate value() {
-        return this.value;
-    }
+    @Deprecated(since = "thymeleaf")
+    public void value() {}
 
     @Override
     public String toString() {
         return value.toString();
+    }
+
+    public static StartDate parse(String dateText) {
+        return new StartDate(LocalDate.parse(dateText));
     }
 }

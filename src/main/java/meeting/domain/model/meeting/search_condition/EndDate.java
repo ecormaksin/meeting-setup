@@ -30,12 +30,15 @@ public class EndDate {
         return Objects.isNull(value);
     }
 
-    public LocalDate value() {
-        return this.value;
-    }
+    @Deprecated(since = "thymeleaf")
+    public void value() {}
 
     @Override
     public String toString() {
         return value.toString();
+    }
+
+    public static EndDate parse(String dateText) {
+        return new EndDate(LocalDate.parse(dateText));
     }
 }

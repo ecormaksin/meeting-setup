@@ -6,7 +6,7 @@ package meeting.domain.model.meeting;
 public enum MeetingEditability {
 
     編集可能("meeting-show__edit-button__display-block", ""),
-    編集不可_非主催者(MeetingEditability.DISPLAY_NONE_CLASS, ""),
+    編集不可_非主催者(MeetingEditability.DISPLAY_NONE_CLASS, "主催者ではないので編集・削除できません。"),
     編集不可_回答済(MeetingEditability.DISPLAY_NONE_CLASS, "回答されているので編集・削除できません。");
 
     static final String DISPLAY_NONE_CLASS = "meeting-show__edit-button__display-none";

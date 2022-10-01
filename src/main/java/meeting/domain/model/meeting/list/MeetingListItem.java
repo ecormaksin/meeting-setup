@@ -1,4 +1,4 @@
-package meeting.domain.model.meeting.meeting_list;
+package meeting.domain.model.meeting.list;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.Subject;

@@ -2,7 +2,7 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingSearchScenario;
 import meeting.domain.model.meeting.MeetingSearchRequest;
-import meeting.domain.model.meeting.meeting_list.MeetingList;
+import meeting.domain.model.meeting.list.MeetingList;
 import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.presentation.organizer.OrganizerNumberProxy;

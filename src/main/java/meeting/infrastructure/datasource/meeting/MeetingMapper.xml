@@ -52,7 +52,7 @@
         WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 
-    <select id="organizerMeetingListItems" resultType="meeting.domain.model.meeting.meeting_list.MeetingListItem">
+    <select id="organizerMeetingListItems" resultType="meeting.domain.model.meeting.list.MeetingListItem">
         SELECT
             ミーティング._ミーティング番号 as "meetingNumber.value",
             ミーティング.件名 as "subject.value"
@@ -67,7 +67,7 @@
             ミーティング.登録日時
     </select>
 
-    <resultMap id="searchedMeetings" type="meeting.domain.model.meeting.meeting_list.MeetingListItem">
+    <resultMap id="searchedMeetings" type="meeting.domain.model.meeting.list.MeetingListItem">
         <id property="meetingNumber.value" column="ミーティング番号" />
         <result property="subject.value" column="件名" />
         <collection property="schedules.list"

@@ -56,7 +56,6 @@
 
     <delete id="deleteSchedulesByMeetingNumber">
         DELETE FROM 日程候補._日程
-        WHERE ミーティング
-        番号 = #{meetingNumber.value}
+        WHERE ミーティング番号 = #{meetingNumber.value}
     </delete>
 </mapper>

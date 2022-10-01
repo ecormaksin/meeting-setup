@@ -2,7 +2,7 @@ package meeting.application.senario;
 
 import meeting.application.service.meeting.MeetingQueryService;
 import meeting.domain.model.meeting.MeetingSearchRequest;
-import meeting.domain.model.meeting.meeting_list.MeetingList;
+import meeting.domain.model.meeting.list.MeetingList;
 import org.springframework.stereotype.Service;
 
 /**

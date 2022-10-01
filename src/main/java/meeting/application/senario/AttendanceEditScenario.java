@@ -2,9 +2,11 @@ package meeting.application.senario;
 
 import meeting.application.service.attendance.AttendanceQueryService;
 import meeting.application.service.attendance.AttendanceRecordService;
+import meeting.application.service.meeting.MeetingQueryService;
 import meeting.application.service.participant.ParticipantQueryService;
 import meeting.application.service.schedule.ScheduleQueryService;
 import meeting.domain.model.attendance.*;
+import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
@@ -19,21 +21,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class AttendanceEditScenario {
 
+    MeetingQueryService meetingQueryService;
     ParticipantQueryService participantQueryService;
     AttendanceRecordService attendanceRecordService;
     AttendanceQueryService attendanceQueryService;
     ScheduleQueryService scheduleQueryService;
 
     public AttendanceEditScenario(
+            MeetingQueryService meetingQueryService,
             ParticipantQueryService participantQueryService,
             AttendanceRecordService attendanceRecordService,
             AttendanceQueryService attendanceQueryService,
             ScheduleQueryService scheduleQueryService) {
 
+        this.meetingQueryService = meetingQueryService;
         this.participantQueryService = participantQueryService;
         this.attendanceRecordService = attendanceRecordService;
         this.attendanceQueryService = attendanceQueryService;
         this.scheduleQueryService = scheduleQueryService;
+    }
+
+    public Meeting meetingOf(MeetingNumber meetingNumber) {
+        return meetingQueryService.meetingOf(meetingNumber);
     }
 
     public Attendance attendanceOf(AttendanceNumber attendanceNumber) {

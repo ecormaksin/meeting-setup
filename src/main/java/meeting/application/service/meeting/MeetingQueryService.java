@@ -3,7 +3,7 @@ package meeting.application.service.meeting;
 import meeting.domain.model.meeting.Meeting;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.meeting.MeetingSearchRequest;
-import meeting.domain.model.meeting.meeting_list.MeetingList;
+import meeting.domain.model.meeting.list.MeetingList;
 import org.springframework.stereotype.Service;
 
 /**
