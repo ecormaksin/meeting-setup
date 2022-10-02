@@ -1,8 +1,9 @@
 package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
-import meeting.domain.model.meeting.MeetingCreationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.MeetingRegistrationRequest;
+import meeting.domain.model.meeting.MeetingRegistrationRequestInvalidException;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.SchedulesInvalidException;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
@@ -88,11 +89,21 @@ public class MeetingCreationController {
         OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         try {
-            MeetingCreationRequest meetingCreationRequest = meetingInputForm.toCreationRequest(meetingNumber, organizerNumber);
-            meetingCreationScenario.create(meetingCreationRequest);
+
+            MeetingRegistrationRequest registrationRequest = meetingInputForm.toRegistrationRequest(meetingNumber, organizerNumber);
+            meetingCreationScenario.create(registrationRequest);
+
         } catch (SchedulesInvalidException e) {
+
             bindingResult.rejectValue("scheduleInputs", null, e.getMessage());
             return VIEW_PATH_FORM;
+
+        } catch (MeetingRegistrationRequestInvalidException e) {
+
+            ObjectError error = new ObjectError("globalError", e.getMessage());
+            bindingResult.addError(error);
+            return VIEW_PATH_FORM;
+
         }
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber);

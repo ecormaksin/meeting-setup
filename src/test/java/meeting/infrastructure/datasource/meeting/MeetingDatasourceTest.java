@@ -63,7 +63,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         RegistrationRequestDateTime registrationRequestDateTime
                 = RegistrationRequestDateTime.of(registrationRequestDateTimeValue);
 
-        MeetingCreationRequest meetingCreationRequest = new MeetingCreationRequest(
+        MeetingRegistrationRequest registrationRequest = new MeetingRegistrationRequest(
                 meetingNumber,
                 subject,
                 memo,
@@ -71,7 +71,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 organizerNumber,
                 registrationRequestDateTime);
 
-        meetingDatasource.create(meetingCreationRequest);
+        meetingDatasource.create(registrationRequest);
     }
 
     private Schedule schedule(int year,

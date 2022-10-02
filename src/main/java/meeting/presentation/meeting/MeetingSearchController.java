@@ -74,6 +74,7 @@ public class MeetingSearchController {
                 "startDate.value",
                 "endDate.value",
                 "limitCount.value",
+                "isDurationValid",
                 "organizerNumber.value",
                 "meetingList.list[*"
         );

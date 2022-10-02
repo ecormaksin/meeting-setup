@@ -9,21 +9,29 @@ import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.participant.ParticipantNumberDuplicationStatus;
+import meeting.infrastructure.datasource.meeting.MeetingMapper;
+import meeting.infrastructure.datasource.meeting.MeetingNotFoundException;
+import meeting.infrastructure.datasource.meeting.MeetingWithoutSchedulesAndAttendances;
 import meeting.infrastructure.datasource.participant.ParticipantMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AttendanceDatasource implements AttendanceRepository {
 
+    MeetingMapper meetingMapper;
     ParticipantMapper participantMapper;
     AttendanceMapper attendanceMapper;
 
     public AttendanceDatasource(
+            MeetingMapper meetingMapper,
             ParticipantMapper participantMapper,
             AttendanceMapper attendanceMapper) {
+
+        this.meetingMapper = meetingMapper;
         this.participantMapper = participantMapper;
         this.attendanceMapper = attendanceMapper;
     }
@@ -66,18 +74,24 @@ public class AttendanceDatasource implements AttendanceRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
-        AttendanceNumber attendanceNumber = attendanceInputRequest.attendanceNumber();
-        ParticipantNumber participantNumber = attendanceInputRequest.participantNumber();
-        ParticipantName participantName = attendanceInputRequest.participantName();
+    public void input(MeetingNumber meetingNumber, AttendanceRegistrationRequest registrationRequest) {
+
+        Optional<MeetingWithoutSchedulesAndAttendances> optionalMeetingWithoutSchedulesAndAttendances = meetingMapper.selectMeeting(meetingNumber);
+        if (optionalMeetingWithoutSchedulesAndAttendances.isEmpty()) {
+            throw new MeetingNotFoundException(meetingNumber);
+        }
+
+        AttendanceNumber attendanceNumber = registrationRequest.attendanceNumber();
+        ParticipantNumber participantNumber = registrationRequest.participantNumber();
+        ParticipantName participantName = registrationRequest.participantName();
 
         if (participantMapper.notExists(participantNumber)) participantMapper.insertParticipant(participantNumber);
 
         updateLatestParticipantName(participantNumber, participantName);
 
-        insertAttendance(meetingNumber, attendanceNumber, participantNumber, attendanceInputRequest.participantName());
-        insertConveniences(attendanceNumber, attendanceInputRequest.conveniences());
-        insertAttendanceComment(attendanceNumber, attendanceInputRequest.attendanceComment());
+        insertAttendance(meetingNumber, attendanceNumber, participantNumber, registrationRequest.participantName());
+        insertConveniences(attendanceNumber, registrationRequest.conveniences());
+        insertAttendanceComment(attendanceNumber, registrationRequest.attendanceComment());
     }
 
     void updateLatestParticipantName(ParticipantNumber participantNumber, ParticipantName participantName) {
@@ -93,10 +107,16 @@ public class AttendanceDatasource implements AttendanceRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest) {
-        AttendanceNumber attendanceNumber = attendanceEditRequest.attendanceNumber();
-        ParticipantNumber participantNumber = attendanceEditRequest.participantNumber();
-        ParticipantName participantName = attendanceEditRequest.participantName();
+    public void edit(MeetingNumber meetingNumber, AttendanceRegistrationRequest registrationRequest) {
+
+        Optional<MeetingWithoutSchedulesAndAttendances> optionalMeetingWithoutSchedulesAndAttendances = meetingMapper.selectMeeting(meetingNumber);
+        if (optionalMeetingWithoutSchedulesAndAttendances.isEmpty()) {
+            throw new MeetingNotFoundException(meetingNumber);
+        }
+
+        AttendanceNumber attendanceNumber = registrationRequest.attendanceNumber();
+        ParticipantNumber participantNumber = registrationRequest.participantNumber();
+        ParticipantName participantName = registrationRequest.participantName();
 
         updateLatestParticipantName(participantNumber, participantName);
 
@@ -104,9 +124,9 @@ public class AttendanceDatasource implements AttendanceRepository {
         deleteAttendanceWithWholeAggregate(attendanceNumber);
 
         // 再追加
-        insertAttendance(meetingNumber, attendanceNumber, participantNumber, attendanceEditRequest.participantName());
-        insertConveniences(attendanceNumber, attendanceEditRequest.conveniences());
-        insertAttendanceComment(attendanceNumber, attendanceEditRequest.attendanceComment());
+        insertAttendance(meetingNumber, attendanceNumber, participantNumber, registrationRequest.participantName());
+        insertConveniences(attendanceNumber, registrationRequest.conveniences());
+        insertAttendanceComment(attendanceNumber, registrationRequest.attendanceComment());
     }
 
     @Override

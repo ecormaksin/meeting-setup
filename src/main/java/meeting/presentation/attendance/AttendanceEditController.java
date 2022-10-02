@@ -85,7 +85,8 @@ public class AttendanceEditController {
             return VIEW_PATH_FORM;
         }
 
-        attendanceEditScenario.edit(meetingNumber, attendanceInputForm.toEditRequest(attendanceNumber, participantNumber));
+        attendanceEditScenario.edit(meetingNumber,
+                attendanceInputForm.toRegistrationRequest(attendanceNumber, participantNumber));
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
         attributes.addFlashAttribute("attendanceNumber", attendanceNumber.value());

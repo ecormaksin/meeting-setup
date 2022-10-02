@@ -1,8 +1,7 @@
 package meeting.application.service.attendance;
 
-import meeting.domain.model.attendance.AttendanceEditRequest;
 import meeting.domain.model.attendance.AttendanceNumber;
-import meeting.domain.model.attendance.AttendanceInputRequest;
+import meeting.domain.model.attendance.AttendanceRegistrationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +16,12 @@ public class AttendanceRecordService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public void input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest) {
-        attendanceRepository.input(meetingNumber, attendanceInputRequest);
+    public void input(MeetingNumber meetingNumber, AttendanceRegistrationRequest registrationRequest) {
+        attendanceRepository.input(meetingNumber, registrationRequest);
     }
 
-    public void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest) {
-        attendanceRepository.edit(meetingNumber, attendanceEditRequest);
+    public void edit(MeetingNumber meetingNumber, AttendanceRegistrationRequest registrationRequest) {
+        attendanceRepository.edit(meetingNumber, registrationRequest);
     }
 
     public void delete(AttendanceNumber attendanceNumber) {

@@ -1,9 +1,8 @@
 package meeting.application.service.meeting;
 
 import meeting.domain.model.meeting.Meeting;
-import meeting.domain.model.meeting.MeetingCreationRequest;
-import meeting.domain.model.meeting.MeetingEditRequest;
 import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.MeetingRegistrationRequest;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,11 +16,11 @@ public class MeetingRecordService {
         this.meetingRepository = meetingRepository;
     }
 
-    public void create(MeetingCreationRequest meetingCreationRequest) {
+    public void create(MeetingRegistrationRequest meetingCreationRequest) {
         meetingRepository.create(meetingCreationRequest);
     }
 
-    public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
+    public void edit(Meeting meeting, MeetingRegistrationRequest meetingEditRequest) {
         meetingRepository.edit(meeting, meetingEditRequest);
     }
 

@@ -9,7 +9,7 @@ import javax.validation.Valid;
 /**
  * 出欠登録依頼
  */
-public abstract class AttendanceRegistrationRequest {
+public class AttendanceRegistrationRequest {
 
     @Valid
     AttendanceNumber attendanceNumber;
@@ -26,6 +26,9 @@ public abstract class AttendanceRegistrationRequest {
     @Valid
     AttendanceComment attendanceComment;
 
+    @Deprecated
+    AttendanceRegistrationRequest() {}
+
     public AttendanceRegistrationRequest(
             AttendanceNumber attendanceNumber,
             ParticipantNumber participantNumber,
@@ -39,9 +42,6 @@ public abstract class AttendanceRegistrationRequest {
         this.conveniences = conveniences;
         this.attendanceComment = attendanceComment;
     }
-
-    @Deprecated
-    AttendanceRegistrationRequest() {}
 
     public AttendanceNumber attendanceNumber() {
         return attendanceNumber;

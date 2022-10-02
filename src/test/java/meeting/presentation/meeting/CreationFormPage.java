@@ -11,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CreationFormPage extends CustomPageObject {
 
@@ -37,6 +39,8 @@ public class CreationFormPage extends CustomPageObject {
     private WebElement subjectError;
 
     private WebElement memoError;
+
+    private WebElement globalErrors;
 
     private WebElement scheduleInputsError;
 
@@ -196,6 +200,19 @@ public class CreationFormPage extends CustomPageObject {
             return memoError.getText();
         } catch (NoSuchElementException e) {
             return "";
+        }
+    }
+
+    public List<String> globalErrorMessages() {
+        try {
+
+            List<WebElement> globalErrorList = globalErrors.findElements(By.cssSelector("li"));
+            return globalErrorList.stream()
+                    .map(WebElement::getText)
+                    .collect(Collectors.toList());
+
+        } catch (NoSuchElementException e) {
+            return Collections.emptyList();
         }
     }
 

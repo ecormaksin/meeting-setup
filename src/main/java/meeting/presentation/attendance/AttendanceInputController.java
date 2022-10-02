@@ -78,7 +78,7 @@ public class AttendanceInputController {
         }
 
         AttendanceNumber attendanceNumber = AttendanceNumber.newNumber();
-        attendanceInputScenario.input(meetingNumber, attendanceInputForm.toInputRequest(attendanceNumber, participantNumber));
+        attendanceInputScenario.input(meetingNumber, attendanceInputForm.toRegistrationRequest(attendanceNumber, participantNumber));
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
         attributes.addFlashAttribute("attendanceNumber", attendanceNumber.value());

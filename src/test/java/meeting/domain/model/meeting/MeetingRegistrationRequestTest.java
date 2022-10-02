@@ -15,7 +15,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MeetingCreationRequestTest {
+public class MeetingRegistrationRequestTest {
 
     private static Validator validator;
 
@@ -34,7 +34,7 @@ public class MeetingCreationRequestTest {
         Schedules schedules = Schedules.of(Arrays.asList(schedule));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-                new MeetingCreationRequest(
+                new MeetingRegistrationRequest(
                         MeetingNumber.newNumber(),
                         Subject.of("件名テスト"),
                         Memo.blank(),

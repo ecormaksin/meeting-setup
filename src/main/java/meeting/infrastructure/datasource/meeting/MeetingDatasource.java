@@ -47,17 +47,17 @@ public class MeetingDatasource implements MeetingRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void create(MeetingCreationRequest meetingCreationRequest) {
+    public void create(MeetingRegistrationRequest registrationRequest) {
 
-        OrganizerNumber organizerNumber = meetingCreationRequest.organizerNumber();
-        MeetingNumber meetingNumber = meetingCreationRequest.meetingNumber();
+        OrganizerNumber organizerNumber = registrationRequest.organizerNumber();
+        MeetingNumber meetingNumber = registrationRequest.meetingNumber();
 
         if (organizerMapper.notExists(organizerNumber)) organizerMapper.insertOrganizer(organizerNumber);
 
-        insertMeeting(meetingNumber, meetingCreationRequest.subject());
+        insertMeeting(meetingNumber, registrationRequest.subject());
         insertMeetingAndOrganizerRelation(meetingNumber, organizerNumber);
-        insertMeetingMemo(meetingNumber, meetingCreationRequest.memo());
-        insertSchedules(meetingNumber, meetingCreationRequest.schedules());
+        insertMeetingMemo(meetingNumber, registrationRequest.memo());
+        insertSchedules(meetingNumber, registrationRequest.schedules());
     }
 
     @Override
@@ -75,7 +75,7 @@ public class MeetingDatasource implements MeetingRepository {
         }
 
         if (meetingNotFound) {
-            throw new MeetingNotFoundException(String.format("指定されたミーティングは、存在しないか主催者に削除されています。主催者へミーティング番号を確認してください。: %s", meetingNumber.value()));
+            throw new MeetingNotFoundException(meetingNumber);
         }
 
         List<Attendance> attendanceList = attendanceMapper.selectAttendancesByMeetingNumber(meetingNumber);
@@ -92,18 +92,18 @@ public class MeetingDatasource implements MeetingRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void edit(Meeting meeting, MeetingEditRequest meetingEditRequest) {
-        MeetingNumber meetingNumber = meetingEditRequest.meetingNumber();
+    public void edit(Meeting meeting, MeetingRegistrationRequest registrationRequest) {
+        MeetingNumber meetingNumber = registrationRequest.meetingNumber();
 
         // 既存のレコードを削除
         deleteMeetingWithWholeAggregate(meetingNumber);
 
         // 再追加
         insertMeeting(meetingNumber,
-                meetingEditRequest.subject());
-        insertMeetingMemo(meetingNumber, meetingEditRequest.memo());
-        insertMeetingAndOrganizerRelation(meetingNumber, meetingEditRequest.organizerNumber());
-        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, meetingEditRequest.schedules());
+                registrationRequest.subject());
+        insertMeetingMemo(meetingNumber, registrationRequest.memo());
+        insertMeetingAndOrganizerRelation(meetingNumber, registrationRequest.organizerNumber());
+        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, registrationRequest.schedules());
         insertAttendances(meetingNumber, meeting.attendances(), scheduleNumbers);
     }
 

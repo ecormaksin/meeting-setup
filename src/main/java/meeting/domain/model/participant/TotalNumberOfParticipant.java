@@ -1,4 +1,4 @@
-package meeting.domain.model.attendance;
+package meeting.domain.model.participant;
 
 /**
  * 参加者の合計人数
@@ -15,11 +15,15 @@ public class TotalNumberOfParticipant {
     }
 
     public boolean isGreaterThanOne() {
-        return value > 1;
+        return this.value > 1;
     }
 
     public boolean isGreaterThan(TotalNumberOfParticipant other) {
         return this.value > other.value;
+    }
+
+    public boolean isGreaterThanOrSame(TotalNumberOfParticipant other) {
+        return this.value >= other.value;
     }
 
     public boolean isSame(TotalNumberOfParticipant other) {

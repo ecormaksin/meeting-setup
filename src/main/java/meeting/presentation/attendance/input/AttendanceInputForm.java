@@ -1,9 +1,6 @@
 package meeting.presentation.attendance.input;
 
-import meeting.domain.model.attendance.AttendanceComment;
-import meeting.domain.model.attendance.AttendanceEditRequest;
-import meeting.domain.model.attendance.AttendanceInputRequest;
-import meeting.domain.model.attendance.AttendanceNumber;
+import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.attendance.convenience.Conveniences;
@@ -83,19 +80,9 @@ public class AttendanceInputForm {
         return inputForm;
     }
 
-    public AttendanceInputRequest toInputRequest(AttendanceNumber attendanceNumber, ParticipantNumber participantNumber) {
+    public AttendanceRegistrationRequest toRegistrationRequest(AttendanceNumber attendanceNumber, ParticipantNumber participantNumber) {
 
-        return new AttendanceInputRequest(
-                attendanceNumber,
-                participantNumber,
-                participantName,
-                conveniences,
-                attendanceComment);
-    }
-
-    public AttendanceEditRequest toEditRequest(AttendanceNumber attendanceNumber, ParticipantNumber participantNumber) {
-
-        return new AttendanceEditRequest(
+        return new AttendanceRegistrationRequest(
                 attendanceNumber,
                 participantNumber,
                 participantName,

@@ -4,6 +4,7 @@ import meeting.domain.ValidationConcern;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.ScheduleRegistrationStatus;
 import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.SchedulesInvalidException;
 
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 /**
  * ミーティング登録依頼
  */
-public abstract class MeetingRegistrationRequest extends ValidationConcern {
+public class MeetingRegistrationRequest extends ValidationConcern {
 
     @Valid
     MeetingNumber meetingNumber;
@@ -32,7 +33,7 @@ public abstract class MeetingRegistrationRequest extends ValidationConcern {
     @Valid
     RegistrationRequestDateTime registrationRequestDateTime;
 
-    private boolean isSchedulesSetOfValidStartDateTime;
+    boolean isSchedulesSetOfValidStartDateTime;
 
     @Deprecated
     MeetingRegistrationRequest() {}
@@ -53,6 +54,11 @@ public abstract class MeetingRegistrationRequest extends ValidationConcern {
         isSchedulesSetOfValidStartDateTime = isSetOfValidMeetingDateTimes();
 
         this.validate(this);
+    }
+
+    @Override
+    protected void throwException(String messageString) {
+        throw new MeetingRegistrationRequestInvalidException(messageString);
     }
 
     private boolean isSetOfValidMeetingDateTimes() {

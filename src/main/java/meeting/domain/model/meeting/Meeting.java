@@ -4,13 +4,17 @@ import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.participant.ConvenientParticipantsStatus;
 import meeting.domain.model.participant.ParticipantNumber;
+import meeting.domain.model.participant.TotalNumberOfParticipant;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleMatchStatus;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
 import javax.validation.Valid;
+import java.util.AbstractMap;
+import java.util.Map;
 
 /**
  * ミーティング
@@ -109,18 +113,35 @@ public class Meeting {
     }
 
     public ScheduleMatchStatus scheduleMatchStatusAt(ScheduleNumber scheduleNumber) {
-        TotalNumberOfParticipant targetTotalNumber = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
 
-        TotalNumberOfParticipant maxTotalNumber = TotalNumberOfParticipant.of(0);
+        TotalNumberOfParticipant targetTotalNumberMaru = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
+
+        ConvenientParticipantsStatus targetScheduleStatus = ConvenientParticipantsStatus.of(
+                Map.ofEntries(
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, targetTotalNumberMaru),
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.サンカク))
+                ));
+
+        ConvenientParticipantsStatus bestMatchedScheduleStatus = ConvenientParticipantsStatus.of(
+                Map.ofEntries(
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, TotalNumberOfParticipant.of(0)),
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, TotalNumberOfParticipant.of(0))
+                ));
 
         for (Schedule schedule : schedules.asList()) {
-            TotalNumberOfParticipant currentTotalNumber  = totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.マル);
-            if (currentTotalNumber.isGreaterThan(maxTotalNumber)) {
-                maxTotalNumber = currentTotalNumber;
+
+            ConvenientParticipantsStatus currentScheduleStatus = ConvenientParticipantsStatus.of(
+                    Map.ofEntries(
+                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.マル)),
+                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.サンカク))
+                    ));
+
+            if (currentScheduleStatus.isMatchedBetterThanOrSame(bestMatchedScheduleStatus)) {
+                bestMatchedScheduleStatus = currentScheduleStatus;
             }
         }
 
-        if (targetTotalNumber.isGreaterThanOne() && targetTotalNumber.isSame(maxTotalNumber)) {
+        if (targetTotalNumberMaru.isGreaterThanOne() && targetScheduleStatus.isMatchedBetterThanOrSame(bestMatchedScheduleStatus)) {
             return ScheduleMatchStatus.BEST_MATCHED;
         }
         return ScheduleMatchStatus.NOT_MATCHED;

@@ -14,7 +14,7 @@
     <form method="post" action="#"
           th:object="${meetingInputForm}" th:action="@{/meeting/create}">
 
-      <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
+      <ul id="globalErrors" th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
         <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
       </ul>
 

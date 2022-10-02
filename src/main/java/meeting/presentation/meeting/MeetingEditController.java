@@ -4,11 +4,13 @@ import meeting.application.senario.MeetingEditScenario;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.SchedulesInvalidException;
 import meeting.presentation.meeting.input.meeting.MeetingInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputs;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -93,10 +95,25 @@ public class MeetingEditController {
 
         validateEditability(meeting, organizerNumber);
 
-        if (bindingResult.hasErrors()) return "meeting/edit/form";
+        if (bindingResult.hasErrors()) return VIEW_PATH_FORM;
 
-        MeetingEditRequest meetingEditRequest = meetingInputForm.toEditRequest(meetingNumber, organizerNumber);
-        meetingEditScenario.edit(meeting, meetingEditRequest);
+        try {
+
+            MeetingRegistrationRequest registrationRequest = meetingInputForm.toRegistrationRequest(meetingNumber, organizerNumber);
+            meetingEditScenario.edit(meeting, registrationRequest);
+
+        } catch (SchedulesInvalidException e) {
+
+            bindingResult.rejectValue("scheduleInputs", null, e.getMessage());
+            return VIEW_PATH_FORM;
+
+        } catch (MeetingRegistrationRequestInvalidException e) {
+
+            ObjectError error = new ObjectError("globalError", e.getMessage());
+            bindingResult.addError(error);
+            return VIEW_PATH_FORM;
+
+        }
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber);
 

@@ -15,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -256,6 +258,27 @@ public class MeetingCreationControllerTest {
             assertEquals("", errorFormPage.scheduleInputsErrorMessage());
             assertEquals("会議時間を入力してください。", errorFormPage.durationEmptyErrorMessageAt(index));
         }
+
+        @Test
+        void 追加する日程が過去の場合はエラー() {
+
+            new RegistrationRequestDateTimeFake_19841231_1023();
+
+            MeetingCreationControllerTest.this.inputValidSampleSubject();
+
+            ScheduleConstructInput constructInput =
+                    ScheduleConstructInput.of(1984,12, 31, 10, 00, 60);
+
+            formPage.inputScheduleAt(0, constructInput);
+
+            CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
+
+            List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
+
+            assertEquals(1, globalErrorMessages.size());
+            assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
+        }
+
     }
 
     void inputValidSampleSubject() {

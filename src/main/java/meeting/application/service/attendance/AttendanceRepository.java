@@ -1,9 +1,6 @@
 package meeting.application.service.attendance;
 
-import meeting.domain.model.attendance.Attendance;
-import meeting.domain.model.attendance.AttendanceEditRequest;
-import meeting.domain.model.attendance.AttendanceInputRequest;
-import meeting.domain.model.attendance.AttendanceNumber;
+import meeting.domain.model.attendance.*;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
@@ -32,11 +29,11 @@ public interface AttendanceRepository {
             AttendanceNumber attendanceNumber,
             ParticipantName participantName);
 
-    void input(MeetingNumber meetingNumber, AttendanceInputRequest attendanceInputRequest);
+    void input(MeetingNumber meetingNumber, AttendanceRegistrationRequest registrationRequest);
 
     Attendance attendanceOf(AttendanceNumber attendanceNumber);
 
-    void edit(MeetingNumber meetingNumber, AttendanceEditRequest attendanceEditRequest);
+    void edit(MeetingNumber meetingNumber, AttendanceRegistrationRequest registrationRequest);
 
     void delete(AttendanceNumber attendanceNumber);
 }

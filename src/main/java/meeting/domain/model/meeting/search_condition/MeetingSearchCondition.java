@@ -5,8 +5,6 @@ import javax.validation.constraints.AssertTrue;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static meeting.domain.model.meeting.search_condition.MeetingSearchConditionValidity.*;
-
 public class MeetingSearchCondition {
     Keyword keyword;
 
@@ -29,14 +27,13 @@ public class MeetingSearchCondition {
         this.keyword = keyword;
         this.startDate = startDate;
         this.endDate = endDate;
-
-        durationValid = isDurationValid();
     }
 
     public static MeetingSearchCondition initialized() {
         LocalDate currentDate = LocalDate.now();
 
-        return new MeetingSearchCondition(Keyword.empty(),
+        return new MeetingSearchCondition(
+                Keyword.empty(),
                 new StartDate(currentDate),
                 new EndDate(currentDate.plusDays(7)));
     }
@@ -52,8 +49,6 @@ public class MeetingSearchCondition {
 
     @AssertTrue(message = "「検索開始日 ≦ 検索終了日」となるように入力してください。")
     boolean isDurationValid() {
-        if (Objects.isNull(startDate)) return true;
-        if (Objects.isNull(endDate)) return true;
         if (startDate.isEmpty()) return true;
         if (endDate.isEmpty()) return true;
         return startDate.isBeforeOrSame(endDate);
