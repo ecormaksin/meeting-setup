@@ -38,7 +38,7 @@ public class ScheduleConstruct {
         this.startMinute = startMinute;
         this.duration = duration;
 
-        setStartTime();
+        startTime = new StartTime(startLocalTime());
         endTime = new EndTime(endLocalTime());
     }
 
@@ -70,23 +70,11 @@ public class ScheduleConstruct {
     }
 
     public StartTime startTime() {
-        setStartTime();
-        return startTime;
-    }
-
-    private void setStartTime() {
-        if (Objects.nonNull(startTime)) return;
-        startTime = new StartTime(startLocalTime());
+        return new StartTime(startLocalTime());
     }
 
     public EndTime endTime() {
-        setEndTime();
-        return endTime;
-    }
-
-    private void setEndTime() {
-        if (Objects.nonNull(endTime)) return;
-        endTime = new EndTime(endLocalTime());
+        return new EndTime(endLocalTime());
     }
 
     private LocalTime startLocalTime() {

@@ -53,12 +53,11 @@ public class MeetingRegistrationRequest extends ValidationConcern {
 
         isSchedulesSetOfValidStartDateTime = isSetOfValidMeetingDateTimes();
 
-        this.validate(this);
-    }
-
-    @Override
-    protected void throwException(String messageString) {
-        throw new MeetingRegistrationRequestInvalidException(messageString);
+        try {
+            this.validate(this);
+        } catch (IllegalArgumentException e) {
+            throw new MeetingRegistrationRequestInvalidException(e.getMessage());
+        }
     }
 
     private boolean isSetOfValidMeetingDateTimes() {

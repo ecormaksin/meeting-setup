@@ -28,11 +28,6 @@ public class Schedules extends ValidationConcern {
 
     boolean isSetOfUniqueMeetingDateTimes;
 
-    @Override
-    protected void throwException(String messageString) {
-        throw new SchedulesInvalidException(messageString);
-    }
-
     @Deprecated
     Schedules() {}
 
@@ -40,7 +35,11 @@ public class Schedules extends ValidationConcern {
         this.list = list;
         isSetOfUniqueMeetingDateTimes = isSetOfUniqueMeetingDateTimes();
 
-        this.validate(this);
+        try {
+            this.validate(this);
+        } catch (IllegalArgumentException e) {
+            throw new SchedulesInvalidException(e.getMessage());
+        }
     }
 
     public static Schedules of(List<Schedule> source) {

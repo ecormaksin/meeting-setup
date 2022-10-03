@@ -35,15 +35,12 @@ public class StartDate {
         return  value.isBefore(endDateValue) || value.equals(endDateValue);
     }
 
-    @Deprecated(since = "thymeleaf")
-    public void value() {}
+    public LocalDate value() {
+        return value;
+    }
 
     @Override
     public String toString() {
         return value.toString();
-    }
-
-    public static StartDate parse(String dateText) {
-        return new StartDate(LocalDate.parse(dateText));
     }
 }
