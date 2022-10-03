@@ -1,32 +1,32 @@
-package meeting.domain.model.participant;
+package meeting.domain.model.attendance.convenience;
 
 /**
- * 参加者の合計人数
+ * 都合別の合計人数
  */
-public class TotalNumberOfParticipant {
+public class CountOfConvenience {
     int value;
 
-    public TotalNumberOfParticipant(int value) {
+    public CountOfConvenience(int value) {
         this.value = value;
     }
 
-    public static TotalNumberOfParticipant of(int value) {
-        return new TotalNumberOfParticipant(value);
+    public static CountOfConvenience of(int value) {
+        return new CountOfConvenience(value);
     }
 
     public boolean isGreaterThanOne() {
         return this.value > 1;
     }
 
-    public boolean isGreaterThan(TotalNumberOfParticipant other) {
+    public boolean isGreaterThan(CountOfConvenience other) {
         return this.value > other.value;
     }
 
-    public boolean isGreaterThanOrSame(TotalNumberOfParticipant other) {
+    public boolean isGreaterThanOrSame(CountOfConvenience other) {
         return this.value >= other.value;
     }
 
-    public boolean isSame(TotalNumberOfParticipant other) {
+    public boolean isSame(CountOfConvenience other) {
         return this.value == other.value;
     }
 

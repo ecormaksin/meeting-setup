@@ -4,9 +4,9 @@ import meeting.domain.model.attendance.*;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.organizer.OrganizerNumber;
-import meeting.domain.model.participant.ConvenientParticipantsStatus;
+import meeting.domain.model.attendance.convenience.CountsOfConvenience;
 import meeting.domain.model.participant.ParticipantNumber;
-import meeting.domain.model.participant.TotalNumberOfParticipant;
+import meeting.domain.model.attendance.convenience.CountOfConvenience;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleMatchStatus;
 import meeting.domain.model.schedule.ScheduleNumber;
@@ -79,7 +79,7 @@ public class Meeting {
         return attendances;
     }
 
-    public TotalNumberOfParticipant totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
+    public CountOfConvenience totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
         int number = 0;
         for (Attendance attendance : attendances.asList()) {
             for (Convenience convenience : attendance.conveniences().asList()) {
@@ -93,7 +93,7 @@ public class Meeting {
             }
         }
 
-        return TotalNumberOfParticipant.of(number);
+        return CountOfConvenience.of(number);
     }
 
     public ConvenienceCategory convenienceCategoryOf(AttendanceNumber attendanceNumber, ScheduleNumber scheduleNumber) {
@@ -114,34 +114,34 @@ public class Meeting {
 
     public ScheduleMatchStatus scheduleMatchStatusAt(ScheduleNumber scheduleNumber) {
 
-        TotalNumberOfParticipant targetTotalNumberMaru = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
+        CountOfConvenience targetTotalNumberMaru = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
 
-        ConvenientParticipantsStatus targetScheduleStatus = ConvenientParticipantsStatus.of(
+        CountsOfConvenience targetScheduleStatus = CountsOfConvenience.of(
                 Map.ofEntries(
                         new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, targetTotalNumberMaru),
                         new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.サンカク))
                 ));
 
-        ConvenientParticipantsStatus bestMatchedScheduleStatus = ConvenientParticipantsStatus.of(
+        CountsOfConvenience bestMatchedScheduleStatus = CountsOfConvenience.of(
                 Map.ofEntries(
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, TotalNumberOfParticipant.of(0)),
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, TotalNumberOfParticipant.of(0))
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, CountOfConvenience.of(0)),
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, CountOfConvenience.of(0))
                 ));
 
         for (Schedule schedule : schedules.asList()) {
 
-            ConvenientParticipantsStatus currentScheduleStatus = ConvenientParticipantsStatus.of(
+            CountsOfConvenience currentScheduleStatus = CountsOfConvenience.of(
                     Map.ofEntries(
                             new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.マル)),
                             new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.サンカク))
                     ));
 
-            if (currentScheduleStatus.isMatchedBetterThanOrSame(bestMatchedScheduleStatus)) {
+            if (currentScheduleStatus.isMoreSuitableOrSame(bestMatchedScheduleStatus)) {
                 bestMatchedScheduleStatus = currentScheduleStatus;
             }
         }
 
-        if (targetTotalNumberMaru.isGreaterThanOne() && targetScheduleStatus.isMatchedBetterThanOrSame(bestMatchedScheduleStatus)) {
+        if (targetTotalNumberMaru.isGreaterThanOne() && targetScheduleStatus.isMoreSuitableOrSame(bestMatchedScheduleStatus)) {
             return ScheduleMatchStatus.BEST_MATCHED;
         }
         return ScheduleMatchStatus.NOT_MATCHED;
