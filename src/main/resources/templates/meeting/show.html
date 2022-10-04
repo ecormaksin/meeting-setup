@@ -47,12 +47,12 @@
           <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
             <td th:text="${scheduleStat.count}">1</td>
             <!-- 日程 -->
-            <td th:class="${meeting.scheduleMatchStatusAt(schedule.scheduleNumber()).status()}"
+            <td th:class="${meeting.convenienceStatusAt(schedule.scheduleNumber()).status()}"
                 th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
             </td>
-            <!-- 日程別・都合別の回答者数 -->
+            <!-- 日程別・都合別の件数 -->
             <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
-                th:text="${meeting.totalNumberOfParticipantAt(schedule.scheduleNumber(), convenienceCategory).show()}">
+                th:text="${meeting.countOfConvenienceAt(schedule.scheduleNumber(), convenienceCategory).show()}">
             </td>
             <!-- 日程別・参加者別の都合 -->
             <td th:each="attendance, attendanceStat: *{attendances.asList()}"

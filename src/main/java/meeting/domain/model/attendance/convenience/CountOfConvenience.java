@@ -14,19 +14,19 @@ public class CountOfConvenience {
         return new CountOfConvenience(value);
     }
 
-    public boolean isGreaterThanOne() {
-        return this.value > 1;
+    boolean isNotAtLeastTwo() {
+        return value <= 1;
     }
 
-    public boolean isGreaterThan(CountOfConvenience other) {
+    boolean isGreaterThan(CountOfConvenience other) {
         return this.value > other.value;
     }
 
-    public boolean isGreaterThanOrSame(CountOfConvenience other) {
+    boolean isGreaterThanOrSame(CountOfConvenience other) {
         return this.value >= other.value;
     }
 
-    public boolean isSame(CountOfConvenience other) {
+    boolean isSame(CountOfConvenience other) {
         return this.value == other.value;
     }
 

@@ -8,7 +8,7 @@ import meeting.domain.model.attendance.convenience.CountsOfConvenience;
 import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.attendance.convenience.CountOfConvenience;
 import meeting.domain.model.schedule.Schedule;
-import meeting.domain.model.schedule.ScheduleMatchStatus;
+import meeting.domain.model.attendance.convenience.ConvenienceStatus;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
@@ -79,21 +79,19 @@ public class Meeting {
         return attendances;
     }
 
-    public CountOfConvenience totalNumberOfParticipantAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
-        int number = 0;
-        for (Attendance attendance : attendances.asList()) {
-            for (Convenience convenience : attendance.conveniences().asList()) {
-                if (!convenience.scheduleNumber().isSame(scheduleNumber)) {
-                    continue;
-                }
-                if (convenience.convenienceCategory() != convenienceCategory) {
-                    continue;
-                }
-                number++;
-            }
-        }
+    public CountOfConvenience countOfConvenienceAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
 
-        return CountOfConvenience.of(number);
+        long count = attendances.asList().stream()
+                .flatMap(attendance -> {
+                    return attendance.conveniences().asList().stream();
+                })
+                .filter(convenience -> {
+                    return convenience.scheduleNumber().isSame(scheduleNumber)
+                            && convenience.convenienceCategory() == convenienceCategory;
+                })
+                .count();
+
+        return CountOfConvenience.of(Long.valueOf(count).intValue());
     }
 
     public ConvenienceCategory convenienceCategoryOf(AttendanceNumber attendanceNumber, ScheduleNumber scheduleNumber) {
@@ -112,17 +110,17 @@ public class Meeting {
         throw new IllegalStateException("出欠に対する都合が存在しません。");
     }
 
-    public ScheduleMatchStatus scheduleMatchStatusAt(ScheduleNumber scheduleNumber) {
+    public ConvenienceStatus convenienceStatusAt(ScheduleNumber scheduleNumber) {
 
-        CountOfConvenience targetTotalNumberMaru = totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.マル);
+        CountOfConvenience targetCountMaru = countOfConvenienceAt(scheduleNumber, ConvenienceCategory.マル);
 
-        CountsOfConvenience targetScheduleStatus = CountsOfConvenience.of(
+        CountsOfConvenience targetCounts = CountsOfConvenience.of(
                 Map.ofEntries(
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, targetTotalNumberMaru),
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, totalNumberOfParticipantAt(scheduleNumber, ConvenienceCategory.サンカク))
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, targetCountMaru),
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, countOfConvenienceAt(scheduleNumber, ConvenienceCategory.サンカク))
                 ));
 
-        CountsOfConvenience bestMatchedScheduleStatus = CountsOfConvenience.of(
+        CountsOfConvenience mostSuitableCounts = CountsOfConvenience.of(
                 Map.ofEntries(
                         new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, CountOfConvenience.of(0)),
                         new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, CountOfConvenience.of(0))
@@ -130,21 +128,18 @@ public class Meeting {
 
         for (Schedule schedule : schedules.asList()) {
 
-            CountsOfConvenience currentScheduleStatus = CountsOfConvenience.of(
+            CountsOfConvenience currentCounts = CountsOfConvenience.of(
                     Map.ofEntries(
-                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.マル)),
-                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, totalNumberOfParticipantAt(schedule.scheduleNumber(), ConvenienceCategory.サンカク))
+                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, countOfConvenienceAt(schedule.scheduleNumber(), ConvenienceCategory.マル)),
+                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, countOfConvenienceAt(schedule.scheduleNumber(), ConvenienceCategory.サンカク))
                     ));
 
-            if (currentScheduleStatus.isMoreSuitableOrSame(bestMatchedScheduleStatus)) {
-                bestMatchedScheduleStatus = currentScheduleStatus;
+            if (currentCounts.isMoreSuitableOrSame(mostSuitableCounts) == ConvenienceStatus.MOST_SUITABLE) {
+                mostSuitableCounts = currentCounts;
             }
         }
 
-        if (targetTotalNumberMaru.isGreaterThanOne() && targetScheduleStatus.isMoreSuitableOrSame(bestMatchedScheduleStatus)) {
-            return ScheduleMatchStatus.BEST_MATCHED;
-        }
-        return ScheduleMatchStatus.NOT_MATCHED;
+        return targetCounts.isMoreSuitableOrSame(mostSuitableCounts);
     }
 
     public AttendanceEditability attendanceEditabilityFor(ParticipantNumber participantNumber, Attendance attendance) {
