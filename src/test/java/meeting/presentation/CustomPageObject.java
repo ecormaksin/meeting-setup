@@ -6,6 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public abstract class CustomPageObject {
 
@@ -35,6 +36,30 @@ public abstract class CustomPageObject {
         new WebDriverWait(driver, duration).until(
                 (ExpectedCondition<Boolean>) driver ->
                         ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
+        );
+    }
+
+    protected static boolean isOrganizerNumberSet(WebDriver driver) {
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        String organizerNumberValue = (String) javascriptExecutor.executeScript("return localStorage.getItem('organizerNumber')");
+
+        return Objects.nonNull(organizerNumberValue) && !organizerNumberValue.isBlank();
+    }
+
+    protected static boolean isParticipantNumberSet(WebDriver driver) {
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        String participantNumberValue = (String) javascriptExecutor.executeScript("return localStorage.getItem('participantNumber')");
+
+        return Objects.nonNull(participantNumberValue) && !participantNumberValue.isBlank();
+    }
+
+    protected static boolean isButtonEnabledById(WebDriver driver, String buttonId) {
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        return (boolean) javascriptExecutor.executeScript(
+                String.format("return !document.getElementById('%s').disabled", buttonId)
         );
     }
 }

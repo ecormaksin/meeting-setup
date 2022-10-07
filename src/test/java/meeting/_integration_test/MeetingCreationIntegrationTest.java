@@ -1,4 +1,4 @@
-package meeting.presentation.meeting;
+package meeting._integration_test;
 
 import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingCreationScenario;
@@ -6,6 +6,8 @@ import meeting.domain.model.meeting.MeetingNumberFake_1;
 import meeting.domain.model.organizer.OrganizerNumberFake_1;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
+import meeting.presentation.meeting.CreationCompletedPage;
+import meeting.presentation.meeting.CreationFormPage;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -20,19 +22,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Testcontainers
-public class MeetingCreationControllerIntegrationTest extends MeetingIntegrationTest {
+public class MeetingCreationIntegrationTest extends MeetingIntegrationTest {
 
     @Container
     private final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
     WebDriver driver;
-
-    @Autowired
-    MeetingCreationScenario meetingCreationScenario;
 
     @RepeatedTest(value = 5, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
     @DirtiesContext
@@ -49,7 +45,7 @@ public class MeetingCreationControllerIntegrationTest extends MeetingIntegration
 
         int scheduleAddClickTotalCount = currentRepetition - 3;
         for (int scheduleAddClick = 0; scheduleAddClick < scheduleAddClickTotalCount; scheduleAddClick++) {
-            formPage = formPage.addNewEmptyScheduleInput();
+            formPage = (CreationFormPage) formPage.addNewEmptyScheduleInput(CreationFormPage.class);
         }
 
         formPage.inputSubject("件名テスト" + currentRepetition);

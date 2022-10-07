@@ -75,7 +75,7 @@ public class MeetingCreationControllerTest {
             CreationFormPage addedFormPage = CreationFormPage.to(driver);
 
             for (int count = 0; count < 2; count++) {
-                addedFormPage = addedFormPage.addNewEmptyScheduleInput();
+                addedFormPage = (CreationFormPage) addedFormPage.addNewEmptyScheduleInput(CreationFormPage.class);
             }
 
             assertFalse(addedFormPage.isAddScheduleButtonEnabled());
@@ -90,7 +90,7 @@ public class MeetingCreationControllerTest {
         void 日程候補の削除ボタンをすべてクリックした場合_日程候補の入力1件_削除ボタン0個である() {
 
             for (int count = 2; count > 0; count--) {
-                formPage = formPage.removeScheduleAt(count - 1);
+                formPage = (CreationFormPage) formPage.removeScheduleAt(count - 1, CreationFormPage.class);
             }
 
             assertEquals(1, formPage.countOfScheduleInputs());
