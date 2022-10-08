@@ -3,7 +3,6 @@ package meeting.presentation.meeting;
 import meeting.domain.model.meeting.MeetingNumber;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -14,11 +13,9 @@ public class EditFormPage extends RegistrationFormPage {
     static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
     static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/" + MEETING_NUMBER_PLACE_HOLDER + "/edit";
 
-    @FindBy(id = "editMeetingButton")
-    private WebElement editButton;
+    private WebElement editMeetingButton;
 
-    @FindBy(id = "deleteMeetingButton")
-    private WebElement deleteButton;
+    private WebElement deleteMeetingButton;
 
     public EditFormPage(WebDriver driver) {
         super(driver);
@@ -64,5 +61,11 @@ public class EditFormPage extends RegistrationFormPage {
                     && isOrganizerNumberSet(innerDriver)
                     && isButtonEnabledById(innerDriver, "editMeetingButton");
         });
+    }
+
+    public <S> S editMeeting(Class<S> resultPage) {
+        editMeetingButton.click();
+        waitUntilPageReady();
+        return PageFactory.initElements(driver, resultPage);
     }
 }

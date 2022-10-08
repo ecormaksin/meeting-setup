@@ -3,23 +3,30 @@ package meeting._integration_test;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
-import meeting.domain.model.meeting.MeetingNumberFake_1;
+import meeting.MeetingIntegrationTest;
+import meeting.domain.model.meeting.MeetingNumber;
+import meeting.domain.model.meeting.MeetingNumberTestHelper;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
 import meeting.domain.model.organizer.OrganizerNumberFake_1;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.infrastructure.datasource.ScheduleNumberColumnFilter;
+import meeting.presentation.TopPage;
+import meeting.presentation.meeting.EditCompletedPage;
+import meeting.presentation.meeting.EditFormPage;
+import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @Testcontainers
-public class MeetingEditIntegrationTest {
+public class MeetingEditIntegrationTest extends MeetingIntegrationTest {
 
     @Container
     private final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
@@ -40,6 +47,26 @@ public class MeetingEditIntegrationTest {
 
             new OrganizerNumberFake_1();
             new RegistrationRequestDateTimeFake_19841231_1023();
+
+            TopPage topPage = TopPage.to(driver);
+            MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
+            EditFormPage formPage = EditFormPage.to(driver, meetingNumber);
+
+            formPage.inputSubject("件名テスト1-編集後1");
+            formPage.inputMemo("メモテスト1-編集後1");
+
+            formPage.inputScheduleAt(0,
+                    ScheduleConstructInput.of(2022,4, 5, 10, 30, 30));
+            formPage.inputScheduleAt(1,
+                    ScheduleConstructInput.of(2022,4, 4, 11, 0, 60));
+            formPage.inputScheduleAt(2,
+                    ScheduleConstructInput.of(2022,4, 3, 13, 30, 90));
+            formPage.inputScheduleAt(3,
+                    ScheduleConstructInput.of(2022,4, 2, 15, 0, 120));
+
+            EditCompletedPage completedPage = formPage.editMeeting(EditCompletedPage.class);
+
+            assertNotNull(completedPage);
         }
     }
 
