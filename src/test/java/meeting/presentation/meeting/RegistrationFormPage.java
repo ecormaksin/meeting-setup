@@ -40,9 +40,10 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
         super(driver);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputSubject(String subjectValue) {
         subject.sendKeys(subjectValue);
-        return (T)this;
+        return (T) this;
     }
 
     protected String subjectValue() {
@@ -53,11 +54,13 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
         return memo.getAttribute("value");
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputMemo(String memoValue) {
         this.memo.sendKeys(memoValue);
         return (T)this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputScheduleAt(int index, ScheduleConstructInput input) {
         inputMeetingDateAt(index, input.meetingDate());
         inputStartHourAt(index, input.startHour());
@@ -66,18 +69,21 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
         return (T)this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputMeetingDateAt(int index, MeetingDateInput meetingDate) {
         WebElement webElement = meetingDate(index);
         webElement.sendKeys(meetingDate.value());
         return (T)this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputStartHourAt(int index, StartHourInput startHour) {
         WebElement webElement = scheduleConstructElement(index, "startHour.value");
         webElement.sendKeys(startHour.value());
         return (T)this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputStartMinuteAt(int index, StartMinuteInput startMinute) {
         WebElement webElement = scheduleConstructElement(index, "startMinute.value");
         Select selectObject = new Select(webElement);
@@ -85,6 +91,7 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
         return (T)this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputDurationAt(int index, DurationInput duration) {
         WebElement webElement = scheduleConstructElement(index, "duration.value");
         Select selectObject = new Select(webElement);
@@ -148,7 +155,7 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
                     .collect(Collectors.toList());
 
         } catch (NoSuchElementException e) {
-            return Collections.emptyList();
+            return Collections.<String>emptyList();
         }
     }
 

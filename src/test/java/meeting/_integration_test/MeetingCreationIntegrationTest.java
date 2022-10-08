@@ -1,10 +1,9 @@
 package meeting._integration_test;
 
 import meeting.MeetingIntegrationTest;
-import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.MeetingNumberFake_1;
-import meeting.domain.model.organizer.OrganizerNumberFake_1;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
+import meeting.domain.model.organizer.OrganizerNumberFake_1;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.presentation.meeting.CreationCompletedPage;
 import meeting.presentation.meeting.CreationFormPage;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.RepetitionInfo;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -32,6 +30,7 @@ public class MeetingCreationIntegrationTest extends MeetingIntegrationTest {
 
     @RepeatedTest(value = 5, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
     @DirtiesContext
+    @SuppressWarnings("unchecked")
     void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) {
 
         int currentRepetition =  repetitionInfo.getCurrentRepetition();

@@ -70,6 +70,7 @@ public class MeetingCreationControllerTest {
     class CheckAddScheduleButton {
 
         @Test
+        @SuppressWarnings("unchecked")
         void 日程候補の入力欄を上限まで追加した場合_追加ボタンが押下不可になる() {
 
             CreationFormPage addedFormPage = CreationFormPage.to(driver);
@@ -87,6 +88,7 @@ public class MeetingCreationControllerTest {
     class CheckRemoveScheduleButton {
 
         @Test
+        @SuppressWarnings("unchecked")
         void 日程候補の削除ボタンをすべてクリックした場合_日程候補の入力1件_削除ボタン0個である() {
 
             for (int count = 2; count > 0; count--) {
@@ -260,6 +262,7 @@ public class MeetingCreationControllerTest {
         }
 
         @Test
+        @SuppressWarnings("unchecked")
         void 追加する日程が過去の場合はエラー() {
 
             new RegistrationRequestDateTimeFake_19841231_1023();

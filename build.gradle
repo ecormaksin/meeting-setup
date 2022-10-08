@@ -85,6 +85,7 @@ bootRun {
     sourceResources sourceSets.main
 }
 
-//tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked'
 //    options.compilerArgs << '-Xlint:deprecation'
-//}
+}
