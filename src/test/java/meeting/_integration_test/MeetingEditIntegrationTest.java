@@ -15,12 +15,12 @@ import meeting.presentation.meeting.EditCompletedPage;
 import meeting.presentation.meeting.EditFormPage;
 import meeting.presentation.meeting.ShowPage;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MeetingEditIntegrationTest extends MeetingIntegrationTest {
 
     @Container
-    private final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
+    private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
     WebDriver driver;

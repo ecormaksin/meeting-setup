@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
     @Container
-    static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
+    private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
     private PlatformTransactionManager transactionManager;

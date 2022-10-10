@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MeetingCreationIntegrationTest extends MeetingIntegrationTest {
 
     @Container
-    private final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
+    private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
     @Autowired
     WebDriver driver;
