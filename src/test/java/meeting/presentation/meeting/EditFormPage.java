@@ -44,25 +44,6 @@ public class EditFormPage extends RegistrationFormPage {
         return "ミーティングの編集";
     }
 
-    public static EditFormPage to(WebDriver driver, MeetingNumber meetingNumber) {
-        String url = URL_BASE + relativePath(meetingNumber.value());
-        driver.get(url);
-        waitUntilPageOperable(driver);
-        return PageFactory.initElements(driver, EditFormPage.class);
-    }
-
-    protected static void waitUntilPageOperable(WebDriver driver) {
-
-        new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
-            String url = innerDriver.getCurrentUrl();
-            boolean isUrlMatched = url.matches(String.format(".*%s$", relativePathRegexPattern()));
-
-            return isUrlMatched
-                    && isOrganizerNumberSet(innerDriver)
-                    && isButtonEnabledById(innerDriver, "editMeetingButton");
-        });
-    }
-
     public <S> S editMeeting(Class<S> resultPage) {
         editMeetingButton.click();
         waitUntilPageReady();

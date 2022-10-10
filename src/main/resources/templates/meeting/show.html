@@ -13,7 +13,7 @@
     <div class="meeting-show__h1-section">
       <h1>ミーティングの詳細</h1>
       <div>
-        <a th:class="${meetingEditability.operableItemStatus()}"
+        <a id="editMeetingLink" th:class="${meetingEditability.operableItemStatus()}"
            th:href="@{/meeting/__${meetingNumber}__/edit}">ミーティングの編集・削除</a>
         <span th:text="${meetingEditability.statusMessage()}"></span>
       </div>

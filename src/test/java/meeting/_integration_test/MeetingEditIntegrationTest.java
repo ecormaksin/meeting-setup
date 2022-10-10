@@ -13,6 +13,7 @@ import meeting.infrastructure.datasource.ScheduleNumberColumnFilter;
 import meeting.presentation.TopPage;
 import meeting.presentation.meeting.EditCompletedPage;
 import meeting.presentation.meeting.EditFormPage;
+import meeting.presentation.meeting.ShowPage;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +37,7 @@ public class MeetingEditIntegrationTest extends MeetingIntegrationTest {
 
     @Nested
     @DisplayName("編集・日程候補追加の場合")
-    class MeetingEditAddSchedule {
+    class MeetingEditAddSchedule extends MeetingIntegrationTest {
 
         @Test
         @DatabaseSetup("testdata/edit_meeting_base.xlsx")
@@ -50,7 +51,8 @@ public class MeetingEditIntegrationTest extends MeetingIntegrationTest {
 
             TopPage topPage = TopPage.to(driver);
             MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
-            EditFormPage formPage = EditFormPage.to(driver, meetingNumber);
+            ShowPage showPage = ShowPage.to(driver, meetingNumber);
+            EditFormPage formPage = showPage.moveToEditPage();
 
             formPage.inputSubject("件名テスト1-編集後1");
             formPage.inputMemo("メモテスト1-編集後1");

@@ -58,8 +58,7 @@ public abstract class CustomPageObject {
     protected static boolean isButtonEnabledById(WebDriver driver, String buttonId) {
 
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
-        return (boolean) javascriptExecutor.executeScript(
-                String.format("return !document.getElementById('%s').disabled", buttonId)
-        );
+        String script = String.format("return !document.getElementById('%s').disabled", buttonId) ;
+        return (boolean) javascriptExecutor.executeScript(script);
     }
 }

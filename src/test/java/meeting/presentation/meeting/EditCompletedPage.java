@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 public class EditCompletedPage extends CustomPageObject {
 
-    static final String URL_RELATIVE_PATH_REGEX = "/meeting/edit/" + MeetingNumber.REGEXP + "completed";
+    static final String URL_RELATIVE_PATH_REGEX = "/meeting/edit/" + MeetingNumber.REGEXP + "/completed";
 
     public EditCompletedPage(WebDriver driver) {
         super(driver);
