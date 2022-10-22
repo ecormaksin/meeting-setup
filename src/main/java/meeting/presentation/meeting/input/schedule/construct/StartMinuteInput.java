@@ -27,16 +27,8 @@ public class StartMinuteInput {
         return new StartMinuteInput("");
     }
 
-    public static StartMinuteInput of(String value) {
-        return new StartMinuteInput(value);
-    }
-
-    public static StartMinuteInput of(int intValue) {
-        return of(String.valueOf(intValue));
-    }
-
     public static StartMinuteInput of(StartMinute startMinute) {
-        return of(startMinute.value());
+        return new StartMinuteInput(startMinute.stringValue());
     }
 
     @AssertTrue(message = "開始分は30分単位で入力してください。")

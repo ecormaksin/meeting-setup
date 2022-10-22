@@ -188,8 +188,8 @@ public class MeetingCreationControllerTest {
 
             int index = 0;
             formPage.inputStartHourAt(index, StartHourInput.of(10));
-            formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
-            formPage.inputDurationAt(index, DurationInput.of(60));
+            formPage.inputStartMinuteAt(index, StartMinuteInput.of(StartMinute.JUST));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -204,8 +204,8 @@ public class MeetingCreationControllerTest {
 
             int index = 1;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 4, 5));
-            formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
-            formPage.inputDurationAt(index, DurationInput.of(60));
+            formPage.inputStartMinuteAt(index, StartMinuteInput.of(StartMinute.JUST));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -222,8 +222,8 @@ public class MeetingCreationControllerTest {
             int index = 1;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 4, 5));
             formPage.inputStartHourAt(index, StartHourInput.of(hour));
-            formPage.inputStartMinuteAt(index, StartMinuteInput.of(0));
-            formPage.inputDurationAt(index, DurationInput.of(60));
+            formPage.inputStartMinuteAt(index, StartMinuteInput.of(StartMinute.JUST));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -239,7 +239,7 @@ public class MeetingCreationControllerTest {
             int index = 2;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 5, 6));
             formPage.inputStartHourAt(index, StartHourInput.of(11));
-            formPage.inputDurationAt(index, DurationInput.of(90));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR_AND_A_HALF));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -255,7 +255,7 @@ public class MeetingCreationControllerTest {
             int index = 0;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 6, 7));
             formPage.inputStartHourAt(index, StartHourInput.of(13));
-            formPage.inputStartMinuteAt(index, StartMinuteInput.of(30));
+            formPage.inputStartMinuteAt(index, StartMinuteInput.of(StartMinute.HALF));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 

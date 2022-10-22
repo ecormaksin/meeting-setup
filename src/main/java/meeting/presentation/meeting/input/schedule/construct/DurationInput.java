@@ -26,16 +26,8 @@ public class DurationInput {
         return new DurationInput("");
     }
 
-    public static DurationInput of(String value) {
-        return new DurationInput(value);
-    }
-
-    public static DurationInput of(int intValue) {
-        return of(String.valueOf(intValue));
-    }
-
     public static DurationInput of(Duration duration) {
-        return of(duration.value());
+        return new DurationInput(duration.stringValue());
     }
 
     @AssertTrue(message = "会議時間は30分単位・2時間以内で入力してください。")
