@@ -42,15 +42,16 @@ public class ScheduleConstruct {
         endTime = new EndTime(endLocalTime());
     }
 
-    public static ScheduleConstruct of(int year, int month, int dayOfMonth, int hour, int minute, int duration) {
+    public static ScheduleConstruct of(int year, int month, int dayOfMonth,
+                                       int hour, StartMinute startMinute, Duration duration) {
 
         LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
 
         return new ScheduleConstruct(
                 MeetingDate.of(meetingDateValue),
                 StartHour.of(hour),
-                StartMinute.of(minute),
-                Duration.of(duration));
+                startMinute,
+                duration);
     }
 
     public MeetingDate meetingDate() {

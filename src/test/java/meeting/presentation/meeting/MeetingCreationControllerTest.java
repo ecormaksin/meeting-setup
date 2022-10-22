@@ -2,6 +2,8 @@ package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
+import meeting.domain.model.schedule.construct.Duration;
+import meeting.domain.model.schedule.construct.StartMinute;
 import meeting.presentation.TestWebConfig;
 import meeting.presentation.WebConfig;
 import meeting.presentation.meeting.input.schedule.construct.*;
@@ -108,7 +110,7 @@ public class MeetingCreationControllerTest {
         void 件名未入力時はエラー() {
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
+                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
 
             formPage.inputScheduleAt(0, constructInput);
 
@@ -168,7 +170,7 @@ public class MeetingCreationControllerTest {
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
+                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
 
             for (int index = 0; index <= 1; index++) {
                 formPage.inputScheduleAt(index, constructInput);
@@ -270,7 +272,7 @@ public class MeetingCreationControllerTest {
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1984,12, 31, 10, 00, 60);
+                    ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.ONE_HOUR);
 
             formPage.inputScheduleAt(0, constructInput);
 
@@ -291,7 +293,7 @@ public class MeetingCreationControllerTest {
     void inputValidSampleSchedule() {
 
         ScheduleConstructInput constructInput =
-                ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
+                ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
 
         formPage.inputScheduleAt(0, constructInput);
     }

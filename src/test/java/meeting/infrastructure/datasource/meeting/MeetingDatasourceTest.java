@@ -78,8 +78,8 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                                 int month,
                                 int dayOfMonth,
                                 int hour,
-                                int minute,
-                                int duration) {
+                                StartMinute minute,
+                                Duration duration) {
 
         ScheduleConstruct scheduleConstruct =
                 ScheduleConstruct.of(year, month, dayOfMonth, hour, minute, duration);
@@ -98,7 +98,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         void 作成リクエストの実行が成功する() {
 
             List<Schedule> scheduleList = Arrays.asList(
-                    schedule(2022, 4, 1,10, 0,60)
+                    schedule(2022, 4, 1,10, StartMinute.JUST,Duration.ONE_HOUR)
             );
             createMeeting(
                     1,
@@ -237,9 +237,9 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         void 作成リクエストの実行が成功する() {
 
             List<Schedule> scheduleList = Arrays.asList(
-                    schedule(2022, 4, 3,13, 30,90),
-                    schedule(2022, 4, 2,11, 0,30),
-                    schedule(2022, 4, 2,10, 30,60)
+                    schedule(2022, 4, 3,13, StartMinute.HALF,Duration.ONE_HOUR_AND_A_HALF),
+                    schedule(2022, 4, 2,11, StartMinute.JUST,Duration.HALF_AN_HOUR),
+                    schedule(2022, 4, 2,10, StartMinute.HALF,Duration.ONE_HOUR)
             );
             createMeeting(
                     2,

@@ -54,14 +54,15 @@ public class ScheduleConstructInput {
                 DurationInput.empty());
     }
 
-    public static ScheduleConstructInput of(int year, int month, int dayOfMonth, int hour, int minute, int duration) {
+    public static ScheduleConstructInput of(int year, int month, int dayOfMonth,
+                                            int hour, StartMinute startMinute, Duration duration) {
 
         LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
 
         return new ScheduleConstructInput(
                 MeetingDateInput.of(meetingDateValue),
                 StartHourInput.of(hour),
-                StartMinuteInput.of(minute),
+                StartMinuteInput.of(startMinute),
                 DurationInput.of(duration));
     }
 

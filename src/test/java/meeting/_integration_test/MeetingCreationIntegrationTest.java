@@ -4,6 +4,8 @@ import meeting.MeetingIntegrationTest;
 import meeting.domain.model.meeting.MeetingNumberFake_1;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
 import meeting.domain.model.organizer.OrganizerNumberFake_1;
+import meeting.domain.model.schedule.construct.Duration;
+import meeting.domain.model.schedule.construct.StartMinute;
 import meeting.infrastructure.datasource.MeetingDBTestContainer;
 import meeting.presentation.meeting.CreationCompletedPage;
 import meeting.presentation.meeting.CreationFormPage;
@@ -50,7 +52,7 @@ public class MeetingCreationIntegrationTest extends MeetingIntegrationTest {
         formPage.inputSubject("件名テスト" + currentRepetition);
 
         ScheduleConstructInput constructInput =
-                ScheduleConstructInput.of(1985,1, 1, 10, 0, 60);
+                ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
 
         formPage.inputScheduleAt(index, constructInput);
 

@@ -10,7 +10,9 @@ import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.construct.Duration;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
+import meeting.domain.model.schedule.construct.StartMinute;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -68,7 +70,7 @@ public class MeetingTest {
 
         ScheduleNumber scheduleNumber = ScheduleNumber.of(patternNumber);
         ScheduleConstruct scheduleConstruct =
-                    ScheduleConstruct.of(2021, 12, patternNumber, 10, 0, 60);
+                    ScheduleConstruct.of(2021, 12, patternNumber, 10, StartMinute.JUST, Duration.ONE_HOUR);
 
         List<Schedule> scheduleList = Arrays.asList(
                 new Schedule(scheduleNumber, scheduleConstruct)
