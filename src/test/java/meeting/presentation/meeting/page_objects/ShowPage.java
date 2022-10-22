@@ -1,4 +1,4 @@
-package meeting.presentation.meeting;
+package meeting.presentation.meeting.page_objects;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.presentation.CustomPageObject;

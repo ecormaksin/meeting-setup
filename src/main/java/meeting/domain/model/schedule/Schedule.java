@@ -31,6 +31,11 @@ public class Schedule {
         return new Schedule(ScheduleNumber.initialized(),  scheduleConstruct);
     }
 
+    public static Schedule of(ScheduleNumber scheduleNumber,
+                              ScheduleConstruct scheduleConstruct) {
+        return new Schedule(scheduleNumber, scheduleConstruct);
+    }
+
     public ScheduleRegistrationStatus registrationStatus() {
         return scheduleNumber.registrationStatus();
     }

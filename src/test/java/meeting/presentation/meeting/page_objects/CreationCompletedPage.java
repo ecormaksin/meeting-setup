@@ -1,4 +1,4 @@
-package meeting.presentation.meeting;
+package meeting.presentation.meeting.page_objects;
 
 import meeting.presentation.CustomPageObject;
 import org.openqa.selenium.WebDriver;

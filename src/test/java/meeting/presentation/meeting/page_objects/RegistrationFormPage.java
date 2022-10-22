@@ -1,4 +1,4 @@
-package meeting.presentation.meeting;
+package meeting.presentation.meeting.page_objects;
 
 import meeting.presentation.CustomPageObject;
 import meeting.presentation.meeting.input.schedule.construct.*;
@@ -46,11 +46,11 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
         return (T) this;
     }
 
-    protected String subjectValue() {
+    public String subjectValue() {
         return subject.getAttribute("value");
     }
 
-    protected String memoValue() {
+    public String memoValue() {
         return memo.getAttribute("value");
     }
 

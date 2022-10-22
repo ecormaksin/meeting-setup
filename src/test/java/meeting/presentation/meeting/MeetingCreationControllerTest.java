@@ -1,26 +1,33 @@
 package meeting.presentation.meeting;
 
 import meeting.application.senario.MeetingCreationScenario;
+import meeting.domain.model.meeting.MeetingNumberFake_1;
+import meeting.domain.model.meeting.MeetingRegistrationRequest;
 import meeting.domain.model.meeting.RegistrationRequestDateTimeFake_19841231_1023;
+import meeting.domain.model.organizer.OrganizerNumberFake_1;
 import meeting.domain.model.schedule.construct.Duration;
 import meeting.domain.model.schedule.construct.StartMinute;
 import meeting.presentation.TestWebConfig;
 import meeting.presentation.WebConfig;
 import meeting.presentation.meeting.input.schedule.construct.*;
+import meeting.presentation.meeting.page_objects.CreationCompletedPage;
+import meeting.presentation.meeting.page_objects.CreationFormPage;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @WebMvcTest(MeetingCreationController.class)
 @Import({WebConfig.class, TestWebConfig.class})
@@ -64,6 +71,44 @@ public class MeetingCreationControllerTest {
         @Test
         void 日程候補の削除ボタンが2個である() {
             assertEquals(2, formPage.countOfRemoveScheduleButtons());
+        }
+    }
+
+    @Nested
+    @DisplayName("正常にミーティングを作成できることの確認")
+    class MeetingCreationHappyPath {
+
+        @RepeatedTest(value = 5, name = "メモなし・日程1件（{currentRepetition}行目に入力）の場合")
+        @DirtiesContext
+        @SuppressWarnings("unchecked")
+        void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) {
+
+            Mockito.doNothing().when(meetingCreationScenario).create(any(MeetingRegistrationRequest.class));
+
+            int currentRepetition =  repetitionInfo.getCurrentRepetition();
+            int index = currentRepetition - 1;
+
+            new OrganizerNumberFake_1();
+            new MeetingNumberFake_1();
+            new RegistrationRequestDateTimeFake_19841231_1023();
+
+            CreationFormPage formPage = CreationFormPage.to(driver);
+
+            int scheduleAddClickTotalCount = currentRepetition - 3;
+            for (int scheduleAddClick = 0; scheduleAddClick < scheduleAddClickTotalCount; scheduleAddClick++) {
+                formPage = (CreationFormPage) formPage.addNewEmptyScheduleInput(CreationFormPage.class);
+            }
+
+            formPage.inputSubject("件名テスト" + currentRepetition);
+
+            ScheduleConstructInput constructInput =
+                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
+
+            formPage.inputScheduleAt(index, constructInput);
+
+            CreationCompletedPage completedPage = formPage.createMeeting(CreationCompletedPage.class);
+
+            assertNotNull(completedPage);
         }
     }
 

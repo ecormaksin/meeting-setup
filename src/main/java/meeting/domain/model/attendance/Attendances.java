@@ -22,6 +22,10 @@ public class Attendances {
         return new Attendances(list);
     }
 
+    public static Attendances empty() {
+        return new Attendances(Collections.emptyList());
+    }
+
     public AttendancesResponseStatus responseStatus() {
         if (list.isEmpty()) return AttendancesResponseStatus.回答未発生;
         return AttendancesResponseStatus.回答発生済;

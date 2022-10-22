@@ -41,18 +41,34 @@ public class Meeting {
     @Deprecated
     Meeting() {}
 
-    public Meeting(@Valid MeetingNumber meetingNumber,
-                   @Valid Subject subject,
-                   @Valid Memo memo,
-                   @Valid OrganizerNumber organizerNumber,
-                   @Valid Schedules schedules,
-                   @Valid Attendances attendances) {
+    public Meeting(MeetingNumber meetingNumber,
+                   Subject subject,
+                   Memo memo,
+                   OrganizerNumber organizerNumber,
+                   Schedules schedules,
+                   Attendances attendances) {
         this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.memo = memo;
         this.organizerNumber = organizerNumber;
         this.schedules = schedules;
         this.attendances = attendances;
+    }
+
+    public static Meeting of(
+                MeetingNumber meetingNumber,
+                Subject subject,
+                Memo memo,
+                OrganizerNumber organizerNumber,
+                Schedules schedules) {
+
+        return new Meeting(
+                meetingNumber,
+                subject,
+                memo,
+                organizerNumber,
+                schedules,
+                Attendances.empty());
     }
 
     public MeetingNumber meetingNumber() {
@@ -82,13 +98,9 @@ public class Meeting {
     public CountOfConvenience countOfConvenienceAt(ScheduleNumber scheduleNumber, ConvenienceCategory convenienceCategory) {
 
         long count = attendances.asList().stream()
-                .flatMap(attendance -> {
-                    return attendance.conveniences().asList().stream();
-                })
-                .filter(convenience -> {
-                    return convenience.scheduleNumber().isSame(scheduleNumber)
-                            && convenience.convenienceCategory() == convenienceCategory;
-                })
+                .flatMap(attendance -> attendance.conveniences().asList().stream())
+                .filter(convenience -> convenience.scheduleNumber().isSame(scheduleNumber)
+                        && convenience.convenienceCategory() == convenienceCategory)
                 .count();
 
         return CountOfConvenience.of(Long.valueOf(count).intValue());

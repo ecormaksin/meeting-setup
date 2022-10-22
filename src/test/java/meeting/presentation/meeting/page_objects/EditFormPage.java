@@ -1,12 +1,9 @@
-package meeting.presentation.meeting;
+package meeting.presentation.meeting.page_objects;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class EditFormPage extends RegistrationFormPage {
 
