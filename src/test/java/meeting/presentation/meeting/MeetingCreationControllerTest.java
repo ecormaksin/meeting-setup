@@ -28,6 +28,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 
 @WebMvcTest(MeetingCreationController.class)
 @Import({WebConfig.class, TestWebConfig.class})
@@ -83,7 +84,7 @@ public class MeetingCreationControllerTest {
         @SuppressWarnings("unchecked")
         void testWithoutMemoAndOneSchedule(RepetitionInfo repetitionInfo) {
 
-            Mockito.doNothing().when(meetingCreationScenario).create(any(MeetingRegistrationRequest.class));
+            doNothing().when(meetingCreationScenario).create(any(MeetingRegistrationRequest.class));
 
             int currentRepetition =  repetitionInfo.getCurrentRepetition();
             int index = currentRepetition - 1;

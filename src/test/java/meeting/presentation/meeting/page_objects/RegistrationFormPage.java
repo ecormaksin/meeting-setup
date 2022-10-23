@@ -42,6 +42,7 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
 
     @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputSubject(String subjectValue) {
+        subject.clear();
         subject.sendKeys(subjectValue);
         return (T) this;
     }
@@ -56,7 +57,8 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
 
     @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputMemo(String memoValue) {
-        this.memo.sendKeys(memoValue);
+        memo.clear();
+        memo.sendKeys(memoValue);
         return (T)this;
     }
 
@@ -72,6 +74,7 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
     @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputMeetingDateAt(int index, MeetingDateInput meetingDate) {
         WebElement webElement = meetingDate(index);
+        webElement.clear();
         webElement.sendKeys(meetingDate.value());
         return (T)this;
     }
@@ -79,6 +82,7 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
     @SuppressWarnings("unchecked")
     public <T extends RegistrationFormPage> T inputStartHourAt(int index, StartHourInput startHour) {
         WebElement webElement = scheduleConstructElement(index, "startHour.value");
+        webElement.clear();
         webElement.sendKeys(startHour.value());
         return (T)this;
     }

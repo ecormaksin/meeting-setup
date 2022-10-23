@@ -22,11 +22,13 @@ public class ShowPage extends CustomPageObject {
     }
 
     private static String relativePathRegexPattern() {
-        return relativePath(MeetingNumber.REGEXP);
+        return ".*" + relativePath(MeetingNumber.REGEXP);
     }
 
     private static boolean urlMatches(String url) {
-        return url.matches(relativePathRegexPattern());
+        String relativePathRegexPattern = relativePathRegexPattern();
+        boolean urlMatches = url.matches(relativePathRegexPattern);
+        return urlMatches;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class EditFormPage extends RegistrationFormPage {
     }
 
     private static String relativePathRegexPattern() {
-        return relativePath(MeetingNumber.REGEXP);
+        return ".*" + relativePath(MeetingNumber.REGEXP);
     }
 
     private static boolean urlMatches(String url) {

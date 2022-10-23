@@ -1,5 +1,6 @@
 package meeting.presentation.meeting;
 
+import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingEditScenario;
 import meeting.application.senario.MeetingShowScenario;
 import meeting.domain.model.meeting.*;
@@ -32,9 +33,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @WebMvcTest({
         MeetingEditController.class,
@@ -42,6 +45,8 @@ import static org.mockito.ArgumentMatchers.any;
         MeetingShowController.class})
 @Import({WebConfig.class, TestWebConfig.class})
 public class MeetingEditControllerTest {
+
+    Logger logger = Logger.getLogger(MeetingEditControllerTest.class.getName());
 
     @Autowired
     MockMvc mockMvc;
@@ -74,8 +79,9 @@ public class MeetingEditControllerTest {
                 schedules
         );
 
-        Mockito.when(meetingShowScenario.meetingOf(meetingNumber)).thenReturn(meeting);
-        Mockito.doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
+        doReturn(meeting).when(meetingShowScenario).meetingOf(any(MeetingNumber.class));
+        doReturn(meeting).when(meetingEditScenario).meetingOf(any(MeetingNumber.class));
+        doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
 
         new OrganizerNumberFake_1();
         new RegistrationRequestDateTimeFake_19841231_1023();
@@ -83,6 +89,9 @@ public class MeetingEditControllerTest {
         TopPage topPage = TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
         EditFormPage formPage = showPage.moveToEditPage();
+
+        logger.info(driver.getCurrentUrl());
+        logger.info(driver.getPageSource());
 
         formPage.inputSubject("件名テスト1-編集後1");
         formPage.inputMemo("メモテスト1-編集後1");
