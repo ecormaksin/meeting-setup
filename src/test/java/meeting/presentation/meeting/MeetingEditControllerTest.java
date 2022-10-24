@@ -79,8 +79,8 @@ public class MeetingEditControllerTest {
                 schedules
         );
 
-        doReturn(meeting).when(meetingShowScenario).meetingOf(any(MeetingNumber.class));
-        doReturn(meeting).when(meetingEditScenario).meetingOf(any(MeetingNumber.class));
+        when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+        when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
         doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
 
         new OrganizerNumberFake_1();
