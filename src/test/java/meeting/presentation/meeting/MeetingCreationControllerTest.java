@@ -15,7 +15,6 @@ import meeting.presentation.meeting.page_objects.CreationFormPage;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -103,13 +102,17 @@ public class MeetingCreationControllerTest {
             formPage.inputSubject("件名テスト" + currentRepetition);
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
+                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
             formPage.inputScheduleAt(index, constructInput);
 
             CreationCompletedPage completedPage = formPage.createMeeting(CreationCompletedPage.class);
 
             assertNotNull(completedPage);
+            assertEquals("ミーティングの作成が完了しました。", completedPage.processFinishedMessage());
+            assertEquals("参加者へ次のURLを連絡してください。:", completedPage.guidanceToContactToParticipants());
+            assertTrue(completedPage.urlToShowMeeting().endsWith("/meeting/mt000000000000000000000001/show"));
+            assertEquals("ミーティングの編集・削除を行う場合は、上記URLへアクセスするか、「ミーティングの詳細」をクリックしてください。", completedPage.guidanceToEditMeeting());
         }
     }
 
@@ -156,7 +159,7 @@ public class MeetingCreationControllerTest {
         void 件名未入力時はエラー() {
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
+                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
             formPage.inputScheduleAt(0, constructInput);
 
@@ -216,7 +219,7 @@ public class MeetingCreationControllerTest {
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
+                    ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
             for (int index = 0; index <= 1; index++) {
                 formPage.inputScheduleAt(index, constructInput);
@@ -235,7 +238,7 @@ public class MeetingCreationControllerTest {
             int index = 0;
             formPage.inputStartHourAt(index, StartHourInput.of(10));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(StartMinute.JUST));
-            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.OF_1_HOUR));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -251,7 +254,7 @@ public class MeetingCreationControllerTest {
             int index = 1;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 4, 5));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(StartMinute.JUST));
-            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.OF_1_HOUR));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -269,7 +272,7 @@ public class MeetingCreationControllerTest {
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 4, 5));
             formPage.inputStartHourAt(index, StartHourInput.of(hour));
             formPage.inputStartMinuteAt(index, StartMinuteInput.of(StartMinute.JUST));
-            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.OF_1_HOUR));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -285,7 +288,7 @@ public class MeetingCreationControllerTest {
             int index = 2;
             formPage.inputMeetingDateAt(index, MeetingDateInput.of(2013, 5, 6));
             formPage.inputStartHourAt(index, StartHourInput.of(11));
-            formPage.inputDurationAt(index, DurationInput.of(Duration.ONE_HOUR_AND_A_HALF));
+            formPage.inputDurationAt(index, DurationInput.of(Duration.OF_1_HOUR_30_MINUTES));
 
             CreationFormPage errorFormPage = formPage.createMeeting(CreationFormPage.class);
 
@@ -318,7 +321,7 @@ public class MeetingCreationControllerTest {
             MeetingCreationControllerTest.this.inputValidSampleSubject();
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.ONE_HOUR);
+                    ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
             formPage.inputScheduleAt(0, constructInput);
 
@@ -339,7 +342,7 @@ public class MeetingCreationControllerTest {
     void inputValidSampleSchedule() {
 
         ScheduleConstructInput constructInput =
-                ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
+                ScheduleConstructInput.of(1985,1, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
         formPage.inputScheduleAt(0, constructInput);
     }

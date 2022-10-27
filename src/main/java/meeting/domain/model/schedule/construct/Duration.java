@@ -8,10 +8,10 @@ import java.util.List;
  */
 public enum Duration {
 
-    HALF_AN_HOUR(30, "30分"),
-    ONE_HOUR(60, "1時間"),
-    ONE_HOUR_AND_A_HALF(90, "1時間30分"),
-    TWO_HOURS(120, "2時間");
+    OF_30_MINUTES(30, "30分"),
+    OF_1_HOUR(60, "1時間"),
+    OF_1_HOUR_30_MINUTES(90, "1時間30分"),
+    OF_2_HOURS(120, "2時間");
 
     int value;
     String label;

@@ -41,7 +41,7 @@ public class SchedulesTest {
 
         for (int count = 1; count <= 6; count++) {
             Schedule schedule = Schedule.initializedBy(
-                ScheduleConstruct.of(2022, 1, count, 10, StartMinute.JUST, Duration.ONE_HOUR)
+                ScheduleConstruct.of(2022, 1, count, 10, StartMinute.JUST, Duration.OF_1_HOUR)
             );
             scheduleList.add(schedule);
         }
@@ -59,7 +59,7 @@ public class SchedulesTest {
 
         for (int count = 1; count <= 2; count++) {
             Schedule schedule = Schedule.initializedBy(
-                    ScheduleConstruct.of(2022, 1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR)
+                    ScheduleConstruct.of(2022, 1, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR)
             );
             scheduleList.add(schedule);
         }

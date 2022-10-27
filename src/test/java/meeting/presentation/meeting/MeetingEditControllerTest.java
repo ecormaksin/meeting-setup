@@ -1,6 +1,5 @@
 package meeting.presentation.meeting;
 
-import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingEditScenario;
 import meeting.application.senario.MeetingShowScenario;
 import meeting.domain.model.meeting.*;
@@ -22,7 +21,6 @@ import meeting.presentation.meeting.page_objects.EditCompletedPage;
 import meeting.presentation.meeting.page_objects.EditFormPage;
 import meeting.presentation.meeting.page_objects.ShowPage;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,14 +28,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest({
         MeetingEditController.class,
@@ -69,7 +66,7 @@ public class MeetingEditControllerTest {
         OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(1);
         Schedules schedules = Schedules.of(Arrays.asList(
                 Schedule.of(ScheduleNumber.of(1),
-                        ScheduleConstruct.of(2022, 4, 1, 10, StartMinute.JUST, Duration.ONE_HOUR))
+                        ScheduleConstruct.of(2022, 4, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR))
         ));
         Meeting meeting = Meeting.of(
                 meetingNumber,
@@ -86,21 +83,25 @@ public class MeetingEditControllerTest {
         new OrganizerNumberFake_1();
         new RegistrationRequestDateTimeFake_19841231_1023();
 
-        TopPage topPage = TopPage.to(driver);
+        TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
         EditFormPage formPage = showPage.moveToEditPage();
-
-        logger.info(driver.getCurrentUrl());
-        logger.info(driver.getPageSource());
 
         formPage.inputSubject("件名テスト1-編集後1");
         formPage.inputMemo("メモテスト1-編集後1");
 
         formPage.inputScheduleAt(0,
-                ScheduleConstructInput.of(2022,4, 2, 13, StartMinute.HALF, Duration.HALF_AN_HOUR));
+                ScheduleConstructInput.of(2022,4, 2, 13, StartMinute.HALF, Duration.OF_30_MINUTES));
 
         EditCompletedPage completedPage = formPage.editMeeting(EditCompletedPage.class);
 
+        logger.info(driver.getCurrentUrl());
+        logger.info(driver.getPageSource());
+
         assertNotNull(completedPage);
+        assertEquals("ミーティングの編集が完了しました。", completedPage.processFinishedMessage());
+        assertEquals("URLに変更はありませんが、必要な場合は参加者へ次のURLを連絡してください。:", completedPage.guidanceToContactToParticipants());
+        assertTrue(completedPage.urlToShowMeeting().endsWith("/meeting/mt000000000000000000000001/show"));
+        assertEquals("ミーティングの編集・削除を行う場合は、上記URLへアクセスするか、「ミーティングの詳細」をクリックしてください。", completedPage.guidanceToEditMeeting());
     }
 }

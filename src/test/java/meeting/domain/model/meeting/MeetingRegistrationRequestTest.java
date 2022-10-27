@@ -29,7 +29,7 @@ public class MeetingRegistrationRequestTest {
     void 追加する日程が過去の場合はエラー() {
 
         ScheduleConstruct scheduleConstruct =
-                ScheduleConstruct.of(2022, 7, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
+                ScheduleConstruct.of(2022, 7, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
         Schedule schedule = Schedule.initializedBy(scheduleConstruct);
         Schedules schedules = Schedules.of(Arrays.asList(schedule));
 

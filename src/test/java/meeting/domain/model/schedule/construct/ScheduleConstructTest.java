@@ -13,8 +13,8 @@ public class ScheduleConstructTest {
     @Test
     void 等価性のテスト() {
 
-        ScheduleConstruct scheduleConstructA = ScheduleConstruct.of(2022, 1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
-        ScheduleConstruct scheduleConstructB = ScheduleConstruct.of(2022, 1, 1, 10, StartMinute.JUST, Duration.ONE_HOUR);
+        ScheduleConstruct scheduleConstructA = ScheduleConstruct.of(2022, 1, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
+        ScheduleConstruct scheduleConstructB = ScheduleConstruct.of(2022, 1, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
         Set<ScheduleConstruct> constructSet = new HashSet<>();
         assertTrue(constructSet.add(scheduleConstructA));

@@ -70,7 +70,7 @@ public class MeetingTest {
 
         ScheduleNumber scheduleNumber = ScheduleNumber.of(patternNumber);
         ScheduleConstruct scheduleConstruct =
-                    ScheduleConstruct.of(2021, 12, patternNumber, 10, StartMinute.JUST, Duration.ONE_HOUR);
+                    ScheduleConstruct.of(2021, 12, patternNumber, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
         List<Schedule> scheduleList = Arrays.asList(
                 new Schedule(scheduleNumber, scheduleConstruct)

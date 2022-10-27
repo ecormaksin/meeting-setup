@@ -98,7 +98,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         void 作成リクエストの実行が成功する() {
 
             List<Schedule> scheduleList = Arrays.asList(
-                    schedule(2022, 4, 1,10, StartMinute.JUST,Duration.ONE_HOUR)
+                    schedule(2022, 4, 1,10, StartMinute.JUST,Duration.OF_1_HOUR)
             );
             createMeeting(
                     1,
@@ -237,9 +237,9 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         void 作成リクエストの実行が成功する() {
 
             List<Schedule> scheduleList = Arrays.asList(
-                    schedule(2022, 4, 3,13, StartMinute.HALF,Duration.ONE_HOUR_AND_A_HALF),
-                    schedule(2022, 4, 2,11, StartMinute.JUST,Duration.HALF_AN_HOUR),
-                    schedule(2022, 4, 2,10, StartMinute.HALF,Duration.ONE_HOUR)
+                    schedule(2022, 4, 3,13, StartMinute.HALF,Duration.OF_1_HOUR_30_MINUTES),
+                    schedule(2022, 4, 2,11, StartMinute.JUST,Duration.OF_30_MINUTES),
+                    schedule(2022, 4, 2,10, StartMinute.HALF,Duration.OF_1_HOUR)
             );
             createMeeting(
                     2,
