@@ -17,6 +17,10 @@ public class Conveniences {
         this.list = list;
     }
 
+    public static Conveniences of(List<Convenience> source) {
+        return new Conveniences(source);
+    }
+
     public List<Convenience> asList() {
         return Collections.unmodifiableList(list);
     }

@@ -46,9 +46,9 @@ public class ShowPage extends CustomPageObject {
         return PageFactory.initElements(driver, ShowPage.class);
     }
 
-    public EditFormPage moveToEditPage() {
+    public <T extends CustomPageObject> T moveToEditPage(Class<T> responsePage) {
         editMeetingLink.click();
         waitUntilPageReady();
-        return PageFactory.initElements(driver, EditFormPage.class);
+        return PageFactory.initElements(driver, responsePage);
     }
 }

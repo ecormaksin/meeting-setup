@@ -15,6 +15,11 @@ public class CreationFormPage extends RegistrationFormPage {
 
     public CreationFormPage(WebDriver driver) {
         super(driver);
+
+        new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
+            return isOrganizerNumberSet(innerDriver)
+                    && isButtonEnabledById(innerDriver, "createMeetingButton");
+        });
     }
 
     @Override
@@ -30,20 +35,7 @@ public class CreationFormPage extends RegistrationFormPage {
 
     public static CreationFormPage to(WebDriver driver) {
         driver.get(URL_BASE + URL_RELATIVE_PATH);
-        waitUntilPageOperable(driver);
         return PageFactory.initElements(driver, CreationFormPage.class);
-    }
-
-    protected static void waitUntilPageOperable(WebDriver driver) {
-
-        new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
-            String url = innerDriver.getCurrentUrl();
-            boolean isUrlMatched = url.matches(String.format(".*%s$", URL_RELATIVE_PATH));
-
-            return isUrlMatched
-                    && isOrganizerNumberSet(innerDriver)
-                    && isButtonEnabledById(innerDriver, "createMeetingButton");
-        });
     }
 
     public <S> S createMeeting(Class<S> resultPage) {

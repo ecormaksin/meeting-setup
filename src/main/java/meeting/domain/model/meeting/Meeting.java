@@ -71,6 +71,21 @@ public class Meeting {
                 Attendances.empty());
     }
 
+    public static Meeting of(MeetingNumber meetingNumber,
+                   Subject subject,
+                   Memo memo,
+                   OrganizerNumber organizerNumber,
+                   Schedules schedules,
+                   Attendances attendances) {
+
+        return new Meeting(meetingNumber,
+                    subject,
+                    memo,
+                    organizerNumber,
+                    schedules,
+                    attendances);
+    }
+
     public MeetingNumber meetingNumber() {
         return meetingNumber;
     }

@@ -55,10 +55,20 @@ public abstract class CustomPageObject {
         return Objects.nonNull(participantNumberValue) && !participantNumberValue.isBlank();
     }
 
+    protected static boolean elementExists(WebDriver driver, String selectors) {
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        String script = String.format("return !!(document.querySelector('%s'));", selectors) ;
+        return (boolean) javascriptExecutor.executeScript(script);
+    }
+
     protected static boolean isButtonEnabledById(WebDriver driver, String buttonId) {
 
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
-        String script = String.format("return !document.getElementById('%s').disabled", buttonId) ;
+        String script = """
+                var buttonObj = !!(document.getElementById('%s'));
+                if (!buttonObj) return false;
+                return !buttonObj.disabled;
+                """.formatted(buttonId);
         return (boolean) javascriptExecutor.executeScript(script);
     }
 }

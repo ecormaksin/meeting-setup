@@ -21,6 +21,10 @@ public class AttendanceComment {
         return new AttendanceComment(value);
     }
 
+    public static AttendanceComment empty() {
+        return AttendanceComment.of("");
+    }
+
     public String value() {
         return value;
     }

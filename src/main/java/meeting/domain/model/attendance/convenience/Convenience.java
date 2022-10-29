@@ -3,7 +3,6 @@ package meeting.domain.model.attendance.convenience;
 import meeting.domain.model.schedule.ScheduleNumber;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * 都合
@@ -23,6 +22,11 @@ public class Convenience {
                        ConvenienceCategory convenienceCategory) {
         this.scheduleNumber = scheduleNumber;
         this.convenienceCategory = convenienceCategory;
+    }
+
+    public static Convenience of(ScheduleNumber scheduleNumber,
+                       ConvenienceCategory convenienceCategory) {
+        return new Convenience(scheduleNumber, convenienceCategory);
     }
 
     public ScheduleNumber scheduleNumber() {

@@ -41,6 +41,18 @@ public class Attendance {
         this.attendanceComment = attendanceComment;
     }
 
+    public static Attendance of(AttendanceNumber attendanceNumber,
+                                ParticipantNumber participantNumber,
+                                ParticipantName participantName,
+                                Conveniences conveniences) {
+        return new Attendance(
+                attendanceNumber,
+                participantNumber,
+                participantName,
+                conveniences,
+                AttendanceComment.empty());
+    }
+
     public AttendanceNumber attendanceNumber() {
         return attendanceNumber;
     }

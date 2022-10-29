@@ -4,6 +4,9 @@ import meeting.domain.model.meeting.MeetingNumber;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class EditFormPage extends RegistrationFormPage {
 
@@ -16,6 +19,11 @@ public class EditFormPage extends RegistrationFormPage {
 
     public EditFormPage(WebDriver driver) {
         super(driver);
+
+        new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
+            return isOrganizerNumberSet(innerDriver)
+                    && isButtonEnabledById(innerDriver, "editMeetingButton");
+        });
     }
 
     private static String relativePath(String replaceValue) {
