@@ -20,7 +20,7 @@ public class EditFormPage extends RegistrationFormPage {
     public EditFormPage(WebDriver driver) {
         super(driver);
 
-        new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
+        new WebDriverWait(driver, Duration.ofSeconds(300)).until(innerDriver -> {
             return isOrganizerNumberSet(innerDriver)
                     && isButtonEnabledById(innerDriver, "editMeetingButton");
         });

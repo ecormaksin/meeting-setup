@@ -17,6 +17,8 @@ public abstract class CustomPageObject {
     public CustomPageObject(WebDriver driver) {
         this.driver = driver;
 
+        new WebDriverWait(driver, Duration.ofSeconds(300)).until(innerDriver -> readyStateCompleted(innerDriver));
+
         if (isNotTargetPage(driver)) {
             String message = String.format("%sページではありません。: %s, %s", pageName(), driver.getCurrentUrl(), driver.getPageSource());
             throw new IllegalStateException(message);
@@ -34,9 +36,12 @@ public abstract class CustomPageObject {
     protected void waitUntilPageReady(Duration duration) {
 
         new WebDriverWait(driver, duration).until(
-                (ExpectedCondition<Boolean>) driver ->
-                        ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
+                (ExpectedCondition<Boolean>) driver -> readyStateCompleted(driver)
         );
+    }
+
+    protected boolean readyStateCompleted(WebDriver driver) {
+        return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
     }
 
     protected static boolean isOrganizerNumberSet(WebDriver driver) {
