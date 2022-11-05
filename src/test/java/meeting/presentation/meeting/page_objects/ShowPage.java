@@ -5,11 +5,15 @@ import meeting.presentation.CustomPageObject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ShowPage extends CustomPageObject {
 
     static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
     static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/" + MEETING_NUMBER_PLACE_HOLDER + "/show";
+
+    private static final Logger logger = LoggerFactory.getLogger(ShowPage.class);
 
     private WebElement editMeetingLink;
 
@@ -48,7 +52,17 @@ public class ShowPage extends CustomPageObject {
 
     public <T extends CustomPageObject> T moveToEditPage(Class<T> responsePage) {
         editMeetingLink.click();
+
+        logger.info("---ミーティング編集開始ボタン 押下直後");
+        logger.info(driver.getCurrentUrl());
+        logger.info(driver.getPageSource());
+
         waitUntilPageReady();
+
+        logger.info("---ミーティング編集開始ボタン ページ読み込み完了後");
+        logger.info(driver.getCurrentUrl());
+        logger.info(driver.getPageSource());
+
         return PageFactory.initElements(driver, responsePage);
     }
 }

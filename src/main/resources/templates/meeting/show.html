@@ -88,6 +88,13 @@ $(function() {
   }
   /*[/]*/
 
+  $('#editMeetingLink').on('click', function(event) {
+    event.preventDefault();
+    document.cookie = "organizerNumber=; max-age=0";
+    document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
+    location.href = $(this).attr('href');
+  });
+
   $('#inputAttendanceButton').on('click', function() {
     document.cookie = "participantNumber=; max-age=0";
     document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');

@@ -17,7 +17,7 @@ public abstract class CustomPageObject {
     public CustomPageObject(WebDriver driver) {
         this.driver = driver;
 
-        new WebDriverWait(driver, Duration.ofSeconds(300)).until(innerDriver -> readyStateCompleted(innerDriver));
+        new WebDriverWait(driver, Duration.ofMinutes(10)).until(innerDriver -> readyStateCompleted(innerDriver));
 
         if (isNotTargetPage(driver)) {
             String message = String.format("%sページではありません。: %s, %s", pageName(), driver.getCurrentUrl(), driver.getPageSource());

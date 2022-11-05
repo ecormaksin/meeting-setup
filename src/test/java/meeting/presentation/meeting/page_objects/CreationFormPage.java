@@ -16,7 +16,7 @@ public class CreationFormPage extends RegistrationFormPage {
     public CreationFormPage(WebDriver driver) {
         super(driver);
 
-        new WebDriverWait(driver, Duration.ofSeconds(300)).until(innerDriver -> {
+        new WebDriverWait(driver, Duration.ofMinutes(10)).until(innerDriver -> {
             return isOrganizerNumberSet(innerDriver)
                     && isButtonEnabledById(innerDriver, "createMeetingButton");
         });
