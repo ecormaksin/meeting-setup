@@ -30,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
+    record MeetingDateTimeSpan(LocalDate meetingDateValue, LocalTime startTimeValue, LocalTime endTimeValue) {}
+
     @Container
     private static final MeetingDBTestContainer dbTestContainer = MeetingDBTestContainer.getInstance();
 
@@ -81,21 +83,21 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                                 StartMinute minute,
                                 Duration duration) {
 
-        ScheduleConstruct scheduleConstruct =
-                ScheduleConstruct.of(year, month, dayOfMonth, hour, minute, duration);
+        ScheduleConstruct scheduleConstruct = ScheduleConstruct.of(year, month, dayOfMonth, hour, minute, duration);
 
         return new Schedule(ScheduleNumber.initialized(), scheduleConstruct);
     }
 
     @Nested
-    @DisplayName("メモあり・日程1件の場合")
-    class MeetingWithMemoAnd1Schedule extends DBUnitWithoutWebTest {
+    @DisplayName("ミーティング作成")
+    class MeetingCreationCase extends DBUnitWithoutWebTest {
 
         @Test
-        @ExpectedDatabase(value = "testdata/create_meeting_with_memo_1_schedule.xlsx",
+        @ExpectedDatabase(value = "testdata/create_get/meeting_with_memo_1_schedule.xlsx",
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 columnFilters = { ScheduleNumberColumnFilter.class })
-        void 作成リクエストの実行が成功する() {
+        @DisplayName("メモあり・日程1件の場合")
+        void testWithMemo1AndSchedule() {
 
             List<Schedule> scheduleList = Arrays.asList(
                     schedule(2022, 4, 1,10, StartMinute.JUST,Duration.OF_1_HOUR)
@@ -109,11 +111,38 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                     LocalDateTime.of(2022, 3, 2, 9, 30, 0));
         }
 
+        @Test
+        @ExpectedDatabase(value = "testdata/create_get/meeting_without_memo_3_schedules_descending_order.xlsx",
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                columnFilters = { ScheduleNumberColumnFilter.class })
+        @DisplayName("メモなし・日程複数件(降順)の場合")
+        void testWithoutMemoAndMultipleSchedulesDescendingOrder() {
+
+            List<Schedule> scheduleList = Arrays.asList(
+                    schedule(2022, 4, 3,13, StartMinute.HALF,Duration.OF_1_HOUR_30_MINUTES),
+                    schedule(2022, 4, 2,11, StartMinute.JUST,Duration.OF_30_MINUTES),
+                    schedule(2022, 4, 2,10, StartMinute.HALF,Duration.OF_1_HOUR)
+            );
+            createMeeting(
+                    2,
+                    "件名テスト２",
+                    "",
+                    scheduleList,
+                    2,
+                    LocalDateTime.of(2022, 4, 1, 15, 12, 34));
+        }
+    }
+
+    @Nested
+    @DisplayName("ミーティングの取得")
+    class MeetingGetCase extends DBUnitWithoutWebTest {
+
         @Nested
         @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-        @DatabaseSetup("testdata/create_meeting_with_memo_1_schedule.xlsx")
-        @DisplayName("作成リクエストと同じ値を取得できる")
-        class MeetingGet extends DBUnitWithoutWebTest {
+        @DatabaseSetup("testdata/create_get/meeting_with_memo_1_schedule.xlsx")
+        @DisplayName("メモあり・日程1件の場合")
+        class MeetingGetWithMemoAnd1Schedule extends DBUnitWithoutWebTest {
+
 
             MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(1);
 
@@ -214,7 +243,6 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 StartMinute startMinute = scheduleConstruct.startMinute();
                 assertEquals(0, startMinute.value());
             }
-
             @Test
             void 会議時間が設定した通りであること() {
                 ScheduleConstruct scheduleConstruct = scheduleConstruct();
@@ -222,39 +250,12 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 assertEquals(60, duration.value());
             }
         }
-    }
-
-    record MeetingDateTimeSpan(LocalDate meetingDateValue, LocalTime startTimeValue, LocalTime endTimeValue) {}
-
-    @Nested
-    @DisplayName("メモなし・日程複数件(降順)の場合")
-    class MeetingWithoutMemoAndMultipleSchedules extends DBUnitWithoutWebTest {
-
-        @Test
-        @ExpectedDatabase(value = "testdata/create_meeting_without_memo_3_schedules_reversed_order.xlsx",
-                assertionMode = DatabaseAssertionMode.NON_STRICT,
-                columnFilters = { ScheduleNumberColumnFilter.class })
-        void 作成リクエストの実行が成功する() {
-
-            List<Schedule> scheduleList = Arrays.asList(
-                    schedule(2022, 4, 3,13, StartMinute.HALF,Duration.OF_1_HOUR_30_MINUTES),
-                    schedule(2022, 4, 2,11, StartMinute.JUST,Duration.OF_30_MINUTES),
-                    schedule(2022, 4, 2,10, StartMinute.HALF,Duration.OF_1_HOUR)
-            );
-            createMeeting(
-                    2,
-                    "件名テスト２",
-                    "",
-                    scheduleList,
-                    2,
-                    LocalDateTime.of(2022, 4, 1, 15, 12, 34));
-        }
 
         @Nested
         @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-        @DatabaseSetup("testdata/create_meeting_without_memo_3_schedules_reversed_order.xlsx")
-        @DisplayName("作成リクエストと同じ値を取得できる")
-        class MeetingGet extends DBUnitWithoutWebTest {
+        @DatabaseSetup("testdata/create_get/meeting_without_memo_3_schedules_descending_order.xlsx")
+        @DisplayName("メモなし・日程複数件(降順)の場合")
+        class MeetingGetWithoutMemoAndMultipleSchedulesDescendingOrder extends DBUnitWithoutWebTest {
 
             MeetingNumber expectedMeetingNumber = MeetingNumberTestHelper.fromInt(2);
 
@@ -298,6 +299,25 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                             return new MeetingDateTimeSpan( meetingDate.value(), startTime.value(), endTime.value());
                         })
                         .collect(Collectors.toList());
+            }
+        }
+
+        @Nested
+        @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+        @DisplayName("ミーティング番号に該当するミーティングが存在しない場合")
+        class MeetingGetNotFound extends DBUnitWithoutWebTest {
+
+            @Test
+            void 例外がスローされること() {
+
+                MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
+
+                Exception exception = assertThrows(MeetingNotFoundException.class, () -> {
+                    meetingDatasource.get(meetingNumber);
+                });
+
+                assertEquals("指定されたミーティングは、存在しないか主催者に削除されています。主催者へミーティング番号を確認してください。: %s".formatted(meetingNumber.value()),
+                        exception.getMessage());
             }
         }
     }
