@@ -30,13 +30,6 @@
 <script th:inline="javascript">
 $(function() {
 
-  const organizerNumber = localStorage.getItem('organizerNumber');
-  /*[# th:if="${organizerNumber != null}"]*/
-  if (!organizerNumber) {
-    localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
-  }
-  /*[/]*/
-
   $('#createMeetingButton').prop('disabled', false);
 
   $('#createMeetingButton').on('click', function() {

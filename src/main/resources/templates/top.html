@@ -17,23 +17,5 @@
   </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
-<script th:inline="javascript">
-$(function() {
-
-  const organizerNumber = localStorage.getItem('organizerNumber');
-  /*[# th:if="${organizerNumber != null}"]*/
-  if (!organizerNumber) {
-    localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
-  }
-  /*[/]*/
-
-  const participantNumber = localStorage.getItem('participantNumber');
-  /*[# th:if="${participantNumber != null}"]*/
-  if (!participantNumber) {
-    localStorage.setItem('participantNumber', [[${participantNumber.value}]]);
-  }
-  /*[/]*/
-});
-</script>
 </body>
 </html>

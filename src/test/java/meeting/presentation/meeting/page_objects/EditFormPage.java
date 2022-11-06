@@ -3,6 +3,7 @@ package meeting.presentation.meeting.page_objects;
 import meeting.domain.model.meeting.MeetingNumber;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,7 +21,7 @@ public class EditFormPage extends RegistrationFormPage {
     public EditFormPage(WebDriver driver) {
         super(driver);
 
-        new WebDriverWait(driver, Duration.ofMinutes(10)).until(innerDriver -> {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
             return isOrganizerNumberSet(innerDriver)
                     && isButtonEnabledById(innerDriver, "editMeetingButton");
         });
@@ -50,8 +51,13 @@ public class EditFormPage extends RegistrationFormPage {
     }
 
     public <S> S editMeeting(Class<S> resultPage) {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            new Actions(innerDriver).moveToElement(editMeetingButton).perform();
+            enableButtonByIdForcibly(innerDriver, "editMeetingButton");
+            return editMeetingButton.isDisplayed()
+                    && editMeetingButton.isEnabled();
+        });
         editMeetingButton.click();
-        waitUntilPageReady();
         return PageFactory.initElements(driver, resultPage);
     }
 }

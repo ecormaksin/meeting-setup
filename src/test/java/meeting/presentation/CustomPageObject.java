@@ -1,5 +1,7 @@
 package meeting.presentation;
 
+import meeting.domain.model.organizer.OrganizerNumber;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -17,7 +19,8 @@ public abstract class CustomPageObject {
     public CustomPageObject(WebDriver driver) {
         this.driver = driver;
 
-        new WebDriverWait(driver, Duration.ofMinutes(10)).until(innerDriver -> readyStateCompleted(innerDriver));
+        driver.manage().window().maximize();
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> readyStateCompleted(innerDriver));
 
         if (isNotTargetPage(driver)) {
             String message = String.format("%sページではありません。: %s, %s", pageName(), driver.getCurrentUrl(), driver.getPageSource());
@@ -25,12 +28,34 @@ public abstract class CustomPageObject {
         }
     }
 
+    public void setOrganizerNumber(WebDriver driver, OrganizerNumber organizerNumber) {
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        String organizerNumberValue = organizerNumber.value();
+        String script = "localStorage.setItem('organizerNumber', '%s');".formatted(organizerNumberValue);
+        javascriptExecutor.executeScript(script);
+
+        driver.manage().deleteCookieNamed("organizerNumber");
+        driver.manage().addCookie(new Cookie("organizerNumber",organizerNumberValue));
+    }
+
+    protected void enableButtonByIdForcibly(WebDriver driver, String buttonId) {
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        String script = """
+                var buttonObj = !!(document.getElementById('%s'));
+                if (!buttonObj) return;
+                buttonObj.disabled = false;
+                """.formatted(buttonId);
+        javascriptExecutor.executeScript(script);
+    }
+
     protected abstract boolean isNotTargetPage(WebDriver driver);
 
     protected abstract String pageName();
 
     protected void waitUntilPageReady() {
-        waitUntilPageReady(Duration.ofSeconds(30));
+        waitUntilPageReady(Duration.ofMinutes(1));
     }
 
     protected void waitUntilPageReady(Duration duration) {

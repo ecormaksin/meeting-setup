@@ -50,19 +50,14 @@ public class ShowPage extends CustomPageObject {
         return PageFactory.initElements(driver, ShowPage.class);
     }
 
-    public <T extends CustomPageObject> T moveToEditPage(Class<T> responsePage) {
-        editMeetingLink.click();
-
-        logger.info("---ミーティング編集開始ボタン 押下直後");
-        logger.info(driver.getCurrentUrl());
-        logger.info(driver.getPageSource());
-
-        waitUntilPageReady();
-
-        logger.info("---ミーティング編集開始ボタン ページ読み込み完了後");
-        logger.info(driver.getCurrentUrl());
-        logger.info(driver.getPageSource());
-
-        return PageFactory.initElements(driver, responsePage);
+    public <T extends CustomPageObject> T moveToEditPage(Class<T> responsePage) throws Exception {
+        try {
+            editMeetingLink.click();
+            return PageFactory.initElements(driver, responsePage);
+        } catch (Exception e) {
+            logger.error(driver.getCurrentUrl());
+            logger.error(driver.getPageSource());
+            throw e;
+        }
     }
 }

@@ -33,7 +33,7 @@ public class TopPage extends CustomPageObject {
 
     private static void waitUntilPageOperable(WebDriver driver) {
 
-        new WebDriverWait(driver, Duration.ofSeconds(60)).until(innerDriver -> {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
             String url = innerDriver.getCurrentUrl();
             boolean isUrlMatched = url.matches(String.format(".*%s$", URL_RELATIVE_PATH));
 

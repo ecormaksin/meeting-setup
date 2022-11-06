@@ -10,6 +10,37 @@
     </section>
     <script type="text/javascript" th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
     <script type="text/javascript" th:src="@{/scripts/site.js}"></script>
+    <script th:inline="javascript">
+    $(function() {
+        const organizerNumber = localStorage.getItem('organizerNumber');
+        if (!organizerNumber) {
+            /*[# th:if="${organizerNumber != null}"]*/
+            // サーバーからの値は存在する場合
+            localStorage.setItem('organizerNumber', [[${organizerNumber.value}]]);
+            /*[/]*/
+        }
+
+        const participantNumber = localStorage.getItem('participantNumber');
+        if (!participantNumber) {
+            /*[# th:if="${participantNumber != null}"]*/
+            // サーバーからの値は存在する場合
+            localStorage.setItem('participantNumber', [[${participantNumber.value}]]);
+            /*[/]*/
+        }
+
+        $('a').on('click', function(event) {
+            event.preventDefault();
+
+            document.cookie = "organizerNumber=; max-age=0";
+            document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
+
+            document.cookie = "participantNumber=; max-age=0";
+            document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
+
+            location.href = $(this).attr('href');
+        });
+    });
+    </script>
 </footer>
 </body>
 </html>

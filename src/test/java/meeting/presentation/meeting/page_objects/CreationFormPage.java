@@ -2,6 +2,7 @@ package meeting.presentation.meeting.page_objects;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -16,7 +17,7 @@ public class CreationFormPage extends RegistrationFormPage {
     public CreationFormPage(WebDriver driver) {
         super(driver);
 
-        new WebDriverWait(driver, Duration.ofMinutes(10)).until(innerDriver -> {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
             return isOrganizerNumberSet(innerDriver)
                     && isButtonEnabledById(innerDriver, "createMeetingButton");
         });
@@ -39,8 +40,13 @@ public class CreationFormPage extends RegistrationFormPage {
     }
 
     public <S> S createMeeting(Class<S> resultPage) {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            new Actions(innerDriver).moveToElement(createMeetingButton).perform();
+            enableButtonByIdForcibly(innerDriver, "createMeetingButton");
+            return createMeetingButton.isDisplayed()
+                    && createMeetingButton.isEnabled();
+        });
         createMeetingButton.click();
-        waitUntilPageReady();
         return PageFactory.initElements(driver, resultPage);
     }
 }

@@ -103,7 +103,7 @@ public class MeetingEditControllerTest {
     }
 
     @Test
-    void ミーティングを編集できる() {
+    void ミーティングを編集できる() throws Exception {
 
         MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
         Meeting meeting = showBaseMeeting(meetingNumber);
@@ -113,10 +113,12 @@ public class MeetingEditControllerTest {
         doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
 
         new OrganizerNumberFake_1();
+        OrganizerNumber organizerNumber = OrganizerNumberFake_1.newNumber();
         new RegistrationRequestDateTimeFake_19841231_1023();
 
         TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
+        showPage.setOrganizerNumber(driver, organizerNumber);
         EditFormPage formPage = showPage.moveToEditPage(EditFormPage.class);
 
         formPage.inputSubject("件名テスト1-編集後1");
@@ -134,7 +136,7 @@ public class MeetingEditControllerTest {
     }
 
     @Test
-    void 表示時に参加者が出欠回答済みの場合はエラーになる() {
+    void 表示時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
 
         MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
         Meeting meeting = showBaseMeeting(meetingNumber);
@@ -144,17 +146,19 @@ public class MeetingEditControllerTest {
         when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);
 
         new OrganizerNumberFake_1();
+        OrganizerNumber organizerNumber = OrganizerNumberFake_1.newNumber();
         new RegistrationRequestDateTimeFake_19841231_1023();
 
         TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
+        showPage.setOrganizerNumber(driver, organizerNumber);
         ErrorPage errorPage = showPage.moveToEditPage(ErrorPage.class);
 
         assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
     }
 
     @Test
-    void 編集時に参加者が出欠回答済みの場合はエラーになる() {
+    void 編集時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
 
         MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
         Meeting meeting = showBaseMeeting(meetingNumber);
@@ -164,10 +168,12 @@ public class MeetingEditControllerTest {
         when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
 
         new OrganizerNumberFake_1();
+        OrganizerNumber organizerNumber = OrganizerNumberFake_1.newNumber();
         new RegistrationRequestDateTimeFake_19841231_1023();
 
         TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
+        showPage.setOrganizerNumber(driver, organizerNumber);
         EditFormPage formPage = showPage.moveToEditPage(EditFormPage.class);
 
         when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);

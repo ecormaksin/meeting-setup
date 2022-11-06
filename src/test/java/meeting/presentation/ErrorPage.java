@@ -31,7 +31,7 @@ public class ErrorPage extends CustomPageObject {
 
     private static void waitUntilPageOperable(WebDriver driver) {
 
-        new WebDriverWait(driver, Duration.ofSeconds(60)).until(ExpectedConditions.titleIs("エラー"));
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(ExpectedConditions.titleIs("エラー"));
     }
 
     public String errorMessage() {

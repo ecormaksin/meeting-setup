@@ -50,6 +50,7 @@ public class MeetingShowController {
 
         model.addAttribute("meeting", meeting);
         model.addAttribute("meetingEditability", meetingEditability);
+        model.addAttribute("organizerNumber", organizerNumber);
         model.addAttribute("participantNumber", participantNumber);
 
         return "meeting/show";
