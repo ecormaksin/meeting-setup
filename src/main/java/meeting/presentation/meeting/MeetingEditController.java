@@ -64,6 +64,7 @@ public class MeetingEditController {
 
     @PostMapping(params={"addSchedule"})
     String addSchedule(Model model,
+                       @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                        @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm) {
 
         MeetingInputForm scheduleAdded = meetingInputForm.addEmptySchedule();
@@ -73,6 +74,7 @@ public class MeetingEditController {
 
     @PostMapping(params={"removeSchedule"})
     String removeSchedule(Model model,
+                          @PathVariable("meetingNumber") MeetingNumber meetingNumber,
                           @ModelAttribute("meetingInputForm") MeetingInputForm meetingInputForm,
                           HttpServletRequest request) {
 

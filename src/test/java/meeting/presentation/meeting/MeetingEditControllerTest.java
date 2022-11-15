@@ -103,6 +103,7 @@ public class MeetingEditControllerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void ミーティングを編集できる() throws Exception {
 
         MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
@@ -120,6 +121,8 @@ public class MeetingEditControllerTest {
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
         showPage.setOrganizerNumber(driver, organizerNumber);
         EditFormPage formPage = showPage.moveToEditPage(EditFormPage.class);
+        formPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
+        formPage = (EditFormPage) formPage.removeScheduleAt(0, EditFormPage.class);
 
         formPage.inputSubject("件名テスト1-編集後1");
         formPage.inputMemo("メモテスト1-編集後1");
