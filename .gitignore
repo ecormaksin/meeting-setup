@@ -43,3 +43,4 @@ out/
 /gradle-dependencies.txt
 /LOG_FILE_IS_UNDEFINED
 /meeting-setup-test.log*
+/.clover/

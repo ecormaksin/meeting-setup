@@ -43,7 +43,7 @@ dependencies {
         'org.springframework.boot:spring-boot-starter-test',
         'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2',
         'com.github.irof:jig-erd:0.0.15',
-        'nl.jqno.equalsverifier:equalsverifier:3.10.1',
+        'nl.jqno.equalsverifier:equalsverifier:3.11',
         'net.sourceforge.htmlunit:htmlunit',
         'org.seleniumhq.selenium:htmlunit-driver',
         'org.seleniumhq.selenium:selenium-support',
@@ -66,8 +66,6 @@ test {
     // https://stackoverflow.com/questions/66586272/running-a-single-junit5-test-on-gradle-exits-with-standard-error
     // https://github.com/junit-team/junit5/issues/1774
     systemProperty 'java.util.logging.config.file', "src/test/resources/logging-test.properties"
-
-    forkEvery = 1
 
     testLogging {
         showStandardStreams = true
