@@ -89,7 +89,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
     }
 
     @Nested
-    @DisplayName("ミーティング作成")
+    @DisplayName("ミーティングの作成")
     class MeetingCreationCase extends DBUnitWithoutWebTest {
 
         @Test
@@ -319,6 +319,24 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
                 assertEquals("指定されたミーティングは、存在しないか主催者に削除されています。主催者へミーティング番号を確認してください。: %s".formatted(meetingNumber.value()),
                         exception.getMessage());
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("ミーティングの編集")
+    class MeetingEditCase extends DBUnitWithoutWebTest {
+
+        @Test
+        @DatabaseSetup("testdata/edit/meeting_before_edit.xlsx")
+        @ExpectedDatabase(value = "testdata/edit/meeting_after_edit.xlsx",
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                columnFilters = { ScheduleNumberColumnFilter.class })
+        @DisplayName("ミーティングの編集")
+        void testCanEditMeeting() {
+
+            MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
+
+            Meeting meeting = meetingDatasource.get(meetingNumber);
         }
     }
 }

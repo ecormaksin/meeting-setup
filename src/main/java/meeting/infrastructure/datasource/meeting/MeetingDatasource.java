@@ -103,8 +103,7 @@ public class MeetingDatasource implements MeetingRepository {
                 registrationRequest.subject());
         insertMeetingMemo(meetingNumber, registrationRequest.memo());
         insertMeetingAndOrganizerRelation(meetingNumber, registrationRequest.organizerNumber());
-        Set<ScheduleNumber> scheduleNumbers = insertSchedules(meetingNumber, registrationRequest.schedules());
-        insertAttendances(meetingNumber, meeting.attendances(), scheduleNumbers);
+        insertSchedules(meetingNumber, registrationRequest.schedules());
     }
 
     @Override
@@ -138,8 +137,7 @@ public class MeetingDatasource implements MeetingRepository {
         meetingMapper.insertMeetingMemo(meetingNumber, memo);
     }
 
-    private Set<ScheduleNumber> insertSchedules(MeetingNumber meetingNumber, Schedules schedules) {
-        Set<ScheduleNumber> scheduleNumbers = new HashSet<>();
+    private void insertSchedules(MeetingNumber meetingNumber, Schedules schedules) {
         List<Schedule> scheduleList = schedules.asList();
         scheduleList.forEach(schedule -> {
 
@@ -155,10 +153,7 @@ public class MeetingDatasource implements MeetingRepository {
                     scheduleConstruct.startHour(),
                     scheduleConstruct.startMinute(),
                     scheduleConstruct.duration());
-            scheduleNumbers.add(scheduleNumber);
         });
-
-        return scheduleNumbers;
     }
 
     private void insertMeetingAndOrganizerRelation(MeetingNumber meetingNumber,
@@ -168,50 +163,11 @@ public class MeetingDatasource implements MeetingRepository {
 
     private void deleteMeetingWithWholeAggregate(MeetingNumber meetingNumber) {
 
-        attendanceMapper.deleteAttendanceCommentsByMeetingNumber(meetingNumber);
-        attendanceMapper.deleteConveniencesByMeetingNumber(meetingNumber);
-        attendanceMapper.deleteAttendancesByMeetingNumber(meetingNumber);
-
         scheduleMapper.deleteSchedulesByMeetingNumber(meetingNumber);
 
         organizerMapper.deleteMeetingAndOrganizerRelation(meetingNumber);
 
         meetingMapper.deleteMeetingMemo(meetingNumber);
         meetingMapper.deleteMeeting(meetingNumber);
-    }
-
-    private void insertAttendances(MeetingNumber meetingNumber, Attendances attendances, Set<ScheduleNumber> scheduleNumbers) {
-
-        for (Attendance attendance : attendances.asList()) {
-            AttendanceNumber attendanceNumber = attendance.attendanceNumber();
-            attendanceMapper.insertAttendance(
-                    meetingNumber,
-                    attendanceNumber,
-                    attendance.participantNumber(),
-                    attendance.participantName());
-            insertConveniences(attendanceNumber, attendance.conveniences(), scheduleNumbers);
-
-            AttendanceComment attendanceComment = attendance.attendanceComment();
-            if (attendanceComment.inputStatus() == AttendanceCommentInputStatus.なし) continue;
-            attendanceMapper.insertAttendanceComment(attendanceNumber, attendanceComment);
-        }
-    }
-
-    private void insertConveniences(AttendanceNumber attendanceNumber, Conveniences conveniences, Set<ScheduleNumber> scheduleNumbers) {
-
-        for (Convenience convenience : conveniences.asList()) {
-            if (isScheduleDeleted(scheduleNumbers, convenience.scheduleNumber())) {
-                continue;
-            }
-            int convenienceNumber = attendanceMapper.newConvenienceNumber();
-            attendanceMapper.insertConvenience(convenienceNumber,
-                    attendanceNumber,
-                    convenience.scheduleNumber(),
-                    convenience.convenienceCategory());
-        }
-    }
-
-    private boolean isScheduleDeleted(Set<ScheduleNumber> scheduleNumbers, ScheduleNumber scheduleNumber) {
-        return !scheduleNumbers.contains(scheduleNumber);
     }
 }
