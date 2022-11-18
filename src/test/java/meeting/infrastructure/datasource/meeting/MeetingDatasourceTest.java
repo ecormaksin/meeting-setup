@@ -337,6 +337,22 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
             MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
 
             Meeting meeting = meetingDatasource.get(meetingNumber);
+
+            Schedules schedules = Schedules.of(Arrays.asList(
+                        Schedule.of(ScheduleNumber.of(1),
+                                ScheduleConstruct.of(2022, 4, 3, 9, StartMinute.JUST, Duration.OF_2_HOURS))
+                    ));
+
+            MeetingRegistrationRequest meetingRegistrationRequest = new MeetingRegistrationRequest(
+                    meeting.meetingNumber(),
+                    Subject.of("件名テスト1-編集後"),
+                    Memo.of("メモテスト1-編集後"),
+                    schedules,
+                    meeting.organizerNumber(),
+                    RegistrationRequestDateTime.of(2022, 4, 4, 11, 0)
+            );
+
+            meetingDatasource.edit(meeting, meetingRegistrationRequest);
         }
     }
 }
