@@ -28,8 +28,6 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
     @FindBy(id = "addSchedule")
     protected WebElement addScheduleButton;
 
-    protected WebElement globalErrors;
-
     protected WebElement subjectError;
 
     protected WebElement memoError;
@@ -68,6 +66,15 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
         inputStartHourAt(index, input.startHour());
         inputStartMinuteAt(index, input.startMinute());
         inputDurationAt(index, input.duration());
+        return (T)this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends RegistrationFormPage> T clearScheduleAt(int index) {
+        inputMeetingDateAt(index, MeetingDateInput.empty());
+        inputStartHourAt(index, StartHourInput.empty());
+        inputStartMinuteAt(index, StartMinuteInput.empty());
+        inputDurationAt(index, DurationInput.empty());
         return (T)this;
     }
 
@@ -148,19 +155,6 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
 
     protected WebElement meetingDate(int index) {
         return scheduleConstructElement(index, "meetingDate.value");
-    }
-
-    public List<String> globalErrorMessages() {
-        try {
-
-            List<WebElement> globalErrorList = globalErrors.findElements(By.cssSelector("li"));
-            return globalErrorList.stream()
-                    .map(WebElement::getText)
-                    .collect(Collectors.toList());
-
-        } catch (NoSuchElementException e) {
-            return Collections.<String>emptyList();
-        }
     }
 
     public String subjectErrorMessage() {

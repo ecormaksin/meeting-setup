@@ -1,20 +1,23 @@
 package meeting.presentation;
 
 import meeting.domain.model.organizer.OrganizerNumber;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class CustomPageObject {
 
     protected static final String URL_BASE = "http://localhost:9990";
 
     protected WebDriver driver;
+
+    protected WebElement globalErrors;
 
     public CustomPageObject(WebDriver driver) {
         this.driver = driver;
@@ -39,11 +42,11 @@ public abstract class CustomPageObject {
         driver.manage().addCookie(new Cookie("organizerNumber",organizerNumberValue));
     }
 
-    protected void enableButtonByIdForcibly(WebDriver driver, String buttonId) {
+    public void enableButtonByIdForcibly(WebDriver driver, String buttonId) {
 
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
         String script = """
-                var buttonObj = !!(document.getElementById('%s'));
+                var buttonObj = document.getElementById('%s');
                 if (!buttonObj) return;
                 buttonObj.disabled = false;
                 """.formatted(buttonId);
@@ -100,5 +103,18 @@ public abstract class CustomPageObject {
                 return !buttonObj.disabled;
                 """.formatted(buttonId);
         return (boolean) javascriptExecutor.executeScript(script);
+    }
+
+    public List<String> globalErrorMessages() {
+        try {
+
+            List<WebElement> globalErrorList = globalErrors.findElements(By.cssSelector("li"));
+            return globalErrorList.stream()
+                    .map(WebElement::getText)
+                    .collect(Collectors.toList());
+
+        } catch (NoSuchElementException e) {
+            return Collections.<String>emptyList();
+        }
     }
 }

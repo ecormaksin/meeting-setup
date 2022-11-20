@@ -23,7 +23,7 @@ public class StartMinuteInput {
         valid = isValid();
     }
 
-    static StartMinuteInput empty() {
+    public static StartMinuteInput empty() {
         return new StartMinuteInput("");
     }
 

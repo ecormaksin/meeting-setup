@@ -21,10 +21,16 @@ import meeting.domain.model.schedule.construct.Duration;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.domain.model.schedule.construct.StartMinute;
 import meeting.presentation.*;
+import meeting.presentation.meeting.input.schedule.construct.MeetingDateInput;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
+import meeting.presentation.meeting.input.schedule.construct.StartHourInput;
+import meeting.presentation.meeting.page_objects.CreationFormPage;
 import meeting.presentation.meeting.page_objects.EditCompletedPage;
 import meeting.presentation.meeting.page_objects.EditFormPage;
 import meeting.presentation.meeting.page_objects.ShowPage;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +40,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -184,5 +191,59 @@ public class MeetingEditControllerTest {
         ErrorPage errorPage = formPage.editMeeting(ErrorPage.class);
 
         assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
+    }
+
+    @Nested
+    @DisplayName("日程候補のエラー確認")
+    class CheckScheduleError {
+
+        MeetingNumber meetingNumber;
+        Meeting meeting;
+        OrganizerNumber organizerNumber;
+        EditFormPage formPage;
+
+        @BeforeEach
+        void setup() throws Exception {
+            meetingNumber = MeetingNumberTestHelper.fromInt(1);
+            meeting = showBaseMeeting(meetingNumber);
+
+            new OrganizerNumberFake_1();
+            organizerNumber = OrganizerNumberFake_1.newNumber();
+            new RegistrationRequestDateTimeFake_19841231_1023();
+
+            when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+            when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+
+            TopPage.to(driver);
+            ShowPage showPage = ShowPage.to(driver, meetingNumber);
+            showPage.setOrganizerNumber(driver, organizerNumber);
+            formPage = showPage.moveToEditPage(EditFormPage.class);
+        }
+
+        @Test
+        void 日程候補が0件の場合はエラー() {
+
+            formPage.clearScheduleAt(0);
+            EditFormPage errorFormPage = formPage.editMeeting(EditFormPage.class);
+
+            assertEquals("日程を1件以上5件以下で指定してください。", errorFormPage.scheduleInputsErrorMessage());
+        }
+
+        @Test
+        @SuppressWarnings("unchecked")
+        void 追加する日程が過去の場合はエラー() {
+
+            ScheduleConstructInput constructInput =
+                    ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
+
+            EditFormPage addedFormPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
+            addedFormPage.inputScheduleAt(1, constructInput);
+            EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class);
+
+            List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
+
+            assertEquals(1, globalErrorMessages.size());
+            assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
+        }
     }
 }

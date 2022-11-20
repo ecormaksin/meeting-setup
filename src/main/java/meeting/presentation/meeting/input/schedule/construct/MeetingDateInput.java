@@ -24,7 +24,7 @@ public class MeetingDateInput {
         valid = isValid();
     }
 
-    static MeetingDateInput empty() {
+    public static MeetingDateInput empty() {
         return new MeetingDateInput("");
     }
 

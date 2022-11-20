@@ -22,7 +22,7 @@ public class StartHourInput {
         valid = isValid();
     }
 
-    static StartHourInput empty() {
+    public static StartHourInput empty() {
         return new StartHourInput("");
     }
 

@@ -22,7 +22,7 @@ public class DurationInput {
         valid = isValid();
     }
 
-    static DurationInput empty() {
+    public static DurationInput empty() {
         return new DurationInput("");
     }
 

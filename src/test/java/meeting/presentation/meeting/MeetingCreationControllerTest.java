@@ -24,6 +24,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,6 +33,8 @@ import static org.mockito.Mockito.doNothing;
 @WebMvcTest(MeetingCreationController.class)
 @Import({WebConfig.class, TestWebConfig.class})
 public class MeetingCreationControllerTest {
+
+    Logger logger = Logger.getLogger(MeetingCreationControllerTest.class.getName());
 
     @Autowired
     MockMvc mockMvc;
@@ -131,6 +134,25 @@ public class MeetingCreationControllerTest {
             }
 
             assertFalse(addedFormPage.isAddScheduleButtonEnabled());
+        }
+
+        @Test
+        @SuppressWarnings("unchecked")
+        void 日程候補の入力欄を規定数より多く追加しようとした場合エラーになる() {
+
+            CreationFormPage addedFormPage = CreationFormPage.to(driver);
+
+            for (int count = 0; count < 2; count++) {
+                addedFormPage = (CreationFormPage) addedFormPage.addNewEmptyScheduleInput(CreationFormPage.class);
+            }
+
+            addedFormPage.enableButtonByIdForcibly(driver, "addSchedule");
+            CreationFormPage errorFormPage = (CreationFormPage) addedFormPage.addNewEmptyScheduleInput(CreationFormPage.class);
+
+            List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
+
+            assertEquals(1, globalErrorMessages.size());
+            assertEquals("5件を超える日程は追加できません。", globalErrorMessages.get(0));
         }
     }
 
