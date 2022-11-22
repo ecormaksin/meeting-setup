@@ -70,6 +70,13 @@ public class MeetingEditControllerTest {
     @MockBean
     MeetingEditScenario meetingEditScenario;
 
+    MeetingNumber meetingNumber;
+    Meeting meeting;
+    Meeting respondedMeeting;
+
+    OrganizerNumber organizerNumber;
+    EditFormPage formPage;
+
     private Meeting showBaseMeeting(MeetingNumber meetingNumber) {
 
         Subject subject = Subject.of("件名テスト1");
@@ -109,25 +116,31 @@ public class MeetingEditControllerTest {
                 Attendances.of(Arrays.asList(attendance)));
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    void ミーティングを編集できる() throws Exception {
+    @BeforeEach
+    void setup() throws Exception {
+        meetingNumber = MeetingNumberTestHelper.fromInt(1);
+        meeting = showBaseMeeting(meetingNumber);
+        respondedMeeting = respondedMeeting(meeting);
 
-        MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
-        Meeting meeting = showBaseMeeting(meetingNumber);
+        new OrganizerNumberFake_1();
+        organizerNumber = OrganizerNumberFake_1.newNumber();
+        new RegistrationRequestDateTimeFake_19841231_1023();
 
         when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
         when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
-        doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
-
-        new OrganizerNumberFake_1();
-        OrganizerNumber organizerNumber = OrganizerNumberFake_1.newNumber();
-        new RegistrationRequestDateTimeFake_19841231_1023();
 
         TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
         showPage.setOrganizerNumber(driver, organizerNumber);
-        EditFormPage formPage = showPage.moveToEditPage(EditFormPage.class);
+        formPage = showPage.moveToEditPage(EditFormPage.class);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void ミーティングを編集できる() throws Exception {
+
+        doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
+
         formPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
         formPage = (EditFormPage) formPage.removeScheduleAt(0, EditFormPage.class);
 
@@ -148,18 +161,8 @@ public class MeetingEditControllerTest {
     @Test
     void 表示時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
 
-        MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
-        Meeting meeting = showBaseMeeting(meetingNumber);
-        Meeting respondedMeeting = respondedMeeting(meeting);
-
-        when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
         when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);
 
-        new OrganizerNumberFake_1();
-        OrganizerNumber organizerNumber = OrganizerNumberFake_1.newNumber();
-        new RegistrationRequestDateTimeFake_19841231_1023();
-
-        TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
         showPage.setOrganizerNumber(driver, organizerNumber);
         ErrorPage errorPage = showPage.moveToEditPage(ErrorPage.class);
@@ -170,21 +173,10 @@ public class MeetingEditControllerTest {
     @Test
     void 編集時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
 
-        MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
-        Meeting meeting = showBaseMeeting(meetingNumber);
-        Meeting respondedMeeting = respondedMeeting(meeting);
-
-        when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
-        when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
-
-        new OrganizerNumberFake_1();
-        OrganizerNumber organizerNumber = OrganizerNumberFake_1.newNumber();
-        new RegistrationRequestDateTimeFake_19841231_1023();
-
         TopPage.to(driver);
         ShowPage showPage = ShowPage.to(driver, meetingNumber);
         showPage.setOrganizerNumber(driver, organizerNumber);
-        EditFormPage formPage = showPage.moveToEditPage(EditFormPage.class);
+        formPage = showPage.moveToEditPage(EditFormPage.class);
 
         when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);
 
@@ -193,57 +185,29 @@ public class MeetingEditControllerTest {
         assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
     }
 
-    @Nested
-    @DisplayName("日程候補のエラー確認")
-    class CheckScheduleError {
+    @Test
+    void 日程候補が0件の場合はエラー() {
 
-        MeetingNumber meetingNumber;
-        Meeting meeting;
-        OrganizerNumber organizerNumber;
-        EditFormPage formPage;
+        formPage.clearScheduleAt(0);
+        EditFormPage errorFormPage = formPage.editMeeting(EditFormPage.class);
 
-        @BeforeEach
-        void setup() throws Exception {
-            meetingNumber = MeetingNumberTestHelper.fromInt(1);
-            meeting = showBaseMeeting(meetingNumber);
+        assertEquals("日程を1件以上5件以下で指定してください。", errorFormPage.scheduleInputsErrorMessage());
+    }
 
-            new OrganizerNumberFake_1();
-            organizerNumber = OrganizerNumberFake_1.newNumber();
-            new RegistrationRequestDateTimeFake_19841231_1023();
+    @Test
+    @SuppressWarnings("unchecked")
+    void 追加する日程が過去の場合はエラー() {
 
-            when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
-            when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+        ScheduleConstructInput constructInput =
+                ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
-            TopPage.to(driver);
-            ShowPage showPage = ShowPage.to(driver, meetingNumber);
-            showPage.setOrganizerNumber(driver, organizerNumber);
-            formPage = showPage.moveToEditPage(EditFormPage.class);
-        }
+        EditFormPage addedFormPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
+        addedFormPage.inputScheduleAt(1, constructInput);
+        EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class);
 
-        @Test
-        void 日程候補が0件の場合はエラー() {
+        List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
 
-            formPage.clearScheduleAt(0);
-            EditFormPage errorFormPage = formPage.editMeeting(EditFormPage.class);
-
-            assertEquals("日程を1件以上5件以下で指定してください。", errorFormPage.scheduleInputsErrorMessage());
-        }
-
-        @Test
-        @SuppressWarnings("unchecked")
-        void 追加する日程が過去の場合はエラー() {
-
-            ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
-
-            EditFormPage addedFormPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
-            addedFormPage.inputScheduleAt(1, constructInput);
-            EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class);
-
-            List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
-
-            assertEquals(1, globalErrorMessages.size());
-            assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
-        }
+        assertEquals(1, globalErrorMessages.size());
+        assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
     }
 }
