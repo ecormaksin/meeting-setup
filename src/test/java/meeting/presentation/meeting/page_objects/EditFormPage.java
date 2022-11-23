@@ -60,4 +60,15 @@ public class EditFormPage extends RegistrationFormPage {
         editMeetingButton.click();
         return PageFactory.initElements(driver, resultPage);
     }
+
+    public <S> S deleteMeeting(Class<S> resultPage) {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            new Actions(innerDriver).moveToElement(deleteMeetingButton).perform();
+            enableButtonByIdForcibly(innerDriver, "deleteMeetingButton");
+            return deleteMeetingButton.isDisplayed()
+                    && deleteMeetingButton.isEnabled();
+        });
+        deleteMeetingButton.click();
+        return PageFactory.initElements(driver, resultPage);
+    }
 }

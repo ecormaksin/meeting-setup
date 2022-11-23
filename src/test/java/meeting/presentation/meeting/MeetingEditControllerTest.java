@@ -21,13 +21,8 @@ import meeting.domain.model.schedule.construct.Duration;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.domain.model.schedule.construct.StartMinute;
 import meeting.presentation.*;
-import meeting.presentation.meeting.input.schedule.construct.MeetingDateInput;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
-import meeting.presentation.meeting.input.schedule.construct.StartHourInput;
-import meeting.presentation.meeting.page_objects.CreationFormPage;
-import meeting.presentation.meeting.page_objects.EditCompletedPage;
-import meeting.presentation.meeting.page_objects.EditFormPage;
-import meeting.presentation.meeting.page_objects.ShowPage;
+import meeting.presentation.meeting.page_objects.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -51,6 +46,7 @@ import static org.mockito.Mockito.when;
 
 @WebMvcTest({
         MeetingEditController.class,
+        MeetingDeleteController.class,
         TopController.class,
         MeetingShowController.class})
 @Import({WebConfig.class, TestWebConfig.class})
@@ -75,6 +71,7 @@ public class MeetingEditControllerTest {
     Meeting respondedMeeting;
 
     OrganizerNumber organizerNumber;
+    ShowPage showPage;
     EditFormPage formPage;
 
     private Meeting showBaseMeeting(MeetingNumber meetingNumber) {
@@ -126,88 +123,116 @@ public class MeetingEditControllerTest {
         organizerNumber = OrganizerNumberFake_1.newNumber();
         new RegistrationRequestDateTimeFake_19841231_1023();
 
-        when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
-        when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
-
         TopPage.to(driver);
-        ShowPage showPage = ShowPage.to(driver, meetingNumber);
-        showPage.setOrganizerNumber(driver, organizerNumber);
-        formPage = showPage.moveToEditPage(EditFormPage.class);
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    void ミーティングを編集できる() throws Exception {
+    @Nested
+    @DisplayName("表示時・編集時ともに出欠なしのミーティング")
+    class CaseBaseMeetingWhenBothGetAndEdit {
 
-        doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
+        ShowPage showPage;
+        EditFormPage formPage;
 
-        formPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
-        formPage = (EditFormPage) formPage.removeScheduleAt(0, EditFormPage.class);
+        @BeforeEach
+        void setup() throws Exception {
 
-        formPage.inputSubject("件名テスト1-編集後1");
-        formPage.inputMemo("メモテスト1-編集後1");
+            when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+            showPage = ShowPage.to(driver, meetingNumber);
+            showPage.setOrganizerNumber(driver, organizerNumber);
 
-        formPage.inputScheduleAt(0,
-                ScheduleConstructInput.of(2022,4, 2, 13, StartMinute.HALF, Duration.OF_30_MINUTES));
+            when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+            formPage = showPage.moveToEditPage(EditFormPage.class);
+        }
 
-        EditCompletedPage completedPage = formPage.editMeeting(EditCompletedPage.class);
+        @Test
+        @SuppressWarnings("unchecked")
+        void ミーティングを編集できる() throws Exception {
 
-        assertEquals("ミーティングの編集が完了しました。", completedPage.processFinishedMessage());
-        assertEquals("URLに変更はありませんが、必要な場合は参加者へ次のURLを連絡してください。:", completedPage.guidanceToContactToParticipants());
-        assertTrue(completedPage.urlToShowMeeting().endsWith("/meeting/mt000000000000000000000001/show"));
-        assertEquals("ミーティングの編集・削除を行う場合は、上記URLへアクセスするか、「ミーティングの詳細」をクリックしてください。", completedPage.guidanceToEditMeeting());
+            formPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
+            formPage = (EditFormPage) formPage.removeScheduleAt(0, EditFormPage.class);
+
+            formPage.inputSubject("件名テスト1-編集後1");
+            formPage.inputMemo("メモテスト1-編集後1");
+
+            formPage.inputScheduleAt(0,
+                    ScheduleConstructInput.of(2022,4, 2, 13, StartMinute.HALF, Duration.OF_30_MINUTES));
+
+            doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
+            EditCompletedPage completedPage = formPage.editMeeting(EditCompletedPage.class);
+
+            assertEquals("ミーティングの編集が完了しました。", completedPage.processFinishedMessage());
+            assertEquals("URLに変更はありませんが、必要な場合は参加者へ次のURLを連絡してください。:", completedPage.guidanceToContactToParticipants());
+            assertTrue(completedPage.urlToShowMeeting().endsWith("/meeting/mt000000000000000000000001/show"));
+            assertEquals("ミーティングの編集・削除を行う場合は、上記URLへアクセスするか、「ミーティングの詳細」をクリックしてください。", completedPage.guidanceToEditMeeting());
+        }
+
+        @Test
+        void 編集時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
+
+            when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);
+            ErrorPage errorPage = formPage.editMeeting(ErrorPage.class);
+
+            assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
+        }
+
+        @Test
+        void 日程候補が0件の場合はエラー() throws Exception {
+
+            formPage.clearScheduleAt(0);
+            EditFormPage errorFormPage = formPage.editMeeting(EditFormPage.class);
+
+            assertEquals("日程を1件以上5件以下で指定してください。", errorFormPage.scheduleInputsErrorMessage());
+        }
+
+        @Test
+        @SuppressWarnings("unchecked")
+        void 追加する日程が過去の場合はエラー() throws Exception {
+
+            ScheduleConstructInput constructInput =
+                    ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
+
+            EditFormPage addedFormPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
+            addedFormPage.inputScheduleAt(1, constructInput);
+            EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class);
+
+            List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
+
+            assertEquals(1, globalErrorMessages.size());
+            assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
+        }
+
+        @Test
+        void ミーティングを削除できる() throws Exception {
+
+            doNothing().when(meetingEditScenario).delete(any(MeetingNumber.class));
+            DeleteCompletedPage completedPage = formPage.deleteMeeting(DeleteCompletedPage.class);
+
+            assertEquals("ミーティングの削除が完了しました。", completedPage.processFinishedMessage());
+        }
     }
 
-    @Test
-    void 表示時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
+    @Nested
+    @DisplayName("表示時に出欠回答済みのミーティングが返ってくる")
+    class CaseAttendedMeetingWhenGet {
 
-        when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);
+        ShowPage showPage;
 
-        ShowPage showPage = ShowPage.to(driver, meetingNumber);
-        showPage.setOrganizerNumber(driver, organizerNumber);
-        ErrorPage errorPage = showPage.moveToEditPage(ErrorPage.class);
+        @BeforeEach
+        void setup() throws Exception {
 
-        assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
-    }
+            when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+            showPage = ShowPage.to(driver, meetingNumber);
+            showPage.setOrganizerNumber(driver, organizerNumber);
 
-    @Test
-    void 編集時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
+            when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);
+        }
 
-        TopPage.to(driver);
-        ShowPage showPage = ShowPage.to(driver, meetingNumber);
-        showPage.setOrganizerNumber(driver, organizerNumber);
-        formPage = showPage.moveToEditPage(EditFormPage.class);
+        @Test
+        void 表示時に参加者が出欠回答済みの場合はエラーになる() throws Exception {
 
-        when(meetingEditScenario.meetingOf(any(MeetingNumber.class))).thenReturn(respondedMeeting);
+            ErrorPage errorPage = showPage.moveToEditPage(ErrorPage.class);
 
-        ErrorPage errorPage = formPage.editMeeting(ErrorPage.class);
-
-        assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
-    }
-
-    @Test
-    void 日程候補が0件の場合はエラー() {
-
-        formPage.clearScheduleAt(0);
-        EditFormPage errorFormPage = formPage.editMeeting(EditFormPage.class);
-
-        assertEquals("日程を1件以上5件以下で指定してください。", errorFormPage.scheduleInputsErrorMessage());
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    void 追加する日程が過去の場合はエラー() {
-
-        ScheduleConstructInput constructInput =
-                ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
-
-        EditFormPage addedFormPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
-        addedFormPage.inputScheduleAt(1, constructInput);
-        EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class);
-
-        List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
-
-        assertEquals(1, globalErrorMessages.size());
-        assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
+            assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
+        }
     }
 }
