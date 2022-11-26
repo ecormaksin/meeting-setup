@@ -114,4 +114,25 @@ public class ScheduleConstruct {
                 startMinute.value(),
                 duration.value());
     }
+
+    @Override
+    public String toString() {
+
+        String template = """
+            {
+                "meetingDate": "%s",
+                "startHour": "%s",
+                "startMinute": "%s",
+                "duration": "%s"
+
+            }
+            """;
+
+//        String template = "%s %s:%s (%s分)";
+
+        return template.formatted(meetingDate.toString(),
+                startHour.toString(),
+                startMinute.toString(),
+                duration.toString());
+    }
 }

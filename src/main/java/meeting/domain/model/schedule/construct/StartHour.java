@@ -39,4 +39,9 @@ public class StartHour extends ValidationConcern {
     public int value() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

@@ -72,4 +72,21 @@ public class Attendance {
     public AttendanceComment attendanceComment() {
         return attendanceComment;
     }
+
+    @Override
+    public String toString() {
+        return """
+                {
+                    "attendanceNumber": "%s",
+                    "participantNumber": "%s",
+                    "participantName": "%s",
+                    "conveniences": %s,
+                    "attendanceComment": "%s"
+                }
+                """.formatted(attendanceNumber.value(),
+                participantNumber.value(),
+                participantName.value(),
+                conveniences.toString(),
+                attendanceComment.toString());
+    }
 }

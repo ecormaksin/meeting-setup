@@ -1,5 +1,6 @@
 package meeting.presentation.meeting;
 
+import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingEditScenario;
 import meeting.application.senario.MeetingShowScenario;
 import meeting.domain.model.attendance.Attendance;
@@ -23,10 +24,7 @@ import meeting.domain.model.schedule.construct.StartMinute;
 import meeting.presentation.*;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
 import meeting.presentation.meeting.page_objects.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -44,35 +42,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest({
-        MeetingEditController.class,
-        MeetingDeleteController.class,
-        TopController.class,
-        MeetingShowController.class})
-@Import({WebConfig.class, TestWebConfig.class})
-public class MeetingEditControllerTest {
+public class MeetingEditControllerTest extends MeetingIntegrationTest {
 
     Logger logger = Logger.getLogger(MeetingEditControllerTest.class.getName());
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    WebDriver driver;
-
-    @MockBean
-    MeetingShowScenario meetingShowScenario;
-
-    @MockBean
-    MeetingEditScenario meetingEditScenario;
 
     MeetingNumber meetingNumber;
     Meeting meeting;
     Meeting respondedMeeting;
 
     OrganizerNumber organizerNumber;
-    ShowPage showPage;
-    EditFormPage formPage;
 
     private Meeting showBaseMeeting(MeetingNumber meetingNumber) {
 
@@ -123,18 +101,28 @@ public class MeetingEditControllerTest {
         organizerNumber = OrganizerNumberFake_1.newNumber();
         new RegistrationRequestDateTimeFake_19841231_1023();
 
-        TopPage.to(driver);
     }
 
     @Nested
     @DisplayName("表示時・編集時ともに出欠なしのミーティング")
-    class CaseBaseMeetingWhenBothGetAndEdit {
+    class CaseBaseMeetingWhenBothGetAndEdit extends MeetingIntegrationTest {
+
+        @Autowired
+        WebDriver driver;
+
+        @MockBean
+        MeetingShowScenario meetingShowScenario;
+
+        @MockBean
+        MeetingEditScenario meetingEditScenario;
 
         ShowPage showPage;
         EditFormPage formPage;
 
         @BeforeEach
         void setup() throws Exception {
+
+            TopPage.to(driver);
 
             when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
             showPage = ShowPage.to(driver, meetingNumber);
@@ -201,7 +189,8 @@ public class MeetingEditControllerTest {
             assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
         }
 
-        @Test
+//        @Test
+        @RepeatedTest(10)
         void ミーティングを削除できる() throws Exception {
 
             doNothing().when(meetingEditScenario).delete(any(MeetingNumber.class));
@@ -209,16 +198,33 @@ public class MeetingEditControllerTest {
 
             assertEquals("ミーティングの削除が完了しました。", completedPage.processFinishedMessage());
         }
+
+        @AfterEach
+        void tearDown() {
+            if (driver == null) return;
+            driver.quit();
+        }
     }
 
     @Nested
     @DisplayName("表示時に出欠回答済みのミーティングが返ってくる")
-    class CaseAttendedMeetingWhenGet {
+    class CaseAttendedMeetingWhenGet extends MeetingIntegrationTest {
+
+        @Autowired
+        WebDriver driver;
+
+        @MockBean
+        MeetingShowScenario meetingShowScenario;
+
+        @MockBean
+        MeetingEditScenario meetingEditScenario;
 
         ShowPage showPage;
 
         @BeforeEach
         void setup() throws Exception {
+
+            TopPage.to(driver);
 
             when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
             showPage = ShowPage.to(driver, meetingNumber);
@@ -233,6 +239,12 @@ public class MeetingEditControllerTest {
             ErrorPage errorPage = showPage.moveToEditPage(ErrorPage.class);
 
             assertEquals("回答されているので編集・削除できません。", errorPage.errorMessage());
+        }
+
+        @AfterEach
+        void tearDown() {
+            if (driver == null) return;
+            driver.quit();
         }
     }
 }

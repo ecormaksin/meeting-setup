@@ -67,4 +67,14 @@ public class Schedule {
     public LocalDateTime startLocalDateTime() {
         return scheduleConstruct.startLocalDateTime();
     }
+
+    @Override
+    public String toString() {
+        return """
+                {
+                    "scheduleNumber": %s,
+                    "scheduleConstruct": %s
+                }
+                """.formatted(scheduleNumber.value(), scheduleConstruct.toString());
+    }
 }

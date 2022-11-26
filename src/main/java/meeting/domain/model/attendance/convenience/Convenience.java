@@ -36,4 +36,14 @@ public class Convenience {
     public ConvenienceCategory convenienceCategory() {
         return convenienceCategory;
     }
+
+    @Override
+    public String toString() {
+        return """
+                {
+                    "scheduleNumber": %s,
+                    "convenienceCategory": "%s"
+                }
+                """.formatted(scheduleNumber.toString(), convenienceCategory.toString());
+    }
 }

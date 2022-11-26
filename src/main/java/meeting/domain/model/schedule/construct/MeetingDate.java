@@ -56,4 +56,9 @@ public class MeetingDate extends ValidationConcern {
     public String show() {
         return value.format(DateTimeFormatter.ofPattern("MM/dd(E)"));
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }

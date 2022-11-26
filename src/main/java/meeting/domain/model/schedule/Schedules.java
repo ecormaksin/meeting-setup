@@ -62,4 +62,18 @@ public class Schedules extends ValidationConcern {
     public List<Schedule> asList() {
         return Collections.unmodifiableList(list);
     }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for (Schedule schedule : list) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append("""
+                    {
+                        "schedule": %s
+                    }
+                    """.formatted(schedule.toString()));
+        }
+        return "[%s]".formatted(sb.toString());
+    }
 }

@@ -50,4 +50,9 @@ public enum Duration {
     public String label() {
         return label;
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

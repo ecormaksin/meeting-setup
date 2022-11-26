@@ -28,4 +28,9 @@ public enum ConvenienceCategory {
     public String symbol() {
         return symbol;
     }
+
+    @Override
+    public String toString() {
+        return symbol.toString();
+    }
 }
