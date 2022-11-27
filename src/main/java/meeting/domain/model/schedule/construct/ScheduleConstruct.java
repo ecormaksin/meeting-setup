@@ -121,7 +121,7 @@ public class ScheduleConstruct {
         String template = """
             {
                 "meetingDate": "%s",
-                "startHour": "%s",
+                "startHour": %s,
                 "startMinute": "%s",
                 "duration": "%s"
 

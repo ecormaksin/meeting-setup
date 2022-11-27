@@ -75,6 +75,6 @@ public class Schedule {
                     "scheduleNumber": %s,
                     "scheduleConstruct": %s
                 }
-                """.formatted(scheduleNumber.value(), scheduleConstruct.toString());
+                """.formatted(scheduleNumber.toString(), scheduleConstruct.toString());
     }
 }

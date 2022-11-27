@@ -190,4 +190,23 @@ public class Meeting {
     private boolean isAlreadyResponded() {
         return attendances.responseStatus() == AttendancesResponseStatus.回答発生済;
     }
+
+    @Override
+    public String toString() {
+        return """
+                {
+                    "meetingNumber": "%s",
+                    "subject": "%s",
+                    "memo": "%s",
+                    "organizerNumber": "%s",
+                    "schedules": %s,
+                    "attendances": %s
+                }
+                """.formatted(meetingNumber.toString(),
+                subject.toString(),
+                memo.toString(),
+                organizerNumber.toString(),
+                schedules.toString(),
+                attendances.toString());
+    }
 }

@@ -1,5 +1,7 @@
 package meeting.domain.model.attendance;
 
+import meeting.domain.model.schedule.Schedule;
+
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
@@ -33,5 +35,19 @@ public class Attendances {
 
     public List<Attendance> asList() {
         return Collections.unmodifiableList(list);
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for (Attendance attendance : list) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append("""
+                    {
+                        "attendance": %s
+                    }
+                    """.formatted(attendance.toString()));
+        }
+        return "[%s]".formatted(sb.toString());
     }
 }

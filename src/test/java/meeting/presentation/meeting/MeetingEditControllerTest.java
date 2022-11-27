@@ -190,11 +190,17 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         }
 
 //        @Test
-        @RepeatedTest(10)
-        void ミーティングを削除できる() throws Exception {
+        @RepeatedTest(100)
+        void ミーティングを削除できる(RepetitionInfo repetitionInfo) throws Exception {
+
+            logger.info("""
+                    （%d 回目 / %d 回）
+                    """.formatted(repetitionInfo.getCurrentRepetition(), repetitionInfo.getTotalRepetitions()));
 
             doNothing().when(meetingEditScenario).delete(any(MeetingNumber.class));
+            logger.info("削除前");
             DeleteCompletedPage completedPage = formPage.deleteMeeting(DeleteCompletedPage.class);
+            logger.info("削除後");
 
             assertEquals("ミーティングの削除が完了しました。", completedPage.processFinishedMessage());
         }
