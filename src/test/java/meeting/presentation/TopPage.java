@@ -1,6 +1,9 @@
 package meeting.presentation;
 
+import meeting.presentation.meeting.page_objects.SearchPage;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -9,6 +12,9 @@ import java.time.Duration;
 public class TopPage extends CustomPageObject {
 
     static final String URL_RELATIVE_PATH = "/";
+
+    @FindBy(css = "main > article > ul > li:nth-child(2) > a")
+    private WebElement meetingSearchLink;
 
     public TopPage(WebDriver driver) {
         super(driver);
@@ -41,5 +47,10 @@ public class TopPage extends CustomPageObject {
                     && isOrganizerNumberSet(innerDriver)
                     && isParticipantNumberSet(innerDriver);
         });
+    }
+
+    public SearchPage moveToSearchPage() {
+        meetingSearchLink.click();
+        return PageFactory.initElements(driver, SearchPage.class);
     }
 }
