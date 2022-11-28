@@ -78,9 +78,7 @@ public class EditFormPage extends RegistrationFormPage {
             return deleteMeetingButton.isDisplayed()
                     && deleteMeetingButton.isEnabled();
         });
-        logger.info("削除ボタン押下前");
         deleteMeetingButton.click();
-        logger.info("削除ボタン押下後");
         if (resultPage.getName().equals(DeleteCompletedPage.class.getName())) {
             new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
                 boolean urlMatches = (innerDriver.getCurrentUrl().matches(DeleteCompletedPage.URL_RELATIVE_PATH_REGEX));

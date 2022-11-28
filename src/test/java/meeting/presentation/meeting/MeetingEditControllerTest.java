@@ -21,16 +21,17 @@ import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.Duration;
 import meeting.domain.model.schedule.construct.ScheduleConstruct;
 import meeting.domain.model.schedule.construct.StartMinute;
-import meeting.presentation.*;
+import meeting.presentation.ErrorPage;
+import meeting.presentation.TopPage;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
-import meeting.presentation.meeting.page_objects.*;
+import meeting.presentation.meeting.page_objects.DeleteCompletedPage;
+import meeting.presentation.meeting.page_objects.EditCompletedPage;
+import meeting.presentation.meeting.page_objects.EditFormPage;
+import meeting.presentation.meeting.page_objects.ShowPage;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
@@ -189,18 +190,11 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
             assertEquals("日程を追加する時は未来の日時を指定してください。", globalErrorMessages.get(0));
         }
 
-//        @Test
-        @RepeatedTest(100)
-        void ミーティングを削除できる(RepetitionInfo repetitionInfo) throws Exception {
-
-            logger.info("""
-                    （%d 回目 / %d 回）
-                    """.formatted(repetitionInfo.getCurrentRepetition(), repetitionInfo.getTotalRepetitions()));
+        @Test
+        void ミーティングを削除できる() throws Exception {
 
             doNothing().when(meetingEditScenario).delete(any(MeetingNumber.class));
-            logger.info("削除前");
             DeleteCompletedPage completedPage = formPage.deleteMeeting(DeleteCompletedPage.class);
-            logger.info("削除後");
 
             assertEquals("ミーティングの削除が完了しました。", completedPage.processFinishedMessage());
         }

@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.logging.Logger;
 
 /**
  * ミーティング編集画面
@@ -27,8 +26,6 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("meeting/{meetingNumber}/edit")
 public class MeetingEditController {
-
-    Logger logger = Logger.getLogger(MeetingEditController.class.getName());
 
     static final String VIEW_PATH_FORM = "meeting/edit/form";
 
@@ -143,13 +140,7 @@ public class MeetingEditController {
                   @CookieValue("organizerNumber") String organizerNumberValue,
                   UriComponentsBuilder builder) {
 
-        logger.info("ミーティング取得前");
         Meeting meeting = meetingEditScenario.meetingOf(meetingNumber);
-        logger.info("""
-            {
-            "meeting": %s
-            }
-        """.formatted(meeting.toString()));
         OrganizerNumber organizerNumber = OrganizerNumber.of(organizerNumberValue);
 
         validateEditability(meeting, organizerNumber);
