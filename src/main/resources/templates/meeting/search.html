@@ -51,15 +51,16 @@
     </p>
     <p>該当するミーティングが見つからない場合は、条件を変更してください。</p>
 
-    <table th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.list.MeetingListItemAvailability).HAVE_ITEMS}">
-      <thead>
+    <div id="searchResult">
+      <table th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.list.MeetingListItemAvailability).HAVE_ITEMS}">
+        <thead>
         <tr>
           <th></th>
           <th>件名</th>
           <th>日程</th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         <tr th:each="meetingListItem, meetingListItemStat : ${meetingList.asList()}">
           <td th:text="${meetingListItemStat.count}">1</td>
           <td>
@@ -71,12 +72,13 @@
             </div>
           </td>
         </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
 
-    <p th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.list.MeetingListItemAvailability).HAVE_NO_ITEMS}">
-      条件に該当するミーティングが見つかりませんでした。
-    </p>
+      <p th:if="${meetingList.itemAvailability() == T(meeting.domain.model.meeting.list.MeetingListItemAvailability).HAVE_NO_ITEMS}">
+        条件に該当するミーティングが見つかりませんでした。
+      </p>
+    </div>
 
   </article>
 </main>
