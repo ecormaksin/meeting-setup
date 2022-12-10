@@ -18,9 +18,7 @@ import meeting.domain.model.participant.ParticipantNumberTestHelper;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
-import meeting.domain.model.schedule.construct.Duration;
-import meeting.domain.model.schedule.construct.ScheduleConstruct;
-import meeting.domain.model.schedule.construct.StartMinute;
+import meeting.domain.model.schedule.construct.*;
 import meeting.presentation.ErrorPage;
 import meeting.presentation.TopPage;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
@@ -60,7 +58,7 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(1);
         Schedules schedules = Schedules.of(Arrays.asList(
                 Schedule.of(ScheduleNumber.of(1),
-                        ScheduleConstruct.of(2022, 4, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR))
+                        ScheduleConstruct.of(MeetingDate.of(2022, 4, 1), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR))
         ));
 
         return Meeting.of(
@@ -134,7 +132,6 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
-        @SuppressWarnings("unchecked")
         void ミーティングを編集できる() throws Exception {
 
             formPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
@@ -144,7 +141,7 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
             formPage.inputMemo("メモテスト1-編集後1");
 
             formPage.inputScheduleAt(0,
-                    ScheduleConstructInput.of(2022,4, 2, 13, StartMinute.HALF, Duration.OF_30_MINUTES));
+                    ScheduleConstructInput.of(2022, 4, 2, 13, StartMinute.HALF, Duration.OF_30_MINUTES));
 
             doNothing().when(meetingEditScenario).edit(any(Meeting.class), any(MeetingRegistrationRequest.class));
             EditCompletedPage completedPage = formPage.editMeeting(EditCompletedPage.class);
@@ -174,11 +171,10 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
-        @SuppressWarnings("unchecked")
         void 追加する日程が過去の場合はエラー() throws Exception {
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1984,12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
+                    ScheduleConstructInput.of(1984, 12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
             EditFormPage addedFormPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
             addedFormPage.inputScheduleAt(1, constructInput);

@@ -2,10 +2,17 @@ package meeting.presentation.meeting;
 
 import meeting.MeetingIntegrationTest;
 import meeting.application.senario.MeetingSearchScenario;
+import meeting.domain.model.meeting.MeetingNumberTestHelper;
 import meeting.domain.model.meeting.MeetingSearchRequest;
+import meeting.domain.model.meeting.Subject;
 import meeting.domain.model.meeting.list.MeetingList;
+import meeting.domain.model.meeting.list.MeetingListItem;
 import meeting.domain.model.meeting.search_condition.MeetingSearchConditionFake_20120123;
 import meeting.domain.model.organizer.OrganizerNumberFake_1;
+import meeting.domain.model.schedule.Schedule;
+import meeting.domain.model.schedule.ScheduleNumber;
+import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.construct.*;
 import meeting.presentation.TopPage;
 import meeting.presentation.meeting.page_objects.SearchPage;
 import org.junit.jupiter.api.*;
@@ -13,6 +20,7 @@ import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -80,6 +88,53 @@ public class MeetingSearchControllerTest extends MeetingIntegrationTest {
         void tearDown() {
             if (driver == null) return;
             driver.quit();
+        }
+    }
+
+    @Nested
+    @DisplayName("条件に該当するミーティング一覧が表示される場合")
+    class CaseMatchedMeetingListDisplayed extends MeetingIntegrationTest {
+
+        @Autowired
+        WebDriver driver;
+
+        @MockBean
+        MeetingSearchScenario meetingSearchScenario;
+
+        TopPage topPage;
+        SearchPage searchPage;
+
+        MeetingList meetingList;
+
+        @BeforeEach
+        void init() {
+            topPage = TopPage.to(driver);
+
+            when(meetingSearchScenario.search(any(MeetingSearchRequest.class))).thenReturn(MeetingList.empty());
+            searchPage = topPage.moveToSearchPage();
+
+            meetingList = MeetingList.of(Arrays.asList(
+                    MeetingListItem.of(
+                            MeetingNumberTestHelper.fromInt(1),
+                            Subject.of("件名テスト1"),
+                            Schedules.of(Arrays.asList(
+                                    Schedule.of(ScheduleNumber.of(1),
+                                            ScheduleConstruct.of(MeetingDate.of(1923, 4, 1), StartHour.of(9), StartMinute.JUST, Duration.OF_1_HOUR)),
+                                    Schedule.of(ScheduleNumber.of(2),
+                                            ScheduleConstruct.of(MeetingDate.of(1923, 4, 2), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR))
+                            ))
+                    ),
+                    MeetingListItem.of(
+                            MeetingNumberTestHelper.fromInt(2),
+                            Subject.of("件名テスト2"),
+                            Schedules.of(Arrays.asList(
+                                    Schedule.of(ScheduleNumber.of(3),
+                                            ScheduleConstruct.of(MeetingDate.of(1923, 4, 3), StartHour.of(9), StartMinute.JUST, Duration.OF_1_HOUR)),
+                                    Schedule.of(ScheduleNumber.of(4),
+                                            ScheduleConstruct.of(MeetingDate.of(1923, 4, 4), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR))
+                            ))
+                    )
+            ));
         }
     }
 }

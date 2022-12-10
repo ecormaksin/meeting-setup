@@ -21,7 +21,8 @@ public class MeetingDate extends ValidationConcern {
     LocalDate value;
 
     @Deprecated
-    MeetingDate() {}
+    MeetingDate() {
+    }
 
     public MeetingDate(LocalDate value) {
         this.value = value;
@@ -38,7 +39,7 @@ public class MeetingDate extends ValidationConcern {
     }
 
     public static MeetingDate of(String value) {
-        return new MeetingDate(LocalDate.parse(value));
+        return of(LocalDate.parse(value));
     }
 
     public boolean isSame(MeetingDate other) {

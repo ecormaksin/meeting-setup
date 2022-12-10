@@ -29,20 +29,20 @@ public class MeetingRegistrationRequestTest {
     void 追加する日程が過去の場合はエラー() {
 
         ScheduleConstruct scheduleConstruct =
-                ScheduleConstruct.of(2022, 7, 1, 10, StartMinute.JUST, Duration.OF_1_HOUR);
+                ScheduleConstruct.of(MeetingDate.of(2022, 7, 1), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR);
         Schedule schedule = Schedule.initializedBy(scheduleConstruct);
         Schedules schedules = Schedules.of(Arrays.asList(schedule));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-                new MeetingRegistrationRequest(
-                        MeetingNumber.newNumber(),
-                        Subject.of("件名テスト"),
-                        Memo.blank(),
-                        schedules,
-                        OrganizerNumber.newNumber(),
-                        RegistrationRequestDateTime.of(2022, 7, 1, 11, 0)
-                );
-            });
+            new MeetingRegistrationRequest(
+                    MeetingNumber.newNumber(),
+                    Subject.of("件名テスト"),
+                    Memo.blank(),
+                    schedules,
+                    OrganizerNumber.newNumber(),
+                    RegistrationRequestDateTime.of(2022, 7, 1, 11, 0)
+            );
+        });
         assertEquals("日程を追加する時は未来の日時を指定してください。", exception.getMessage());
     }
 }

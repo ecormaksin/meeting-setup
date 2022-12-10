@@ -14,7 +14,8 @@ public class MeetingListItem {
     Schedules schedules;
 
     @Deprecated
-    MeetingListItem() {}
+    MeetingListItem() {
+    }
 
     public MeetingListItem(MeetingNumber meetingNumber,
                            Subject subject,
@@ -22,6 +23,12 @@ public class MeetingListItem {
         this.meetingNumber = meetingNumber;
         this.subject = subject;
         this.schedules = schedules;
+    }
+
+    public static MeetingListItem of(MeetingNumber meetingNumber,
+                                     Subject subject,
+                                     Schedules schedules) {
+        return new MeetingListItem(meetingNumber, subject, schedules);
     }
 
     public MeetingNumber meetingNumber() {

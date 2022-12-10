@@ -1,6 +1,9 @@
 package meeting.domain.model.meeting;
 
-import meeting.domain.model.attendance.*;
+import meeting.domain.model.attendance.Attendance;
+import meeting.domain.model.attendance.AttendanceComment;
+import meeting.domain.model.attendance.AttendanceNumber;
+import meeting.domain.model.attendance.Attendances;
 import meeting.domain.model.attendance.convenience.Convenience;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.attendance.convenience.Conveniences;
@@ -10,9 +13,7 @@ import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
-import meeting.domain.model.schedule.construct.Duration;
-import meeting.domain.model.schedule.construct.ScheduleConstruct;
-import meeting.domain.model.schedule.construct.StartMinute;
+import meeting.domain.model.schedule.construct.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -61,25 +62,25 @@ public class MeetingTest {
             "27, '×', '×', '×', 0, 0, 3",
     })
     void 指定した日程の都合種別ごとの人数を取得できる(int patternNumber,
-                    String participant1Convenience,
-                    String participant2Convenience,
-                    String participant3Convenience,
-                    int numberOfParticipantMaru,
-                    int numberOfParticipantSankaku,
-                    int numberOfParticipantsBatsu) {
+                                            String participant1Convenience,
+                                            String participant2Convenience,
+                                            String participant3Convenience,
+                                            int numberOfParticipantMaru,
+                                            int numberOfParticipantSankaku,
+                                            int numberOfParticipantsBatsu) {
 
         ScheduleNumber scheduleNumber = ScheduleNumber.of(patternNumber);
         ScheduleConstruct scheduleConstruct =
-                    ScheduleConstruct.of(2021, 12, patternNumber, 10, StartMinute.JUST, Duration.OF_1_HOUR);
+                ScheduleConstruct.of(MeetingDate.of(2021, 12, patternNumber), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR);
 
         List<Schedule> scheduleList = Arrays.asList(
                 new Schedule(scheduleNumber, scheduleConstruct)
         );
 
         Attendances attendances = createAttendances(patternNumber,
-                                        Arrays.asList(participant1Convenience,
-                                                        participant2Convenience,
-                                                        participant3Convenience));
+                Arrays.asList(participant1Convenience,
+                        participant2Convenience,
+                        participant3Convenience));
 
         Meeting meeting = new Meeting(MeetingNumber.newNumber(),
                 Subject.of("件名テスト"),

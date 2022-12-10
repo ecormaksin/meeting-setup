@@ -1,7 +1,6 @@
 package meeting.domain.model.schedule.construct;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -27,7 +26,8 @@ public class ScheduleConstruct {
     EndTime endTime;
 
     @Deprecated
-    ScheduleConstruct() {}
+    ScheduleConstruct() {
+    }
 
     public ScheduleConstruct(MeetingDate meetingDate,
                              StartHour startHour,
@@ -42,14 +42,12 @@ public class ScheduleConstruct {
         endTime = new EndTime(endLocalTime());
     }
 
-    public static ScheduleConstruct of(int year, int month, int dayOfMonth,
-                                       int hour, StartMinute startMinute, Duration duration) {
-
-        LocalDate meetingDateValue = LocalDate.of(year,month, dayOfMonth);
+    public static ScheduleConstruct of(MeetingDate meetingDate,
+                                       StartHour startHour, StartMinute startMinute, Duration duration) {
 
         return new ScheduleConstruct(
-                MeetingDate.of(meetingDateValue),
-                StartHour.of(hour),
+                meetingDate,
+                startHour,
                 startMinute,
                 duration);
     }
@@ -119,14 +117,14 @@ public class ScheduleConstruct {
     public String toString() {
 
         String template = """
-            {
-                "meetingDate": "%s",
-                "startHour": %s,
-                "startMinute": "%s",
-                "duration": "%s"
+                {
+                    "meetingDate": "%s",
+                    "startHour": %s,
+                    "startMinute": "%s",
+                    "duration": "%s"
 
-            }
-            """;
+                }
+                """;
 
 //        String template = "%s %s:%s (%s分)";
 
