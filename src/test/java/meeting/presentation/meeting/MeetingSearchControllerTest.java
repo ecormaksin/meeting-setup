@@ -135,6 +135,17 @@ public class MeetingSearchControllerTest extends MeetingIntegrationTest {
                             ))
                     )
             ));
+
+            when(meetingSearchScenario.search(any(MeetingSearchRequest.class))).thenReturn(meetingList);
+            searchPage.inputKeyword("テスト");
+            searchPage.inputStartDate("1923-04-01");
+            searchPage.inputEndDate("1923-04-10");
+            searchPage = searchPage.search();
+        }
+
+        @Test
+        void test() {
+            assertEquals("件名テスト1", searchPage.subjectValue(0));
         }
     }
 }

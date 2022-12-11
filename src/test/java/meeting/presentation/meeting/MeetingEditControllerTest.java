@@ -132,6 +132,7 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
+        @SuppressWarnings("unchecked")
         void ミーティングを編集できる() throws Exception {
 
             formPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
@@ -171,6 +172,7 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
+        @SuppressWarnings("unchecked")
         void 追加する日程が過去の場合はエラー() throws Exception {
 
             ScheduleConstructInput constructInput =
