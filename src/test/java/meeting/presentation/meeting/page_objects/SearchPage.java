@@ -11,13 +11,12 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPage extends CustomPageObject {
 
     static final String URL_RELATIVE_PATH = "/meeting/search";
-
-    private static final String MEETING_LIST_ROW_SELECTOR_TEMPLATE = "#searchResult > table > tbody > tr:nth-child(%d)";
 
     @FindBy(id = "keyword.value")
     private WebElement keyword;
@@ -30,8 +29,9 @@ public class SearchPage extends CustomPageObject {
 
     private WebElement searchMeetingButton;
 
-    @FindBy(css = "#searchResult > table > tbody")
-    private WebElement meetingList;
+    @FindBy(css = "#searchResult > table > tbody > tr")
+    private List<WebElement> meetingListItemRows;
+    private static final String MEETING_LIST_ITEM_CELL_SELECTOR_TEMPLATE = "td:nth-child(%d)";
 
     @FindBy(css = "#searchResult > p")
     private WebElement noMatchFoundMessage;
@@ -107,18 +107,29 @@ public class SearchPage extends CustomPageObject {
         return PageFactory.initElements(driver, SearchPage.class);
     }
 
-    public List<WebElement> meetingListItemRows() {
-        return meetingList.findElements(By.tagName("tr"));
+    public int numberOfMeetingListItems() {
+        return meetingListItemRows.size();
     }
 
-    WebElement meetingListItemRow(int index) {
-        String cssSelector = MEETING_LIST_ROW_SELECTOR_TEMPLATE.formatted(index + 1);
-        return meetingList.findElement(By.cssSelector(cssSelector));
+    private WebElement meetingListItemCell(int rowNumber, int columnNumber) {
+        String cssSelector = MEETING_LIST_ITEM_CELL_SELECTOR_TEMPLATE.formatted(columnNumber);
+        return meetingListItemRows.get(rowNumber - 1).findElement(By.cssSelector(cssSelector));
     }
 
-    public String subjectValue(int index) {
-        WebElement subject = meetingListItemRow(index).findElement(By.cssSelector("td:nth-child(2)"));
+    public String subjectValue(int rowNumber) {
+        WebElement subject = meetingListItemCell(rowNumber, ColumnNumber.SUBJECT.value);
         return subject.getText();
+    }
+
+    public List<String> schedulesValue(int rowNumber) {
+        WebElement schedulesCell = meetingListItemCell(rowNumber, ColumnNumber.SCHEDULES.value);
+        List<WebElement> schedules = schedulesCell.findElements(By.cssSelector("div > span"));
+
+        List<String> schedulesValue = new ArrayList<>();
+        for (WebElement schedule : schedules) {
+            schedulesValue.add(schedule.getText());
+        }
+        return schedulesValue;
     }
 
     public String noMatchFoundMessage() {

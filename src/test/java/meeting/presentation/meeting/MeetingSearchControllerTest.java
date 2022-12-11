@@ -144,8 +144,43 @@ public class MeetingSearchControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
-        void test() {
-            assertEquals("件名テスト1", searchPage.subjectValue(0));
+        void キーワードが検索実行前に指定したものであること() {
+            assertEquals("テスト", searchPage.keywordValue());
+        }
+
+        @Test
+        void 開始日が検索実行前に指定したものであること() {
+            assertEquals("1923-04-01", searchPage.startDateValue());
+        }
+
+        @Test
+        void 終了日が検索実行前に指定したものであること() {
+            assertEquals("1923-04-10", searchPage.endDateValue());
+        }
+
+        @Test
+        void 検索結果が2件であること() {
+            assertEquals(2, searchPage.numberOfMeetingListItems());
+        }
+
+        @Test
+        void _1件目の件名が期待値通りであること() {
+            assertEquals("件名テスト1", searchPage.subjectValue(1));
+        }
+
+        @Test
+        void _1件目の日程が期待値通りであること() {
+            assertEquals(Arrays.asList("04/01(日) 09:00 ～ 10:00", "04/02(月) 10:00 ～ 11:00"), searchPage.schedulesValue(1));
+        }
+
+        @Test
+        void _2件目の件名が期待値通りであること() {
+            assertEquals("件名テスト2", searchPage.subjectValue(2));
+        }
+
+        @Test
+        void _2件目の日程が期待値通りであること() {
+            assertEquals(Arrays.asList("04/03(火) 09:00 ～ 10:00", "04/04(水) 10:00 ～ 11:00"), searchPage.schedulesValue(2));
         }
     }
 }
