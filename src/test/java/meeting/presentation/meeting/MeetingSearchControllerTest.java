@@ -183,4 +183,56 @@ public class MeetingSearchControllerTest extends MeetingIntegrationTest {
             assertEquals(Arrays.asList("04/03(火) 09:00 ～ 10:00", "04/04(水) 10:00 ～ 11:00"), searchPage.schedulesValue(2));
         }
     }
+
+    @Nested
+    @DisplayName("検索条件にエラーがある場合")
+    class CaseSearchConditionError extends MeetingIntegrationTest {
+
+        @Autowired
+        WebDriver driver;
+
+        @MockBean
+        MeetingSearchScenario meetingSearchScenario;
+
+        TopPage topPage;
+        SearchPage searchPage;
+
+        @BeforeEach
+        void init() {
+            topPage = TopPage.to(driver);
+
+            when(meetingSearchScenario.search(any(MeetingSearchRequest.class))).thenReturn(MeetingList.empty());
+            searchPage = topPage.moveToSearchPage();
+        }
+
+        @Test
+        void 開始日が未入力の場合はエラーになる() {
+
+            searchPage.inputStartDate("");
+            searchPage.inputEndDate("1923-04-10");
+            SearchPage searchPageGotError = searchPage.search();
+
+            assertEquals("検索開始日を入力してください。", searchPageGotError.startDateError());
+        }
+
+        @Test
+        void 終了日が未入力の場合はエラーになる() {
+
+            searchPage.inputStartDate("1923-04-01");
+            searchPage.inputEndDate("");
+            SearchPage searchPageGotError = searchPage.search();
+
+            assertEquals("検索終了日を入力してください。", searchPageGotError.endDateError());
+        }
+
+        @Test
+        void 検索期間の前後関係が逆の場合はエラーになる() {
+
+            searchPage.inputStartDate("1923-04-01");
+            searchPage.inputEndDate("1923-03-31");
+            SearchPage searchPageGotError = searchPage.search();
+
+            assertEquals("「検索開始日 ≦ 検索終了日」となるように入力してください。", searchPageGotError.durationError());
+        }
+    }
 }

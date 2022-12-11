@@ -27,6 +27,10 @@ public class SearchPage extends CustomPageObject {
     @FindBy(id = "endDate.value")
     private WebElement endDate;
 
+    private WebElement startDateError;
+    private WebElement endDateError;
+    private WebElement durationError;
+
     private WebElement searchMeetingButton;
 
     @FindBy(css = "#searchResult > table > tbody > tr")
@@ -94,6 +98,18 @@ public class SearchPage extends CustomPageObject {
         endDate.clear();
         endDate.sendKeys(value);
         return this;
+    }
+
+    public String startDateError() {
+        return startDateError.getText();
+    }
+
+    public String endDateError() {
+        return endDateError.getText();
+    }
+
+    public String durationError() {
+        return durationError.getText();
     }
 
     public SearchPage search() {
