@@ -10,11 +10,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public abstract class RegistrationFormPage<T extends RegistrationFormPage> extends CustomPageObject {
+public abstract class RegistrationForm<T extends RegistrationForm> extends CustomPageObject {
 
     protected static final String SCHEDULE_CONSTRUCT_PREFIX = "scheduleInputs.list%d.scheduleConstruct.";
 
@@ -34,14 +32,14 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
 
     protected WebElement scheduleInputsError;
 
-    public RegistrationFormPage(WebDriver driver) {
+    public RegistrationForm(WebDriver driver) {
         super(driver);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T inputSubject(String subjectValue) {
+    public <T extends RegistrationForm> T inputSubject(String value) {
         subject.clear();
-        subject.sendKeys(subjectValue);
+        subject.sendKeys(value);
         return (T) this;
     }
 
@@ -54,63 +52,63 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T inputMemo(String memoValue) {
+    public <T extends RegistrationForm> T inputMemo(String value) {
         memo.clear();
-        memo.sendKeys(memoValue);
-        return (T)this;
+        memo.sendKeys(value);
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T inputScheduleAt(int index, ScheduleConstructInput input) {
+    public <T extends RegistrationForm> T inputScheduleAt(int index, ScheduleConstructInput input) {
         inputMeetingDateAt(index, input.meetingDate());
         inputStartHourAt(index, input.startHour());
         inputStartMinuteAt(index, input.startMinute());
         inputDurationAt(index, input.duration());
-        return (T)this;
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T clearScheduleAt(int index) {
+    public <T extends RegistrationForm> T clearScheduleAt(int index) {
         inputMeetingDateAt(index, MeetingDateInput.empty());
         inputStartHourAt(index, StartHourInput.empty());
         inputStartMinuteAt(index, StartMinuteInput.empty());
         inputDurationAt(index, DurationInput.empty());
-        return (T)this;
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T inputMeetingDateAt(int index, MeetingDateInput meetingDate) {
+    public <T extends RegistrationForm> T inputMeetingDateAt(int index, MeetingDateInput meetingDate) {
         WebElement webElement = meetingDate(index);
         webElement.clear();
         webElement.sendKeys(meetingDate.value());
-        return (T)this;
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T inputStartHourAt(int index, StartHourInput startHour) {
+    public <T extends RegistrationForm> T inputStartHourAt(int index, StartHourInput startHour) {
         WebElement webElement = scheduleConstructElement(index, "startHour.value");
         webElement.clear();
         webElement.sendKeys(startHour.value());
-        return (T)this;
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T inputStartMinuteAt(int index, StartMinuteInput startMinute) {
+    public <T extends RegistrationForm> T inputStartMinuteAt(int index, StartMinuteInput startMinute) {
         WebElement webElement = scheduleConstructElement(index, "startMinute.value");
         Select selectObject = new Select(webElement);
         selectObject.selectByValue(startMinute.value());
-        return (T)this;
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends RegistrationFormPage> T inputDurationAt(int index, DurationInput duration) {
+    public <T extends RegistrationForm> T inputDurationAt(int index, DurationInput duration) {
         WebElement webElement = scheduleConstructElement(index, "duration.value");
         Select selectObject = new Select(webElement);
         selectObject.selectByValue(duration.value());
-        return (T)this;
+        return (T) this;
     }
 
-    public <T extends RegistrationFormPage> T removeScheduleAt(int index, Class<T> resultPage) {
+    public <T extends RegistrationForm> T removeScheduleAt(int index, Class<T> resultPage) {
         WebElement removeScheduleButton = (WebElement) removeScheduleButtons().get(index);
         removeScheduleButton.click();
         return PageFactory.initElements(driver, resultPage);
@@ -148,7 +146,7 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
         return addScheduleButton.isEnabled();
     }
 
-    public <T extends RegistrationFormPage> T addNewEmptyScheduleInput(Class<T> resultPage) {
+    public <T extends RegistrationForm> T addNewEmptyScheduleInput(Class<T> resultPage) {
         addScheduleButton.click();
         return PageFactory.initElements(driver, resultPage);
     }
@@ -203,7 +201,7 @@ public abstract class RegistrationFormPage<T extends RegistrationFormPage> exten
 
     protected String scheduleConstructItemErrorMessageAt(int index, String itemName) {
         try {
-            WebElement webElement =  scheduleConstructElement(index, itemName);
+            WebElement webElement = scheduleConstructElement(index, itemName);
             return webElement.getText();
         } catch (NoSuchElementException e) {
             return "";

@@ -17,6 +17,8 @@ public class ShowPage extends CustomPageObject {
 
     private WebElement editMeetingLink;
 
+    private WebElement inputAttendanceButton;
+
     public ShowPage(WebDriver driver) {
         super(driver);
     }
@@ -40,6 +42,8 @@ public class ShowPage extends CustomPageObject {
         String url = driver.getCurrentUrl();
         return !urlMatches(url);
     }
+
+    @Override
     protected String pageName() {
         return "ミーティングの詳細";
     }
@@ -53,6 +57,17 @@ public class ShowPage extends CustomPageObject {
     public <T extends CustomPageObject> T moveToEditPage(Class<T> responsePage) throws Exception {
         try {
             editMeetingLink.click();
+            return PageFactory.initElements(driver, responsePage);
+        } catch (Exception e) {
+            logger.error(driver.getCurrentUrl());
+            logger.error(driver.getPageSource());
+            throw e;
+        }
+    }
+
+    public <T extends CustomPageObject> T moveToAttendanceInputPage(Class<T> responsePage) throws Exception {
+        try {
+            inputAttendanceButton.click();
             return PageFactory.initElements(driver, responsePage);
         } catch (Exception e) {
             logger.error(driver.getCurrentUrl());

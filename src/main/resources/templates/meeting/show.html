@@ -1,92 +1,93 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-  <th:block th:replace="_parts/head :: meta"/>
-  <title>ミーティングの詳細</title>
-  <th:block th:replace="_parts/head :: css"/>
+    <th:block th:replace="_parts/head :: meta"/>
+    <title>ミーティングの詳細</title>
+    <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
 <header th:replace="_parts/navigation :: home_only"></header>
 
 <main>
-  <article>
-    <div class="meeting-show__h1-section">
-      <h1>ミーティングの詳細</h1>
-      <div>
-        <a id="editMeetingLink" th:class="${meetingEditability.operableItemStatus()}"
-           th:href="@{/meeting/__${meetingNumber}__/edit}">ミーティングの編集・削除</a>
-        <span th:text="${meetingEditability.statusMessage()}"></span>
-      </div>
-    </div>
-    <form method="get" action="#" th:object="${meeting}" th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
-      <label>件名</label>
-      <p class="meeting-show__detail" th:text="${meeting.subject()}" />
+    <article>
+        <div class="meeting-show__h1-section">
+            <h1>ミーティングの詳細</h1>
+            <div>
+                <a id="editMeetingLink" th:class="${meetingEditability.operableItemStatus()}"
+                   th:href="@{/meeting/__${meetingNumber}__/edit}">ミーティングの編集・削除</a>
+                <span th:text="${meetingEditability.statusMessage()}"></span>
+            </div>
+        </div>
+        <form method="get" action="#" th:object="${meeting}"
+              th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
+            <label>件名</label>
+            <p class="meeting-show__detail" th:text="${meeting.subject()}"/>
 
-      <label>ミーティングの補足説明</label>
-      <p class="meeting-show__detail" th:text="${meeting.memo()}" />
+            <label>ミーティングの補足説明</label>
+            <p class="meeting-show__detail" th:text="${meeting.memo()}"/>
 
-      <label>日程候補</label>
-      <table class="meeting-show__detail" >
-        <thead>
-          <tr>
-            <th></th>
-            <th>日程</th>
-            <!-- 都合の記号 -->
-            <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
-                th:text="${convenienceCategory.symbol()}"></th>
-            <!-- 参加者名 -->
-            <th th:each="attendance, attendanceStat: *{attendances.asList()}">
-              <a th:class="${meeting.attendanceEditabilityFor(participantNumber, attendance).operableItemStatus()}"
-                 th:href="@{/meeting/__${meetingNumber}__/attendance/__${attendance.attendanceNumber.value}__/edit}">
-                <span th:text="${attendance.participantName.value}"></span>
-              </a>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
-            <td th:text="${scheduleStat.count}">1</td>
-            <!-- 日程 -->
-            <td th:class="${meeting.convenienceStatusAt(schedule.scheduleNumber()).status()}"
-                th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
-            </td>
-            <!-- 日程別・都合別の件数 -->
-            <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
-                th:text="${meeting.countOfConvenienceAt(schedule.scheduleNumber(), convenienceCategory).show()}">
-            </td>
-            <!-- 日程別・参加者別の都合 -->
-            <td th:each="attendance, attendanceStat: *{attendances.asList()}"
-                th:text="${meeting.convenienceCategoryOf(attendance.attendanceNumber(), schedule.scheduleNumber()).symbol()}"></td>
-          </tr>
-          <tr>
-            <td colspan="5"></td>
-            <!-- 参加者の出欠コメント -->
-            <td class="attendance-comment__table-cell"
-                th:each="attendance, attendanceStat: *{attendances.asList()}"
-                th:text="${attendance.attendanceComment().value()}"></td>
-          </tr>
-        </tbody>
-      </table>
+            <label>日程候補</label>
+            <table class="meeting-show__detail">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>日程</th>
+                    <!-- 都合の記号 -->
+                    <th th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
+                        th:text="${convenienceCategory.symbol()}"></th>
+                    <!-- 参加者名 -->
+                    <th th:each="attendance, attendanceStat: *{attendances.asList()}">
+                        <a th:class="${meeting.attendanceEditabilityFor(participantNumber, attendance).operableItemStatus()}"
+                           th:href="@{/meeting/__${meetingNumber}__/attendance/__${attendance.attendanceNumber.value}__/edit}">
+                            <span th:text="${attendance.participantName.value}"></span>
+                        </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
+                    <td th:text="${scheduleStat.count}">1</td>
+                    <!-- 日程 -->
+                    <td th:class="${meeting.convenienceStatusAt(schedule.scheduleNumber()).status()}"
+                        th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
+                    </td>
+                    <!-- 日程別・都合別の件数 -->
+                    <td th:each="convenienceCategory : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}"
+                        th:text="${meeting.countOfConvenienceAt(schedule.scheduleNumber(), convenienceCategory).show()}">
+                    </td>
+                    <!-- 日程別・参加者別の都合 -->
+                    <td th:each="attendance, attendanceStat: *{attendances.asList()}"
+                        th:text="${meeting.convenienceCategoryOf(attendance.attendanceNumber(), schedule.scheduleNumber()).symbol()}"></td>
+                </tr>
+                <tr>
+                    <td colspan="5"></td>
+                    <!-- 参加者の出欠コメント -->
+                    <td class="attendance-comment__table-cell"
+                        th:each="attendance, attendanceStat: *{attendances.asList()}"
+                        th:text="${attendance.attendanceComment().value()}"></td>
+                </tr>
+                </tbody>
+            </table>
 
-      <div>
-        <button type="button" id="inputAttendanceButton">出欠を入力する</button>
-      </div>
-      <p>
-        出欠を編集・削除する場合は、参加者名をクリックしてください。
-      </p>
-    </form>
-  </article>
+            <div>
+                <button type="button" id="inputAttendanceButton">出欠を入力する</button>
+            </div>
+            <p>
+                出欠を編集・削除する場合は、参加者名をクリックしてください。
+            </p>
+        </form>
+    </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 <script th:inline="javascript">
 $(function() {
 
   $('#inputAttendanceButton').on('click', function() {
-    document.cookie = "participantNumber=; max-age=0";
     document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
     $('form').get(0).submit();
   });
 });
+
 </script>
 </body>
 </html>

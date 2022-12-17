@@ -31,15 +31,13 @@
         $('a').on('click', function(event) {
             event.preventDefault();
 
-            document.cookie = "organizerNumber=; max-age=0";
             document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
-
-            document.cookie = "participantNumber=; max-age=0";
             document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
 
             location.href = $(this).attr('href');
         });
     });
+
     </script>
 </footer>
 </body>

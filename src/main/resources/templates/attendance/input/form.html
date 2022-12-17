@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-  <th:block th:replace="_parts/head :: meta"/>
-  <title>出欠の入力</title>
-  <th:block th:replace="_parts/head :: css"/>
+    <th:block th:replace="_parts/head :: meta"/>
+    <title>出欠の入力</title>
+    <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
 <header th:replace="_parts/navigation :: meeting-show_only (meetingNumber=${meetingNumber})"></header>
 
 <main>
-  <article>
-    <h1>出欠の入力</h1>
-    <form method="post" action="#"
-          th:object="${attendanceInputForm}" th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
+    <article>
+        <h1>出欠の入力</h1>
+        <form method="post" action="#"
+              th:object="${attendanceInputForm}" th:action="@{/meeting/__${meetingNumber}__/attendance/input}">
 
-      <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
-        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
-      </ul>
+            <ul th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
+                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+            </ul>
 
-      <th:block th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></th:block>
+            <th:block
+                    th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></th:block>
 
-      <div>
-        <button id="inputAttendanceButton" disabled="disabled">入力</button>
-      </div>
-    </form>
-  </article>
+            <div>
+                <button id="inputAttendanceButton" disabled="disabled">入力</button>
+            </div>
+        </form>
+    </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 <script th:inline="javascript">
@@ -35,12 +36,12 @@ $(function() {
   $('#inputAttendanceButton').on('click', function() {
     $(this).prop('disabled', true);
 
-    document.cookie = "participantNumber=; max-age=0";
     document.cookie = "participantNumber=" + localStorage.getItem('participantNumber');
 
     $('form').get(0).submit();
   });
 });
+
 </script>
 </body>
 </html>

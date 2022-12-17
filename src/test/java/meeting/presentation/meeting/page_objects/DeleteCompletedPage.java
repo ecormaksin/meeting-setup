@@ -2,12 +2,9 @@ package meeting.presentation.meeting.page_objects;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.presentation.CustomPageObject;
-import meeting.presentation.meeting.MeetingEditControllerTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.logging.Logger;
 
 public class DeleteCompletedPage extends CustomPageObject {
 
@@ -20,11 +17,17 @@ public class DeleteCompletedPage extends CustomPageObject {
         super(driver);
     }
 
-    protected boolean isNotTargetPage(WebDriver driver) {
+    public static boolean isTargetPage(WebDriver driver) {
         String url = driver.getCurrentUrl();
-        return !url.matches(URL_RELATIVE_PATH_REGEX);
+        return url.matches(URL_RELATIVE_PATH_REGEX);
     }
 
+    @Override
+    protected boolean isNotTargetPage(WebDriver driver) {
+        return !isTargetPage(driver);
+    }
+
+    @Override
     protected String pageName() {
         return "ミーティングの削除完了";
     }

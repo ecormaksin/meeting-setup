@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-  <th:block th:replace="_parts/head :: meta"/>
-  <title>ミーティングの作成</title>
-  <th:block th:replace="_parts/head :: css"/>
+    <th:block th:replace="_parts/head :: meta"/>
+    <title>ミーティングの作成</title>
+    <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
 <header th:replace="_parts/navigation :: home_only"></header>
 
 <main>
-  <article>
-    <h1>ミーティングの作成</h1>
-    <form method="post" action="#"
-          th:object="${meetingInputForm}" th:action="@{/meeting/create}">
+    <article>
+        <h1>ミーティングの作成</h1>
+        <form method="post" action="#"
+              th:object="${meetingInputForm}" th:action="@{/meeting/create}">
 
-      <ul id="globalErrors" th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
-        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
-      </ul>
+            <ul id="globalErrors" th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
+                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+            </ul>
 
-      <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
+            <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
 
-      <div>
-        <button type="button" id="createMeetingButton" disabled="disabled">作成</button>
-      </div>
-    </form>
-  </article>
+            <div>
+                <button type="button" id="createMeetingButton" disabled="disabled">作成</button>
+            </div>
+        </form>
+    </article>
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
 <script th:inline="javascript">
@@ -35,12 +35,12 @@ $(function() {
   $('#createMeetingButton').on('click', function() {
     $(this).prop('disabled', true);
 
-    document.cookie = "organizerNumber=; max-age=0";
     document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
 
     $('form').get(0).submit();
   });
 });
+
 </script>
 </body>
 </html>

@@ -1,39 +1,40 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" >
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-  <th:block th:replace="_parts/head :: meta"/>
-  <title>ミーティングの編集</title>
-  <th:block th:replace="_parts/head :: css"/>
+    <th:block th:replace="_parts/head :: meta"/>
+    <title>ミーティングの編集</title>
+    <th:block th:replace="_parts/head :: css"/>
 </head>
 <body>
 <header th:replace="_parts/navigation :: home_meeting-show (meetingNumber=${meetingNumber})"></header>
 
 <main>
-  <article>
-    <h1>ミーティングの編集</h1>
-    <form method="post" action="#"
-          th:object="${meetingInputForm}" th:action="@{/meeting/__${meetingNumber}__/edit}">
+    <article>
+        <h1>ミーティングの編集</h1>
+        <form method="post" action="#"
+              th:object="${meetingInputForm}" th:action="@{/meeting/__${meetingNumber}__/edit}">
 
-      <ul id="globalErrors" th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
-        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
-      </ul>
+            <ul id="globalErrors" th:if="${#fields.hasGlobalErrors()}" class="notification is-danger">
+                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+            </ul>
 
-      <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
+            <th:block th:replace="_parts/meeting :: form (meetingInputForm=${meetingInputForm})"></th:block>
 
-      <p>
-        削除すると元に戻せません。
-      </p>
-      <div class="meeting-edit__button-parent">
-        <div>
-          <button type="button" id="editMeetingButton" disabled="disabled">編集</button>
-        </div>
-        <div>
-          <button type="button" id="deleteMeetingButton" class="delete-button" disabled="disabled">削除</button>
-          <button name="delete" id="submitFormButtonWithDelete" class="button-hidden">隠し削除実行ボタン</button>
-        </div>
-      </div>
-    </form>
-  </article>
+            <p>
+                削除すると元に戻せません。
+            </p>
+            <div class="meeting-edit__button-parent">
+                <div>
+                    <button type="button" id="editMeetingButton" disabled="disabled">編集</button>
+                </div>
+                <div>
+                    <button type="button" id="deleteMeetingButton" class="delete-button" disabled="disabled">削除
+                    </button>
+                    <button name="delete" id="submitFormButtonWithDelete" class="button-hidden">隠し削除実行ボタン</button>
+                </div>
+            </div>
+        </form>
+    </article>
 
 </main>
 <footer th:replace="_parts/footer :: default"></footer>
@@ -46,7 +47,6 @@ $(function() {
   }
 
   function setOrganizerNumber() {
-    document.cookie = "organizerNumber=; max-age=0";
     document.cookie = "organizerNumber=" + localStorage.getItem('organizerNumber');
   }
 
@@ -67,6 +67,7 @@ $(function() {
     $('#submitFormButtonWithDelete').click();
   });
 });
+
 </script>
 </body>
 </html>

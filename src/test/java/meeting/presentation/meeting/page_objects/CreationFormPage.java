@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class CreationFormPage extends RegistrationFormPage {
+public class CreationFormPage extends RegistrationForm {
 
     static final String URL_RELATIVE_PATH = "/meeting/create";
 

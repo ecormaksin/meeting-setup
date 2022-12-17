@@ -1,0 +1,64 @@
+package meeting.presentation.attendance.page_objects;
+
+import meeting.domain.model.meeting.MeetingNumber;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.logging.Logger;
+
+public class InputFormPage extends RegistrationForm {
+
+    Logger logger = Logger.getLogger(InputFormPage.class.getName());
+
+    static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
+    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/" + MEETING_NUMBER_PLACE_HOLDER + "/attendance/input";
+
+    private WebElement inputAttendanceButton;
+
+    public InputFormPage(WebDriver driver) {
+        super(driver);
+
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            return isParticipantNumberSet(innerDriver)
+                    && isButtonEnabledById(innerDriver, "inputAttendanceButton");
+        });
+    }
+
+    private static String relativePath(String replaceValue) {
+        return URL_RELATIVE_PATH_TEMPLATE.replace(MEETING_NUMBER_PLACE_HOLDER, replaceValue);
+    }
+
+    private static String relativePathRegexPattern() {
+        return ".*" + relativePath(MeetingNumber.REGEXP);
+    }
+
+    private static boolean urlMatches(String url) {
+        return url.matches(relativePathRegexPattern());
+    }
+
+    @Override
+    protected boolean isNotTargetPage(WebDriver driver) {
+        String url = driver.getCurrentUrl();
+        return !urlMatches(url);
+    }
+
+    @Override
+    protected String pageName() {
+        return "出欠の入力";
+    }
+
+    public <S> S inputAttendance(Class<S> resultPage) {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            new Actions(innerDriver).moveToElement(inputAttendanceButton).perform();
+            enableButtonByIdForcibly(innerDriver, "inputAttendanceButton");
+            return inputAttendanceButton.isDisplayed()
+                    && inputAttendanceButton.isEnabled();
+        });
+        inputAttendanceButton.click();
+        return PageFactory.initElements(driver, resultPage);
+    }
+}

@@ -99,7 +99,6 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         new OrganizerNumberFake_1();
         organizerNumber = OrganizerNumberFake_1.newNumber();
         new RegistrationRequestDateTimeFake_19841231_1023();
-
     }
 
     @Nested

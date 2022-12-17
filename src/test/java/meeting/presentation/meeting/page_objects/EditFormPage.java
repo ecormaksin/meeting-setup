@@ -1,24 +1,17 @@
 package meeting.presentation.meeting.page_objects;
 
 import meeting.domain.model.meeting.MeetingNumber;
-import meeting.presentation.meeting.MeetingEditControllerTest;
-import org.openqa.selenium.JavascriptExecutor;
+import meeting.presentation.ErrorPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.LogEntry;
-import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Objects;
-import java.util.Set;
 import java.util.logging.Logger;
 
-public class EditFormPage extends RegistrationFormPage {
+public class EditFormPage extends RegistrationForm {
 
     Logger logger = Logger.getLogger(EditFormPage.class.getName());
     static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
@@ -68,6 +61,16 @@ public class EditFormPage extends RegistrationFormPage {
                     && editMeetingButton.isEnabled();
         });
         editMeetingButton.click();
+        if (resultPage.getName().equals(ErrorPage.class.getName())) {
+            new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+                boolean isTargetPage = ErrorPage.isTargetPage(innerDriver);
+                if (!isTargetPage) {
+                    logger.info("編集ボタン再押下");
+                    editMeetingButton.click();
+                }
+                return isTargetPage;
+            });
+        }
         return PageFactory.initElements(driver, resultPage);
     }
 
@@ -81,12 +84,12 @@ public class EditFormPage extends RegistrationFormPage {
         deleteMeetingButton.click();
         if (resultPage.getName().equals(DeleteCompletedPage.class.getName())) {
             new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
-                boolean urlMatches = (innerDriver.getCurrentUrl().matches(DeleteCompletedPage.URL_RELATIVE_PATH_REGEX));
-                if (!urlMatches) {
+                boolean isTargetPage = DeleteCompletedPage.isTargetPage(innerDriver);
+                if (!isTargetPage) {
                     logger.info("削除ボタン再押下");
                     deleteMeetingButton.click();
                 }
-                return urlMatches;
+                return isTargetPage;
             });
         }
 

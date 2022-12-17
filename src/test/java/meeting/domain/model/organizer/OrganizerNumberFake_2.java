@@ -1,0 +1,12 @@
+package meeting.domain.model.organizer;
+
+import mockit.Mock;
+import mockit.MockUp;
+
+public class OrganizerNumberFake_2 extends MockUp<OrganizerNumber> {
+
+    @Mock
+    public static OrganizerNumber newNumber() {
+        return OrganizerNumberTestHelper.fromInt(2);
+    }
+}

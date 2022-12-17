@@ -1,6 +1,7 @@
 package meeting.presentation;
 
 import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.participant.ParticipantNumber;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -39,7 +40,18 @@ public abstract class CustomPageObject {
         javascriptExecutor.executeScript(script);
 
         driver.manage().deleteCookieNamed("organizerNumber");
-        driver.manage().addCookie(new Cookie("organizerNumber",organizerNumberValue));
+        driver.manage().addCookie(new Cookie("organizerNumber", organizerNumberValue));
+    }
+
+    public void setParticipantNumber(WebDriver driver, ParticipantNumber participantNumber) {
+
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+        String participantNumberValue = participantNumber.value();
+        String script = "localStorage.setItem('participantNumber', '%s');".formatted(participantNumberValue);
+        javascriptExecutor.executeScript(script);
+
+        driver.manage().deleteCookieNamed("participantNumber");
+        driver.manage().addCookie(new Cookie("participantNumber", participantNumberValue));
     }
 
     public void enableButtonByIdForcibly(WebDriver driver, String buttonId) {
@@ -90,7 +102,7 @@ public abstract class CustomPageObject {
 
     protected static boolean elementExists(WebDriver driver, String selectors) {
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
-        String script = String.format("return !!(document.querySelector('%s'));", selectors) ;
+        String script = String.format("return !!(document.querySelector('%s'));", selectors);
         return (boolean) javascriptExecutor.executeScript(script);
     }
 

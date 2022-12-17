@@ -1,0 +1,114 @@
+package meeting.presentation.attendance;
+
+import meeting.MeetingIntegrationTest;
+import meeting.application.senario.AttendanceInputScenario;
+import meeting.application.senario.MeetingShowScenario;
+import meeting.domain.model.meeting.*;
+import meeting.domain.model.organizer.OrganizerNumber;
+import meeting.domain.model.organizer.OrganizerNumberFake_2;
+import meeting.domain.model.organizer.OrganizerNumberTestHelper;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNumber;
+import meeting.domain.model.participant.ParticipantNumberFake_1;
+import meeting.domain.model.schedule.Schedule;
+import meeting.domain.model.schedule.ScheduleNumber;
+import meeting.domain.model.schedule.Schedules;
+import meeting.domain.model.schedule.construct.*;
+import meeting.presentation.TopPage;
+import meeting.presentation.attendance.page_objects.InputFormPage;
+import meeting.presentation.meeting.page_objects.ShowPage;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Arrays;
+import java.util.logging.Logger;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+public class AttendanceInputControllerTest extends MeetingIntegrationTest {
+
+    Logger logger = Logger.getLogger(AttendanceInputControllerTest.class.getName());
+
+    MeetingNumber meetingNumber;
+    Meeting meeting;
+    Schedules schedules = Schedules.of(Arrays.asList(
+            Schedule.of(ScheduleNumber.of(1),
+                    ScheduleConstruct.of(MeetingDate.of(2022, 4, 1), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR))
+    ));
+
+    OrganizerNumber organizerNumber;
+    ParticipantNumber participantNumber;
+
+    private Meeting showBaseMeeting(MeetingNumber meetingNumber) {
+
+        Subject subject = Subject.of("件名テスト1");
+        Memo memo = Memo.blank();
+        OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(1);
+
+        return Meeting.of(
+                meetingNumber,
+                subject,
+                memo,
+                organizerNumber,
+                schedules
+        );
+    }
+
+    @BeforeEach
+    void setup() throws Exception {
+        meetingNumber = MeetingNumberTestHelper.fromInt(1);
+        meeting = showBaseMeeting(meetingNumber);
+
+        new OrganizerNumberFake_2();
+        organizerNumber = OrganizerNumberFake_2.newNumber();
+
+        new ParticipantNumberFake_1();
+        participantNumber = ParticipantNumberFake_1.newNumber();
+    }
+
+    @Nested
+    @DisplayName("出欠初回入力・初期表示の場合")
+    class CaseInit extends MeetingIntegrationTest {
+
+        @Autowired
+        WebDriver driver;
+
+        @MockBean
+        MeetingShowScenario meetingShowScenario;
+
+        @MockBean
+        AttendanceInputScenario attendanceInputScenario;
+
+        ShowPage showPage;
+        InputFormPage formPage;
+
+        @BeforeEach
+        void setup() throws Exception {
+
+            TopPage.to(driver);
+
+            when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+            showPage = ShowPage.to(driver, meetingNumber);
+            showPage.setOrganizerNumber(driver, organizerNumber);
+            showPage.setParticipantNumber(driver, participantNumber);
+
+            when(attendanceInputScenario.latestParticipantName(any(ParticipantNumber.class))).thenReturn(ParticipantName.blank());
+            when(attendanceInputScenario.schedules(any(MeetingNumber.class))).thenReturn(schedules);
+            formPage = showPage.moveToAttendanceInputPage(InputFormPage.class);
+        }
+
+        @Test
+        void test() throws Exception {
+            assertNotNull(formPage);
+            logger.info(driver.getCurrentUrl());
+            logger.info(driver.getPageSource());
+        }
+    }
+}
