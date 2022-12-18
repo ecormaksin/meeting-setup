@@ -17,10 +17,7 @@ import meeting.domain.model.schedule.construct.*;
 import meeting.presentation.TopPage;
 import meeting.presentation.attendance.page_objects.InputFormPage;
 import meeting.presentation.meeting.page_objects.ShowPage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -40,7 +38,9 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
     Meeting meeting;
     Schedules schedules = Schedules.of(Arrays.asList(
             Schedule.of(ScheduleNumber.of(1),
-                    ScheduleConstruct.of(MeetingDate.of(2022, 4, 1), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR))
+                    ScheduleConstruct.of(MeetingDate.of(2022, 4, 1), StartHour.of(10), StartMinute.JUST, Duration.OF_1_HOUR)),
+            Schedule.of(ScheduleNumber.of(2),
+                    ScheduleConstruct.of(MeetingDate.of(2022, 4, 2), StartHour.of(11), StartMinute.HALF, Duration.OF_1_HOUR_30_MINUTES))
     ));
 
     OrganizerNumber organizerNumber;
@@ -105,10 +105,24 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
-        void test() throws Exception {
+        void 対象ページのオブジェクトが返ってくる() throws Exception {
             assertNotNull(formPage);
-            logger.info(driver.getCurrentUrl());
-            logger.info(driver.getPageSource());
+        }
+
+        @Test
+        void 参加者名が空欄() throws Exception {
+            assertEquals("", formPage.participantNameValue());
+        }
+
+        @Test
+        void 日程1件目の都合がバツ() throws Exception {
+            assertEquals("×", formPage.convenienceCategoryValue(1));
+        }
+
+        @AfterEach
+        void tearDown() {
+            if (driver == null) return;
+            driver.quit();
         }
     }
 }
