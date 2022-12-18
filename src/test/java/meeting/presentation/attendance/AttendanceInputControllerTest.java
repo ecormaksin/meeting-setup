@@ -3,18 +3,19 @@ package meeting.presentation.attendance;
 import meeting.MeetingIntegrationTest;
 import meeting.application.senario.AttendanceInputScenario;
 import meeting.application.senario.MeetingShowScenario;
+import meeting.domain.model.attendance.AttendanceRegistrationRequest;
+import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.organizer.OrganizerNumberFake_2;
 import meeting.domain.model.organizer.OrganizerNumberTestHelper;
-import meeting.domain.model.participant.ParticipantName;
-import meeting.domain.model.participant.ParticipantNumber;
-import meeting.domain.model.participant.ParticipantNumberFake_1;
+import meeting.domain.model.participant.*;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 import meeting.domain.model.schedule.construct.*;
 import meeting.presentation.TopPage;
+import meeting.presentation.attendance.page_objects.InputCompletedPage;
 import meeting.presentation.attendance.page_objects.InputFormPage;
 import meeting.presentation.meeting.page_objects.ShowPage;
 import org.junit.jupiter.api.*;
@@ -28,6 +29,7 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 public class AttendanceInputControllerTest extends MeetingIntegrationTest {
@@ -74,8 +76,8 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
     }
 
     @Nested
-    @DisplayName("出欠初回入力・初期表示の場合")
-    class CaseInit extends MeetingIntegrationTest {
+    @DisplayName("出欠初回入力の場合")
+    class CaseFirstAttendanceInputAsParticipant extends MeetingIntegrationTest {
 
         @Autowired
         WebDriver driver;
@@ -127,6 +129,28 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
         @Test
         void 出欠コメントが空欄() throws Exception {
             assertEquals("", formPage.attendanceCommentValue());
+        }
+
+        @Test
+        void 出欠を入力できる() throws Exception {
+            formPage.inputParticipantName("参加者名テスト1");
+            formPage.inputConvenienceCategory(1, ConvenienceCategory.マル);
+            formPage.inputConvenienceCategory(2, ConvenienceCategory.サンカク);
+            formPage.inputAttendanceComment("出欠コメントテスト1");
+
+            when(attendanceInputScenario.participantNumberDuplicationStatus(
+                    any(MeetingNumber.class),
+                    any(ParticipantNumber.class)))
+                    .thenReturn(ParticipantNumberDuplicationStatus.なし);
+            when(attendanceInputScenario.participantNameDuplicationStatus(
+                    any(MeetingNumber.class),
+                    any(ParticipantName.class)))
+                    .thenReturn(ParticipantNameDuplicationStatus.なし);
+            doNothing().when(attendanceInputScenario).input(any(MeetingNumber.class), any(AttendanceRegistrationRequest.class));
+
+            InputCompletedPage completedPage = formPage.inputAttendance(InputCompletedPage.class);
+
+            assertEquals("出欠の入力が完了しました。内容を編集するには、上部の「ミーティングの詳細」をクリックしてください。", completedPage.processFinishedMessage());
         }
 
         @AfterEach

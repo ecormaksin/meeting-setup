@@ -81,7 +81,6 @@ public class AttendanceInputController {
         attendanceInputScenario.input(meetingNumber, attendanceInputForm.toRegistrationRequest(attendanceNumber, participantNumber));
 
         attributes.addFlashAttribute("meetingNumber", meetingNumber.value());
-        attributes.addFlashAttribute("attendanceNumber", attendanceNumber.value());
 
         URI uri = builder.path(String.format("meeting/%s/attendance/input/completed", meetingNumber.value())).build().toUri();
         return "redirect:" + uri.toString();
@@ -125,14 +124,9 @@ public class AttendanceInputController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingNumber") String meetingNumber,
-                     @ModelAttribute("attendanceNumber") String attendanceNumber,
-                     Model model, UriComponentsBuilder builder) {
+    String completed(@ModelAttribute("meetingNumber") String meetingNumber, Model model) {
 
         model.addAttribute("meetingNumber", meetingNumber);
-
-        URI uri = builder.path(String.format("/meeting/%s/attendance/%s/edit", meetingNumber, attendanceNumber)).build().toUri();
-        model.addAttribute("attendanceEditLocation", uri.toString());
 
         return "attendance/input/completed";
     }

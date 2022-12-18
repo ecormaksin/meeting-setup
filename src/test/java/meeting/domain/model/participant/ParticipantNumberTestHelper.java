@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class ParticipantNumberTestHelper {
 
-    static final String PREFIX = "mt";
+    static final String PREFIX = "pt";
 
     public static ParticipantNumber fromInt(int intValue) {
         int formatLength = ParticipantNumber.SIZE - PREFIX.length();

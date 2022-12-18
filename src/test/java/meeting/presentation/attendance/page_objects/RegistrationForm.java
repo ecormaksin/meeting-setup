@@ -1,5 +1,6 @@
 package meeting.presentation.attendance.page_objects;
 
+import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.presentation.CustomPageObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -52,9 +53,33 @@ public abstract class RegistrationForm<T extends RegistrationForm> extends Custo
         return attendanceComment.getAttribute("value");
     }
 
-    public String convenienceCategoryValue(int scheduleOrdinalNumber) {
+    private List<WebElement> convenienceCategoryOptions(int scheduleOrdinalNumber) {
         String name = CONVENIENCE_CATEGORY_NAME_TEMPLATE.formatted(scheduleOrdinalNumber - 1);
         List<WebElement> radioButtons = driver.findElements(By.name(name));
+        return radioButtons;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends RegistrationForm> T inputConvenienceCategory(
+            int scheduleOrdinalNumber,
+            ConvenienceCategory convenienceCategory) {
+
+        List<WebElement> radioButtons = convenienceCategoryOptions(scheduleOrdinalNumber);
+        String targetValue = convenienceCategory.symbol();
+
+        WebElement radioButton = radioButtons.stream()
+                .filter(r -> r.getAttribute("value").equals(convenienceCategory.symbol()))
+                .findAny()
+                .orElseThrow(() -> new NoSuchElementException("「%s」に該当する選択肢が見つかりませんでした。".formatted(targetValue)));
+
+        WebElement buttonLabel = radioButton.findElement(By.xpath("../label"));
+        buttonLabel.click();
+
+        return (T) this;
+    }
+
+    public String convenienceCategoryValue(int scheduleOrdinalNumber) {
+        List<WebElement> radioButtons = convenienceCategoryOptions(scheduleOrdinalNumber);
 
         return radioButtons.stream()
                 .filter(r -> r.isSelected())
