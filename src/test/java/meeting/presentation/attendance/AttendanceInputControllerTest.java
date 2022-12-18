@@ -119,6 +119,16 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
             assertEquals("×", formPage.convenienceCategoryValue(1));
         }
 
+        @Test
+        void 日程2件目の都合がバツ() throws Exception {
+            assertEquals("×", formPage.convenienceCategoryValue(2));
+        }
+
+        @Test
+        void 出欠コメントが空欄() throws Exception {
+            assertEquals("", formPage.attendanceCommentValue());
+        }
+
         @AfterEach
         void tearDown() {
             if (driver == null) return;
