@@ -20,7 +20,7 @@ public class ConvenienceCategoryTypeHandler extends BaseTypeHandler<ConvenienceC
 
     private ConvenienceCategory convenienceCategory(String columnValue) {
         return Objects.isNull(columnValue) ?
-                ConvenienceCategory.バツ
+                ConvenienceCategory.BAD
                 :
                 ConvenienceCategory.of(columnValue);
     }

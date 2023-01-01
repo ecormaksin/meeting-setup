@@ -19,7 +19,8 @@ public class ScheduleInput {
     ScheduleConstructInput scheduleConstruct;
 
     @Deprecated
-    ScheduleInput(){}
+    ScheduleInput() {
+    }
 
     public ScheduleInput(ScheduleNumber scheduleNumber,
                          ScheduleConstructInput scheduleConstruct) {
@@ -46,6 +47,14 @@ public class ScheduleInput {
         return new Schedule(scheduleNumber, scheduleConstruct.toScheduleConstruct());
     }
 
+    public String show() {
+        return toSchedule().show();
+    }
+
+    public ScheduleNumber scheduleNumber() {
+        return scheduleNumber;
+    }
+    
     public ScheduleConstructInput scheduleConstructInput() {
         return scheduleConstruct;
     }

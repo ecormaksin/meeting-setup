@@ -15,7 +15,7 @@ DROP SCHEMA IF EXISTS 出欠 CASCADE;
 CREATE SCHEMA 出欠;
 
 DROP TYPE IF EXISTS 出欠.都合種別 CASCADE;
-CREATE TYPE 出欠.都合種別 AS ENUM ('○', '△', '×', '－');
+CREATE TYPE 出欠.都合種別 AS ENUM ('○', '△', '×');
 
 -- 主催者 スキーマ
 CREATE TABLE 主催者.主催者

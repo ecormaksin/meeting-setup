@@ -15,14 +15,14 @@ public class CountsOfConvenience {
     }
 
     public ConvenienceStatus isMoreSuitableOrSame(CountsOfConvenience other) {
-        CountOfConvenience thisMaru = value.get(ConvenienceCategory.マル);
-        CountOfConvenience otherMaru = other.value.get(ConvenienceCategory.マル);
+        CountOfConvenience thisMaru = value.get(ConvenienceCategory.GOOD);
+        CountOfConvenience otherMaru = other.value.get(ConvenienceCategory.GOOD);
 
         if (thisMaru.isNotAtLeastTwo()) return ConvenienceStatus.NOT_SUITABLE;
         if (thisMaru.isGreaterThan(otherMaru)) return ConvenienceStatus.MOST_SUITABLE;
 
-        CountOfConvenience thisSankaku = value.get(ConvenienceCategory.サンカク);
-        CountOfConvenience otherSankaku = other.value.get(ConvenienceCategory.サンカク);
+        CountOfConvenience thisSankaku = value.get(ConvenienceCategory.MODEST);
+        CountOfConvenience otherSankaku = other.value.get(ConvenienceCategory.MODEST);
         if (thisMaru.isSame(otherMaru) && thisSankaku.isGreaterThanOrSame(otherSankaku)) {
             return ConvenienceStatus.MOST_SUITABLE;
         }

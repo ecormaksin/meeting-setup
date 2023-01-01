@@ -1,14 +1,10 @@
 package meeting.domain.model.meeting;
 
 import meeting.domain.model.attendance.*;
-import meeting.domain.model.attendance.convenience.Convenience;
-import meeting.domain.model.attendance.convenience.ConvenienceCategory;
+import meeting.domain.model.attendance.convenience.*;
 import meeting.domain.model.organizer.OrganizerNumber;
-import meeting.domain.model.attendance.convenience.CountsOfConvenience;
 import meeting.domain.model.participant.ParticipantNumber;
-import meeting.domain.model.attendance.convenience.CountOfConvenience;
 import meeting.domain.model.schedule.Schedule;
-import meeting.domain.model.attendance.convenience.ConvenienceStatus;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
 
@@ -39,7 +35,8 @@ public class Meeting {
     Attendances attendances;
 
     @Deprecated
-    Meeting() {}
+    Meeting() {
+    }
 
     public Meeting(MeetingNumber meetingNumber,
                    Subject subject,
@@ -56,11 +53,11 @@ public class Meeting {
     }
 
     public static Meeting of(
-                MeetingNumber meetingNumber,
-                Subject subject,
-                Memo memo,
-                OrganizerNumber organizerNumber,
-                Schedules schedules) {
+            MeetingNumber meetingNumber,
+            Subject subject,
+            Memo memo,
+            OrganizerNumber organizerNumber,
+            Schedules schedules) {
 
         return new Meeting(
                 meetingNumber,
@@ -72,18 +69,18 @@ public class Meeting {
     }
 
     public static Meeting of(MeetingNumber meetingNumber,
-                   Subject subject,
-                   Memo memo,
-                   OrganizerNumber organizerNumber,
-                   Schedules schedules,
-                   Attendances attendances) {
+                             Subject subject,
+                             Memo memo,
+                             OrganizerNumber organizerNumber,
+                             Schedules schedules,
+                             Attendances attendances) {
 
         return new Meeting(meetingNumber,
-                    subject,
-                    memo,
-                    organizerNumber,
-                    schedules,
-                    attendances);
+                subject,
+                memo,
+                organizerNumber,
+                schedules,
+                attendances);
     }
 
     public MeetingNumber meetingNumber() {
@@ -139,26 +136,26 @@ public class Meeting {
 
     public ConvenienceStatus convenienceStatusAt(ScheduleNumber scheduleNumber) {
 
-        CountOfConvenience targetCountMaru = countOfConvenienceAt(scheduleNumber, ConvenienceCategory.マル);
+        CountOfConvenience targetCountMaru = countOfConvenienceAt(scheduleNumber, ConvenienceCategory.GOOD);
 
         CountsOfConvenience targetCounts = CountsOfConvenience.of(
                 Map.ofEntries(
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, targetCountMaru),
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, countOfConvenienceAt(scheduleNumber, ConvenienceCategory.サンカク))
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.GOOD, targetCountMaru),
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.MODEST, countOfConvenienceAt(scheduleNumber, ConvenienceCategory.MODEST))
                 ));
 
         CountsOfConvenience mostSuitableCounts = CountsOfConvenience.of(
                 Map.ofEntries(
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, CountOfConvenience.of(0)),
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, CountOfConvenience.of(0))
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.GOOD, CountOfConvenience.of(0)),
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.MODEST, CountOfConvenience.of(0))
                 ));
 
         for (Schedule schedule : schedules.asList()) {
 
             CountsOfConvenience currentCounts = CountsOfConvenience.of(
                     Map.ofEntries(
-                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.マル, countOfConvenienceAt(schedule.scheduleNumber(), ConvenienceCategory.マル)),
-                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.サンカク, countOfConvenienceAt(schedule.scheduleNumber(), ConvenienceCategory.サンカク))
+                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.GOOD, countOfConvenienceAt(schedule.scheduleNumber(), ConvenienceCategory.GOOD)),
+                            new AbstractMap.SimpleEntry<>(ConvenienceCategory.MODEST, countOfConvenienceAt(schedule.scheduleNumber(), ConvenienceCategory.MODEST))
                     ));
 
             if (currentCounts.isMoreSuitableOrSame(mostSuitableCounts) == ConvenienceStatus.MOST_SUITABLE) {

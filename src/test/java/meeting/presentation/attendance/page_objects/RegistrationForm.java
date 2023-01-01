@@ -27,6 +27,8 @@ public abstract class RegistrationForm<T extends RegistrationForm> extends Custo
 
     protected WebElement attendanceCommentError;
 
+    private By convenienceCategoryLabel = By.xpath("../label");
+
     public RegistrationForm(WebDriver driver) {
         super(driver);
     }
@@ -67,24 +69,29 @@ public abstract class RegistrationForm<T extends RegistrationForm> extends Custo
         List<WebElement> radioButtons = convenienceCategoryOptions(scheduleOrdinalNumber);
         String targetValue = convenienceCategory.symbol();
 
+
         WebElement radioButton = radioButtons.stream()
-                .filter(r -> r.getAttribute("value").equals(convenienceCategory.symbol()))
+                .filter(r -> convenienceCategoryLabel(r).getText().equals(convenienceCategory.symbol()))
                 .findAny()
                 .orElseThrow(() -> new NoSuchElementException("「%s」に該当する選択肢が見つかりませんでした。".formatted(targetValue)));
 
-        WebElement buttonLabel = radioButton.findElement(By.xpath("../label"));
+        WebElement buttonLabel = radioButton.findElement(convenienceCategoryLabel);
         buttonLabel.click();
 
         return (T) this;
     }
 
-    public String convenienceCategoryValue(int scheduleOrdinalNumber) {
+    private WebElement convenienceCategoryLabel(WebElement radioButton) {
+        return radioButton.findElement(convenienceCategoryLabel);
+    }
+
+    public String convenienceCategoryText(int scheduleOrdinalNumber) {
         List<WebElement> radioButtons = convenienceCategoryOptions(scheduleOrdinalNumber);
 
         return radioButtons.stream()
                 .filter(r -> r.isSelected())
                 .findAny()
-                .map(r -> r.getAttribute("value"))
+                .map(r -> convenienceCategoryLabel(r).getText())
                 .orElse("");
     }
 

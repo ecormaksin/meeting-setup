@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <body>
-<th:block th:fragment="form (participantName, schedules, conveniences, attendanceComment)">
+<th:block th:fragment="form (attendanceInputForm)">
     <label>参加者名</label>
     <input type="text" th:field="*{participantName.value}" class="participant-name">
     <p th:if="${#fields.hasErrors('participantName.valid')}">
@@ -18,18 +18,23 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="schedule,scheduleStat: *{schedules.asList()}">
+        <tr th:each="schedule,scheduleStat: *{scheduleInputs.asList()}">
             <td th:text="${scheduleStat.count}">1</td>
-            <td th:text="${schedule.meetingDate().show() + ' ' + schedule.startTime().show() + ' ～ ' + schedule.endTime().show()}">
+            <td th:text="${schedule.show()}">
             </td>
             <td>
                 <input type="hidden"
-                       th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value}">
+                       th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleNumber.value}">
                 <input type="hidden"
-                       th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.startTime.value}">
+                       th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.meetingDate.value}">
                 <input type="hidden"
-                       th:field="*{schedules.list[__${scheduleStat.index}__].scheduleConstruct.endTime.value}">
-                <input type="hidden" th:field="*{conveniences.list[__${scheduleStat.index}__].scheduleNumber.value}">
+                       th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startHour.value}">
+                <input type="hidden"
+                       th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.startMinute.value}">
+                <input type="hidden"
+                       th:field="*{scheduleInputs.list[__${scheduleStat.index}__].scheduleConstruct.duration.value}">
+                <input type="hidden"
+                       th:field="*{conveniences.list[__${scheduleStat.index}__].scheduleNumber.value}">
                 <div class="convenience-radio"
                      th:each="convenienceCategory,convenienceCategoryStat : ${T(meeting.domain.model.attendance.convenience.ConvenienceCategory).values()}">
                     <input type="radio" th:field="*{conveniences.list[__${scheduleStat.index}__].convenienceCategory}"

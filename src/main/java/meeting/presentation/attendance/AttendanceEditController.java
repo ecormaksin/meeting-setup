@@ -10,6 +10,7 @@ import meeting.domain.model.participant.ParticipantNumber;
 import meeting.domain.model.participant.ParticipantNumberDuplicationStatus;
 import meeting.domain.model.schedule.Schedules;
 import meeting.presentation.attendance.input.AttendanceInputForm;
+import meeting.presentation.meeting.input.schedule.ScheduleInputs;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,7 +48,7 @@ public class AttendanceEditController {
                 attendance.participantName(),
                 attendance.conveniences(),
                 attendance.attendanceComment(),
-                schedules
+                ScheduleInputs.of(schedules)
         );
 
         model.addAttribute("attendanceInputForm", attendanceInputForm);
@@ -168,7 +169,7 @@ public class AttendanceEditController {
                 "participantName.value",
                 "conveniences.list[*",
                 "attendanceComment.value",
-                "schedules.list[*"
+                "scheduleInputs.list[*"
         );
     }
 }

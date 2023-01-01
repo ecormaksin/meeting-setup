@@ -118,12 +118,12 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
 
         @Test
         void 日程1件目の都合がバツ() throws Exception {
-            assertEquals("×", formPage.convenienceCategoryValue(1));
+            assertEquals("×", formPage.convenienceCategoryText(1));
         }
 
         @Test
         void 日程2件目の都合がバツ() throws Exception {
-            assertEquals("×", formPage.convenienceCategoryValue(2));
+            assertEquals("×", formPage.convenienceCategoryText(2));
         }
 
         @Test
@@ -134,8 +134,8 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
         @Test
         void 出欠を入力できる() throws Exception {
             formPage.inputParticipantName("参加者名テスト1");
-            formPage.inputConvenienceCategory(1, ConvenienceCategory.マル);
-            formPage.inputConvenienceCategory(2, ConvenienceCategory.サンカク);
+            formPage.inputConvenienceCategory(1, ConvenienceCategory.GOOD);
+            formPage.inputConvenienceCategory(2, ConvenienceCategory.MODEST);
             formPage.inputAttendanceComment("出欠コメントテスト1");
 
             when(attendanceInputScenario.participantNumberDuplicationStatus(
@@ -151,6 +151,16 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
             InputCompletedPage completedPage = formPage.inputAttendance(InputCompletedPage.class);
 
             assertEquals("出欠の入力が完了しました。内容を編集するには、上部の「ミーティングの詳細」をクリックしてください。", completedPage.processFinishedMessage());
+        }
+
+        @Test
+        void 参加者名が未入力の場合はエラーになる() {
+
+            InputFormPage errorFormPage = formPage.inputAttendance(InputFormPage.class);
+            logger.info(driver.getCurrentUrl());
+            logger.info(driver.getPageSource());
+
+            assertEquals("参加者名は10文字以内で必ず入力してください。", errorFormPage.participantNameErrorMessage());
         }
 
         @AfterEach

@@ -19,7 +19,8 @@ public class Schedule {
     ScheduleConstruct scheduleConstruct;
 
     @Deprecated
-    Schedule() {}
+    Schedule() {
+    }
 
     public Schedule(ScheduleNumber scheduleNumber,
                     ScheduleConstruct scheduleConstruct) {
@@ -28,7 +29,7 @@ public class Schedule {
     }
 
     public static Schedule initializedBy(ScheduleConstruct scheduleConstruct) {
-        return new Schedule(ScheduleNumber.initialized(),  scheduleConstruct);
+        return new Schedule(ScheduleNumber.initialized(), scheduleConstruct);
     }
 
     public static Schedule of(ScheduleNumber scheduleNumber,
@@ -66,6 +67,10 @@ public class Schedule {
 
     public LocalDateTime startLocalDateTime() {
         return scheduleConstruct.startLocalDateTime();
+    }
+
+    public String show() {
+        return "%s %s 〜 %s".formatted(meetingDate().show(), startTime().show(), endTime().show());
     }
 
     @Override

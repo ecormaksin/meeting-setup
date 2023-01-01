@@ -74,7 +74,7 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
     private Meeting respondedMeeting(Meeting meeting) {
 
         Conveniences conveniences = Conveniences.of(Arrays.asList(
-                Convenience.of(ScheduleNumber.of(1), ConvenienceCategory.マル)
+                Convenience.of(ScheduleNumber.of(1), ConvenienceCategory.GOOD)
         ));
 
         Attendance attendance = Attendance.of(AttendanceNumberTestHelper.fromInt(1),

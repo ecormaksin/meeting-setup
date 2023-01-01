@@ -20,7 +20,7 @@
             </ul>
 
             <th:block
-                    th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></th:block>
+                    th:replace="_parts/attendance :: form (attendanceInputForm=${attendanceInputForm})"></th:block>
 
             <p>
                 削除すると元に戻せません。
@@ -67,6 +67,7 @@ $(function() {
     $('#submitFormButtonWithDelete').click();
   });
 });
+
 
 </script>
 </body>

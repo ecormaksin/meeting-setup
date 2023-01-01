@@ -48,9 +48,4 @@ public enum StartMinute {
     public String label() {
         return label;
     }
-
-    @Override
-    public String toString() {
-        return String.valueOf(value);
-    }
 }

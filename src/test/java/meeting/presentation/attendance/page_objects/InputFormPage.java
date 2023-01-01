@@ -42,8 +42,12 @@ public class InputFormPage extends RegistrationForm {
 
     @Override
     protected boolean isNotTargetPage(WebDriver driver) {
+        return !isTargetPage(driver);
+    }
+
+    public static boolean isTargetPage(WebDriver driver) {
         String url = driver.getCurrentUrl();
-        return !urlMatches(url);
+        return urlMatches(url);
     }
 
     @Override

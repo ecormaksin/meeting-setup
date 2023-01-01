@@ -4,9 +4,9 @@ package meeting.domain.model.attendance.convenience;
  * 都合種別
  */
 public enum ConvenienceCategory {
-    マル("○"),
-    サンカク("△"),
-    バツ("×");
+    GOOD("○"),
+    MODEST("△"),
+    BAD("×");
 
     String symbol;
 
@@ -27,10 +27,5 @@ public enum ConvenienceCategory {
 
     public String symbol() {
         return symbol;
-    }
-
-    @Override
-    public String toString() {
-        return symbol.toString();
     }
 }

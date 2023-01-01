@@ -19,7 +19,7 @@
             </ul>
 
             <th:block
-                    th:replace="_parts/attendance :: form (participantName=*{participantName}, schedules=*{schedules}, conveniences=*{conveniences}, attendanceComment=*{attendanceComment})"></th:block>
+                    th:replace="_parts/attendance :: form (attendanceInputForm=${attendanceInputForm})"></th:block>
 
             <div>
                 <button id="inputAttendanceButton" disabled="disabled">入力</button>
@@ -41,6 +41,7 @@ $(function() {
     $('form').get(0).submit();
   });
 });
+
 
 </script>
 </body>

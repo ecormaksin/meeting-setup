@@ -2,11 +2,15 @@ package meeting.presentation.meeting.page_objects;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.presentation.CustomPageObject;
+import meeting.presentation.attendance.page_objects.InputFormPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
 
 public class ShowPage extends CustomPageObject {
 
@@ -54,10 +58,10 @@ public class ShowPage extends CustomPageObject {
         return PageFactory.initElements(driver, ShowPage.class);
     }
 
-    public <T extends CustomPageObject> T moveToEditPage(Class<T> responsePage) throws Exception {
+    public <T extends CustomPageObject> T moveToEditPage(Class<T> resultPage) throws Exception {
         try {
             editMeetingLink.click();
-            return PageFactory.initElements(driver, responsePage);
+            return PageFactory.initElements(driver, resultPage);
         } catch (Exception e) {
             logger.error(driver.getCurrentUrl());
             logger.error(driver.getPageSource());
@@ -65,10 +69,20 @@ public class ShowPage extends CustomPageObject {
         }
     }
 
-    public <T extends CustomPageObject> T moveToAttendanceInputPage(Class<T> responsePage) throws Exception {
+    public <T extends CustomPageObject> T moveToAttendanceInputPage(Class<T> resultPage) throws Exception {
         try {
             inputAttendanceButton.click();
-            return PageFactory.initElements(driver, responsePage);
+            if (resultPage.getName().equals(InputFormPage.class.getName())) {
+                new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+                    boolean isTargetPage = InputFormPage.isTargetPage(innerDriver);
+                    if (!isTargetPage) {
+                        logger.info("出欠入力ボタン再押下");
+                        inputAttendanceButton.click();
+                    }
+                    return isTargetPage;
+                });
+            }
+            return PageFactory.initElements(driver, resultPage);
         } catch (Exception e) {
             logger.error(driver.getCurrentUrl());
             logger.error(driver.getPageSource());

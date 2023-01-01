@@ -90,13 +90,13 @@ public class MeetingTest {
                 attendances);
 
         assertEquals(numberOfParticipantMaru,
-                meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.マル).value(),
+                meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.GOOD).value(),
                 String.format("◯と回答した人数は%d", numberOfParticipantMaru));
         assertEquals(numberOfParticipantSankaku,
-                meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.サンカク).value(),
+                meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.MODEST).value(),
                 String.format("△と回答した人数は%d", numberOfParticipantSankaku));
         assertEquals(numberOfParticipantsBatsu,
-                meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.バツ).value(),
+                meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.BAD).value(),
                 String.format("×と回答した人数は%d", numberOfParticipantsBatsu));
     }
 
