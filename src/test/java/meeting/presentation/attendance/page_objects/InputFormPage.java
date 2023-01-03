@@ -15,7 +15,7 @@ public class InputFormPage extends RegistrationForm {
     Logger logger = Logger.getLogger(InputFormPage.class.getName());
 
     static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
-    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/" + MEETING_NUMBER_PLACE_HOLDER + "/attendance/input";
+    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/%s/attendance/input".formatted(MEETING_NUMBER_PLACE_HOLDER);
 
     private WebElement inputAttendanceButton;
 
