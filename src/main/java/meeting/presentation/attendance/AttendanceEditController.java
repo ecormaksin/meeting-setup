@@ -109,12 +109,7 @@ public class AttendanceEditController {
         AttendanceInputDuplicationStatus attendanceInputDuplicationStatus =
                 attendanceEditScenario.participantNumberDuplicationStatus(meetingNumber, attendanceNumber, participantNumber);
 
-        if (attendanceInputDuplicationStatus == AttendanceInputDuplicationStatus.あり) {
-            bindingResult.reject(null, attendanceInputDuplicationStatus.errorMessage());
-            return true;
-        }
-
-        return false;
+        return AttendanceControllerHelper.attendanceInputDuplicated(attendanceInputDuplicationStatus, bindingResult);
     }
 
     private boolean participantNameDuplicated(
@@ -130,13 +125,7 @@ public class AttendanceEditController {
                         attendanceNumber,
                         participantName);
 
-        if (participantNameDuplicationStatus == ParticipantNameDuplicationStatus.あり) {
-            bindingResult.rejectValue("participantName.valid", null,
-                    participantNameDuplicationStatus.errorMessage());
-            return true;
-        }
-
-        return false;
+        return AttendanceControllerHelper.participantNameDuplicated(participantNameDuplicationStatus, bindingResult);
     }
 
     @GetMapping("completed")

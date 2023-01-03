@@ -27,7 +27,8 @@ public class Attendance {
     AttendanceComment attendanceComment;
 
     @Deprecated
-    Attendance() {}
+    Attendance() {
+    }
 
     public Attendance(AttendanceNumber attendanceNumber,
                       ParticipantNumber participantNumber,
@@ -39,6 +40,19 @@ public class Attendance {
         this.participantName = participantName;
         this.conveniences = conveniences;
         this.attendanceComment = attendanceComment;
+    }
+
+    public static Attendance of(AttendanceNumber attendanceNumber,
+                                ParticipantNumber participantNumber,
+                                ParticipantName participantName,
+                                Conveniences conveniences,
+                                AttendanceComment attendanceComment) {
+        return new Attendance(
+                attendanceNumber,
+                participantNumber,
+                participantName,
+                conveniences,
+                attendanceComment);
     }
 
     public static Attendance of(AttendanceNumber attendanceNumber,
