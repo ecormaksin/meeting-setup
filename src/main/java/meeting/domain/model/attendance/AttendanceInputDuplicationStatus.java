@@ -1,15 +1,15 @@
-package meeting.domain.model.participant;
+package meeting.domain.model.attendance;
 
 /**
- * 参加者番号の重複状態
+ * 出欠入力の重複状態
  */
-public enum ParticipantNumberDuplicationStatus {
+public enum AttendanceInputDuplicationStatus {
     なし(""),
     あり("すでに出欠を入力しているので編集してください。");
 
     String errorMessage;
 
-    ParticipantNumberDuplicationStatus(String errorMessage) {
+    AttendanceInputDuplicationStatus(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

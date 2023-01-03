@@ -2,12 +2,12 @@ package meeting.presentation.attendance;
 
 import meeting.application.senario.AttendanceEditScenario;
 import meeting.domain.model.attendance.Attendance;
+import meeting.domain.model.attendance.AttendanceInputDuplicationStatus;
 import meeting.domain.model.attendance.AttendanceNumber;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.participant.ParticipantNumber;
-import meeting.domain.model.participant.ParticipantNumberDuplicationStatus;
 import meeting.domain.model.schedule.Schedules;
 import meeting.presentation.attendance.input.AttendanceInputForm;
 import meeting.presentation.meeting.input.schedule.ScheduleInputs;
@@ -68,7 +68,7 @@ public class AttendanceEditController {
 
         ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
 
-        if (participantNumberDuplicated(
+        if (attendanceInputDuplicated(
                 meetingNumber,
                 attendanceNumber,
                 participantNumber,
@@ -99,18 +99,18 @@ public class AttendanceEditController {
         return "redirect:" + uri.toString();
     }
 
-    private boolean participantNumberDuplicated(
+    private boolean attendanceInputDuplicated(
             MeetingNumber meetingNumber,
             AttendanceNumber attendanceNumber,
             ParticipantNumber participantNumber,
             BindingResult bindingResult
     ) {
 
-        ParticipantNumberDuplicationStatus participantNumberDuplicationStatus =
+        AttendanceInputDuplicationStatus attendanceInputDuplicationStatus =
                 attendanceEditScenario.participantNumberDuplicationStatus(meetingNumber, attendanceNumber, participantNumber);
 
-        if (participantNumberDuplicationStatus == ParticipantNumberDuplicationStatus.あり) {
-            bindingResult.reject(null, participantNumberDuplicationStatus.errorMessage());
+        if (attendanceInputDuplicationStatus == AttendanceInputDuplicationStatus.あり) {
+            bindingResult.reject(null, attendanceInputDuplicationStatus.errorMessage());
             return true;
         }
 

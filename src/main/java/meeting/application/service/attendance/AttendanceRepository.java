@@ -1,21 +1,23 @@
 package meeting.application.service.attendance;
 
-import meeting.domain.model.attendance.*;
+import meeting.domain.model.attendance.Attendance;
+import meeting.domain.model.attendance.AttendanceInputDuplicationStatus;
+import meeting.domain.model.attendance.AttendanceNumber;
+import meeting.domain.model.attendance.AttendanceRegistrationRequest;
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.participant.ParticipantNumber;
-import meeting.domain.model.participant.ParticipantNumberDuplicationStatus;
 
 /**
  * 出欠 リポジトリ
  */
 public interface AttendanceRepository {
-    ParticipantNumberDuplicationStatus participantNumberDuplicationStatus(
+    AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
             MeetingNumber meetingNumber,
             ParticipantNumber participantNumber);
 
-    ParticipantNumberDuplicationStatus participantNumberDuplicationStatus(
+    AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
             MeetingNumber meetingNumber,
             AttendanceNumber attendanceNumber,
             ParticipantNumber participantNumber);

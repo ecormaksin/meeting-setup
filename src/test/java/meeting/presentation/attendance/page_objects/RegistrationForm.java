@@ -17,6 +17,9 @@ public abstract class RegistrationForm<T extends RegistrationForm> extends Custo
 
     private static final String CONVENIENCE_CATEGORY_NAME_TEMPLATE = "conveniences.list[%d].convenienceCategory";
 
+    @FindBy(css = "main > article > form > ul > li:nth-child(1)")
+    protected WebElement generalErrorMessage;
+
     @FindBy(id = "participantName.value")
     protected WebElement participantName;
 
@@ -31,6 +34,10 @@ public abstract class RegistrationForm<T extends RegistrationForm> extends Custo
 
     public RegistrationForm(WebDriver driver) {
         super(driver);
+    }
+
+    public String generalErrorMessage() {
+        return generalErrorMessage.getText();
     }
 
     @SuppressWarnings("unchecked")

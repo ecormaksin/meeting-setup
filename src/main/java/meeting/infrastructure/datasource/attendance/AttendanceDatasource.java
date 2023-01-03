@@ -8,7 +8,6 @@ import meeting.domain.model.meeting.MeetingNumber;
 import meeting.domain.model.participant.ParticipantName;
 import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
 import meeting.domain.model.participant.ParticipantNumber;
-import meeting.domain.model.participant.ParticipantNumberDuplicationStatus;
 import meeting.infrastructure.datasource.meeting.MeetingMapper;
 import meeting.infrastructure.datasource.meeting.MeetingNotFoundException;
 import meeting.infrastructure.datasource.meeting.MeetingWithoutSchedulesAndAttendances;
@@ -37,7 +36,7 @@ public class AttendanceDatasource implements AttendanceRepository {
     }
 
     @Override
-    public ParticipantNumberDuplicationStatus participantNumberDuplicationStatus(
+    public AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
             MeetingNumber meetingNumber,
             ParticipantNumber participantNumber) {
 
@@ -45,13 +44,13 @@ public class AttendanceDatasource implements AttendanceRepository {
     }
 
     @Override
-    public ParticipantNumberDuplicationStatus participantNumberDuplicationStatus(
+    public AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
             MeetingNumber meetingNumber,
             AttendanceNumber attendanceNumber,
             ParticipantNumber participantNumber) {
 
         boolean duplicated = attendanceMapper.participantNumberDuplicated(meetingNumber, attendanceNumber, participantNumber);
-        return duplicated ? ParticipantNumberDuplicationStatus.あり : ParticipantNumberDuplicationStatus.なし;
+        return duplicated ? AttendanceInputDuplicationStatus.あり : AttendanceInputDuplicationStatus.なし;
     }
 
     @Override

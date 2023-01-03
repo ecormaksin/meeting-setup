@@ -3,13 +3,17 @@ package meeting.presentation.attendance;
 import meeting.MeetingIntegrationTest;
 import meeting.application.senario.AttendanceInputScenario;
 import meeting.application.senario.MeetingShowScenario;
+import meeting.domain.model.attendance.AttendanceInputDuplicationStatus;
 import meeting.domain.model.attendance.AttendanceRegistrationRequest;
 import meeting.domain.model.attendance.convenience.ConvenienceCategory;
 import meeting.domain.model.meeting.*;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.organizer.OrganizerNumberFake_2;
 import meeting.domain.model.organizer.OrganizerNumberTestHelper;
-import meeting.domain.model.participant.*;
+import meeting.domain.model.participant.ParticipantName;
+import meeting.domain.model.participant.ParticipantNameDuplicationStatus;
+import meeting.domain.model.participant.ParticipantNumber;
+import meeting.domain.model.participant.ParticipantNumberFake_1;
 import meeting.domain.model.schedule.Schedule;
 import meeting.domain.model.schedule.ScheduleNumber;
 import meeting.domain.model.schedule.Schedules;
@@ -76,7 +80,7 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
     }
 
     @Nested
-    @DisplayName("出欠初回入力の場合")
+    @DisplayName("初回の出欠入力の場合")
     class CaseFirstAttendanceInputAsParticipant extends MeetingIntegrationTest {
 
         @Autowired
@@ -138,10 +142,10 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
             formPage.inputConvenienceCategory(2, ConvenienceCategory.MODEST);
             formPage.inputAttendanceComment("出欠コメントテスト1");
 
-            when(attendanceInputScenario.participantNumberDuplicationStatus(
+            when(attendanceInputScenario.attendanceInputDuplicationStatus(
                     any(MeetingNumber.class),
                     any(ParticipantNumber.class)))
-                    .thenReturn(ParticipantNumberDuplicationStatus.なし);
+                    .thenReturn(AttendanceInputDuplicationStatus.なし);
             when(attendanceInputScenario.participantNameDuplicationStatus(
                     any(MeetingNumber.class),
                     any(ParticipantName.class)))
@@ -157,10 +161,83 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
         void 参加者名が未入力の場合はエラーになる() {
 
             InputFormPage errorFormPage = formPage.inputAttendance(InputFormPage.class);
-            logger.info(driver.getCurrentUrl());
-            logger.info(driver.getPageSource());
 
             assertEquals("参加者名は10文字以内で必ず入力してください。", errorFormPage.participantNameErrorMessage());
+        }
+
+        @Test
+        void 同じ参加者が出欠を新規入力しようとした場合はエラーになる() {
+
+            formPage.inputParticipantName("参加者名テスト1");
+
+            when(attendanceInputScenario.attendanceInputDuplicationStatus(
+                    any(MeetingNumber.class),
+                    any(ParticipantNumber.class)))
+                    .thenReturn(AttendanceInputDuplicationStatus.あり);
+            InputFormPage errorFormPage = formPage.inputAttendance(InputFormPage.class);
+
+            assertEquals("すでに出欠を入力しているので編集してください。", errorFormPage.generalErrorMessage());
+        }
+
+        @Test
+        void 同じ参加者名が重複している場合はエラーになる() {
+
+            formPage.inputParticipantName("参加者名テスト1");
+
+            when(attendanceInputScenario.attendanceInputDuplicationStatus(
+                    any(MeetingNumber.class),
+                    any(ParticipantNumber.class)))
+                    .thenReturn(AttendanceInputDuplicationStatus.なし);
+            when(attendanceInputScenario.participantNameDuplicationStatus(
+                    any(MeetingNumber.class),
+                    any(ParticipantName.class)))
+                    .thenReturn(ParticipantNameDuplicationStatus.あり);
+            InputFormPage errorFormPage = formPage.inputAttendance(InputFormPage.class);
+
+            assertEquals("参加者名は重複しないように入力してください。", errorFormPage.participantNameErrorMessage());
+        }
+
+        @AfterEach
+        void tearDown() {
+            if (driver == null) return;
+            driver.quit();
+        }
+    }
+
+    @Nested
+    @DisplayName("2回目以降の出欠入力の場合")
+    class Case2ndTimeOnwardsAttendanceInputAsParticipant extends MeetingIntegrationTest {
+
+        @Autowired
+        WebDriver driver;
+
+        @MockBean
+        MeetingShowScenario meetingShowScenario;
+
+        @MockBean
+        AttendanceInputScenario attendanceInputScenario;
+
+        ShowPage showPage;
+        InputFormPage formPage;
+
+        @BeforeEach
+        void setup() throws Exception {
+
+            TopPage.to(driver);
+
+            when(meetingShowScenario.meetingOf(any(MeetingNumber.class))).thenReturn(meeting);
+            showPage = ShowPage.to(driver, meetingNumber);
+            showPage.setOrganizerNumber(driver, organizerNumber);
+            showPage.setParticipantNumber(driver, participantNumber);
+
+            when(attendanceInputScenario.latestParticipantName(any(ParticipantNumber.class))).thenReturn(ParticipantName.of("参加者名テスト1"));
+            when(attendanceInputScenario.schedules(any(MeetingNumber.class))).thenReturn(schedules);
+            formPage = showPage.moveToAttendanceInputPage(InputFormPage.class);
+        }
+
+        @Test
+        void 参加者名が過去に入力した直近の参加者名である() throws Exception {
+            assertEquals("参加者名テスト1", formPage.participantNameValue());
         }
 
         @AfterEach

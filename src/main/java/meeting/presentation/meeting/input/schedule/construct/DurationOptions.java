@@ -13,9 +13,6 @@ public class DurationOptions {
 
     List<DurationOption> list;
 
-    @Deprecated
-    DurationOptions() {}
-
     private DurationOptions(List<DurationOption> list) {
         this.list = list;
     }
@@ -27,8 +24,8 @@ public class DurationOptions {
         list.add(new DurationOption("", ""));
         for (Duration duration : Duration.values()) {
             DurationOption option = new DurationOption(
-                                                String.valueOf(duration.value()),
-                                                duration.label());
+                    String.valueOf(duration.value()),
+                    duration.label());
             list.add(option);
         }
 

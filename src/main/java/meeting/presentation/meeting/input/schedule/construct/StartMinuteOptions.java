@@ -13,9 +13,6 @@ public class StartMinuteOptions {
 
     List<StartMinuteOption> list;
 
-    @Deprecated
-    StartMinuteOptions() {}
-
     private StartMinuteOptions(List<StartMinuteOption> list) {
         this.list = list;
     }
@@ -27,8 +24,8 @@ public class StartMinuteOptions {
         list.add(new StartMinuteOption("", ""));
         for (StartMinute startMinute : StartMinute.values()) {
             StartMinuteOption option = new StartMinuteOption(
-                                                String.valueOf(startMinute.value()),
-                                                startMinute.label());
+                    String.valueOf(startMinute.value()),
+                    startMinute.label());
             list.add(option);
         }
 
