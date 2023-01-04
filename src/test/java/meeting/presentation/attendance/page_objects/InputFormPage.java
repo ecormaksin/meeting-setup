@@ -14,8 +14,9 @@ public class InputFormPage extends RegistrationForm {
 
     Logger logger = Logger.getLogger(InputFormPage.class.getName());
 
-    static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
-    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/%s/attendance/input".formatted(MEETING_NUMBER_PLACE_HOLDER);
+    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/%s/attendance/input".formatted(MeetingNumber.REGEX_PATTERN);
+
+    static final String INPUT_ATTENDANCE_BUTTON_ID = "inputAttendanceButton";
 
     private WebElement inputAttendanceButton;
 
@@ -24,20 +25,12 @@ public class InputFormPage extends RegistrationForm {
 
         new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
             return isParticipantNumberSet(innerDriver)
-                    && isButtonEnabledById(innerDriver, "inputAttendanceButton");
+                    && isButtonEnabledById(innerDriver, INPUT_ATTENDANCE_BUTTON_ID);
         });
     }
 
-    private static String relativePath(String replaceValue) {
-        return URL_RELATIVE_PATH_TEMPLATE.replace(MEETING_NUMBER_PLACE_HOLDER, replaceValue);
-    }
-
-    private static String relativePathRegexPattern() {
-        return ".*" + relativePath(MeetingNumber.REGEXP);
-    }
-
     private static boolean urlMatches(String url) {
-        return url.matches(relativePathRegexPattern());
+        return url.matches(".*" + URL_RELATIVE_PATH_TEMPLATE);
     }
 
     @Override
@@ -58,7 +51,7 @@ public class InputFormPage extends RegistrationForm {
     public <S> S inputAttendance(Class<S> resultPage) {
         new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
             new Actions(innerDriver).moveToElement(inputAttendanceButton).perform();
-            enableButtonByIdForcibly(innerDriver, "inputAttendanceButton");
+            enableButtonByIdForcibly(innerDriver, INPUT_ATTENDANCE_BUTTON_ID);
             return inputAttendanceButton.isDisplayed()
                     && inputAttendanceButton.isEnabled();
         });

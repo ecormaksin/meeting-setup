@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public class EditFormPage extends RegistrationForm {
 
     Logger logger = Logger.getLogger(EditFormPage.class.getName());
-    static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
-    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/" + MEETING_NUMBER_PLACE_HOLDER + "/edit";
+
+    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/%s/edit".formatted(MeetingNumber.REGEX_PATTERN);
 
     private WebElement editMeetingButton;
 
@@ -30,16 +30,8 @@ public class EditFormPage extends RegistrationForm {
         });
     }
 
-    private static String relativePath(String replaceValue) {
-        return URL_RELATIVE_PATH_TEMPLATE.replace(MEETING_NUMBER_PLACE_HOLDER, replaceValue);
-    }
-
-    private static String relativePathRegexPattern() {
-        return ".*" + relativePath(MeetingNumber.REGEXP);
-    }
-
     private static boolean urlMatches(String url) {
-        return url.matches(relativePathRegexPattern());
+        return url.matches(".*" + URL_RELATIVE_PATH_TEMPLATE);
     }
 
     @Override

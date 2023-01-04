@@ -11,15 +11,17 @@ import javax.validation.constraints.Pattern;
 public class MeetingNumber {
 
     static final int SIZE = 26;
-    public static final String REGEXP = "[\\da-z]{" + SIZE + "}";
     static final String SPECIFIED_VALUE = "ミーティング番号は" + SIZE + "桁の半角英数字で指定してください。";
 
+    public static final String REGEX_PATTERN = "[\\da-z]{" + SIZE + "}";
+
     @NotNull(message = SPECIFIED_VALUE)
-    @Pattern(regexp=REGEXP, message = SPECIFIED_VALUE)
+    @Pattern(regexp = REGEX_PATTERN, message = SPECIFIED_VALUE)
     String value;
 
     @Deprecated
-    MeetingNumber() {}
+    MeetingNumber() {
+    }
 
     public MeetingNumber(String value) {
         this.value = value;

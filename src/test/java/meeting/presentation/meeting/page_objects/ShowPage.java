@@ -15,7 +15,7 @@ import java.time.Duration;
 public class ShowPage extends CustomPageObject {
 
     static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
-    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/" + MEETING_NUMBER_PLACE_HOLDER + "/show";
+    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/%s/show".formatted(MEETING_NUMBER_PLACE_HOLDER);
 
     private static final Logger logger = LoggerFactory.getLogger(ShowPage.class);
 
@@ -32,7 +32,7 @@ public class ShowPage extends CustomPageObject {
     }
 
     private static String relativePathRegexPattern() {
-        return ".*" + relativePath(MeetingNumber.REGEXP);
+        return ".*" + relativePath(MeetingNumber.REGEX_PATTERN);
     }
 
     private static boolean urlMatches(String url) {

@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class InputCompletedPage extends CustomPageObject {
 
-    static final String URL_RELATIVE_PATH_REGEX = ".*/meeting/" + MeetingNumber.REGEXP + "/attendance/input/completed";
+    static final String URL_RELATIVE_PATH_REGEX = ".*/meeting/" + MeetingNumber.REGEX_PATTERN + "/attendance/input/completed";
 
     @FindBy(css = "main > article > p")
     private WebElement processFinishedMessage;

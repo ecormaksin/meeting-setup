@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class EditCompletedPage extends CustomPageObject {
 
-    static final String URL_RELATIVE_PATH_REGEX = ".*/meeting/" + MeetingNumber.REGEXP + "/edit/completed";
+    static final String URL_RELATIVE_PATH_REGEX = ".*/meeting/" + MeetingNumber.REGEX_PATTERN + "/edit/completed";
 
     @FindBy(css = "main > article > p:nth-child(1)")
     private WebElement processFinishedMessage;
@@ -26,11 +26,13 @@ public class EditCompletedPage extends CustomPageObject {
         super(driver);
     }
 
+    @Override
     protected boolean isNotTargetPage(WebDriver driver) {
         String url = driver.getCurrentUrl();
         return !url.matches(URL_RELATIVE_PATH_REGEX);
     }
 
+    @Override
     protected String pageName() {
         return "ミーティングの編集完了";
     }

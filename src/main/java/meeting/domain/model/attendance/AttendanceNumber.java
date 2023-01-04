@@ -13,12 +13,15 @@ public class AttendanceNumber {
     static final int SIZE = 26;
     static final String SPECIFIED_VALUE = "出欠番号は" + SIZE + "桁の半角英数字で指定してください。";
 
+    public static final String REGEX_PATTERN = "[\\da-z]{" + SIZE + "}";
+
     @NotNull(message = SPECIFIED_VALUE)
-    @Pattern(regexp="[\\da-z]{" + SIZE + "}", message = SPECIFIED_VALUE)
+    @Pattern(regexp = REGEX_PATTERN, message = SPECIFIED_VALUE)
     String value;
 
     @Deprecated
-    AttendanceNumber() {}
+    AttendanceNumber() {
+    }
 
     public static AttendanceNumber newNumber() {
         ULID ulid = new ULID();
