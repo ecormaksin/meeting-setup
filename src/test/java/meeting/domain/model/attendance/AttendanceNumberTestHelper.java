@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class AttendanceNumberTestHelper {
 
-    static final String PREFIX = "mt";
+    static final String PREFIX = "at";
 
     public static AttendanceNumber fromInt(int intValue) {
         int formatLength = AttendanceNumber.SIZE - PREFIX.length();

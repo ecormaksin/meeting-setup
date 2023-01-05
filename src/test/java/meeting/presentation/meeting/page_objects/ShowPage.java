@@ -2,7 +2,9 @@ package meeting.presentation.meeting.page_objects;
 
 import meeting.domain.model.meeting.MeetingNumber;
 import meeting.presentation.CustomPageObject;
+import meeting.presentation.attendance.page_objects.EditFormPage;
 import meeting.presentation.attendance.page_objects.InputFormPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -14,8 +16,11 @@ import java.time.Duration;
 
 public class ShowPage extends CustomPageObject {
 
-    static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
-    static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/%s/show".formatted(MEETING_NUMBER_PLACE_HOLDER);
+    private static final String MEETING_NUMBER_PLACE_HOLDER = "{meetingNumber}";
+    private static final String URL_RELATIVE_PATH_TEMPLATE = "/meeting/%s/show".formatted(MEETING_NUMBER_PLACE_HOLDER);
+
+    private static final String ATTENDANCE_EDIT_SELECTOR_TEMPLATE = "main > article > form > table > thead > tr > th:nth-child(%d) > a";
+    private static final int ATTENDANCE_EDIT_LINK_INDEX_OFFSET = 5;
 
     private static final Logger logger = LoggerFactory.getLogger(ShowPage.class);
 
@@ -78,6 +83,29 @@ public class ShowPage extends CustomPageObject {
                     if (!isTargetPage) {
                         logger.info("出欠入力ボタン再押下");
                         inputAttendanceButton.click();
+                    }
+                    return isTargetPage;
+                });
+            }
+            return PageFactory.initElements(driver, resultPage);
+        } catch (Exception e) {
+            logger.error(driver.getCurrentUrl());
+            logger.error(driver.getPageSource());
+            throw e;
+        }
+    }
+
+    public <T extends CustomPageObject> T moveToAttendanceEditPage(int indexNumber, Class<T> resultPage) throws Exception {
+        try {
+            String cssSelector = ATTENDANCE_EDIT_SELECTOR_TEMPLATE.formatted((indexNumber + ATTENDANCE_EDIT_LINK_INDEX_OFFSET));
+            WebElement attendanceEditLink = driver.findElement(By.cssSelector(cssSelector));
+            attendanceEditLink.click();
+            if (resultPage.getName().equals(EditFormPage.class.getName())) {
+                new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+                    boolean isTargetPage = EditFormPage.isTargetPage(innerDriver);
+                    if (!isTargetPage) {
+                        logger.info("出欠編集リンク再押下");
+                        attendanceEditLink.click();
                     }
                     return isTargetPage;
                 });
