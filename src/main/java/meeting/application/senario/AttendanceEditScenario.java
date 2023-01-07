@@ -50,14 +50,6 @@ public class AttendanceEditScenario {
         return scheduleQueryService.schedules(meetingNumber);
     }
 
-    public AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
-            MeetingNumber meetingNumber,
-            AttendanceNumber attendanceNumber,
-            ParticipantNumber participantNumber
-    ) {
-        return attendanceQueryService.participantNumberDuplicationStatus(meetingNumber, attendanceNumber, participantNumber);
-    }
-
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(
             MeetingNumber meetingNumber,
             AttendanceNumber attendanceNumber,

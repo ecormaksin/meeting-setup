@@ -24,19 +24,11 @@ public class AttendanceQueryService {
         return attendanceRepository.attendanceOf(attendanceNumber);
     }
 
-    public AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
+    public AttendanceInputDuplicationStatus attendanceInputDuplicationStatus(
             MeetingNumber meetingNumber,
             ParticipantNumber participantNumber) {
 
-        return attendanceRepository.participantNumberDuplicationStatus(meetingNumber, participantNumber);
-    }
-
-    public AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
-            MeetingNumber meetingNumber,
-            AttendanceNumber attendanceNumber,
-            ParticipantNumber participantNumber) {
-
-        return attendanceRepository.participantNumberDuplicationStatus(meetingNumber, attendanceNumber, participantNumber);
+        return attendanceRepository.attendanceInputDuplicationStatus(meetingNumber, participantNumber);
     }
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(

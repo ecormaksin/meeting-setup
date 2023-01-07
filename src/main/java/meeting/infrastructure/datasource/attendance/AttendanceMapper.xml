@@ -4,14 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="meeting.infrastructure.datasource.attendance.AttendanceMapper">
 
-    <select id="participantNumberDuplicated" resultType="boolean">
+    <select id="attendanceInputDuplicated" resultType="boolean">
         SELECT EXISTS (
             SELECT 参加者番号 FROM 出欠._出欠
             WHERE
             ミーティング番号 = #{meetingNumber.value}
-            <if test="attendanceNumber != null and attendanceNumber.value != null">
-                AND 出欠番号 != #{attendanceNumber.value}
-            </if>
             AND 参加者番号 = #{participantNumber.value}
         )
     </select>
@@ -127,35 +124,6 @@
             日程.開始分 ASC,
             日程.会議時間 ASC
     </select>
-
-    <delete id="deleteAttendanceCommentsByMeetingNumber">
-        DELETE FROM 出欠._出欠コメント
-        WHERE 出欠番号 IN (
-            SELECT
-                出欠番号
-            FROM
-                出欠._出欠
-            WHERE
-                ミーティング番号 = #{meetingNumber.value}
-        )
-    </delete>
-
-    <delete id="deleteConveniencesByMeetingNumber">
-        DELETE FROM 出欠._都合
-        WHERE 出欠番号 IN (
-            SELECT
-                出欠番号
-            FROM
-                出欠._出欠
-            WHERE
-                ミーティング番号 = #{meetingNumber.value}
-        )
-    </delete>
-
-    <delete id="deleteAttendancesByMeetingNumber">
-        DELETE FROM 出欠._出欠
-        WHERE ミーティング番号 = #{meetingNumber.value}
-    </delete>
 
     <delete id="deleteAttendanceComment">
         DELETE FROM 出欠._出欠コメント

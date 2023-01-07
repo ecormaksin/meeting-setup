@@ -49,7 +49,7 @@ public class AttendanceInputScenario {
     }
 
     public AttendanceInputDuplicationStatus attendanceInputDuplicationStatus(MeetingNumber meetingNumber, ParticipantNumber participantNumber) {
-        return attendanceQueryService.participantNumberDuplicationStatus(meetingNumber, participantNumber);
+        return attendanceQueryService.attendanceInputDuplicationStatus(meetingNumber, participantNumber);
     }
 
     public ParticipantNameDuplicationStatus participantNameDuplicationStatus(MeetingNumber meetingNumber, ParticipantName participantName) {

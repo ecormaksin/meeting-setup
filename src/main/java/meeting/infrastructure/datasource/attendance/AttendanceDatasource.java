@@ -36,20 +36,11 @@ public class AttendanceDatasource implements AttendanceRepository {
     }
 
     @Override
-    public AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
+    public AttendanceInputDuplicationStatus attendanceInputDuplicationStatus(
             MeetingNumber meetingNumber,
             ParticipantNumber participantNumber) {
 
-        return participantNumberDuplicationStatus(meetingNumber, null, participantNumber);
-    }
-
-    @Override
-    public AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
-            MeetingNumber meetingNumber,
-            AttendanceNumber attendanceNumber,
-            ParticipantNumber participantNumber) {
-
-        boolean duplicated = attendanceMapper.participantNumberDuplicated(meetingNumber, attendanceNumber, participantNumber);
+        boolean duplicated = attendanceMapper.attendanceInputDuplicated(meetingNumber, participantNumber);
         return duplicated ? AttendanceInputDuplicationStatus.あり : AttendanceInputDuplicationStatus.なし;
     }
 

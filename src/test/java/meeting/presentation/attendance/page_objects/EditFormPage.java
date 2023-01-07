@@ -22,6 +22,8 @@ public class EditFormPage extends RegistrationForm {
 
     private WebElement editAttendanceButton;
 
+    private WebElement deleteAttendanceButton;
+
     public EditFormPage(WebDriver driver) {
         super(driver);
 
@@ -58,6 +60,28 @@ public class EditFormPage extends RegistrationForm {
                     && editAttendanceButton.isEnabled();
         });
         editAttendanceButton.click();
+        return PageFactory.initElements(driver, resultPage);
+    }
+
+    public <S> S deleteAttendance(Class<S> resultPage) {
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            new Actions(innerDriver).moveToElement(deleteAttendanceButton).perform();
+            enableButtonByIdForcibly(innerDriver, "deleteAttendanceButton");
+            return deleteAttendanceButton.isDisplayed()
+                    && deleteAttendanceButton.isEnabled();
+        });
+        deleteAttendanceButton.click();
+        if (resultPage.getName().equals(DeleteCompletedPage.class.getName())) {
+            new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+                boolean isTargetPage = DeleteCompletedPage.isTargetPage(innerDriver);
+                if (!isTargetPage) {
+                    logger.info("削除ボタン再押下");
+                    deleteAttendanceButton.click();
+                }
+                return isTargetPage;
+            });
+        }
+
         return PageFactory.initElements(driver, resultPage);
     }
 }

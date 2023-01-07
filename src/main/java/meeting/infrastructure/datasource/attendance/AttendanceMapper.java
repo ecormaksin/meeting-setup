@@ -16,9 +16,8 @@ import java.util.List;
 
 @Mapper
 public interface AttendanceMapper {
-    boolean participantNumberDuplicated(@Param("meetingNumber") MeetingNumber meetingNumber,
-                                        @Param("attendanceNumber") AttendanceNumber attendanceNumber,
-                                        @Param("participantNumber") ParticipantNumber participantNumber);
+    boolean attendanceInputDuplicated(@Param("meetingNumber") MeetingNumber meetingNumber,
+                                      @Param("participantNumber") ParticipantNumber participantNumber);
 
     boolean participantNameDuplicated(@Param("meetingNumber") MeetingNumber meetingNumber,
                                       @Param("attendanceNumber") AttendanceNumber attendanceNumber,
@@ -41,10 +40,6 @@ public interface AttendanceMapper {
     Attendance selectAttendance(@Param("attendanceNumber") AttendanceNumber attendanceNumber);
     List<Attendance> selectAttendancesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
     List<Convenience> selectConveniencesByAttendanceNumber(@Param("attendanceNumber") AttendanceNumber attendanceNumber);
-
-    void deleteAttendanceCommentsByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
-    void deleteConveniencesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
-    void deleteAttendancesByMeetingNumber(@Param("meetingNumber") MeetingNumber meetingNumber);
 
     void deleteAttendanceComment(@Param("attendanceNumber") AttendanceNumber attendanceNumber);
     void deleteConveniences(@Param("attendanceNumber") AttendanceNumber attendanceNumber);

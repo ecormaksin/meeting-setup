@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class DeleteCompletedPage extends CustomPageObject {
 
-    static final String URL_RELATIVE_PATH_REGEX = ".*/meeting/" + MeetingNumber.REGEX_PATTERN + "/delete/completed";
+    static final String URL_RELATIVE_PATH_REGEX = ".*/meeting/%s/delete/completed".formatted(MeetingNumber.REGEX_PATTERN);
 
     @FindBy(css = "main > article > p:nth-child(1)")
     private WebElement processFinishedMessage;

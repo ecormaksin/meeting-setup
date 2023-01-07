@@ -180,7 +180,7 @@ public class AttendanceInputControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
-        void 同じ参加者名が重複している場合はエラーになる() {
+        void 参加者名が重複している場合はエラーになる() {
 
             formPage.inputParticipantName("参加者名テスト1");
 

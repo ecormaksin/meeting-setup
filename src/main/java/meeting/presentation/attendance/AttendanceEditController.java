@@ -68,15 +68,6 @@ public class AttendanceEditController {
 
         ParticipantNumber participantNumber = ParticipantNumber.of(participantNumberValue);
 
-        if (attendanceInputDuplicated(
-                meetingNumber,
-                attendanceNumber,
-                participantNumber,
-                bindingResult
-        )) {
-            return VIEW_PATH_FORM;
-        }
-
         if (participantNameDuplicated(
                 meetingNumber,
                 attendanceNumber,
@@ -97,19 +88,6 @@ public class AttendanceEditController {
                         attendanceNumber.value()
                 )).build().toUri();
         return "redirect:" + uri.toString();
-    }
-
-    private boolean attendanceInputDuplicated(
-            MeetingNumber meetingNumber,
-            AttendanceNumber attendanceNumber,
-            ParticipantNumber participantNumber,
-            BindingResult bindingResult
-    ) {
-
-        AttendanceInputDuplicationStatus attendanceInputDuplicationStatus =
-                attendanceEditScenario.participantNumberDuplicationStatus(meetingNumber, attendanceNumber, participantNumber);
-
-        return AttendanceControllerHelper.attendanceInputDuplicated(attendanceInputDuplicationStatus, bindingResult);
     }
 
     private boolean participantNameDuplicated(

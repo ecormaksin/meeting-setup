@@ -13,13 +13,8 @@ import meeting.domain.model.participant.ParticipantNumber;
  * 出欠 リポジトリ
  */
 public interface AttendanceRepository {
-    AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
+    AttendanceInputDuplicationStatus attendanceInputDuplicationStatus(
             MeetingNumber meetingNumber,
-            ParticipantNumber participantNumber);
-
-    AttendanceInputDuplicationStatus participantNumberDuplicationStatus(
-            MeetingNumber meetingNumber,
-            AttendanceNumber attendanceNumber,
             ParticipantNumber participantNumber);
 
     ParticipantNameDuplicationStatus participantNameDuplicationStatus(
