@@ -4,6 +4,12 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import meeting.domain.model.meeting.*;
+import meeting.domain.model.meeting.list.MeetingList;
+import meeting.domain.model.meeting.list.MeetingListItem;
+import meeting.domain.model.meeting.search_condition.EndDate;
+import meeting.domain.model.meeting.search_condition.Keyword;
+import meeting.domain.model.meeting.search_condition.MeetingSearchCondition;
+import meeting.domain.model.meeting.search_condition.StartDate;
 import meeting.domain.model.organizer.OrganizerNumber;
 import meeting.domain.model.organizer.OrganizerNumberTestHelper;
 import meeting.domain.model.schedule.Schedule;
@@ -96,7 +102,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
     class MeetingCreationCase extends DBUnitWithoutWebTest {
 
         @Test
-        @ExpectedDatabase(value = "testdata/create_get/meeting_with_memo_1_schedule.xlsx",
+        @ExpectedDatabase(value = "testdata/meeting_with_memo_1_schedule.xlsx",
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 columnFilters = {ScheduleNumberColumnFilter.class})
         @DisplayName("メモあり・日程1件の場合")
@@ -115,7 +121,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
         }
 
         @Test
-        @ExpectedDatabase(value = "testdata/create_get/meeting_without_memo_3_schedules_descending_order.xlsx",
+        @ExpectedDatabase(value = "testdata/meeting_without_memo_3_schedules_descending_order.xlsx",
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 columnFilters = {ScheduleNumberColumnFilter.class})
         @DisplayName("メモなし・日程複数件(降順)の場合")
@@ -142,7 +148,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
         @Nested
         @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-        @DatabaseSetup("testdata/create_get/meeting_with_memo_1_schedule.xlsx")
+        @DatabaseSetup("testdata/meeting_with_memo_1_schedule.xlsx")
         @DisplayName("メモあり・日程1件の場合")
         class MeetingGetWithMemoAnd1Schedule extends DBUnitWithoutWebTest {
 
@@ -257,7 +263,7 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
 
         @Nested
         @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-        @DatabaseSetup("testdata/create_get/meeting_without_memo_3_schedules_descending_order.xlsx")
+        @DatabaseSetup("testdata/meeting_without_memo_3_schedules_descending_order.xlsx")
         @DisplayName("メモなし・日程複数件(降順)の場合")
         class MeetingGetWithoutMemoAndMultipleSchedulesDescendingOrder extends DBUnitWithoutWebTest {
 
@@ -331,8 +337,8 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
     class MeetingEditCase extends DBUnitWithoutWebTest {
 
         @Test
-        @DatabaseSetup("testdata/edit/meeting_before_edit.xlsx")
-        @ExpectedDatabase(value = "testdata/edit/meeting_after_edit.xlsx",
+        @DatabaseSetup("testdata/meeting_before_edit.xlsx")
+        @ExpectedDatabase(value = "testdata/meeting_after_edit.xlsx",
                 assertionMode = DatabaseAssertionMode.NON_STRICT,
                 columnFilters = {ScheduleNumberColumnFilter.class})
         @DisplayName("ミーティングの編集")
@@ -357,6 +363,63 @@ public class MeetingDatasourceTest extends DBUnitWithoutWebTest {
             );
 
             meetingDatasource.edit(meeting, meetingRegistrationRequest);
+        }
+    }
+
+    @Nested
+    @DisplayName("ミーティングの削除")
+    class MeetingDeleteCase extends DBUnitWithoutWebTest {
+
+        @Test
+        @DatabaseSetup("testdata/meeting_with_memo_1_schedule.xlsx")
+        @ExpectedDatabase(value = "testdata/meeting_no_data.xlsx",
+                assertionMode = DatabaseAssertionMode.NON_STRICT,
+                columnFilters = {ScheduleNumberColumnFilter.class})
+        @DisplayName("ミーティングの削除")
+        void testCanDeleteMeeting() {
+
+            MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
+            meetingDatasource.delete(meetingNumber);
+        }
+    }
+
+    @Nested
+    @DisplayName("ミーティングの検索")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DatabaseSetup("testdata/meeting_for_search.xlsx")
+    class MeetingSearchCase extends DBUnitWithoutWebTest {
+
+        List<MeetingListItem> meetingListItems;
+
+        @BeforeEach
+        void setup() {
+            OrganizerNumber organizerNumber = OrganizerNumberTestHelper.fromInt(2);
+            MeetingSearchCondition searchCondition = MeetingSearchCondition.of(
+                    Keyword.of("テスト"),
+                    StartDate.of(LocalDate.of(2022, 4, 1)),
+                    EndDate.of(LocalDate.of(2022, 4, 7))
+            );
+            MeetingSearchRequest searchRequest = MeetingSearchRequest.of(organizerNumber, searchCondition);
+
+            MeetingList meetingList = meetingDatasource.search(searchRequest);
+            meetingListItems = meetingList.asList();
+        }
+
+        @Test
+        void 検索結果の件数が期待通りであること() {
+            assertEquals(3, meetingListItems.size());
+        }
+
+        @Test
+        void _1件目のミーティングの内容が期待通りであること() {
+            MeetingListItem meetingListItem = meetingListItems.get(0);
+            MeetingNumber meetingNumber = meetingListItem.meetingNumber();
+            assertEquals("mt000000000000000000000005", meetingNumber.value());
+
+            Subject subject = meetingListItem.subject();
+            assertEquals("件名テスト5", subject.value());
+
+            Schedules schedules = meetingListItem.schedules();
         }
     }
 }

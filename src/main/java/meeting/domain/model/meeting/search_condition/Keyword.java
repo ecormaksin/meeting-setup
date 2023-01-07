@@ -7,7 +7,8 @@ public class Keyword {
     String value;
 
     @Deprecated
-    Keyword() {}
+    Keyword() {
+    }
 
     public Keyword(String value) {
         this.value = value;
@@ -17,12 +18,11 @@ public class Keyword {
         return new Keyword("");
     }
 
-    public String value() {
-        return value;
+    public static Keyword of(String value) {
+        return new Keyword(value);
     }
 
-    @Override
-    public String toString() {
+    public String value() {
         return value;
     }
 }

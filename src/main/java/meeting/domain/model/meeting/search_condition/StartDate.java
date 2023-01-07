@@ -16,7 +16,8 @@ public class StartDate {
     LocalDate value;
 
     @Deprecated
-    StartDate() {}
+    StartDate() {
+    }
 
     public StartDate(LocalDate value) {
         this.value = value;
@@ -26,13 +27,17 @@ public class StartDate {
         return new StartDate(null);
     }
 
+    public static StartDate of(LocalDate value) {
+        return new StartDate(value);
+    }
+
     public boolean isEmpty() {
         return Objects.isNull(value);
     }
 
     public boolean isBeforeOrSame(EndDate endDate) {
         LocalDate endDateValue = endDate.value;
-        return  value.isBefore(endDateValue) || value.equals(endDateValue);
+        return value.isBefore(endDateValue) || value.equals(endDateValue);
     }
 
     public LocalDate value() {

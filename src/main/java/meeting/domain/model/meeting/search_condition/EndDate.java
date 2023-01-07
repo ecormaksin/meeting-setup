@@ -16,7 +16,8 @@ public class EndDate {
     LocalDate value;
 
     @Deprecated
-    EndDate() {}
+    EndDate() {
+    }
 
     public EndDate(LocalDate value) {
         this.value = value;
@@ -24,6 +25,10 @@ public class EndDate {
 
     public static EndDate empty() {
         return new EndDate(null);
+    }
+
+    public static EndDate of(LocalDate value) {
+        return new EndDate(value);
     }
 
     public boolean isEmpty() {
