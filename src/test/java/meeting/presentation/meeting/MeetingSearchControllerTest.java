@@ -216,13 +216,19 @@ public class MeetingSearchControllerTest extends MeetingIntegrationTest {
         }
 
         @Test
-        void 終了日が未入力の場合はエラーになる() {
+        void 終了日が未入力の場合はエラーになる() throws Exception {
 
-            searchPage.inputStartDate("1923-04-01");
-            searchPage.inputEndDate("");
-            SearchPage searchPageGotError = searchPage.search();
+            try {
+                searchPage.inputStartDate("1923-04-01");
+                searchPage.inputEndDate("");
+                SearchPage searchPageGotError = searchPage.search();
 
-            assertEquals("検索終了日を入力してください。", searchPageGotError.endDateError());
+                assertEquals("検索終了日を入力してください。", searchPageGotError.endDateError());
+            } catch (Exception e) {
+                logger.info(driver.getCurrentUrl());
+                logger.info(driver.getPageSource());
+                throw e;
+            }
         }
 
         @Test
