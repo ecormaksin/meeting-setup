@@ -16,7 +16,8 @@ public class Convenience {
     ConvenienceCategory convenienceCategory;
 
     @Deprecated
-    Convenience() {}
+    Convenience() {
+    }
 
     public Convenience(ScheduleNumber scheduleNumber,
                        ConvenienceCategory convenienceCategory) {
@@ -25,7 +26,7 @@ public class Convenience {
     }
 
     public static Convenience of(ScheduleNumber scheduleNumber,
-                       ConvenienceCategory convenienceCategory) {
+                                 ConvenienceCategory convenienceCategory) {
         return new Convenience(scheduleNumber, convenienceCategory);
     }
 
@@ -35,6 +36,19 @@ public class Convenience {
 
     public ConvenienceCategory convenienceCategory() {
         return convenienceCategory;
+    }
+
+    public boolean isSame(Convenience other) {
+        if (!this.scheduleNumber.isSame(other.scheduleNumber)) return false;
+        if (this.convenienceCategory != other.convenienceCategory) return false;
+        return true;
+    }
+
+    @Deprecated
+    @Override
+    public boolean equals(Object anObject) {
+        if (anObject == this) return true;
+        return isSame((Convenience) anObject);
     }
 
     @Override

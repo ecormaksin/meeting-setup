@@ -87,6 +87,16 @@ public class Attendance {
         return attendanceComment;
     }
 
+    public boolean isSame(Attendance other) {
+        if (!this.attendanceNumber.isSame(other.attendanceNumber)) return false;
+        if (!this.participantNumber.isSame(other.participantNumber)) return false;
+        if (!this.participantName.isSame(other.participantName)) return false;
+        if (!this.conveniences.isSame(other.conveniences)) return false;
+        if (!this.attendanceComment.isSame(other.attendanceComment)) return false;
+
+        return true;
+    }
+
     @Override
     public String toString() {
         return """

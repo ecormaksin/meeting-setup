@@ -1,7 +1,5 @@
 package meeting.domain.model.attendance.convenience;
 
-import meeting.domain.model.schedule.Schedule;
-
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +11,8 @@ public class Conveniences {
     List<@Valid Convenience> list;
 
     @Deprecated
-    Conveniences() {}
+    Conveniences() {
+    }
 
     public Conveniences(List<Convenience> list) {
         this.list = list;
@@ -25,6 +24,11 @@ public class Conveniences {
 
     public List<Convenience> asList() {
         return Collections.unmodifiableList(list);
+    }
+
+
+    public boolean isSame(Conveniences other) {
+        return this.list.equals(other.list);
     }
 
     @Override

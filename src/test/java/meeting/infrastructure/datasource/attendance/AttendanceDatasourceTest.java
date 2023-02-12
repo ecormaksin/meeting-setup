@@ -40,13 +40,15 @@ public class AttendanceDatasourceTest extends DBUnitWithoutWebTest {
     @Autowired
     private AttendanceDatasource attendanceDatasource;
 
+    Conveniences conveniencesForInput = Conveniences.of(Arrays.asList(
+            Convenience.of(ScheduleNumber.of(1), ConvenienceCategory.GOOD)
+    ));
+
     AttendanceRegistrationRequest registrationRequestForInput = new AttendanceRegistrationRequest(
             AttendanceNumberTestHelper.fromInt(1),
             ParticipantNumberTestHelper.fromInt(1),
             ParticipantName.of("参加者名テスト1"),
-            Conveniences.of(Arrays.asList(
-                    Convenience.of(ScheduleNumber.of(1), ConvenienceCategory.GOOD)
-            )),
+            conveniencesForInput,
             AttendanceComment.of("出欠コメント_テスト1")
     );
 
@@ -122,8 +124,15 @@ public class AttendanceDatasourceTest extends DBUnitWithoutWebTest {
         MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
         assertDoesNotThrow(() -> attendanceDatasource.input(meetingNumber, registrationRequestForInput));
 
-        Attendance actual = attendanceDatasource.attendanceOf(AttendanceNumberTestHelper.fromInt(1));
-        assertNotNull(actual);
-        assertTrue(actual.participantNumber().isSame(ParticipantNumberTestHelper.fromInt(1)));
+        AttendanceNumber attendanceNumber = AttendanceNumberTestHelper.fromInt(1);
+        Attendance actual = attendanceDatasource.attendanceOf(attendanceNumber);
+        Attendance expected = Attendance.of(
+                attendanceNumber,
+                ParticipantNumberTestHelper.fromInt(1),
+                ParticipantName.of("参加者名テスト1"),
+                conveniencesForInput,
+                AttendanceComment.of("出欠コメント_テスト1"));
+
+        assertTrue(actual.isSame(expected));
     }
 }
