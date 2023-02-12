@@ -136,11 +136,11 @@ public class Meeting {
 
     public ConvenienceStatus convenienceStatusAt(ScheduleNumber scheduleNumber) {
 
-        CountOfConvenience targetCountMaru = countOfConvenienceAt(scheduleNumber, ConvenienceCategory.GOOD);
+        CountOfConvenience targetCountGood = countOfConvenienceAt(scheduleNumber, ConvenienceCategory.GOOD);
 
         CountsOfConvenience targetCounts = CountsOfConvenience.of(
                 Map.ofEntries(
-                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.GOOD, targetCountMaru),
+                        new AbstractMap.SimpleEntry<>(ConvenienceCategory.GOOD, targetCountGood),
                         new AbstractMap.SimpleEntry<>(ConvenienceCategory.MODEST, countOfConvenienceAt(scheduleNumber, ConvenienceCategory.MODEST))
                 ));
 

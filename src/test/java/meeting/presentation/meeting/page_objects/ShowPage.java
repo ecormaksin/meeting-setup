@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public class ShowPage extends CustomPageObject {
 
@@ -21,6 +22,8 @@ public class ShowPage extends CustomPageObject {
 
     private static final String ATTENDANCE_EDIT_SELECTOR_TEMPLATE = "main > article > form > table > thead > tr > th:nth-child(%d) > a";
     private static final int ATTENDANCE_EDIT_LINK_INDEX_OFFSET = 5;
+
+    private static final String MEETING_SCHEDULE_DATETIME_COLUMN_SELECTOR_TEMPLATE = "body > main > article > form > table > tbody > tr:nth-child(%d) > td:nth-child(2)";
 
     private static final Logger logger = LoggerFactory.getLogger(ShowPage.class);
 
@@ -116,5 +119,12 @@ public class ShowPage extends CustomPageObject {
             logger.error(driver.getPageSource());
             throw e;
         }
+    }
+
+    public boolean isBackgroundColorEmphasizedAt(int scheduleRowIndex) {
+        String cssSelector = MEETING_SCHEDULE_DATETIME_COLUMN_SELECTOR_TEMPLATE.formatted(scheduleRowIndex + 1);
+        WebElement scheduleColumn = driver.findElement(By.cssSelector(cssSelector));
+        String className = scheduleColumn.getAttribute("class");
+        return Objects.nonNull(className) && className.contains("convenience-most-suitable");
     }
 }

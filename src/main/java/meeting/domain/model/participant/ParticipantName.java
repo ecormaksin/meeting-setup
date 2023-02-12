@@ -14,7 +14,8 @@ public class ParticipantName {
     boolean valid;
 
     @Deprecated
-    ParticipantName() {}
+    ParticipantName() {
+    }
 
     public ParticipantName(String value) {
         this.value = value;
@@ -32,8 +33,8 @@ public class ParticipantName {
 
     @AssertTrue(message = WITHIN_MAX_LENGTH)
     boolean isValid() {
-        if ( isBlank() ) return false;
-        if ( isLengthOverMaxSize() ) return false;
+        if (isBlank()) return false;
+        if (isLengthOverMaxSize()) return false;
         return true;
     }
 
@@ -44,6 +45,10 @@ public class ParticipantName {
 
     private boolean isLengthOverMaxSize() {
         return value.length() > MAX_LENGTH;
+    }
+
+    public boolean isSame(ParticipantName other) {
+        return this.value.equals(other.value);
     }
 
     public String value() {

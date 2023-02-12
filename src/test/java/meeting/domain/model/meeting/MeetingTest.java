@@ -65,9 +65,9 @@ public class MeetingTest {
                                             String participant1Convenience,
                                             String participant2Convenience,
                                             String participant3Convenience,
-                                            int numberOfParticipantMaru,
-                                            int numberOfParticipantSankaku,
-                                            int numberOfParticipantsBatsu) {
+                                            int numberOfParticipantGood,
+                                            int numberOfParticipantModest,
+                                            int numberOfParticipantsBad) {
 
         ScheduleNumber scheduleNumber = ScheduleNumber.of(patternNumber);
         ScheduleConstruct scheduleConstruct =
@@ -89,15 +89,15 @@ public class MeetingTest {
                 Schedules.of(scheduleList),
                 attendances);
 
-        assertEquals(numberOfParticipantMaru,
+        assertEquals(numberOfParticipantGood,
                 meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.GOOD).value(),
-                String.format("◯と回答した人数は%d", numberOfParticipantMaru));
-        assertEquals(numberOfParticipantSankaku,
+                String.format("◯と回答した人数は%d", numberOfParticipantGood));
+        assertEquals(numberOfParticipantModest,
                 meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.MODEST).value(),
-                String.format("△と回答した人数は%d", numberOfParticipantSankaku));
-        assertEquals(numberOfParticipantsBatsu,
+                String.format("△と回答した人数は%d", numberOfParticipantModest));
+        assertEquals(numberOfParticipantsBad,
                 meeting.countOfConvenienceAt(scheduleNumber, ConvenienceCategory.BAD).value(),
-                String.format("×と回答した人数は%d", numberOfParticipantsBatsu));
+                String.format("×と回答した人数は%d", numberOfParticipantsBad));
     }
 
     private Attendances createAttendances(int primitiveScheduleNumber, List<String> convenienceSymbols) {

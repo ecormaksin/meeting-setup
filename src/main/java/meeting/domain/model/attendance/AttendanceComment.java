@@ -11,7 +11,8 @@ public class AttendanceComment {
     String value;
 
     @Deprecated
-    AttendanceComment() {}
+    AttendanceComment() {
+    }
 
     public AttendanceComment(String value) {
         this.value = value;
@@ -23,6 +24,10 @@ public class AttendanceComment {
 
     public static AttendanceComment empty() {
         return AttendanceComment.of("");
+    }
+
+    public boolean isSame(AttendanceComment other) {
+        return this.value.equals(other.value);
     }
 
     public String value() {
