@@ -13,9 +13,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SearchPage extends CustomPageObject {
 
+    Logger logger = Logger.getLogger(SearchPage.class.getName());
     static final String URL_RELATIVE_PATH = "/meeting/search";
 
     @FindBy(id = "keyword.value")
@@ -120,7 +122,19 @@ public class SearchPage extends CustomPageObject {
                     && searchMeetingButton.isEnabled();
         });
         searchMeetingButton.click();
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            boolean isTargetPage = isResultPage(innerDriver);
+            if (!isTargetPage) {
+                logger.info("検索ボタン再押下");
+                searchMeetingButton.click();
+            }
+            return isTargetPage;
+        });
         return PageFactory.initElements(driver, SearchPage.class);
+    }
+
+    private boolean isResultPage(WebDriver driver) {
+        return driver.getCurrentUrl().contains("?");
     }
 
     public int numberOfMeetingListItems() {
