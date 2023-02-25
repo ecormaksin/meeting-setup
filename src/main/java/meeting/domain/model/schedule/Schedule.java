@@ -73,6 +73,16 @@ public class Schedule {
         return "%s %s 〜 %s".formatted(meetingDate().show(), startTime().show(), endTime().show());
     }
 
+    @Deprecated
+    @Override
+    public boolean equals(Object anObject) {
+        if (this == anObject) return true;
+        if (!(anObject instanceof Schedule)) return false;
+        Schedule other = (Schedule) anObject;
+        return this.scheduleNumber.isSame(other.scheduleNumber)
+                && this.scheduleConstruct.isSame(other.scheduleConstruct);
+    }
+
     @Override
     public String toString() {
         return """

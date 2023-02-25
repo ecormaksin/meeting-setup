@@ -52,6 +52,18 @@ public class AttendanceDatasourceTest extends DBUnitWithoutWebTest {
             AttendanceComment.of("出欠コメント_テスト1")
     );
 
+    Conveniences conveniencesForEdit = Conveniences.of(Arrays.asList(
+            Convenience.of(ScheduleNumber.of(1), ConvenienceCategory.MODEST)
+    ));
+
+    AttendanceRegistrationRequest registrationRequestForEdit = new AttendanceRegistrationRequest(
+            AttendanceNumberTestHelper.fromInt(1),
+            ParticipantNumberTestHelper.fromInt(1),
+            ParticipantName.of("参加者名変更後"),
+            conveniencesForEdit,
+            AttendanceComment.of("出欠コメント_変更後")
+    );
+
     @ParameterizedTest
     @DatabaseSetup("testdata/attendance_for_check_input_duplication_status.xlsx")
     @MethodSource("attendanceInputDuplicationStatusProvider")
@@ -134,5 +146,44 @@ public class AttendanceDatasourceTest extends DBUnitWithoutWebTest {
                 AttendanceComment.of("出欠コメント_テスト1"));
 
         assertTrue(actual.isSame(expected));
+    }
+
+    @Test
+    @DatabaseSetup("testdata/attendance_for_edit_before.xlsx")
+    @ExpectedDatabase(value = "testdata/attendance_for_edit_after.xlsx",
+            assertionMode = DatabaseAssertionMode.NON_STRICT,
+            columnFilters = {ConvenienceNumberColumnFilter.class})
+    void _出欠を編集できる() {
+        MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
+        assertDoesNotThrow(() -> attendanceDatasource.edit(meetingNumber, registrationRequestForEdit));
+
+        AttendanceNumber attendanceNumber = AttendanceNumberTestHelper.fromInt(1);
+        Attendance actual = attendanceDatasource.attendanceOf(attendanceNumber);
+        Attendance expected = Attendance.of(
+                attendanceNumber,
+                ParticipantNumberTestHelper.fromInt(1),
+                ParticipantName.of("参加者名変更後"),
+                conveniencesForEdit,
+                AttendanceComment.of("出欠コメント_変更後"));
+
+        assertTrue(actual.isSame(expected));
+    }
+
+    @Test
+    void _出欠編集対象のミーティングが見つからない場合はエラーになること() {
+
+        MeetingNumber meetingNumber = MeetingNumberTestHelper.fromInt(1);
+
+        assertThrows(MeetingNotFoundException.class, () -> attendanceDatasource.edit(meetingNumber, registrationRequestForEdit));
+    }
+
+    @Test
+    @DatabaseSetup("testdata/attendance_for_delete_before.xlsx")
+    @ExpectedDatabase(value = "testdata/attendance_for_delete_after.xlsx",
+            assertionMode = DatabaseAssertionMode.NON_STRICT,
+            columnFilters = {ConvenienceNumberColumnFilter.class})
+    void _出欠を削除できる() {
+        AttendanceNumber attendanceNumber = AttendanceNumberTestHelper.fromInt(1);
+        assertDoesNotThrow(() -> attendanceDatasource.delete(attendanceNumber));
     }
 }
