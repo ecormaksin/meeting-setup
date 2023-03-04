@@ -25,9 +25,13 @@ public class CreationCompletedPage extends CustomPageObject {
         super(driver);
     }
 
-    protected boolean isNotTargetPage(WebDriver driver) {
+    public static boolean isTargetPage(WebDriver driver) {
         String url = driver.getCurrentUrl();
-        return !url.endsWith(URL_RELATIVE_PATH);
+        return url.endsWith(URL_RELATIVE_PATH);
+    }
+
+    protected boolean isNotTargetPage(WebDriver driver) {
+        return !isTargetPage(driver);
     }
 
     protected String pageName() {

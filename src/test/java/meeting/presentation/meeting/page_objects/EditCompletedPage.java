@@ -28,8 +28,12 @@ public class EditCompletedPage extends CustomPageObject {
 
     @Override
     protected boolean isNotTargetPage(WebDriver driver) {
+        return !isTargetPage(driver);
+    }
+
+    public static boolean isTargetPage(WebDriver driver) {
         String url = driver.getCurrentUrl();
-        return !url.matches(URL_RELATIVE_PATH_REGEX);
+        return url.matches(URL_RELATIVE_PATH_REGEX);
     }
 
     @Override

@@ -98,7 +98,6 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
 
         new OrganizerNumberFake_1();
         organizerNumber = OrganizerNumberFake_1.newNumber();
-        new RegistrationRequestDateTimeFake_19841231_1023();
     }
 
     @Nested
@@ -175,10 +174,12 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         void 追加する日程が過去の場合はエラー() throws Exception {
 
             ScheduleConstructInput constructInput =
-                    ScheduleConstructInput.of(1984, 12, 31, 10, StartMinute.JUST, Duration.OF_1_HOUR);
+                    ScheduleConstructInput.of(1984, 12, 30, 10, StartMinute.JUST, Duration.OF_1_HOUR);
 
             EditFormPage addedFormPage = (EditFormPage) formPage.addNewEmptyScheduleInput(EditFormPage.class);
             addedFormPage.inputScheduleAt(1, constructInput);
+
+            new RegistrationRequestDateTimeFake_19841231_1023();
             EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class);
 
             List<String> globalErrorMessages = errorFormPage.globalErrorMessages();

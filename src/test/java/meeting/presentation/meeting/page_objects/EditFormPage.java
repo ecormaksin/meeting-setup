@@ -34,10 +34,14 @@ public class EditFormPage extends RegistrationForm {
         return url.matches(".*" + URL_RELATIVE_PATH_TEMPLATE);
     }
 
+    public static boolean isTargetPage(WebDriver driver) {
+        String url = driver.getCurrentUrl();
+        return urlMatches(url);
+    }
+
     @Override
     protected boolean isNotTargetPage(WebDriver driver) {
-        String url = driver.getCurrentUrl();
-        return !urlMatches(url);
+        return !isTargetPage(driver);
     }
 
     @Override
@@ -53,16 +57,24 @@ public class EditFormPage extends RegistrationForm {
                     && editMeetingButton.isEnabled();
         });
         editMeetingButton.click();
-        if (resultPage.getName().equals(ErrorPage.class.getName())) {
-            new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
-                boolean isTargetPage = ErrorPage.isTargetPage(innerDriver);
-                if (!isTargetPage) {
-                    logger.info("編集ボタン再押下");
-                    editMeetingButton.click();
-                }
-                return isTargetPage;
-            });
-        }
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            boolean isTargetPage = false;
+            String resultPageClazzName = resultPage.getName();
+            if (resultPageClazzName.equals(EditFormPage.class.getName())) {
+                isTargetPage = EditFormPage.isTargetPage(innerDriver);
+            }
+            if (resultPageClazzName.equals(EditCompletedPage.class.getName())) {
+                isTargetPage = EditCompletedPage.isTargetPage(innerDriver);
+            }
+            if (resultPageClazzName.equals(ErrorPage.class.getName())) {
+                isTargetPage = ErrorPage.isTargetPage(innerDriver);
+            }
+            if (!isTargetPage) {
+                logger.info("編集ボタン再押下");
+                editMeetingButton.click();
+            }
+            return isTargetPage;
+        });
         return PageFactory.initElements(driver, resultPage);
     }
 

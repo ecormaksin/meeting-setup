@@ -7,9 +7,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.logging.Logger;
 
 public class CreationFormPage extends RegistrationForm {
 
+    Logger logger = Logger.getLogger(CreationFormPage.class.getName());
     static final String URL_RELATIVE_PATH = "/meeting/create";
 
     private WebElement createMeetingButton;
@@ -23,10 +25,14 @@ public class CreationFormPage extends RegistrationForm {
         });
     }
 
+    public static boolean isTargetPage(WebDriver driver) {
+        String url = driver.getCurrentUrl();
+        return url.endsWith(URL_RELATIVE_PATH);
+    }
+
     @Override
     protected boolean isNotTargetPage(WebDriver driver) {
-        String url = driver.getCurrentUrl();
-        return !url.endsWith(URL_RELATIVE_PATH);
+        return !isTargetPage(driver);
     }
 
     @Override
@@ -47,6 +53,21 @@ public class CreationFormPage extends RegistrationForm {
                     && createMeetingButton.isEnabled();
         });
         createMeetingButton.click();
+        new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
+            boolean isTargetPage = false;
+            String resultPageClazzName = resultPage.getName();
+            if (resultPageClazzName.equals(CreationFormPage.class.getName())) {
+                isTargetPage = CreationFormPage.isTargetPage(innerDriver);
+            }
+            if (resultPageClazzName.equals(CreationCompletedPage.class.getName())) {
+                isTargetPage = CreationCompletedPage.isTargetPage(innerDriver);
+            }
+            if (!isTargetPage) {
+                logger.info("作成ボタン再押下");
+                createMeetingButton.click();
+            }
+            return isTargetPage;
+        });
         return PageFactory.initElements(driver, resultPage);
     }
 }
