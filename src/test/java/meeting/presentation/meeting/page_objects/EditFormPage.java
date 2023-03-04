@@ -50,6 +50,10 @@ public class EditFormPage extends RegistrationForm {
     }
 
     public <S> S editMeeting(Class<S> resultPage) {
+        return editMeeting(resultPage, ErrorCheckTarget.NONE);
+    }
+
+    public <S> S editMeeting(Class<S> resultPage, ErrorCheckTarget errorCheckTarget) {
         new WebDriverWait(driver, Duration.ofMinutes(3)).until(innerDriver -> {
             new Actions(innerDriver).moveToElement(editMeetingButton).perform();
             enableButtonByIdForcibly(innerDriver, "editMeetingButton");
@@ -62,6 +66,12 @@ public class EditFormPage extends RegistrationForm {
             String resultPageClazzName = resultPage.getName();
             if (resultPageClazzName.equals(EditFormPage.class.getName())) {
                 isTargetPage = EditFormPage.isTargetPage(innerDriver);
+                if (errorCheckTarget == ErrorCheckTarget.SCHEDULE_INPUTS) {
+                    isTargetPage &= !scheduleInputsErrorMessage().isEmpty();
+                }
+                if (errorCheckTarget == ErrorCheckTarget.GLOBAL_ERROR) {
+                    isTargetPage &= (globalErrorMessages().size() > 0);
+                }
             }
             if (resultPageClazzName.equals(EditCompletedPage.class.getName())) {
                 isTargetPage = EditCompletedPage.isTargetPage(innerDriver);

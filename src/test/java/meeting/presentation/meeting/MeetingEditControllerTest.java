@@ -22,10 +22,7 @@ import meeting.domain.model.schedule.construct.*;
 import meeting.presentation.ErrorPage;
 import meeting.presentation.TopPage;
 import meeting.presentation.meeting.input.schedule.construct.ScheduleConstructInput;
-import meeting.presentation.meeting.page_objects.DeleteCompletedPage;
-import meeting.presentation.meeting.page_objects.EditCompletedPage;
-import meeting.presentation.meeting.page_objects.EditFormPage;
-import meeting.presentation.meeting.page_objects.ShowPage;
+import meeting.presentation.meeting.page_objects.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,7 +161,7 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
         void 日程候補が0件の場合はエラー() throws Exception {
 
             formPage.clearScheduleAt(0);
-            EditFormPage errorFormPage = formPage.editMeeting(EditFormPage.class);
+            EditFormPage errorFormPage = formPage.editMeeting(EditFormPage.class, ErrorCheckTarget.SCHEDULE_INPUTS);
 
             assertEquals("日程を1件以上5件以下で指定してください。", errorFormPage.scheduleInputsErrorMessage());
         }
@@ -180,7 +177,7 @@ public class MeetingEditControllerTest extends MeetingIntegrationTest {
             addedFormPage.inputScheduleAt(1, constructInput);
 
             new RegistrationRequestDateTimeFake_19841231_1023();
-            EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class);
+            EditFormPage errorFormPage = addedFormPage.editMeeting(EditFormPage.class, ErrorCheckTarget.GLOBAL_ERROR);
 
             List<String> globalErrorMessages = errorFormPage.globalErrorMessages();
 
