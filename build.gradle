@@ -11,6 +11,10 @@ version = '0.0.1-SNAPSHOT'
 description 'ミーティング調整サービスの試作'
 sourceCompatibility = '17'
 
+bootJar {
+    archiveFileName = "meeting-setup.jar"
+}
+
 sourceSets {
     main {
         resources.srcDirs = ["src/main/java", "src/main/resources"]
