@@ -126,11 +126,12 @@ public class MeetingEditController {
     }
 
     @GetMapping("completed")
-    String completed(@ModelAttribute("meetingNumber") MeetingNumber meetingNumber,
-                     Model model, UriComponentsBuilder builder) {
+    String completed(Model model,
+                     @ModelAttribute("meetingNumber") MeetingNumber meetingNumber,
+                     UriComponentsBuilder builder,
+                     HttpServletRequest request) {
 
-        URI uri = builder.path(String.format("/meeting/%s/show", meetingNumber.value())).build().toUri();
-        model.addAttribute("meetingShowLocation", uri.toString());
+        MeetingControllerHelper.setMeetingShowLocation(model, meetingNumber, builder, request);
 
         return "meeting/edit/completed";
     }
