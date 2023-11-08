@@ -18,9 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
-*.iml
 *.ipr
 out/
 !**/src/main/**/out/
@@ -34,7 +32,7 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
-.vscode/
+.vscode/settings.json
 
 ### customised ###
 /src/test/resources/schema.sql

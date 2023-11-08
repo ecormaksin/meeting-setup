@@ -1,0 +1,13 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.jdt.ls.java.home": "${env:JAVA_HOME}",
+    "java.import.gradle.java.home": "${config:java.jdt.ls.java.home}",
+    "java.test.config": [
+        {
+            "name": "myTestDefaultConfig",
+            "workingDirectory": "${workspaceFolder}",
+            "vmargs": ["-javaagent:testlibs/jmockit-1.49.jar"]
+        }
+    ],
+    "java.test.defaultConfig": "myTestDefaultConfig"
+}
